@@ -14,12 +14,7 @@
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "noFallthroughCasesInSwitch": true,
-    "resolveJsonModule": true,
-    "baseUrl": "./src",
-    "paths": {
-      "@denim/core": ["core"],
-      "@denim/forms": ["forms"]
-    }
+    "resolveJsonModule": true
   },
   "exclude": [
     "node_modules",

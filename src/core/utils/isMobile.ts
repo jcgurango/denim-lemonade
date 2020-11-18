@@ -1,7 +1,9 @@
-import { Dimensions } from "react-native";
+import useScreenSize from './useScreenSize';
 
 export const isMobile = () => {
-  return Dimensions.get('window').width < 600;
+  const { width } = useScreenSize();
+
+  return width < 600;
 };
 
 export default isMobile;
