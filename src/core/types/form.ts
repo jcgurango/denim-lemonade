@@ -1,0 +1,34 @@
+export interface DenimFormSchema {
+  id: string;
+  sections: DenimFormSectionSchema[];
+}
+
+export interface DenimFormSectionSchema {
+  id: string;
+  label?: string;
+  rows: DenimFormRowSchema[];
+  showLabel?: Boolean;
+  collapsible?: Boolean;
+  defaultOpen?: Boolean;
+}
+
+export interface DenimFormRowSchema {
+  id: string;
+  controls: DenimFormControlSchema[];
+}
+
+export interface DenimFormControlSchema {
+  id: string;
+  label?: String;
+  relativeWidth: number;
+  type: DenimFormControlType;
+  controlProps?: any;
+}
+
+export enum DenimFormControlType {
+  TextInput = 'text-input',
+  MultilineTextInput = 'multiline-text-input',
+  DropDown = 'dropdown',
+  Radio = 'radio',
+  CheckBox = 'checkbox',
+}
