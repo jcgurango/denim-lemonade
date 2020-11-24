@@ -4,6 +4,7 @@ export interface DenimUser {
 
 export interface DenimDataContext {
   user: DenimUser;
+  location: 'server' | 'client';
 }
 
 export type Expansion = string[];
@@ -27,16 +28,16 @@ export interface DenimQueryConditionGroup {
 }
 
 export enum DenimQueryOperator {
-  Equals,
-  NotEquals,
-  StringContains,
-  StringNotContains,
-  GreaterThan,
-  LessThan,
-  GreaterThanOrEqual,
-  LessThanOrEqual,
-  NotNull,
-  Null,
+  Equals = 'eq',
+  NotEquals = 'neq',
+  StringContains = 'contains',
+  StringNotContains = 'ncontains',
+  GreaterThan = 'gt',
+  LessThan = 'lt',
+  GreaterThanOrEqual = 'gte',
+  LessThanOrEqual = 'lte',
+  NotNull = 'notnull',
+  Null = 'null',
 }
 
 export interface DenimQueryCondition {

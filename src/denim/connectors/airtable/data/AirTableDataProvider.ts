@@ -3,6 +3,9 @@ import Table from 'airtable/lib/table';
 import { QueryParams } from 'airtable/lib/query_params';
 import { AirTableDataSource } from '..';
 import {
+  DenimColumn,
+  DenimColumnType,
+  DenimDataContext,
   DenimQuery,
   DenimQueryConditionGroup,
   DenimQueryConditionOrGroup,
@@ -12,6 +15,7 @@ import {
 } from '../../../core';
 import { AirTable } from '../types/schema';
 import { DenimTableDataProvider } from '../../../service';
+import { NumberSchema, Schema, StringSchema } from 'yup';
 
 export default class AirTableDataProvider extends DenimTableDataProvider {
   public tableData: Table;
@@ -27,10 +31,48 @@ export default class AirTableDataProvider extends DenimTableDataProvider {
     this.airtableSchema = airtableSchema;
   }
 
+  private mapDenimRecordToAirTableFields(record: DenimRecord): any {
+    // Turn any foreign keys into denim data.
+    const newFields: any = {};
+
+    Object.keys(record).forEach((column) => {
+      const columnSchema = this.tableSchema.columns.find(
+        ({ name }) => name === column,
+      );
+
+      const fieldValue = record[column];
+
+      if (!columnSchema || columnSchema.type === DenimColumnType.ReadOnly) {
+        return;
+      }
+
+      newFields[column] = fieldValue;
+
+      if (fieldValue && typeof(fieldValue) === 'object' && (fieldValue.type === 'record' || fieldValue.type === 'record-collection')) {
+        if (fieldValue.type === 'record') {
+          newFields[column] = [fieldValue.id];
+        }
+
+        if (fieldValue.type === 'record-collection') {
+          newFields[column] = fieldValue.records.map(({ id }) => id);
+        }
+      }
+    });
+
+    return newFields;
+  }
+
   private mapAirtableToDenimRecord(record: Record): DenimRecord {
     // Turn any foreign keys into denim data.
+    const newFields: DenimRecord = {};
+
+    if (record.id) {
+      newFields.id = record.id;
+    }
+
     Object.keys(record.fields).forEach((column) => {
       const fieldValue = record.fields[column];
+      (<any>(newFields))[column] = fieldValue;
 
       if (fieldValue && Array.isArray(fieldValue)) {
         const columnSchema = this.airtableSchema.columns.find(
@@ -40,10 +82,10 @@ export default class AirTableDataProvider extends DenimTableDataProvider {
         if (columnSchema && columnSchema.type === 'foreignKey') {
           if (columnSchema.typeOptions?.relationship === 'many') {
             // Retrieve the name field asynchronously.
-            record.fields[column] = {
+            newFields[column] = {
               type: 'record-collection',
               records: fieldValue.map((id) => ({
-                type: 'record-collection',
+                type: 'record',
                 id,
                 name: '',
               })),
@@ -54,7 +96,7 @@ export default class AirTableDataProvider extends DenimTableDataProvider {
             columnSchema.typeOptions?.relationship === 'one' &&
             fieldValue[0]
           ) {
-            record.fields[column] = {
+            newFields[column] = {
               type: 'record',
               id: fieldValue[0],
               name: '',
@@ -64,13 +106,14 @@ export default class AirTableDataProvider extends DenimTableDataProvider {
       }
     });
 
-    return {
-      id: record.id,
-      ...record.fields,
-    };
+    return newFields;
   }
 
-  private operatorToFormula(operator: DenimQueryOperator, left: string, right: string): string {
+  private operatorToFormula(
+    operator: DenimQueryOperator,
+    left: string,
+    right: string,
+  ): string {
     switch (operator) {
       case DenimQueryOperator.Equals:
         return `${left} = ${right}`;
@@ -101,9 +144,13 @@ export default class AirTableDataProvider extends DenimTableDataProvider {
     }
 
     if (condition.conditionType === 'single') {
-      return `${this.operatorToFormula(condition.operator, condition.field === 'id' ? 'RECORD_ID()' : `{${condition.field}}`, `'${condition.value}'`)}`;
+      return `${this.operatorToFormula(
+        condition.operator,
+        condition.field === 'id' ? 'RECORD_ID()' : `{${condition.field}}`,
+        `'${condition.value}'`,
+      )}`;
     }
-  
+
     return `1 = 1`;
   }
 
@@ -111,6 +158,51 @@ export default class AirTableDataProvider extends DenimTableDataProvider {
     return `${condition.type}(${condition.conditions
       .map((c) => this.conditionToFormula(c))
       .join(`, `)})`;
+  }
+
+  public createFieldValidator(
+    context: DenimDataContext,
+    field: DenimColumn,
+  ): Schema<any, object> {
+    let validation = super.createFieldValidator(context, field);
+
+    // Find the corresponding AirTable field.
+    const atField = this.airtableSchema.columns.find(
+      ({ name }) => name === field.name,
+    );
+
+    if (atField) {
+      // Add additional validations for the AirTable types.
+      if (
+        atField.type === 'text' ||
+        (atField.type === 'multilineText' && atField.typeOptions)
+      ) {
+        if (atField.typeOptions?.validatorName == 'email') {
+          return (<StringSchema<any, object>>validation).email();
+        }
+
+        if (atField.typeOptions?.validatorName == 'url') {
+          return (<StringSchema<any, object>>validation).url();
+        }
+      }
+
+      if (atField.type === 'phone') {
+        return (<StringSchema<any, object>>validation).matches(
+          /^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9]*$/g,
+        );
+      }
+
+      if (atField.type === 'number') {
+        if (
+          atField?.typeOptions &&
+          atField.typeOptions.validatorName === 'positive'
+        ) {
+          return (<NumberSchema<any, object>>validation).min(0);
+        }
+      }
+    }
+
+    return validation;
   }
 
   protected async retrieve(id: string): Promise<DenimRecord | null> {
@@ -131,18 +223,49 @@ export default class AirTableDataProvider extends DenimTableDataProvider {
       params.filterByFormula = this.conditionGroupToFormula(query.conditions);
     }
 
+    if (query?.pageSize) {
+      params.pageSize = query.pageSize;
+    }
+
     // Retrieve the records.
     const atQuery = this.tableData.select(params);
+
+    if (query?.page) {
+      return new Promise((resolve) => {
+        let pageNum = 1;
+
+        atQuery.eachPage((page, nextPage) => {
+          if (pageNum === query.page) {
+            resolve(
+              page.map((record) => this.mapAirtableToDenimRecord(record)),
+            );
+            return;
+          }
+
+          pageNum++;
+          nextPage();
+        });
+      });
+    }
+
     const records = await atQuery.all();
 
     return records.map((record) => this.mapAirtableToDenimRecord(record));
   }
 
-  protected save(record: DenimRecord): Promise<void> {
-    throw new Error('Method not implemented.');
+  protected async save(record: DenimRecord): Promise<DenimRecord> {
+    if (record.id) {
+      const atRecord = await this.tableData.update(record.id, this.mapDenimRecordToAirTableFields(record));
+
+      return this.mapAirtableToDenimRecord(atRecord);
+    }
+
+    const atRecord = await this.tableData.create(this.mapDenimRecordToAirTableFields(record));
+
+    return this.mapAirtableToDenimRecord(atRecord);
   }
 
-  protected delete(id: string): Promise<void> {
-    throw new Error('Method not implemented.');
+  protected async delete(id: string): Promise<void> {
+    await this.tableData.destroy(id);
   }
 }

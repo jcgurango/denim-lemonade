@@ -1,6 +1,6 @@
 import express from 'express';
 import Airtable from 'airtable';
-import { DenimTableRouter } from '../denim/service';
+import DenimTableRouter from './DenimTableRouter';
 import { AirTableDataSource } from '../denim/connectors/airtable';
 import { EmptyValidator } from '../denim/core';
 
@@ -14,6 +14,6 @@ Airtable.configure({
 const app = express();
 const data = new AirTableDataSource(require('../schema/airtable-schema.json'), 'appDvEQrTWmwWIKlG');
 
-app.use('/test', DenimTableRouter(data.createDataProvider('Test Record CRUD'), new EmptyValidator()));
+app.use('/test', DenimTableRouter(data.createDataProvider('Test Record CRUD')));
 
 app.listen(6000, () => console.log('Listening...'));

@@ -31,6 +31,7 @@ export default class AirTableDataSource extends DenimDataSource {
         return {
           id: airtable.id,
           name: airtable.name,
+          label: airtable.name,
           nameField: airtable.columns[0].name,
           columns: airtable.columns.map((column) => {
             if (column.type === 'text' || column.type === 'phone') {

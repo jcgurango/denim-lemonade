@@ -6,6 +6,7 @@ export interface DenimTable {
   id: string;
   name: string;
   nameField: string;
+  label: string;
   columns: DenimColumn[];
 }
 
