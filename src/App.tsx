@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { SafeAreaView, StatusBar } from 'react-native';
-import DenimFormProvider from './forms/providers/DenimFormProvider';
-import TranslationProvider from './forms/providers/TranslationProvider';
-import { DenimForm } from './forms';
-import { DenimFormControlType } from './core';
+import { DenimForm, DenimFormProvider, TranslationProvider } from './denim/forms';
+import { DenimFormControlType } from './denim/core';
 import * as Yup from 'yup';
 import { ValidationError } from 'yup';
 
