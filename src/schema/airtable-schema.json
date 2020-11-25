@@ -64,6 +64,18 @@
 					"relationship": "many",
 					"unreversed": true
 				}
+			},
+			{
+				"id": "fldiTRyHR2yjqegR1",
+				"name": "Calculation",
+				"type": "formula",
+				"typeOptions": {
+					"formulaTextParsed": "RECORD_ID()",
+					"dependencies": {
+						"referencedColumnIdsForValue": []
+					},
+					"resultType": "text"
+				}
 			}
 		]
 	},
@@ -434,6 +446,30 @@
 					"foreignTableId": "tblr6DzR6n8lWWEv7",
 					"symmetricColumnId": "fldmiGgJvhZQepdcg",
 					"unreversed": true
+				}
+			},
+			{
+				"id": "fldJPaijUxlt0U1sH",
+				"name": "Calculation 2",
+				"type": "formula",
+				"typeOptions": {
+					"formulaTextParsed": "AND(1!=1)",
+					"dependencies": {
+						"referencedColumnIdsForValue": []
+					},
+					"resultType": "number"
+				}
+			},
+			{
+				"id": "fldqttyusvKYUWaeM",
+				"name": "Calculation 3",
+				"type": "formula",
+				"typeOptions": {
+					"formulaTextParsed": "RECORD_ID()",
+					"dependencies": {
+						"referencedColumnIdsForValue": []
+					},
+					"resultType": "text"
 				}
 			}
 		]

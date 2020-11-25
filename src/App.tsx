@@ -4,6 +4,7 @@ import { createConnectedDataProvider } from './denim/forms/providers/DenimConnec
 import AirTableSchemaSource from './denim/connectors/airtable/AirTableSchemaSource';
 import { DenimSchemaSource, DenimValidator } from './denim/service';
 import TestDataSource from './TestDataSource';
+import { DenimFormControlType } from './denim/core';
 
 class TestSchemaSource extends AirTableSchemaSource<{}> {
   createValidator(table: string): DenimValidator<{}> {
@@ -49,7 +50,7 @@ const App = () => {
           <ScrollView>
             <Form
               table="Test Record CRUD"
-              record=""
+              record="recdz5EugExuuEvT8"
               schema={{
                 id: 'test-form',
                 sections: [
@@ -64,8 +65,9 @@ const App = () => {
                         id: 'row0',
                         controls: [
                           {
+                            label: 'Full Name',
                             id: 'Name',
-                            relativeWidth: 1,
+                            relativeWidth: 1
                           },
                         ],
                       },
