@@ -19,9 +19,9 @@ export interface DenimFormRowSchema {
 
 export interface DenimFormControlSchema {
   id: string;
-  label?: String;
   relativeWidth: number;
-  type: DenimFormControlType;
+  label?: String;
+  type?: DenimFormControlType;
   controlProps?: any;
 }
 

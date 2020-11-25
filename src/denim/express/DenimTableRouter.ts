@@ -1,9 +1,9 @@
 import { Request, Response, Router } from 'express';
 import bodyParser from 'body-parser';
-import { DenimDataContext, DenimQuery, DenimRecord } from '../denim/core';
-import { DenimTableDataProvider } from '../denim/service';
+import { DenimDataContext, DenimQuery, DenimRecord } from '../core';
+import { DenimSchemaSource, DenimTableDataProvider } from '../service';
 
-const getDenimDataContextFromRequest = (request: any): DenimDataContext => {
+const getDenimDataContextFromRequest = <T extends DenimDataContext>(request: any): T => {
   return {
     ...request.denimContext,
   };
@@ -19,12 +19,12 @@ const getExpansionFromQuery = (query: any) => {
   return null;
 };
 
-const DenimTableRouter = (dataProvider: DenimTableDataProvider) => {
+const DenimTableRouter = <T extends DenimDataContext, S extends DenimSchemaSource<T>>(dataProvider: DenimTableDataProvider<T, S>) => {
   const router = Router();
 
   // Retrieve records.
   const queryHandler = async (req: Request, res: Response) => {
-    const context = getDenimDataContextFromRequest(req);
+    const context = getDenimDataContextFromRequest<T>(req);
     const query: DenimQuery = { expand: getExpansionFromQuery(req.query) };
 
     if (req.query.page) {
@@ -60,7 +60,7 @@ const DenimTableRouter = (dataProvider: DenimTableDataProvider) => {
 
   // Retrieve existing record.
   router.get('/:id', async (req, res) => {
-    const context = getDenimDataContextFromRequest(req);
+    const context = getDenimDataContextFromRequest<T>(req);
     const { id } = req.params;
 
     if (!id) {
@@ -84,7 +84,7 @@ const DenimTableRouter = (dataProvider: DenimTableDataProvider) => {
 
   // Create new record.
   router.put('/', bodyParser.json(), async (req, res) => {
-    const context = getDenimDataContextFromRequest(req);
+    const context = getDenimDataContextFromRequest<T>(req);
     const updateData = <DenimRecord>(req.body);
 
     // Validate the new record.
@@ -114,7 +114,7 @@ const DenimTableRouter = (dataProvider: DenimTableDataProvider) => {
 
   // Update existing record.
   router.put('/:id', bodyParser.json(), async (req, res) => {
-    const context = getDenimDataContextFromRequest(req);
+    const context = getDenimDataContextFromRequest<T>(req);
     const updateData = <DenimRecord>(req.body);
 
     // Validate the updated record.
@@ -143,7 +143,7 @@ const DenimTableRouter = (dataProvider: DenimTableDataProvider) => {
 
   // Delete existing record.
   router.delete('/:id', async (req, res) => {
-    const context = getDenimDataContextFromRequest(req);
+    const context = getDenimDataContextFromRequest<T>(req);
 
     if (!req.params.id) {
       return res.status(400).send();

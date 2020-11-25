@@ -3,7 +3,6 @@ import Table from 'airtable/lib/table';
 import { QueryParams } from 'airtable/lib/query_params';
 import { AirTableDataSource } from '..';
 import {
-  DenimColumn,
   DenimColumnType,
   DenimDataContext,
   DenimQuery,
@@ -15,18 +14,20 @@ import {
 } from '../../../core';
 import { AirTable } from '../types/schema';
 import { DenimTableDataProvider } from '../../../service';
-import { NumberSchema, Schema, StringSchema } from 'yup';
+import DenimValidator from '../../../service/DenimValidator';
+import AirTableSchemaSource from '../AirTableSchemaSource';
 
-export default class AirTableDataProvider extends DenimTableDataProvider {
+export default class AirTableDataProvider<T extends DenimDataContext, S extends AirTableSchemaSource<T>> extends DenimTableDataProvider<T, S> {
   public tableData: Table;
   private airtableSchema: AirTable;
 
   constructor(
-    dataSource: AirTableDataSource,
+    dataSource: AirTableDataSource<T, S>,
     schema: DenimTable,
+    validator: DenimValidator<T>,
     airtableSchema: AirTable,
   ) {
-    super(dataSource, schema);
+    super(dataSource, schema, validator);
     this.tableData = dataSource.base.table(airtableSchema.name);
     this.airtableSchema = airtableSchema;
   }
@@ -160,51 +161,6 @@ export default class AirTableDataProvider extends DenimTableDataProvider {
       .join(`, `)})`;
   }
 
-  public createFieldValidator(
-    context: DenimDataContext,
-    field: DenimColumn,
-  ): Schema<any, object> {
-    let validation = super.createFieldValidator(context, field);
-
-    // Find the corresponding AirTable field.
-    const atField = this.airtableSchema.columns.find(
-      ({ name }) => name === field.name,
-    );
-
-    if (atField) {
-      // Add additional validations for the AirTable types.
-      if (
-        atField.type === 'text' ||
-        (atField.type === 'multilineText' && atField.typeOptions)
-      ) {
-        if (atField.typeOptions?.validatorName == 'email') {
-          return (<StringSchema<any, object>>validation).email();
-        }
-
-        if (atField.typeOptions?.validatorName == 'url') {
-          return (<StringSchema<any, object>>validation).url();
-        }
-      }
-
-      if (atField.type === 'phone') {
-        return (<StringSchema<any, object>>validation).matches(
-          /^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9]*$/g,
-        );
-      }
-
-      if (atField.type === 'number') {
-        if (
-          atField?.typeOptions &&
-          atField.typeOptions.validatorName === 'positive'
-        ) {
-          return (<NumberSchema<any, object>>validation).min(0);
-        }
-      }
-    }
-
-    return validation;
-  }
-
   protected async retrieve(id: string): Promise<DenimRecord | null> {
     // Retrieve the record.
     const record = await this.tableData.find(id);
@@ -220,7 +176,7 @@ export default class AirTableDataProvider extends DenimTableDataProvider {
     const params: QueryParams = {};
 
     if (query?.conditions) {
-      params.filterByFormula = this.conditionGroupToFormula(query.conditions);
+      params.filterByFormula = this.conditionToFormula(query.conditions);
     }
 
     if (query?.pageSize) {

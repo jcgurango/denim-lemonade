@@ -15,7 +15,7 @@ const DenimFormControl: FunctionComponent<DenimFormControlProps> = ({
 }) => {
   const translation = useTranslation();
   const denimForm = useDenimForm();
-  const Control = denimForm.controlRegistry[schema.type];
+  const Control = schema.type ? denimForm.controlRegistry[schema.type] : null;
   const controlErrors = denimForm.getErrorsFor(schema.id);
 
   return (

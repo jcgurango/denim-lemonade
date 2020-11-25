@@ -3,14 +3,12 @@ export interface DenimUser {
 }
 
 export interface DenimDataContext {
-  user: DenimUser;
-  location: 'server' | 'client';
 }
 
 export type Expansion = string[];
 
 export interface DenimPlainQuery {
-  conditions?: DenimQueryConditionGroup;
+  conditions?: DenimQueryConditionOrGroup;
   page?: number;
   pageSize?: number;
 }

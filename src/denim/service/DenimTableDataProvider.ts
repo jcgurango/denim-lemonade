@@ -1,6 +1,4 @@
-import * as Yup from 'yup';
-import { Schema } from 'yup';
-import { DenimDataSource } from '.';
+import { DenimDataSource, DenimSchemaSource } from '.';
 import {
   DenimQuery,
   DenimRecord,
@@ -11,38 +9,30 @@ import {
   DenimTable,
   DenimColumnType,
   DenimQueryOperator,
-  DenimColumn,
 } from '../core';
-
-const RecordSchema = Yup.object().shape({
-  type: Yup.string().required().equals(['record']),
-  id: Yup.string().required(),
-  name: Yup.string().nullable(),
-  record: Yup.mixed().nullable(),
-});
-
-const RecordCollectionSchema = Yup.object().shape({
-  type: Yup.string().required().equals(['record-collection']),
-  record: Yup.array(RecordSchema),
-});
-
-const CommonSchema = {
-  Record: RecordSchema,
-  RecordCollection: RecordCollectionSchema,
-};
+import DenimValidator from './DenimValidator';
 
 type RelationshipMap = { [relationship: string]: RelationshipRecordMap };
 type RelationshipRecordMap = {
   [id: string]: DenimRelatedRecord | DenimRelatedRecordCollection | null;
 };
 
-export default abstract class DenimTableDataProvider {
-  private dataSource: DenimDataSource;
+export default abstract class DenimTableDataProvider<
+  T extends DenimDataContext,
+  S extends DenimSchemaSource<T>
+> {
+  private dataSource: DenimDataSource<T, S>;
   public tableSchema: DenimTable;
+  protected validator: DenimValidator<T>;
 
-  constructor(source: DenimDataSource, schema: DenimTable) {
+  constructor(
+    source: DenimDataSource<T, S>,
+    schema: DenimTable,
+    validator: DenimValidator<T>,
+  ) {
     this.dataSource = source;
     this.tableSchema = schema;
+    this.validator = validator;
   }
 
   protected abstract retrieve(id: string): Promise<DenimRecord | null>;
@@ -58,7 +48,7 @@ export default abstract class DenimTableDataProvider {
   }
 
   async expandRecords(
-    context: DenimDataContext,
+    context: T,
     records: DenimRecord[],
     expansion: Expansion,
   ): Promise<void> {
@@ -211,17 +201,10 @@ export default abstract class DenimTableDataProvider {
   }
 
   async retrieveRecords(
-    context: DenimDataContext,
+    context: T,
     query?: DenimQuery,
   ): Promise<DenimRecord[]> {
     let passedQuery = query || {};
-    let expansion = null;
-
-    if (query) {
-      const { expand, ...plainQuery } = query;
-      expansion = expand;
-      passedQuery = plainQuery;
-    }
 
     if (!passedQuery.expand) {
       passedQuery.expand = [];
@@ -232,19 +215,15 @@ export default abstract class DenimTableDataProvider {
     const records = await this.query(passedQuery);
 
     // Perform expansions (if any).
-    if (expansion) {
-      await this.expandRecords(
-        context,
-        records,
-        expansion,
-      );
+    if (passedQuery?.expand) {
+      await this.expandRecords(context, records, passedQuery?.expand);
     }
 
     return records;
   }
 
   async retrieveRecord(
-    context: DenimDataContext,
+    context: T,
     id: string,
     expansion?: Expansion,
   ): Promise<DenimRecord | null> {
@@ -262,35 +241,33 @@ export default abstract class DenimTableDataProvider {
     return record;
   }
 
-  async createRecord(
-    context: DenimDataContext,
-    record: DenimRecord,
-  ): Promise<DenimRecord | null> {
-    const validator = this.createValidator(context);
-    
-    // Validate the record.
-    if (await validator.validate(record, { abortEarly: false })) {
-      // Create the record.
-      const newRecord = await this.save(record);
+  async createRecord(context: T, record: DenimRecord): Promise<DenimRecord> {
+    const validator = this.validator.createValidator(context);
 
-      // Expand the record.
-      await this.expandRecords(context, [newRecord], this.getDefaultExpand());
+    const validRecord = await validator.validate(record, { abortEarly: false });
 
-      return newRecord;
-    }
+    // Create the record.
+    const newRecord = await this.save(validRecord);
 
-    return null;
+    // Expand the record.
+    await this.expandRecords(context, [newRecord], this.getDefaultExpand());
+
+    return newRecord;
   }
 
   async updateRecord(
-    context: DenimDataContext,
+    context: T,
     id: string,
     record: DenimRecord,
-  ): Promise<DenimRecord | null> {
-    const validator = this.createValidator(context);
+  ): Promise<DenimRecord> {
+    const validator = this.validator.createValidator(context);
 
     // Retrieve the record.
-    let existingRecord = await this.retrieveRecord(context, id, this.getDefaultExpand());
+    let existingRecord = await this.retrieveRecord(
+      context,
+      id,
+      this.getDefaultExpand(),
+    );
 
     existingRecord = {
       ...existingRecord,
@@ -298,93 +275,27 @@ export default abstract class DenimTableDataProvider {
     };
 
     // Expand the new record.
-    await this.expandRecords(context, [existingRecord], this.getDefaultExpand());
+    await this.expandRecords(
+      context,
+      [existingRecord],
+      this.getDefaultExpand(),
+    );
 
     // Validate the updated record.
-    if (await validator.validate(existingRecord, { abortEarly: false })) {
-      const record = await this.save(existingRecord);
-
-      // Expand the record again.
-      await this.expandRecords(context, [record], this.getDefaultExpand());
-
-      // Return the updated record.
-      return record;
-    }
-
-    return null;
-  }
-
-  async deleteRecord(
-    context: DenimDataContext,
-    id: string,
-  ): Promise<void> {
-    await this.delete(id);
-  }
-
-  createForeignKeyValidator(
-    context: DenimDataContext,
-    field: DenimColumn,
-  ): Schema<any, object> {
-    // Validate the shape.
-    if (field.type === DenimColumnType.ForeignKey) {
-      if (field.properties.multiple) {
-        return CommonSchema.RecordCollection.nullable(true).default(null);
-      } else {
-        return CommonSchema.Record.nullable(true).default(null);
-      }
-    }
-
-    return Yup.mixed();
-  }
-
-  createFieldValidator(
-    context: DenimDataContext,
-    field: DenimColumn,
-  ): Schema<any, object> {
-    switch (field.type) {
-      case DenimColumnType.ForeignKey:
-        return this.createForeignKeyValidator(context, field);
-      case DenimColumnType.Boolean:
-        return Yup.boolean();
-      case DenimColumnType.DateTime:
-        return Yup.date();
-      case DenimColumnType.Select:
-        return Yup.string().oneOf(
-          field.properties.options.map(({ value }) => value),
-        );
-      case DenimColumnType.MultiSelect:
-        return Yup.array(
-          Yup.string().oneOf(
-            field.properties.options.map(({ value }) => value),
-          ),
-        );
-      case DenimColumnType.Number:
-        return Yup.number();
-      case DenimColumnType.Text:
-        return Yup.string();
-      case DenimColumnType.ReadOnly:
-        return Yup.mixed();
-    }
-  }
-
-  createValidator(context: DenimDataContext): Yup.ObjectSchema<any, object> {
-    const shape: { [key: string]: Schema<any, object> } = {};
-
-    this.tableSchema.columns.forEach((value) => {
-      shape[value.name] = this.createFieldValidator(context, value);
-      shape[value.name] = this.dataSource.executeValidationHooks(
-        this.tableSchema.name,
-        context,
-        value,
-        shape[value.name],
-      );
+    const validRecord = await validator.validate(existingRecord, {
+      abortEarly: false,
     });
 
-    return <Yup.ObjectSchema<any, object>>(this.dataSource.executeValidationHooks(
-      this.tableSchema.name,
-      context,
-      null,
-      Yup.object().shape(shape),
-    ));
+    const updatedRecord = await this.save(validRecord);
+
+    // Expand the record again.
+    await this.expandRecords(context, [updatedRecord], this.getDefaultExpand());
+
+    // Return the updated record.
+    return updatedRecord;
+  }
+
+  async deleteRecord(context: DenimDataContext, id: string): Promise<void> {
+    await this.delete(id);
   }
 }

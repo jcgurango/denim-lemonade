@@ -10,7 +10,11 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import { DenimRelatedRecord, DenimRelatedRecordCollection } from '../../core';
+import {
+  DenimRelatedRecord,
+  DenimRelatedRecordCollection,
+  isMobile,
+} from '../../core';
 import {
   DenimControlProps,
   useDenimForm,
@@ -18,16 +22,20 @@ import {
 import { useDenimLookupData } from '../providers/DenimLookupDataProvider';
 import DenimTag from './DenimTag';
 
+interface DenimLookupControlProps {
+  relationship?: string;
+}
+
 interface DenimLookupProps {
   onRecordChange: (value: DenimRelatedRecord | null) => void;
   record: DenimRelatedRecord | null;
-  relationship?: string;
+  relationship: string;
 }
 
 interface DenimMultiLookupProps {
   onChange: (value: DenimRelatedRecordCollection | null) => void;
   value: DenimRelatedRecordCollection | null;
-  relationship?: string;
+  relationship: string;
 }
 
 const LookupField: FunctionComponent<TextInputProps & DenimLookupProps> = ({
@@ -46,6 +54,7 @@ const LookupField: FunctionComponent<TextInputProps & DenimLookupProps> = ({
   const [loading, setLoading] = useState(false);
   const [searchResults, setSearchResults] = useState<DenimRelatedRecord[]>([]);
   const displayText = String(record?.name || '');
+  const mobile = isMobile();
 
   useEffect(() => {
     if (showLookup) {
@@ -96,8 +105,13 @@ const LookupField: FunctionComponent<TextInputProps & DenimLookupProps> = ({
         {...props}
       />
       <Modal transparent={true} visible={showLookup}>
-        <View style={styles.lookupModalContainer}>
-          <View style={styles.lookupModalBox}>
+        <View
+          style={[
+            styles.lookupModalContainer,
+            mobile ? styles.mobileLookupModalContainer : null,
+          ]}
+        >
+          <View style={[styles.lookupModalBox, mobile ? styles.mobileLookupModalBox : null]}>
             <ControlContainer>
               <TextInput
                 style={[
@@ -142,7 +156,7 @@ const LookupField: FunctionComponent<TextInputProps & DenimLookupProps> = ({
 };
 
 const DenimLookup: FunctionComponent<
-  DenimControlProps & TextInputProps & DenimLookupProps
+  DenimControlProps & TextInputProps & DenimLookupControlProps
 > = ({ schema, form, errors, relationship, value, onChange, ...props }) => {
   const denimForm = useDenimForm();
   const ControlContainer = denimForm.componentRegistry.controlContainer;
@@ -150,32 +164,38 @@ const DenimLookup: FunctionComponent<
 
   return (
     <ControlContainer error={errors.length > 0} helpText={helpText}>
-      <LookupField relationship={relationship} record={value} {...props} onRecordChange={onChange} />
+      <LookupField
+        relationship={relationship || ''}
+        record={value}
+        {...props}
+        onRecordChange={onChange}
+      />
     </ControlContainer>
   );
 };
 
 export const DenimMultiLookup: FunctionComponent<
-  DenimControlProps & TextInputProps & DenimMultiLookupProps
+  DenimControlProps & TextInputProps & DenimLookupControlProps
 > = ({ onChange, schema, form, errors, relationship, value, ...props }) => {
   const denimForm = useDenimForm();
   const ControlContainer = denimForm.componentRegistry.controlContainer;
   const helpText = errors.map(({ message }) => message).join('\n');
 
   const deselect = (recordId: string) => {
-    return value && {
-      ...value,
-      records: value.records.filter(({ id }: { id: string }) => id !== recordId),
-    };
+    return (
+      value && {
+        ...value,
+        records: value.records.filter(
+          ({ id }: { id: string }) => id !== recordId,
+        ),
+      }
+    );
   };
 
   const select = (record: DenimRelatedRecord): DenimRelatedRecordCollection => {
     return {
       type: 'record-collection',
-      records: [
-        ...(value?.records || []),
-        record,
-      ],
+      records: [...(value?.records || []), record],
     };
   };
 
@@ -183,27 +203,29 @@ export const DenimMultiLookup: FunctionComponent<
     <ControlContainer error={errors.length > 0} helpText={helpText}>
       {value?.type === 'record-collection' && Array.isArray(value?.records)
         ? value.records.map((record: DenimRelatedRecord) => {
-          return (
-            <DenimTag
-              key={record.id}
-              color="rgb(80, 80, 80)"
-              style={{ marginBottom: 8 }}
-            >
-              <View style={{ flexDirection: 'row' }}>
-                <Text style={{ color: 'white', flex: 1 }}>
-                  {record.name}
-                </Text>
-                <TouchableOpacity onPress={() => onChange(deselect(record.id))}>
-                  <Text style={{ color: 'white' }}>Remove</Text>
-                </TouchableOpacity>
-              </View>
-            </DenimTag>
-          );
+            return (
+              <DenimTag
+                key={record.id}
+                color="rgb(80, 80, 80)"
+                style={{ marginBottom: 8 }}
+              >
+                <View style={{ flexDirection: 'row' }}>
+                  <Text style={{ color: 'white', flex: 1 }}>{record.name}</Text>
+                  <TouchableOpacity
+                    onPress={() => onChange(deselect(record.id))}
+                  >
+                    <Text style={{ color: 'white' }}>Remove</Text>
+                  </TouchableOpacity>
+                </View>
+              </DenimTag>
+            );
           })
         : null}
       <LookupField
-        relationship={relationship}
-        onRecordChange={(record: DenimRelatedRecord | null) => record && onChange(select(record))}
+        relationship={relationship || ''}
+        onRecordChange={(record: DenimRelatedRecord | null) =>
+          record && onChange(select(record))
+        }
         record={null}
         {...props}
       />
@@ -228,12 +250,19 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  mobileLookupModalContainer: {
+    justifyContent: 'flex-end',
+  },
   lookupModalBox: {
     backgroundColor: 'white',
     padding: 24,
     borderRadius: 8,
     width: '100%',
     maxWidth: 800,
+  },
+  mobileLookupModalBox: {
+    borderBottomLeftRadius: 0,
+    borderBottomRightRadius: 0,
   },
   loading: {
     alignSelf: 'center',

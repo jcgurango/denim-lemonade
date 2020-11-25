@@ -3,9 +3,11 @@ import {
   AirTable,
   AirTableColumn,
 } from './types/schema';
-import { DenimColumnType, DenimSchema, DenimSelectProperties } from '../../core';
+import { DenimColumnType, DenimDataContext, DenimSchema, DenimSelectProperties } from '../../core';
 import { AirTableDataProvider } from '.';
 import { DenimDataSource, DenimTableDataProvider } from '../../service';
+import AirTableValidator from './AirTableValidator';
+import AirTableSchemaSource from './AirTableSchemaSource';
 
 const getSelectProperties = (column: AirTableColumn): DenimSelectProperties => {
   if (column.type === 'select' || column.type === 'multiSelect') {
@@ -21,11 +23,11 @@ const getSelectProperties = (column: AirTableColumn): DenimSelectProperties => {
   return { options: [] };
 };
 
-export default class AirTableDataSource extends DenimDataSource {
+export default class AirTableDataSource<T extends DenimDataContext, S extends AirTableSchemaSource<T>> extends DenimDataSource<T, S> {
   public base: any;
   private airtableSchema: AirTable[];
 
-  private static convertSchema(schema: AirTable[]): DenimSchema {
+  public static convertSchema(schema: AirTable[]): DenimSchema {
     return {
       tables: schema.map((airtable) => {
         return {
@@ -115,22 +117,22 @@ export default class AirTableDataSource extends DenimDataSource {
     };
   }
 
-  constructor(schema: AirTable[], baseId?: string) {
-    super(AirTableDataSource.convertSchema(schema));
+  constructor(schema: S, baseId?: string) {
+    super(schema);
     this.base = baseId ? Airtable.base(baseId) : null;
-    this.airtableSchema = schema;
+    this.airtableSchema = schema.airtableSchema;
   }
 
-  public createDataProvider(table: string): DenimTableDataProvider {
+  public createDataProvider(table: string): DenimTableDataProvider<T, S> {
     const tableSchema = this.airtableSchema.find(
       ({ name, id }) => name === table || id === table,
     );
-    const denimTableSchema = this.schema.tables.find(({ id, name }) => name === table || id === table);
+    const denimTableSchema = this.schemaSource.schema.tables.find(({ id, name }) => name === table || id === table);
 
     if (!tableSchema || !denimTableSchema) {
       throw new Error('Unable to find table ' + table + ' in schema.');
     }
 
-    return new AirTableDataProvider(this, denimTableSchema, tableSchema);
+    return new AirTableDataProvider(this, denimTableSchema, new AirTableValidator(denimTableSchema, tableSchema), tableSchema);
   }
 }
