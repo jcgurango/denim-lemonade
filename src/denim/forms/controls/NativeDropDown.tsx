@@ -18,7 +18,7 @@ const NativeDropDown: FunctionComponent<
       style={{ fontSize: 16, height: 24, border: 0 }}
       {...props}
     >
-      <option>Select an item...</option>
+      <option value="">Select an item...</option>
       {options?.map((option) => (
         <option key={option.value} label={option.label} value={option.value} />
       )) || null}

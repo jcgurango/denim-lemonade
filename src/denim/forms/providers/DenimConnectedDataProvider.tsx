@@ -292,20 +292,21 @@ export const createConnectedDataProvider = <
 
     const save = async () => {
       if (dataProvider) {
+        setErrors([]);
         setSaving(true);
         const c: any = context.context;
         const rec: any = updateData;
 
         try {
-          const savedRecord = await (record
-            ? dataProvider.updateRecord(c, record, rec)
+          const savedRecord = await ((record || recordData?.id)
+            ? dataProvider.updateRecord(c, String(record || recordData?.id), rec)
             : dataProvider.createRecord(c, rec));
           setRecordData(savedRecord);
           setUpdateData({});
           onSave(savedRecord);
         } catch (e) {
-          if (e.many) {
-            setErrors(e.many);
+          if (e.inner) {
+            setErrors(e.inner);
           } else {
             setErrors([e]);
           }
@@ -365,6 +366,7 @@ export const createConnectedDataProvider = <
                         operator: DenimQueryOperator.StringContains,
                         value: query,
                       },
+                      expand: [],
                     });
 
                     return records.map((record) => ({

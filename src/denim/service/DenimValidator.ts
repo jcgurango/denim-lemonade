@@ -75,25 +75,25 @@ export default class DenimValidator<T extends DenimDataContext> {
       case DenimColumnType.ForeignKey:
         return this.createForeignKeyValidator(context, table, field);
       case DenimColumnType.Boolean:
-        return Yup.boolean();
+        return Yup.boolean().nullable(true);
       case DenimColumnType.DateTime:
-        return Yup.date();
+        return Yup.date().nullable(true);
       case DenimColumnType.Select:
-        return Yup.string().oneOf(
-          field.properties.options.map(({ value }) => value),
+        return Yup.string().nullable(true).oneOf(
+          [null].concat(<any>(field.properties.options.map(({ value }) => value))),
         );
       case DenimColumnType.MultiSelect:
         return Yup.array(
           Yup.string().oneOf(
             field.properties.options.map(({ value }) => value),
           ),
-        );
+        ).nullable(true);
       case DenimColumnType.Number:
-        return Yup.number();
+        return Yup.number().nullable(true);
       case DenimColumnType.Text:
-        return Yup.string();
+        return Yup.string().nullable(true);
       case DenimColumnType.ReadOnly:
-        return Yup.mixed();
+        return Yup.mixed().nullable(true);
     }
   }
 

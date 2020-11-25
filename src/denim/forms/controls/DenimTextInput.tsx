@@ -25,7 +25,7 @@ const DenimTextInput: FunctionComponent<DenimControlProps & TextInputProps> = ({
     >
       <TextInput
         style={[styles.textInput, (Platform.OS === 'web' && (numberOfLines || 0) <= 1) ? { height: 24 } : null]}
-        onChangeText={onChange}
+        onChangeText={(text) => onChange(text || null)}
         value={value || ''}
         numberOfLines={numberOfLines}
         {...props}

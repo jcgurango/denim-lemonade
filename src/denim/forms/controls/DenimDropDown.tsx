@@ -20,7 +20,7 @@ const DenimDropDown: FunctionComponent<
       helpText={helpText}
     >
       <NativeDropDown
-        onChange={onChange}
+        onChange={(value: any) => onChange(value || null)}
         value={value}
         options={options}
         {...props}

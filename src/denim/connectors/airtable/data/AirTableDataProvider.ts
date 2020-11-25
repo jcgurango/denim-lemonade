@@ -121,9 +121,9 @@ export default class AirTableDataProvider<T extends DenimDataContext, S extends 
       case DenimQueryOperator.NotEquals:
         return `${left} != ${right}`;
       case DenimQueryOperator.StringContains:
-        return `FIND(${right}, ${left}) > -1`;
+        return `FIND(${right}, ${left})`;
       case DenimQueryOperator.StringNotContains:
-        return `FIND(${right}, ${left}) = -1`;
+        return `ISERROR(FIND(${right}, ${left}))`;
       case DenimQueryOperator.GreaterThan:
         return `${left} > ${right}`;
       case DenimQueryOperator.LessThan:
@@ -187,10 +187,10 @@ export default class AirTableDataProvider<T extends DenimDataContext, S extends 
     const atQuery = this.tableData.select(params);
 
     if (query?.page) {
-      return new Promise((resolve) => {
+      return new Promise(async (resolve) => {
         let pageNum = 1;
 
-        atQuery.eachPage((page, nextPage) => {
+        await atQuery.eachPage((page, nextPage) => {
           if (pageNum === query.page) {
             resolve(
               page.map((record) => this.mapAirtableToDenimRecord(record)),
@@ -201,6 +201,8 @@ export default class AirTableDataProvider<T extends DenimDataContext, S extends 
           pageNum++;
           nextPage();
         });
+
+        resolve([]);
       });
     }
 

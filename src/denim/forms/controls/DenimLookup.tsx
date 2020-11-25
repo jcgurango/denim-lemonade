@@ -60,6 +60,10 @@ const LookupField: FunctionComponent<TextInputProps & DenimLookupProps> = ({
     if (showLookup) {
       setSearchText('');
       setSearchResults([]);
+
+      if (searchRef.current) {
+        searchRef.current.focus();
+      }
     }
   }, [showLookup]);
 

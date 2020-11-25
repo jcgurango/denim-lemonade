@@ -13,7 +13,7 @@ import {
 import dashify from 'dashify';
 import bent from 'bent';
 
-const endpoint = 'http://localhost:9090/data';
+const endpoint = 'http://192.168.254.102:9090/data';
 
 class TestTableDataProvider<
   T extends DenimDataContext
@@ -52,8 +52,8 @@ class TestTableDataProvider<
     query?: DenimQuery,
   ): Promise<DenimRecord[]> {
     const response = query
-      ? await bent('json')(this.tableEndpoint)
-      : await bent('json', 'POST')(this.tableEndpoint, query);
+      ? await bent('json', 'POST')(this.tableEndpoint + (query.expand ? ('?expand=' + query.expand.join(',')) : ''), query.conditions)
+      : await bent('json')(this.tableEndpoint);
 
     return <DenimRecord[]>response || null;
   }
