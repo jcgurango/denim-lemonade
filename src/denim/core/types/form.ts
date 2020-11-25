@@ -29,6 +29,9 @@ export enum DenimFormControlType {
   TextInput = 'text-input',
   MultilineTextInput = 'multiline-text-input',
   DropDown = 'dropdown',
-  Radio = 'radio',
+  MultiDropDown = 'multi-dropdown',
   CheckBox = 'checkbox',
+  ReadOnly = 'readonly',
+  Lookup = 'lookup',
+  MultiLookup = 'multi-lookup',
 }

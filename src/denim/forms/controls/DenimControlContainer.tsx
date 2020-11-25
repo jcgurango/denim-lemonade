@@ -2,7 +2,7 @@ import React, { FunctionComponent } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { DenimFormControlProps } from '../DenimFormControl';
 
-export interface DenimControlContainerProps extends DenimFormControlProps {
+export interface DenimControlContainerProps {
   error?: boolean;
   helpText?: String;
 }

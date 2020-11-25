@@ -1,12 +1,13 @@
 import React, { ComponentType, createContext, useContext } from 'react';
 import { StyleProp, TextStyle } from 'react-native';
-import { DenimFormControlSchema, DenimFormControlType, DenimFormSchema } from '../../core';
-import DenimFormSection, { DenimFormSectionProps } from '../DenimFormSection';
-import DenimFormRow, { DenimFormRowProps } from '../DenimFormRow';
-import DenimFormControl, { DenimFormControlProps } from '../DenimFormControl';
-import DenimTextInput, { DenimMultilineTextInput } from '../controls/DenimTextInput';
-import DenimControlContainer, { DenimControlContainerProps } from '../controls/DenimControlContainer';
+import { DenimFormControlSchema, DenimFormSchema } from '../../core';
+import { DenimFormSectionProps } from '../DenimFormSection';
+import { DenimFormRowProps } from '../DenimFormRow';
+import { DenimFormControlProps } from '../DenimFormControl';
+import { DenimControlContainerProps } from '../controls/DenimControlContainer';
 import { ValidationError } from 'yup';
+import { DefaultDenimFormContext } from './DefaultDenimFormContext';
+import { DenimButtonProps } from '../controls/DenimButton';
 
 export interface DenimControlProps {
   value: any;
@@ -16,7 +17,7 @@ export interface DenimControlProps {
   errors: ValidationError[];
 }
 
-interface DenimFormContextProps {
+export interface DenimFormContextProps {
   controlRegistry: DenimControlRegistry;
   componentRegistry: DenimComponentRegistry;
   styleOverrides?: DenimStyleOverrides;
@@ -24,22 +25,6 @@ interface DenimFormContextProps {
   getValue: (field: string) => any;
   getErrorsFor: (field: string) => ValidationError[];
 }
-
-export const DefaultDenimFormContext = {
-  controlRegistry: {
-    [DenimFormControlType.TextInput]: DenimTextInput,
-    [DenimFormControlType.MultilineTextInput]: DenimMultilineTextInput,
-  },
-  componentRegistry: {
-    section: DenimFormSection,
-    row: DenimFormRow,
-    control: DenimFormControl,
-    controlContainer: DenimControlContainer,
-  },
-  setValue: () => () => { },
-  getValue: () => null,
-  getErrorsFor: () => [],
-};
 
 const DenimFormContext = createContext<DenimFormContextProps>(DefaultDenimFormContext);
 
@@ -54,6 +39,7 @@ type DenimComponentRegistry = {
   row: ComponentType<DenimFormRowProps>;
   control: ComponentType<DenimFormControlProps>;
   controlContainer: ComponentType<DenimControlContainerProps>;
+  button: ComponentType<DenimButtonProps>;
 }
 
 type DenimStyleOverrides = {
@@ -69,8 +55,26 @@ const DenimFormProvider: ComponentType<DenimFormProviderProps> = ({
   children,
   ...props
 }) => {
+  const parentContext = useDenimForm();
+
   return (
-    <DenimFormContext.Provider value={{ ...DefaultDenimFormContext, ...props }}>
+    <DenimFormContext.Provider
+    value={{
+      ...DefaultDenimFormContext,
+      ...parentContext,
+      ...props,
+      controlRegistry: {
+        ...DefaultDenimFormContext.controlRegistry,
+        ...parentContext.controlRegistry,
+        ...props.controlRegistry,
+      },
+      componentRegistry: {
+        ...DefaultDenimFormContext.componentRegistry,
+        ...parentContext.componentRegistry,
+        ...props.componentRegistry,
+      },
+    }}
+    >
       {children}
     </DenimFormContext.Provider>
   );

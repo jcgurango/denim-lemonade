@@ -19,7 +19,7 @@ export type DenimColumn = DenimColumnDefinition<DenimColumnType.Text, DenimTextP
   | DenimColumnDefinition<DenimColumnType.ForeignKey, DenimForeignKeyProperties>
   | DenimColumnDefinition<DenimColumnType.ReadOnly, undefined>;
 
-interface DenimColumnDefinition<T extends DenimColumnType, TO> {
+interface DenimColumnDefinition<T, TO> {
   name: string;
   type: T;
   properties: TO; 

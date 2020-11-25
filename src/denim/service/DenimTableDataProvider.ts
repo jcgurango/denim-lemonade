@@ -22,8 +22,8 @@ const RecordSchema = Yup.object().shape({
 });
 
 const RecordCollectionSchema = Yup.object().shape({
-  type: Yup.string().required().equals(['record-collection']).notRequired(),
-  record: Yup.array(RecordSchema).notRequired(),
+  type: Yup.string().required().equals(['record-collection']),
+  record: Yup.array(RecordSchema),
 });
 
 const CommonSchema = {

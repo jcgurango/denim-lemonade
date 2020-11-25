@@ -115,9 +115,9 @@ export default class AirTableDataSource extends DenimDataSource {
     };
   }
 
-  constructor(schema: AirTable[], baseId: string) {
+  constructor(schema: AirTable[], baseId?: string) {
     super(AirTableDataSource.convertSchema(schema));
-    this.base = Airtable.base(baseId);
+    this.base = baseId ? Airtable.base(baseId) : null;
     this.airtableSchema = schema;
   }
 
