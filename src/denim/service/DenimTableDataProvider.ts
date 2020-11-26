@@ -40,36 +40,43 @@ export default abstract class DenimTableDataProvider<
   protected abstract save(record: DenimRecord): Promise<DenimRecord>;
   protected abstract delete(id: string): Promise<void>;
 
-  getDefaultExpand() {
-    // Expand foreign records 1 level to get names.
-    return this.tableSchema.columns
-      .filter(({ type }) => type === DenimColumnType.ForeignKey)
-      .map(({ name }) => name);
-  }
-
   async expandRecords(
     context: T,
     records: DenimRecord[],
-    expansion: Expansion,
+    expansion?: Expansion,
   ): Promise<void> {
     let relationships: RelationshipMap,
       childExpansions: { [relationship: string]: Expansion },
       rootExpansions: string[];
     relationships = {};
+    const defaultExpansion = !!expansion;
 
-    childExpansions = expansion.reduce<{ [relationship: string]: string[] }>(
-      (current, next) => {
-        const [root, field] = next.split('.', 2);
+    if (expansion) {
+      childExpansions = expansion.reduce<{ [relationship: string]: string[] }>(
+        (current, next) => {
+          const [root, field] = next.split('.', 2);
 
-        return {
+          return {
+            ...current,
+            [root]: [...(current[root] || []), ...(field ? [field] : [])],
+          };
+        },
+        {},
+      );
+
+      rootExpansions = Object.keys(childExpansions);
+    } else {
+      rootExpansions = this.tableSchema.columns
+        .filter(({ type }) => type === DenimColumnType.ForeignKey)
+        .map(({ name }) => name);
+      childExpansions = rootExpansions.reduce(
+        (current, next) => ({
           ...current,
-          [root]: [...(current[root] || []), ...(field ? [field] : [])],
-        };
-      },
-      {},
-    );
-
-    rootExpansions = Object.keys(childExpansions);
+          [next]: [],
+        }),
+        {},
+      );
+    }
 
     // Iterate through the expected expansions.
     for (let i = 0; i < rootExpansions.length; i++) {
@@ -121,6 +128,7 @@ export default abstract class DenimTableDataProvider<
               })),
             },
             expand: childExpansions[relationship],
+            view: 'related',
           },
         );
 
@@ -208,11 +216,7 @@ export default abstract class DenimTableDataProvider<
     const record = await this.retrieve(id);
     let expand = expansion;
 
-    if (!expand) {
-      expand = this.getDefaultExpand();
-    }
-
-    if (expand && record) {
+    if (record) {
       await this.expandRecords(context, [record], expand);
     }
 
@@ -225,18 +229,11 @@ export default abstract class DenimTableDataProvider<
   ): Promise<DenimRecord[]> {
     let passedQuery = query || {};
 
-    if (!passedQuery.expand) {
-      passedQuery.expand = [];
-      passedQuery.expand.push(...this.getDefaultExpand());
-    }
-
     // Retrieve the records.
     const records = await this.query(passedQuery);
 
     // Perform expansions (if any).
-    if (passedQuery?.expand) {
-      await this.expandRecords(context, records, passedQuery?.expand);
-    }
+    await this.expandRecords(context, records, passedQuery.expand);
 
     return records;
   }
@@ -250,7 +247,7 @@ export default abstract class DenimTableDataProvider<
     const newRecord = await this.save(validRecord);
 
     // Expand the record.
-    await this.expandRecords(context, [newRecord], this.getDefaultExpand());
+    await this.expandRecords(context, [newRecord], []);
 
     return newRecord;
   }
@@ -263,11 +260,7 @@ export default abstract class DenimTableDataProvider<
     const validator = this.validator.createValidator(context);
 
     // Retrieve the record.
-    let existingRecord = await this.retrieveRecord(
-      context,
-      id,
-      this.getDefaultExpand(),
-    );
+    let existingRecord = await this.retrieveRecord(context, id);
 
     existingRecord = {
       ...existingRecord,
@@ -275,11 +268,7 @@ export default abstract class DenimTableDataProvider<
     };
 
     // Expand the new record.
-    await this.expandRecords(
-      context,
-      [existingRecord],
-      this.getDefaultExpand(),
-    );
+    await this.expandRecords(context, [existingRecord]);
 
     // Validate the updated record.
     const validRecord = await validator.validate(existingRecord, {
@@ -289,7 +278,7 @@ export default abstract class DenimTableDataProvider<
     const updatedRecord = await this.save(validRecord);
 
     // Expand the record again.
-    await this.expandRecords(context, [updatedRecord], this.getDefaultExpand());
+    await this.expandRecords(context, [updatedRecord]);
 
     // Return the updated record.
     return updatedRecord;

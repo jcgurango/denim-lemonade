@@ -11,7 +11,7 @@ export interface DenimPlainQuery {
   conditions?: DenimQueryConditionOrGroup;
   page?: number;
   pageSize?: number;
-  view?: string;
+  view?: 'related' | string;
 }
 
 export interface DenimQuery extends DenimPlainQuery {

@@ -17,7 +17,10 @@ import { DenimTableDataProvider } from '../../../service';
 import DenimValidator from '../../../service/DenimValidator';
 import AirTableSchemaSource from '../AirTableSchemaSource';
 
-export default class AirTableDataProvider<T extends DenimDataContext, S extends AirTableSchemaSource<T>> extends DenimTableDataProvider<T, S> {
+export default class AirTableDataProvider<
+  T extends DenimDataContext,
+  S extends AirTableSchemaSource<T>
+> extends DenimTableDataProvider<T, S> {
   public tableData: Table;
   private airtableSchema: AirTable;
 
@@ -49,7 +52,12 @@ export default class AirTableDataProvider<T extends DenimDataContext, S extends 
 
       newFields[column] = fieldValue;
 
-      if (fieldValue && typeof(fieldValue) === 'object' && (fieldValue.type === 'record' || fieldValue.type === 'record-collection')) {
+      if (
+        fieldValue &&
+        typeof fieldValue === 'object' &&
+        (fieldValue.type === 'record' ||
+          fieldValue.type === 'record-collection')
+      ) {
         if (fieldValue.type === 'record') {
           newFields[column] = [fieldValue.id];
         }
@@ -73,7 +81,7 @@ export default class AirTableDataProvider<T extends DenimDataContext, S extends 
 
     Object.keys(record.fields).forEach((column) => {
       const fieldValue = record.fields[column];
-      (<any>(newFields))[column] = fieldValue;
+      (<any>newFields)[column] = fieldValue;
 
       if (fieldValue && Array.isArray(fieldValue)) {
         const columnSchema = this.airtableSchema.columns.find(
@@ -184,8 +192,16 @@ export default class AirTableDataProvider<T extends DenimDataContext, S extends 
     }
 
     if (query?.view || this.tableSchema.defaultView) {
-      params.view = query?.view || this.tableSchema.defaultView;
+      const view = query?.view || this.tableSchema.defaultView;
+
+      if (view === 'related') {
+        params.fields = [this.tableSchema.nameField];
+      } else {
+        params.view = query?.view || this.tableSchema.defaultView;
+      }
     }
+
+    console.log(params.view);
 
     // Retrieve the records.
     const atQuery = this.tableData.select(params);
@@ -217,12 +233,17 @@ export default class AirTableDataProvider<T extends DenimDataContext, S extends 
 
   protected async save(record: DenimRecord): Promise<DenimRecord> {
     if (record.id) {
-      const atRecord = await this.tableData.update(record.id, this.mapDenimRecordToAirTableFields(record));
+      const atRecord = await this.tableData.update(
+        record.id,
+        this.mapDenimRecordToAirTableFields(record),
+      );
 
       return this.mapAirtableToDenimRecord(atRecord);
     }
 
-    const atRecord = await this.tableData.create(this.mapDenimRecordToAirTableFields(record));
+    const atRecord = await this.tableData.create(
+      this.mapDenimRecordToAirTableFields(record),
+    );
 
     return this.mapAirtableToDenimRecord(atRecord);
   }

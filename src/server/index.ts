@@ -14,7 +14,7 @@ Airtable.configure({
 const app = express();
 const cors = require('cors');
 const schema = new AirTableSchemaSource<{}>(require('../schema/airtable-schema.json'));
-schema.registerDefaultView('Test Record CRUD', 'viw3B44Jsu8hIYfCs');
+schema.registerDefaultView('Test Record CRUD', 'Grid 2');
 const data = new AirTableDataSource(schema, 'appDvEQrTWmwWIKlG');
 app.use('/data', cors(), DenimDataSourceRouter(data));
 
