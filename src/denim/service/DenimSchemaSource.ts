@@ -1,6 +1,6 @@
 import { Schema } from 'yup';
 import { DenimValidator } from '.';
-import { DenimColumn, DenimDataContext, DenimSchema } from '../core';
+import { DenimColumn, DenimDataContext, DenimSchema, DenimTable } from '../core';
 
 interface ValidationHook<T extends DenimDataContext> {
   table: string | RegExp;
@@ -51,5 +51,20 @@ export default abstract class DenimSchemaSource<T extends DenimDataContext> {
       .reduce((current, next) => {
         return next.validation(context, table, column, current);
       }, validation);
+  }
+
+  findTableSchema(table: string): DenimTable {
+    const tableSchema = this.schema.tables.find(({ id, name }) => id === table || name === table);
+
+    if (!tableSchema) {
+      throw new Error('Unknown table ' + table + '.');
+    }
+
+    return tableSchema;
+  }
+
+  registerDefaultView(table: string, view: string) {
+    const tableSchema = this.findTableSchema(table);
+    tableSchema.defaultView = view;
   }
 }

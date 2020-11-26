@@ -183,6 +183,10 @@ export default class AirTableDataProvider<T extends DenimDataContext, S extends 
       params.pageSize = query.pageSize;
     }
 
+    if (query?.view || this.tableSchema.defaultView) {
+      params.view = query?.view || this.tableSchema.defaultView;
+    }
+
     // Retrieve the records.
     const atQuery = this.tableData.select(params);
 

@@ -11,6 +11,7 @@ export interface DenimPlainQuery {
   conditions?: DenimQueryConditionOrGroup;
   page?: number;
   pageSize?: number;
+  view?: string;
 }
 
 export interface DenimQuery extends DenimPlainQuery {
@@ -43,10 +44,6 @@ export interface DenimQueryCondition {
   field: string;
   operator: DenimQueryOperator;
   value: any;
-}
-
-export interface DenimTableValidator {
-  validate: (context: DenimDataContext, record: DenimRecord) => Promise<Boolean>;
 }
 
 export interface DenimRecord {

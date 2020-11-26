@@ -8,6 +8,7 @@ export interface DenimTable {
   nameField: string;
   label: string;
   columns: DenimColumn[];
+  defaultView?: string;
 }
 
 export type DenimColumn = DenimColumnDefinition<DenimColumnType.Text, DenimTextProperties | undefined>

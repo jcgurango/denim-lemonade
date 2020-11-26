@@ -36,6 +36,10 @@ const DenimTableRouter = <T extends DenimDataContext, S extends DenimSchemaSourc
       query.pageSize = Number(req.query.page_size);
     }
 
+    if (req.query.view) {
+      query.view = String(req.query.view);
+    }
+
     if (req.body) {
       query.conditions = req.body;
     }
