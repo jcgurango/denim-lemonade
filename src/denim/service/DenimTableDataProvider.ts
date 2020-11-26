@@ -200,6 +200,25 @@ export default abstract class DenimTableDataProvider<
     });
   }
 
+  async retrieveRecord(
+    context: T,
+    id: string,
+    expansion?: Expansion,
+  ): Promise<DenimRecord | null> {
+    const record = await this.retrieve(id);
+    let expand = expansion;
+
+    if (!expand) {
+      expand = this.getDefaultExpand();
+    }
+
+    if (expand && record) {
+      await this.expandRecords(context, [record], expand);
+    }
+
+    return record;
+  }
+
   async retrieveRecords(
     context: T,
     query?: DenimQuery,
@@ -220,25 +239,6 @@ export default abstract class DenimTableDataProvider<
     }
 
     return records;
-  }
-
-  async retrieveRecord(
-    context: T,
-    id: string,
-    expansion?: Expansion,
-  ): Promise<DenimRecord | null> {
-    const record = await this.retrieve(id);
-    let expand = expansion;
-
-    if (!expand) {
-      expand = this.getDefaultExpand();
-    }
-
-    if (expand && record) {
-      await this.expandRecords(context, [record], expand);
-    }
-
-    return record;
   }
 
   async createRecord(context: T, record: DenimRecord): Promise<DenimRecord> {
