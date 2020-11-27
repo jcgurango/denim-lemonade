@@ -34,4 +34,5 @@ export enum DenimFormControlType {
   ReadOnly = 'readonly',
   Lookup = 'lookup',
   MultiLookup = 'multi-lookup',
+  DatePicker = 'datepicker',
 }

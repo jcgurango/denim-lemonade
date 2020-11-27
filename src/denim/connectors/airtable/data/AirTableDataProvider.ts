@@ -201,8 +201,6 @@ export default class AirTableDataProvider<
       }
     }
 
-    console.log(params.view);
-
     // Retrieve the records.
     const atQuery = this.tableData.select(params);
 

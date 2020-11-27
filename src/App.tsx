@@ -47,129 +47,127 @@ const App = () => {
           schemaSource={schemaSource}
           dataSource={dataSource}
         >
-          <ScrollView>
-            <Form
-              table="Test Record CRUD"
-              record="recdz5EugExuuEvT8"
-              schema={{
-                id: 'test-form',
-                sections: [
-                  {
-                    id: 'test-section',
-                    label: 'Test Section',
-                    showLabel: true,
-                    collapsible: true,
-                    defaultOpen: true,
-                    rows: [
-                      {
-                        id: 'row0',
-                        controls: [
-                          {
-                            label: 'Full Name',
-                            id: 'Name',
-                            relativeWidth: 1
-                          },
-                        ],
-                      },
-                      {
-                        id: 'row1',
-                        controls: [
-                          {
-                            id: 'Notes',
-                            relativeWidth: 1,
-                          },
-                        ],
-                      },
-                      {
-                        id: 'row2',
-                        controls: [
-                          {
-                            id: 'Status',
-                            relativeWidth: 1,
-                          },
-                          {
-                            id: 'Multiple Select',
-                            relativeWidth: 1,
-                          },
-                          {
-                            id: 'Checkbox',
-                            relativeWidth: 1,
-                          },
-                          {
-                            id: 'Phone',
-                            relativeWidth: 1,
-                          },
-                        ],
-                      },
-                      {
-                        id: 'row3',
-                        controls: [
-                          {
-                            id: 'Date',
-                            relativeWidth: 1,
-                          },
-                          {
-                            id: 'Date Time',
-                            relativeWidth: 1,
-                          },
-                          {
-                            id: 'Email',
-                            relativeWidth: 1,
-                          },
-                          {
-                            id: 'URL',
-                            relativeWidth: 1,
-                          },
-                        ],
-                      },
-                      {
-                        id: 'row4',
-                        controls: [
-                          {
-                            id: 'Number',
-                            relativeWidth: 1,
-                          },
-                          {
-                            id: 'Currency',
-                            relativeWidth: 1,
-                          },
-                          {
-                            id: 'Percent',
-                            relativeWidth: 1,
-                          },
-                          {
-                            id: 'Duration',
-                            relativeWidth: 1,
-                          },
-                        ],
-                      },
-                      {
-                        id: 'row5',
-                        controls: [
-                          {
-                            id: 'Rating',
-                            relativeWidth: 1,
-                          },
-                          {
-                            id: 'Calculation',
-                            relativeWidth: 1,
-                          },
-                          {
-                            id: 'Single Link',
-                            relativeWidth: 1,
-                          },
-                          {
-                            id: 'Link',
-                            relativeWidth: 1,
-                          },
-                        ],
-                      },
-                    ],
-                  },
-                ],
-              }}
-            />
-          </ScrollView>
+          <Form
+            table="Test Record CRUD"
+            record="recdz5EugExuuEvT8"
+            schema={{
+              id: 'test-form',
+              sections: [
+                {
+                  id: 'test-section',
+                  label: 'Test Section',
+                  showLabel: true,
+                  collapsible: true,
+                  defaultOpen: true,
+                  rows: [
+                    {
+                      id: 'row0',
+                      controls: [
+                        {
+                          label: 'Full Name',
+                          id: 'Name',
+                          relativeWidth: 1,
+                        },
+                      ],
+                    },
+                    {
+                      id: 'row1',
+                      controls: [
+                        {
+                          id: 'Notes',
+                          relativeWidth: 1,
+                        },
+                      ],
+                    },
+                    {
+                      id: 'row2',
+                      controls: [
+                        {
+                          id: 'Status',
+                          relativeWidth: 1,
+                        },
+                        {
+                          id: 'Multiple Select',
+                          relativeWidth: 1,
+                        },
+                        {
+                          id: 'Checkbox',
+                          relativeWidth: 1,
+                        },
+                        {
+                          id: 'Phone',
+                          relativeWidth: 1,
+                        },
+                      ],
+                    },
+                    {
+                      id: 'row3',
+                      controls: [
+                        {
+                          id: 'Date',
+                          relativeWidth: 1,
+                        },
+                        {
+                          id: 'Date Time',
+                          relativeWidth: 1,
+                        },
+                        {
+                          id: 'Email',
+                          relativeWidth: 1,
+                        },
+                        {
+                          id: 'URL',
+                          relativeWidth: 1,
+                        },
+                      ],
+                    },
+                    {
+                      id: 'row4',
+                      controls: [
+                        {
+                          id: 'Number',
+                          relativeWidth: 1,
+                        },
+                        {
+                          id: 'Currency',
+                          relativeWidth: 1,
+                        },
+                        {
+                          id: 'Percent',
+                          relativeWidth: 1,
+                        },
+                        {
+                          id: 'Duration',
+                          relativeWidth: 1,
+                        },
+                      ],
+                    },
+                    {
+                      id: 'row5',
+                      controls: [
+                        {
+                          id: 'Rating',
+                          relativeWidth: 1,
+                        },
+                        {
+                          id: 'Calculation',
+                          relativeWidth: 1,
+                        },
+                        {
+                          id: 'Single Link',
+                          relativeWidth: 1,
+                        },
+                        {
+                          id: 'Link',
+                          relativeWidth: 1,
+                        },
+                      ],
+                    },
+                  ],
+                },
+              ],
+            }}
+          />
         </Provider>
       </SafeAreaView>
     </>

@@ -120,6 +120,7 @@ export const createConnectedDataProvider = <
                   type: DenimFormControlType.DropDown,
                   controlProps: {
                     options: column.properties.options,
+                    ...(control.controlProps || { }),
                   },
                 };
               case DenimColumnType.MultiSelect:
@@ -130,6 +131,7 @@ export const createConnectedDataProvider = <
                   type: DenimFormControlType.MultiDropDown,
                   controlProps: {
                     options: column.properties.options,
+                    ...(control.controlProps || { }),
                   },
                 };
               case DenimColumnType.ForeignKey:
@@ -142,6 +144,7 @@ export const createConnectedDataProvider = <
                     : DenimFormControlType.Lookup,
                   controlProps: {
                     relationship: column.name,
+                    ...(control.controlProps || { }),
                   },
                 };
               case DenimColumnType.Text:
@@ -160,6 +163,17 @@ export const createConnectedDataProvider = <
                   label: control.label || column.name,
                   id: column.name,
                   type: DenimFormControlType.TextInput,
+                };
+              case DenimColumnType.DateTime:
+                return {
+                  ...control,
+                  label: control.label || column.name,
+                  id: column.name,
+                  type: DenimFormControlType.DatePicker,
+                  controlProps: {
+                    withTime: column.properties.includesTime,
+                    ...(control.controlProps || { }),
+                  },
                 };
             }
 

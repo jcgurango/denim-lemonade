@@ -2,6 +2,7 @@ import { DenimFormControlType } from '../../core';
 import DenimButton from '../controls/DenimButton';
 import DenimCheckBox from '../controls/DenimCheckBox';
 import DenimControlContainer from '../controls/DenimControlContainer';
+import DenimDatePicker from '../controls/DenimDatePicker';
 import DenimDropDown from '../controls/DenimDropDown';
 import DenimLookup, { DenimMultiLookup } from '../controls/DenimLookup';
 import DenimMultiDropDown from '../controls/DenimMultiDropDown';
@@ -23,6 +24,7 @@ export const DefaultDenimFormContext = {
     [DenimFormControlType.CheckBox]: DenimCheckBox,
     [DenimFormControlType.Lookup]: DenimLookup,
     [DenimFormControlType.MultiLookup]: DenimMultiLookup,
+    [DenimFormControlType.DatePicker]: DenimDatePicker,
   },
   componentRegistry: {
     section: DenimFormSection,
