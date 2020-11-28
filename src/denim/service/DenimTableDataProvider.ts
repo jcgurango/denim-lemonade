@@ -128,7 +128,8 @@ export default abstract class DenimTableDataProvider<
               })),
             },
             expand: childExpansions[relationship],
-            view: 'related',
+            view: defaultExpansion ? 'related' : undefined,
+            retrieveAll: true,
           },
         );
 

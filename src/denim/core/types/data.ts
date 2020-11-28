@@ -12,6 +12,7 @@ export interface DenimPlainQuery {
   page?: number;
   pageSize?: number;
   view?: 'related' | string;
+  retrieveAll?: boolean;
 }
 
 export interface DenimQuery extends DenimPlainQuery {

@@ -204,7 +204,7 @@ export default class AirTableDataProvider<
     // Retrieve the records.
     const atQuery = this.tableData.select(params);
 
-    if (query?.page) {
+    if (query?.page && query.page > 1) {
       return new Promise(async (resolve) => {
         let pageNum = 1;
 
@@ -224,7 +224,13 @@ export default class AirTableDataProvider<
       });
     }
 
-    const records = await atQuery.all();
+    if (query?.retrieveAll) {
+      return (await atQuery.all()).map((record) =>
+        this.mapAirtableToDenimRecord(record),
+      );
+    }
+
+    const records = await atQuery.firstPage();
 
     return records.map((record) => this.mapAirtableToDenimRecord(record));
   }
