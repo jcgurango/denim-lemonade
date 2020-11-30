@@ -1,3 +1,4 @@
+import { transformAll } from '@demvsystems/yup-ast';
 import React, {
   createContext,
   FunctionComponent,
@@ -88,7 +89,7 @@ export const createConnectedDataProvider = <
           getTableValidator: useCallback(
             (table) => {
               const validator = schemaSource.createValidator(table);
-              return validator.createValidator(context);
+              return transformAll(validator.createValidator(context));
             },
             [schemaSource],
           ),
@@ -347,7 +348,7 @@ export const createConnectedDataProvider = <
           errors.filter((error) => {
             return (
               error.path &&
-              (error.path === field || error.path.startsWith(field + '.'))
+              (error.path === field || error.path.startsWith(field + '.') || error.path.startsWith(field + '['))
             );
           })
         }

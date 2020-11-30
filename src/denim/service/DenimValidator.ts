@@ -6,28 +6,26 @@ import {
   DenimDataContext,
   DenimSchema,
   DenimTable,
+  YupAst,
 } from '../core';
 
 const RecordSchemaShape = {
-  type: Yup.string().required().equals(['record']),
-  id: Yup.string().required(),
-  name: Yup.string().nullable(),
-  record: Yup.mixed().nullable(),
+  type: [['yup.string'], ['yup.required'], ['yup.equals', ['record']]],
+  id: [['yup.string', ['yup.required']]],
+  name: [['yup.string'], ['yup.nullable', true]],
+  record: [['yup.mixed'], ['yup.nullable']],
 };
 
 const RecordCollectionSchemaShape = {
   type: Yup.string().required().equals(['record-collection']),
-  record: Yup.array(Yup.object().shape(RecordSchemaShape)),
+  record: [
+    ['yup.array', [['yup.object'], ['yup.shape', RecordSchemaShape]]],
+  ],
 };
 
 export const CommonShapes = {
   Record: RecordSchemaShape,
   RecordCollection: RecordCollectionSchemaShape,
-};
-
-export const CommonSchema = {
-  Record: Yup.object().shape(CommonShapes.Record),
-  RecordCollection: Yup.object().shape(CommonShapes.RecordCollection),
 };
 
 interface ValidationHook {
@@ -36,8 +34,8 @@ interface ValidationHook {
     context: DenimDataContext,
     table: string,
     column: DenimColumn | null,
-    validation: Schema<any, object>,
-  ) => Schema<any, object>;
+    validation: YupAst,
+  ) => YupAst;
 }
 
 export default class DenimValidator<T extends DenimDataContext> {
@@ -53,57 +51,71 @@ export default class DenimValidator<T extends DenimDataContext> {
     context: T,
     table: DenimTable,
     field: DenimColumn,
-  ): Schema<any, object> {
+  ): YupAst {
     // Validate the shape.
     if (field.type === DenimColumnType.ForeignKey) {
       if (field.properties.multiple) {
-        return CommonSchema.RecordCollection.nullable(true).default(null);
+        return [['yup.object'], ['yup.shape', CommonShapes.RecordCollection]];
       } else {
-        return CommonSchema.Record.nullable(true).default(null);
+        return [['yup.object'], ['yup.shape', CommonShapes.Record]];
       }
     }
 
-    return Yup.mixed();
+    return ['yup.mixed'];
   }
 
   createFieldValidator(
     context: T,
     table: DenimTable,
     field: DenimColumn,
-  ): Schema<any, object> {
+  ): YupAst {
     switch (field.type) {
       case DenimColumnType.ForeignKey:
         return this.createForeignKeyValidator(context, table, field);
       case DenimColumnType.Boolean:
-        return Yup.boolean().nullable(true);
+        return ['yup.boolean', ['yup.nullable', true]];
       case DenimColumnType.DateTime:
-        return Yup.date().nullable(true);
+        return ['yup.date', ['yup.nullable', true]];
       case DenimColumnType.Select:
-        return Yup.string().nullable(true).oneOf(
-          [null].concat(<any>(field.properties.options.map(({ value }) => value))),
-        );
+        return [
+          ['yup.string'],
+          ['yup.nullable', true],
+          [
+            'yup.oneOf',
+            [null].concat(
+              <any>field.properties.options.map(({ value }) => value),
+            ),
+          ],
+        ];
       case DenimColumnType.MultiSelect:
-        return Yup.array(
-          Yup.string().oneOf(
-            field.properties.options.map(({ value }) => value),
-          ),
-        ).nullable(true);
+        return [
+          ['yup.nullable', true],
+          [
+            'yup.array',
+            [
+              ['yup.string'],
+              ['yup.oneOf', field.properties.options.map(({ value }) => value)],
+            ],
+          ],
+        ];
       case DenimColumnType.Number:
-        return Yup.number().nullable(true);
+        return [['yup.number'], ['yup.nullable', true]];
       case DenimColumnType.Text:
-        return Yup.string().nullable(true);
+        return [['yup.string'], ['yup.nullable', true]];
       case DenimColumnType.ReadOnly:
-        return Yup.mixed().nullable(true);
+        return [['yup.mixed'], ['yup.nullable', true]];
     }
   }
 
-  createValidator(
-    context: T,
-  ): ObjectSchema<any, object> {
-    const shape: { [key: string]: Schema<any, object> } = {};
+  createValidator(context: T): YupAst {
+    const shape: { [key: string]: YupAst } = {};
 
     this.schema.columns.forEach((value) => {
-      shape[value.name] = this.createFieldValidator(context, this.schema, value);
+      shape[value.name] = this.createFieldValidator(
+        context,
+        this.schema,
+        value,
+      );
       shape[value.name] = this.executeValidationHooks(
         this.schema.name,
         context,
@@ -112,14 +124,10 @@ export default class DenimValidator<T extends DenimDataContext> {
       );
     });
 
-    return <Yup.ObjectSchema<any, object>>(
-      this.executeValidationHooks(
-        this.schema.name,
-        context,
-        null,
-        Yup.object().shape(shape),
-      )
-    );
+    return this.executeValidationHooks(this.schema.name, context, null, [
+      ['yup.object'],
+      ['yup.shape', shape],
+    ]);
   }
 
   registerValidationHook(
@@ -128,8 +136,8 @@ export default class DenimValidator<T extends DenimDataContext> {
       context: DenimDataContext,
       table: string,
       column: DenimColumn | null,
-      validation: Schema<any, object>,
-    ) => Schema<any, object>,
+      validation: YupAst,
+    ) => YupAst,
   ) {
     this.validationHooks.push({
       table,
@@ -141,8 +149,8 @@ export default class DenimValidator<T extends DenimDataContext> {
     table: string,
     context: DenimDataContext,
     column: DenimColumn | null,
-    validation: Schema<any, object>,
-  ): Schema<any, object> {
+    validation: YupAst,
+  ): YupAst {
     return this.validationHooks
       .filter(({ table: t }) =>
         typeof t === 'string' ? table === t : t.test(table),

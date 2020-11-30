@@ -11,6 +11,7 @@ import {
   DenimQueryOperator,
 } from '../core';
 import DenimValidator from './DenimValidator';
+import { transformAll } from '@demvsystems/yup-ast';
 
 type RelationshipMap = { [relationship: string]: RelationshipRecordMap };
 type RelationshipRecordMap = {
@@ -240,7 +241,7 @@ export default abstract class DenimTableDataProvider<
   }
 
   async createRecord(context: T, record: DenimRecord): Promise<DenimRecord> {
-    const validator = this.validator.createValidator(context);
+    const validator = transformAll(this.validator.createValidator(context));
 
     const validRecord = await validator.validate(record, { abortEarly: false });
 
@@ -258,7 +259,7 @@ export default abstract class DenimTableDataProvider<
     id: string,
     record: DenimRecord,
   ): Promise<DenimRecord> {
-    const validator = this.validator.createValidator(context);
+    const validator = transformAll(this.validator.createValidator(context));
 
     // Retrieve the record.
     let existingRecord = await this.retrieveRecord(context, id);
