@@ -1,10 +1,9 @@
 import React from 'react';
-import { SafeAreaView, ScrollView, StatusBar } from 'react-native';
+import { SafeAreaView, StatusBar } from 'react-native';
 import { createConnectedDataProvider } from './denim/forms/providers/DenimConnectedDataProvider';
 import AirTableSchemaSource from './denim/connectors/airtable/AirTableSchemaSource';
 import { DenimSchemaSource, DenimValidator } from './denim/service';
 import TestDataSource from './TestDataSource';
-import { DenimFormControlType } from './denim/core';
 
 class TestSchemaSource extends AirTableSchemaSource<{}> {
   createValidator(table: string): DenimValidator<{}> {
@@ -14,8 +13,10 @@ class TestSchemaSource extends AirTableSchemaSource<{}> {
       'Test Record CRUD',
       (context, table, column, validation) => {
         if (column?.name === 'Name') {
-          const v: any = validation;
-          return v.required();
+          return [
+            ...validation.filter(([func]) => func !== 'yup.nullable'),
+            ['yup.required'],
+          ];
         }
 
         return validation;

@@ -80,123 +80,128 @@ export default abstract class DenimTableDataProvider<
     }
 
     // Iterate through the expected expansions.
-    for (let i = 0; i < rootExpansions.length; i++) {
-      const relationship = rootExpansions[i];
-      const column = this.tableSchema.columns.find(
-        ({ name }) => name === relationship,
-      );
-
-      if (
-        column?.type === DenimColumnType.ForeignKey &&
-        column?.properties?.foreignTableId
-      ) {
-        const foreignTable = column?.properties?.foreignTableId;
-        const foreignTableProvider = this.dataSource.createDataProvider(
-          foreignTable,
+    await Promise.all(
+      rootExpansions.map(async (relationship) => {
+        const column = this.tableSchema.columns.find(
+          ({ name }) => name === relationship,
         );
 
-        // Collect related IDs.
-        const relatedRecordIds = records.reduce<string[]>((current, next) => {
-          const field = next[relationship];
+        if (
+          column?.type === DenimColumnType.ForeignKey &&
+          column?.properties?.foreignTableId
+        ) {
+          const foreignTable = column?.properties?.foreignTableId;
+          const foreignTableProvider = this.dataSource.createDataProvider(
+            foreignTable,
+          );
 
-          if (typeof field === 'object') {
-            if (field?.type === 'record' && field?.id) {
-              return current.concat(field.id);
-            }
-
-            if (field?.type === 'record-collection') {
-              return current.concat(
-                field.records.map(({ id }) => id).filter(Boolean),
-              );
-            }
-          }
-
-          return current;
-        }, []);
-
-        // Retrieve the related records.
-        const relatedRecords = await foreignTableProvider.retrieveRecords(
-          context,
-          {
-            conditions: {
-              conditionType: 'group',
-              type: 'OR',
-              conditions: relatedRecordIds.map((id) => ({
-                conditionType: 'single',
-                field: 'id',
-                operator: DenimQueryOperator.Equals,
-                value: id,
-              })),
-            },
-            expand: childExpansions[relationship],
-            view: defaultExpansion ? 'related' : undefined,
-            retrieveAll: true,
-          },
-        );
-
-        relationships[relationship] = records.reduce<RelationshipRecordMap>(
-          (current, next) => {
+          // Collect related IDs.
+          const relatedRecordIds = records.reduce<string[]>((current, next) => {
             const field = next[relationship];
 
             if (typeof field === 'object') {
               if (field?.type === 'record' && field?.id) {
-                const relatedRecord = relatedRecords.find(
-                  ({ id }) => id === field.id,
-                );
-
-                if (relatedRecord) {
-                  return {
-                    ...current,
-                    [String(next.id)]:
-                      {
-                        type: 'record',
-                        id: String(relatedRecord.id),
-                        name:
-                          String(
-                            relatedRecord[
-                              foreignTableProvider.tableSchema.nameField
-                            ],
-                          ) || '',
-                        record: relatedRecord,
-                      } || null,
-                  };
-                }
+                return current.concat(field.id);
               }
 
               if (field?.type === 'record-collection') {
-                return {
-                  ...current,
-                  [String(next.id)]: {
-                    type: 'record-collection',
-                    records: relatedRecords
-                      .filter(({ id }) =>
-                        field.records.map(({ id }) => id).includes(String(id)),
-                      )
-                      .filter(Boolean)
-                      .map((relatedRecord) => ({
-                        type: 'record',
-                        id: String(relatedRecord.id),
-                        name:
-                          String(
-                            relatedRecord[
-                              foreignTableProvider.tableSchema.nameField
-                            ],
-                          ) || '',
-                        record: relatedRecord,
-                      })),
-                  },
-                };
+                return current.concat(
+                  field.records.map(({ id }) => id).filter(Boolean),
+                );
               }
             }
 
             return current;
-          },
-          {},
-        );
-      } else {
-        throw new Error('Unknown expansion ' + relationship);
-      }
-    }
+          }, []);
+
+          if (relatedRecordIds.length > 0) {
+            // Retrieve the related records.
+            const relatedRecords = await foreignTableProvider.retrieveRecords(
+              context,
+              {
+                conditions: {
+                  conditionType: 'group',
+                  type: 'OR',
+                  conditions: relatedRecordIds.map((id) => ({
+                    conditionType: 'single',
+                    field: 'id',
+                    operator: DenimQueryOperator.Equals,
+                    value: id,
+                  })),
+                },
+                expand: childExpansions[relationship],
+                view: defaultExpansion ? 'related' : undefined,
+                retrieveAll: true,
+              },
+            );
+
+            relationships[relationship] = records.reduce<RelationshipRecordMap>(
+              (current, next) => {
+                const field = next[relationship];
+
+                if (typeof field === 'object') {
+                  if (field?.type === 'record' && field?.id) {
+                    const relatedRecord = relatedRecords.find(
+                      ({ id }) => id === field.id,
+                    );
+
+                    if (relatedRecord) {
+                      return {
+                        ...current,
+                        [String(next.id)]:
+                          {
+                            type: 'record',
+                            id: String(relatedRecord.id),
+                            name:
+                              String(
+                                relatedRecord[
+                                  foreignTableProvider.tableSchema.nameField
+                                ],
+                              ) || '',
+                            record: relatedRecord,
+                          } || null,
+                      };
+                    }
+                  }
+
+                  if (field?.type === 'record-collection') {
+                    return {
+                      ...current,
+                      [String(next.id)]: {
+                        type: 'record-collection',
+                        records: relatedRecords
+                          .filter(({ id }) =>
+                            field.records
+                              .map(({ id }) => id)
+                              .includes(String(id)),
+                          )
+                          .filter(Boolean)
+                          .map((relatedRecord) => ({
+                            type: 'record',
+                            id: String(relatedRecord.id),
+                            name:
+                              String(
+                                relatedRecord[
+                                  foreignTableProvider.tableSchema.nameField
+                                ],
+                              ) || '',
+                            record: relatedRecord,
+                          })),
+                      },
+                    };
+                  }
+                }
+
+                return current;
+              },
+              {},
+            );
+          }
+        } else {
+          throw new Error('Unknown expansion ' + relationship);
+        }
+      }),
+    );
 
     // Write back to the records.
     Object.keys(relationships).forEach((relationship) => {
