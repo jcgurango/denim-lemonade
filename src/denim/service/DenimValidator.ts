@@ -88,10 +88,13 @@ export default class DenimValidator<T extends DenimDataContext> {
         if (!field.properties.includesTime) {
           return [
             ['yup.string'],
+            ['yup.nullable', true],
             [
               'yup.transform',
               function (this: any, value: any) {
-                if (this.isType(value)) return value;
+                if (!value) {
+                  return null;
+                }
 
                 // First validate that this is a date.
                 const parsed = dayjs(value);
@@ -99,10 +102,11 @@ export default class DenimValidator<T extends DenimDataContext> {
                 if (parsed.isValid()) {
                   return parsed.format('YYYY-MM-DD');
                 }
-
+                
                 return new Date('');
               },
             ],
+            ['yup.typeError', field.name + ' must be a valid date.']
           ];
         }
 

@@ -54,41 +54,47 @@ export class DenimRemoteTableProvider<
     id: string,
     expansion?: Expansion,
   ): Promise<DenimRecord | null> {
-    const response = await bent(
-      'json',
-      context.headers || { },
-    )(this.tableEndpoint + '/' + id);
+    return this.wrapRequest(async () => {
+      const response = await bent(
+        'json',
+        context.headers || {},
+      )(this.tableEndpoint + '/' + id + (expansion ? ('?expand=' + expansion.join(',')) : ''));
 
-    return <DenimRecord>response || null;
+      return <DenimRecord>response || null;
+    });
   }
 
   async retrieveRecords(
     context: T,
     query?: DenimQuery,
   ): Promise<DenimRecord[]> {
-    const response = query
-      ? await bent(
-          'json',
-          'POST',
-          context.headers || { },
-        )(
-          this.tableEndpoint +
-            (query.expand ? '?expand=' + query.expand.join(',') : ''),
-          query.conditions,
-        )
-      : await bent('json')(this.tableEndpoint);
+    return this.wrapRequest(async () => {
+      const response = query
+        ? await bent(
+            'json',
+            'POST',
+            context.headers || {},
+          )(
+            this.tableEndpoint +
+              (query.expand ? '?expand=' + query.expand.join(',') : ''),
+            query.conditions,
+          )
+        : await bent('json')(this.tableEndpoint);
 
-    return <DenimRecord[]>response || null;
+      return <DenimRecord[]>response || null;
+    });
   }
 
   async createRecord(context: T, record: DenimRecord): Promise<DenimRecord> {
-    const response = await bent(
-      'json',
-      'PUT',
-      context.headers || { },
-    )(this.tableEndpoint, record);
+    return this.wrapRequest(async () => {
+      const response = await bent(
+        'json',
+        'PUT',
+        context.headers || {},
+      )(this.tableEndpoint, record);
 
-    return <DenimRecord>response;
+      return <DenimRecord>response;
+    });
   }
 
   async updateRecord(
@@ -96,21 +102,43 @@ export class DenimRemoteTableProvider<
     id: string,
     record: DenimRecord,
   ): Promise<DenimRecord> {
-    const response = await bent(
-      'json',
-      'PUT',
-      context.headers || { },
-    )(this.tableEndpoint + '/' + id, record);
+    return this.wrapRequest(async () => {
+      const response = await bent(
+        'json',
+        'PUT',
+        context.headers || {},
+      )(this.tableEndpoint + '/' + id, record);
 
-    return <DenimRecord>response;
+      return <DenimRecord>response;
+    });
   }
 
   async deleteRecord(context: T, id: string): Promise<void> {
-    await bent(
-      'json',
-      'DELETE',
-      context.headers || { },
-    )(this.tableEndpoint + '/' + id);
+    await this.wrapRequest(async () => {
+      await bent(
+        'json',
+        'DELETE',
+        context.headers || {},
+      )(this.tableEndpoint + '/' + id);
+    });
+  }
+
+  async wrapRequest<T>(callback: () => T): Promise<T> {
+    try {
+      return await callback();
+    } catch (e) {
+      if (e.json) {
+        const json = await e.json();
+
+        if (json.errors) {
+          const error: any = new Error('Multiple errors occured.');
+          error.inner = json.errors;
+          throw error;
+        }
+      }
+
+      throw e;
+    }
   }
 }
 
@@ -119,10 +147,7 @@ export default class DenimRemoteDataSource<
 > extends DenimDataSource<T, DenimSchemaSource<T>> {
   private endpoint: string;
 
-  constructor(
-    schema: DenimSchemaSource<T>,
-    endpoint: string,
-  ) {
+  constructor(schema: DenimSchemaSource<T>, endpoint: string) {
     super(schema);
     this.endpoint = endpoint;
   }
