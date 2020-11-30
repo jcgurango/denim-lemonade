@@ -1,324 +1,123 @@
 [
 	{
-		"id": "tblr6DzR6n8lWWEv7",
-		"name": "Employees",
+		"id": "tblwceR29WfuANzls",
+		"name": "Employee",
 		"columns": [
 			{
-				"id": "fldi1dCA6md3lTXii",
-				"name": "Name",
+				"id": "fldWyDzE7UI65hd4z",
+				"name": "User ID",
 				"type": "text",
 				"typeOptions": null
 			},
 			{
-				"id": "fldOoYdmCX9emdkee",
-				"name": "Updated",
-				"type": "formula",
-				"typeOptions": {
-					"isDateTime": true,
-					"dateFormat": "Local",
-					"displayType": "lastModifiedTime",
-					"timeZone": "client",
-					"formulaTextParsed": "LAST_MODIFIED_TIME()",
-					"dependencies": {
-						"referencedColumnIdsForValue": [],
-						"dependsOnAllColumnModifications": true
-					},
-					"resultType": "date"
-				}
-			},
-			{
-				"id": "fld70HTZoIUXOk4Fu",
-				"name": "Test Leave Balance",
-				"type": "foreignKey",
-				"typeOptions": {
-					"foreignTableId": "tblwIJqydRD5fTOJy",
-					"symmetricColumnId": "fldlj1c9RB64zaqka",
-					"relationship": "many",
-					"unreversed": true
-				}
-			},
-			{
-				"id": "fldUue9vHcwIDTn49",
-				"name": "Internal Leave ID",
+				"id": "fld1kbYah9rQPF1ZA",
+				"name": "Last Name",
 				"type": "text",
 				"typeOptions": null
 			},
 			{
-				"id": "fldW51uaEIETGzd63",
-				"name": "Test Record CRUD",
-				"type": "foreignKey",
-				"typeOptions": {
-					"foreignTableId": "tbljG7vzm7Y8UA3um",
-					"symmetricColumnId": "fldCUKUWoGEKHotTn",
-					"relationship": "many",
-					"unreversed": true
-				}
-			},
-			{
-				"id": "fldmiGgJvhZQepdcg",
-				"name": "Test Record CRUD 2",
-				"type": "foreignKey",
-				"typeOptions": {
-					"foreignTableId": "tbljG7vzm7Y8UA3um",
-					"symmetricColumnId": "fldhAWZJBltIuqcS5",
-					"relationship": "many",
-					"unreversed": true
-				}
-			},
-			{
-				"id": "fldiTRyHR2yjqegR1",
-				"name": "Calculation",
-				"type": "formula",
-				"typeOptions": {
-					"formulaTextParsed": "RECORD_ID()",
-					"dependencies": {
-						"referencedColumnIdsForValue": []
-					},
-					"resultType": "text"
-				}
-			}
-		]
-	},
-	{
-		"id": "tblmUn9ffFdbisSTe",
-		"name": "Leave Types",
-		"columns": [
-			{
-				"id": "fldzfRzpFqETeCCpD",
-				"name": "Name",
+				"id": "fldOtpyP71tMRZNHA",
+				"name": "First Name",
 				"type": "text",
 				"typeOptions": null
 			},
 			{
-				"id": "fld0NaS8ujR6lD7n0",
-				"name": "Internal ID",
+				"id": "fldiFN7cnUfcPeZzB",
+				"name": "Middle Name",
 				"type": "text",
 				"typeOptions": null
 			},
 			{
-				"id": "fldJVpLro8ss3xhUp",
-				"name": "Test Leave Balance",
-				"type": "foreignKey",
-				"typeOptions": {
-					"foreignTableId": "tblwIJqydRD5fTOJy",
-					"symmetricColumnId": "fldUdjOwa35amOcjU",
-					"relationship": "many",
-					"unreversed": true
-				}
-			}
-		]
-	},
-	{
-		"id": "tblwIJqydRD5fTOJy",
-		"name": "Test Leave Balance",
-		"columns": [
-			{
-				"id": "fldrWmzf6ucGkDWnB",
-				"name": "Name",
-				"type": "text",
-				"typeOptions": null
-			},
-			{
-				"id": "fldlj1c9RB64zaqka",
-				"name": "Employees",
-				"type": "foreignKey",
-				"typeOptions": {
-					"foreignTableId": "tblr6DzR6n8lWWEv7",
-					"relationship": "many",
-					"unreversed": true,
-					"symmetricColumnId": "fld70HTZoIUXOk4Fu"
-				}
-			},
-			{
-				"id": "fldUWdd7PCSvqhvPc",
-				"name": "Employee Leave ID",
-				"type": "lookup",
-				"typeOptions": {
-					"relationColumnId": "fldlj1c9RB64zaqka",
-					"foreignTableRollupColumnId": "fldUue9vHcwIDTn49",
-					"dependencies": {
-						"referencedColumnIdsForValue": [
-							"fldlj1c9RB64zaqka",
-							"fldUue9vHcwIDTn49"
-						]
-					},
-					"resultType": "text"
-				}
-			},
-			{
-				"id": "fldUdjOwa35amOcjU",
-				"name": "Leave Types",
-				"type": "foreignKey",
-				"typeOptions": {
-					"foreignTableId": "tblmUn9ffFdbisSTe",
-					"relationship": "many",
-					"unreversed": true,
-					"symmetricColumnId": "fldJVpLro8ss3xhUp"
-				}
-			},
-			{
-				"id": "flddv11p6Fpfgalep",
-				"name": "Leave Type ID",
-				"type": "lookup",
-				"typeOptions": {
-					"relationColumnId": "fldUdjOwa35amOcjU",
-					"foreignTableRollupColumnId": "fld0NaS8ujR6lD7n0",
-					"dependencies": {
-						"referencedColumnIdsForValue": [
-							"fldUdjOwa35amOcjU",
-							"fld0NaS8ujR6lD7n0"
-						]
-					},
-					"resultType": "text"
-				}
-			},
-			{
-				"id": "fldFw22NSudPXACww",
+				"id": "fld6jrze3EtStfQKA",
 				"name": "Leave Balance",
-				"type": "number",
-				"typeOptions": {
-					"format": "decimal",
-					"precision": 1,
-					"negative": false,
-					"validatorName": "positive"
-				}
-			},
-			{
-				"id": "fldVrSqJUElXbbvt1",
-				"name": "Updated",
-				"type": "formula",
-				"typeOptions": {
-					"isDateTime": true,
-					"dateFormat": "Local",
-					"displayType": "lastModifiedTime",
-					"timeZone": "client",
-					"formulaTextParsed": "LAST_MODIFIED_TIME()",
-					"dependencies": {
-						"referencedColumnIdsForValue": [],
-						"dependsOnAllColumnModifications": true
-					},
-					"resultType": "date"
-				}
-			}
-		]
-	},
-	{
-		"id": "tbljG7vzm7Y8UA3um",
-		"name": "Test Record CRUD",
-		"columns": [
-			{
-				"id": "fldY3BFgx4eUhBVwO",
-				"name": "Name",
 				"type": "text",
 				"typeOptions": null
 			},
 			{
-				"id": "fldb8BQknTo1eJIfg",
-				"name": "Notes",
-				"type": "multilineText",
-				"typeOptions": null
+				"id": "fld0TzEJyVhYBimUw",
+				"name": "Full Name",
+				"type": "formula",
+				"typeOptions": {
+					"formulaTextParsed": "{column_value_fld1kbYah9rQPF1ZA} & \", \" &{column_value_fldOtpyP71tMRZNHA} & \" \" & {column_value_fldiFN7cnUfcPeZzB}",
+					"dependencies": {
+						"referencedColumnIdsForValue": [
+							"fld1kbYah9rQPF1ZA",
+							"fldOtpyP71tMRZNHA",
+							"fldiFN7cnUfcPeZzB"
+						]
+					},
+					"resultType": "text"
+				}
 			},
 			{
-				"id": "fldSDm2oekQpnFIQj",
-				"name": "Status",
+				"id": "fldVoFbMpv5PglRE5",
+				"name": "Title",
 				"type": "select",
 				"typeOptions": {
-					"choices": {
-						"seldiPtNlXKvwWTKo": {
-							"id": "seldiPtNlXKvwWTKo",
-							"name": "Todo",
-							"color": "red"
-						},
-						"selvdhm9n8XLXRjoh": {
-							"id": "selvdhm9n8XLXRjoh",
-							"name": "In progress",
-							"color": "yellow"
-						},
-						"selWYjTYv4YXwnEcR": {
-							"id": "selWYjTYv4YXwnEcR",
-							"name": "Done",
-							"color": "green"
-						}
-					},
 					"choiceOrder": [
-						"seldiPtNlXKvwWTKo",
-						"selvdhm9n8XLXRjoh",
-						"selWYjTYv4YXwnEcR"
-					]
-				}
-			},
-			{
-				"id": "fld2AJMcRUX9QpIyJ",
-				"name": "Checkbox",
-				"type": "checkbox",
-				"typeOptions": {
-					"color": "green",
-					"icon": "check"
-				}
-			},
-			{
-				"id": "fldcH7WmHxTqyksZE",
-				"name": "Multiple Select",
-				"type": "multiSelect",
-				"typeOptions": {
-					"choiceOrder": [
-						"selC0Ixf3VeK0IjB2",
-						"selJcNFgUHRHESgC1",
-						"selWHoQ7CDvc7Jh1X"
+						"selH4MygMXiunwpuZ",
+						"selWp8CyTRck4cyJq",
+						"selpbwz3M2SAT8PUQ",
+						"selgHSNPI64flJuYS",
+						"selPjA4hmFMnJH7zF"
 					],
 					"choices": {
-						"selC0Ixf3VeK0IjB2": {
-							"id": "selC0Ixf3VeK0IjB2",
+						"selH4MygMXiunwpuZ": {
+							"id": "selH4MygMXiunwpuZ",
 							"color": "blue",
-							"name": "Test 1"
+							"name": "Mr."
 						},
-						"selJcNFgUHRHESgC1": {
-							"id": "selJcNFgUHRHESgC1",
+						"selWp8CyTRck4cyJq": {
+							"id": "selWp8CyTRck4cyJq",
 							"color": "cyan",
-							"name": "Test 2"
+							"name": "Mrs."
 						},
-						"selWHoQ7CDvc7Jh1X": {
-							"id": "selWHoQ7CDvc7Jh1X",
+						"selpbwz3M2SAT8PUQ": {
+							"id": "selpbwz3M2SAT8PUQ",
 							"color": "teal",
-							"name": "Test 3"
+							"name": "Ms."
+						},
+						"selgHSNPI64flJuYS": {
+							"id": "selgHSNPI64flJuYS",
+							"color": "green",
+							"name": "Miss"
+						},
+						"selPjA4hmFMnJH7zF": {
+							"id": "selPjA4hmFMnJH7zF",
+							"color": "yellow",
+							"name": "Madam"
 						}
 					},
 					"disableColors": false
 				}
 			},
 			{
-				"id": "fldDgHDbUmDH44mYk",
-				"name": "Single Select",
+				"id": "fld151IvWI07Fl3GK",
+				"name": "Gender",
 				"type": "select",
 				"typeOptions": {
 					"choiceOrder": [
-						"selguvGafGnNbwMkL",
-						"selOdjipvxXVk1U1D",
-						"selZnsdkWgA6Qrnmi"
+						"selrzRWGi5ymPYlfG",
+						"selm2z0Q2Fpfw087i"
 					],
 					"choices": {
-						"selguvGafGnNbwMkL": {
-							"id": "selguvGafGnNbwMkL",
+						"selrzRWGi5ymPYlfG": {
+							"id": "selrzRWGi5ymPYlfG",
 							"color": "blue",
-							"name": "Test 1"
+							"name": "Male"
 						},
-						"selOdjipvxXVk1U1D": {
-							"id": "selOdjipvxXVk1U1D",
+						"selm2z0Q2Fpfw087i": {
+							"id": "selm2z0Q2Fpfw087i",
 							"color": "cyan",
-							"name": "Test 2"
-						},
-						"selZnsdkWgA6Qrnmi": {
-							"id": "selZnsdkWgA6Qrnmi",
-							"color": "teal",
-							"name": "Test 3"
+							"name": "Female"
 						}
 					},
 					"disableColors": false
 				}
 			},
 			{
-				"id": "fldh9v33ADqhSV8DU",
-				"name": "Date",
+				"id": "fldRh0dugqgcQtTnp",
+				"name": "Date of Birth",
 				"type": "date",
 				"typeOptions": {
 					"isDateTime": false,
@@ -326,24 +125,264 @@
 				}
 			},
 			{
-				"id": "fldt1mcZUHliIwp7f",
-				"name": "Date Time",
-				"type": "date",
+				"id": "fldXueYJpTRbDGwC6",
+				"name": "Nationality",
+				"type": "select",
 				"typeOptions": {
-					"isDateTime": true,
-					"dateFormat": "Local",
-					"timeFormat": "12hour",
-					"timeZone": "UTC"
+					"choiceOrder": [
+						"sel6eracCDDL5y5xO",
+						"seli2ZX0y664Q9s58",
+						"selRzNakvYutBWtUO"
+					],
+					"choices": {
+						"sel6eracCDDL5y5xO": {
+							"id": "sel6eracCDDL5y5xO",
+							"color": "blue",
+							"name": "AU-Australia"
+						},
+						"seli2ZX0y664Q9s58": {
+							"id": "seli2ZX0y664Q9s58",
+							"color": "cyan",
+							"name": "SG-Singapore"
+						},
+						"selRzNakvYutBWtUO": {
+							"id": "selRzNakvYutBWtUO",
+							"color": "teal",
+							"name": "PH-Philippines"
+						}
+					},
+					"disableColors": false
 				}
 			},
 			{
-				"id": "fldvimBBcztGBJaSo",
-				"name": "Phone",
+				"id": "fldyqTgTZx4ydk5eb",
+				"name": "Citizenship",
+				"type": "select",
+				"typeOptions": {
+					"choiceOrder": [],
+					"choices": {},
+					"disableColors": false
+				}
+			},
+			{
+				"id": "fldULcCHHKdAo8GnW",
+				"name": "Employee ID",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldkqJGFQMls8CHa1",
+				"name": "Address 1",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldHAKfVvmrEjC7Yv",
+				"name": "Address 2",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldVkAYtL9SQCL5N8",
+				"name": "City",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldIejMAubQvB9b5c",
+				"name": "State/Province",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldJYzdCjUgC40LAw",
+				"name": "Zip",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fld16irAm4oBVo0Rr",
+				"name": "Country",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldQlnnxwxWvXnGpn",
+				"name": "Home Number",
 				"type": "phone",
 				"typeOptions": null
 			},
 			{
-				"id": "fldoai1Zj6jfR3Z5j",
+				"id": "fldLGXtiKLmjUHAXG",
+				"name": "Mobile Number",
+				"type": "phone",
+				"typeOptions": null
+			},
+			{
+				"id": "fldfaVltdPWIB04Ux",
+				"name": "Marital Status",
+				"type": "select",
+				"typeOptions": {
+					"choiceOrder": [
+						"sel8nxVp5gpF9fZGL",
+						"sel4jEObSBYG7BFvT",
+						"sela9C5VdGVbdGYHm",
+						"sels1PgTREtDOdrrP",
+						"selaCvraEUPV9LVmY",
+						"sel0ogQs0sB8jmBq3"
+					],
+					"choices": {
+						"sel8nxVp5gpF9fZGL": {
+							"id": "sel8nxVp5gpF9fZGL",
+							"color": "blue",
+							"name": "Single"
+						},
+						"sel4jEObSBYG7BFvT": {
+							"id": "sel4jEObSBYG7BFvT",
+							"color": "cyan",
+							"name": "Married"
+						},
+						"sela9C5VdGVbdGYHm": {
+							"id": "sela9C5VdGVbdGYHm",
+							"color": "teal",
+							"name": "Civil Partner"
+						},
+						"sels1PgTREtDOdrrP": {
+							"id": "sels1PgTREtDOdrrP",
+							"color": "green",
+							"name": "Separated"
+						},
+						"selaCvraEUPV9LVmY": {
+							"id": "selaCvraEUPV9LVmY",
+							"color": "yellow",
+							"name": "Divorced"
+						},
+						"sel0ogQs0sB8jmBq3": {
+							"id": "sel0ogQs0sB8jmBq3",
+							"color": "orange",
+							"name": "Widowed"
+						}
+					},
+					"disableColors": false
+				}
+			},
+			{
+				"id": "fldEdQxQxLs0D7naL",
+				"name": "Base",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldKfLoZF5ksvjgMq",
+				"name": "Direct Manager",
+				"type": "foreignKey",
+				"typeOptions": {
+					"relationship": "one",
+					"foreignTableId": "tblwceR29WfuANzls",
+					"unreversed": true
+				}
+			},
+			{
+				"id": "fldO2hvzqwGVPRoZ5",
+				"name": "Member Type",
+				"type": "select",
+				"typeOptions": {
+					"choiceOrder": [
+						"sel8e6Z6hMB7JN88p",
+						"selkDi9uHzgQXcLFp",
+						"sel5nk6ae9PQHzsDJ",
+						"sellzr0g5KFyDQj0S"
+					],
+					"choices": {
+						"sel8e6Z6hMB7JN88p": {
+							"id": "sel8e6Z6hMB7JN88p",
+							"color": "blue",
+							"name": "Employee"
+						},
+						"selkDi9uHzgQXcLFp": {
+							"id": "selkDi9uHzgQXcLFp",
+							"color": "cyan",
+							"name": "Contractor"
+						},
+						"sel5nk6ae9PQHzsDJ": {
+							"id": "sel5nk6ae9PQHzsDJ",
+							"color": "teal",
+							"name": "Consultant"
+						},
+						"sellzr0g5KFyDQj0S": {
+							"id": "sellzr0g5KFyDQj0S",
+							"color": "green",
+							"name": "Partner"
+						}
+					},
+					"disableColors": false
+				}
+			},
+			{
+				"id": "fld4t3ZDsvTcdXLtK",
+				"name": "Department Supervisor",
+				"type": "checkbox",
+				"typeOptions": {
+					"color": "green",
+					"icon": "check"
+				}
+			},
+			{
+				"id": "fldvcBOqdfaJOnakZ",
+				"name": "Seat Number",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldknRbMCzBF2fpat",
+				"name": "Entry Date",
+				"type": "date",
+				"typeOptions": {
+					"isDateTime": false,
+					"dateFormat": "Local"
+				}
+			},
+			{
+				"id": "fldrXobyvSSq1I3iK",
+				"name": "Phone Number Visibility",
+				"type": "checkbox",
+				"typeOptions": {
+					"color": "green",
+					"icon": "check"
+				}
+			},
+			{
+				"id": "fldfsTH5f02AkKpeR",
+				"name": "Account Status",
+				"type": "select",
+				"typeOptions": {
+					"choiceOrder": [
+						"selJrTDVnh1grIhxT",
+						"selkzYFHtdmRPFyk8"
+					],
+					"choices": {
+						"selJrTDVnh1grIhxT": {
+							"id": "selJrTDVnh1grIhxT",
+							"color": "blue",
+							"name": "Active"
+						},
+						"selkzYFHtdmRPFyk8": {
+							"id": "selkzYFHtdmRPFyk8",
+							"color": "cyan",
+							"name": "Inactive"
+						}
+					},
+					"disableColors": false
+				}
+			},
+			{
+				"id": "fldSkcaKiGF9J1KMS",
+				"name": "Department",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldpRMSNGO24MokMF",
 				"name": "Email",
 				"type": "text",
 				"typeOptions": {
@@ -351,27 +390,93 @@
 				}
 			},
 			{
-				"id": "fldzMLhLOCPrKoyI7",
-				"name": "URL",
+				"id": "fldp9lUyKZrwHYe3z",
+				"name": "Nickname",
 				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldbsqgV2RQb61gEx",
+				"name": "Picture",
+				"type": "multipleAttachment",
 				"typeOptions": {
-					"validatorName": "url"
+					"unreversed": true
 				}
 			},
 			{
-				"id": "fldSGKWTQiNSaZv4b",
-				"name": "Number",
-				"type": "number",
+				"id": "fldd0uAYreSSWCjMw",
+				"name": "Curriculum Vitae",
+				"type": "multipleAttachment",
 				"typeOptions": {
-					"format": "decimal",
-					"precision": 1,
-					"negative": false,
-					"validatorName": "positive"
+					"unreversed": true
 				}
 			},
 			{
-				"id": "fldaqiLNWiDY0arSj",
-				"name": "Currency",
+				"id": "fldFrv5zqAtPy2gww",
+				"name": "Skills",
+				"type": "multiSelect",
+				"typeOptions": {
+					"choiceOrder": [
+						"selzy2RhO1TQGt8om",
+						"selgUmqA4EYtL0XQt",
+						"selyHYocAAVAaQcAx",
+						"selaIzN0eyju2n21Y",
+						"selSUd2kVpRlmElGx",
+						"selVzFZnQaT27B5OF"
+					],
+					"choices": {
+						"selzy2RhO1TQGt8om": {
+							"id": "selzy2RhO1TQGt8om",
+							"color": "blue",
+							"name": "Programming Skills - .Net"
+						},
+						"selgUmqA4EYtL0XQt": {
+							"id": "selgUmqA4EYtL0XQt",
+							"color": "cyan",
+							"name": "Programming Skills - PHP"
+						},
+						"selyHYocAAVAaQcAx": {
+							"id": "selyHYocAAVAaQcAx",
+							"color": "teal",
+							"name": "Programming Skills - Java"
+						},
+						"selaIzN0eyju2n21Y": {
+							"id": "selaIzN0eyju2n21Y",
+							"color": "green",
+							"name": "Database Management"
+						},
+						"selSUd2kVpRlmElGx": {
+							"id": "selSUd2kVpRlmElGx",
+							"color": "yellow",
+							"name": "Product Management"
+						},
+						"selVzFZnQaT27B5OF": {
+							"id": "selVzFZnQaT27B5OF",
+							"color": "orange",
+							"name": "Pre-Sales"
+						}
+					},
+					"disableColors": false
+				}
+			},
+			{
+				"id": "fldSxu6cgqGjbTtJB",
+				"name": "Payroll ID",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldHuLcjW5BhRbpGG",
+				"name": "Exit Date",
+				"type": "date",
+				"typeOptions": {
+					"isDateTime": false,
+					"dateFormat": "Local"
+				}
+			},
+			{
+				"id": "fldfevYa5libJ9G7S",
+				"name": "Employee Wage",
 				"type": "number",
 				"typeOptions": {
 					"format": "currency",
@@ -382,95 +487,3020 @@
 				}
 			},
 			{
-				"id": "fld0xItIlPVSzBBXx",
-				"name": "Percent",
+				"id": "fldZmrVGqTSMRY3up",
+				"name": "Employee Allowance",
+				"type": "foreignKey",
+				"typeOptions": {
+					"foreignTableId": "tblVDkY6qqCieREeE",
+					"relationship": "many",
+					"unreversed": true,
+					"symmetricColumnId": "fldBpKHjMivqYKEZN"
+				}
+			},
+			{
+				"id": "fld95N5XBCBOL5Ive",
+				"name": "Leave Scheme",
+				"type": "foreignKey",
+				"typeOptions": {
+					"relationship": "one",
+					"foreignTableId": "tblWFj6DwlXpQ0tCJ",
+					"symmetricColumnId": "fldt3G54TgMUwFlwZ",
+					"unreversed": true
+				}
+			},
+			{
+				"id": "fldCwVqzt14ZwrAm4",
+				"name": "Daily Work Hours",
 				"type": "number",
 				"typeOptions": {
-					"format": "percentV2",
-					"precision": 0,
+					"format": "decimal",
+					"precision": 1,
 					"negative": false,
 					"validatorName": "positive"
 				}
 			},
 			{
-				"id": "fldqdck800trC1WPp",
-				"name": "Duration",
-				"type": "number",
+				"id": "flddWyhvyhT01vj0e",
+				"name": "Leave Accrual",
+				"type": "foreignKey",
 				"typeOptions": {
-					"format": "duration",
-					"durationFormat": "h:mm",
-					"negative": true
+					"foreignTableId": "tblGQD9Bp6lcRXCaM",
+					"symmetricColumnId": "fldxqsdOlFBRcbhzL",
+					"relationship": "many",
+					"unreversed": true
 				}
 			},
 			{
-				"id": "fldkkZDyKlGm0i4Gu",
-				"name": "Rating",
-				"type": "rating",
+				"id": "fldglzQjgUswZRuJ5",
+				"name": "Job Positions",
+				"type": "foreignKey",
 				"typeOptions": {
-					"color": "yellow",
-					"icon": "star",
-					"max": 5
+					"foreignTableId": "tblLzP2ER3rp4X4TB",
+					"relationship": "many",
+					"unreversed": true,
+					"symmetricColumnId": "fldHkcyoit9dFmIsN"
 				}
 			},
 			{
-				"id": "fldO6Ju98Gf2YA910",
-				"name": "Calculation",
+				"id": "fld3LYFrJGeYOUDKw",
+				"name": "Job Roles",
+				"type": "foreignKey",
+				"typeOptions": {
+					"foreignTableId": "tbl4mQRdqzcEfNdns",
+					"relationship": "many",
+					"unreversed": true,
+					"symmetricColumnId": "fldwn3WC14w0pD5o2"
+				}
+			},
+			{
+				"id": "fldY6eE4iQXZQuPVg",
+				"name": "Job Title",
+				"type": "foreignKey",
+				"typeOptions": {
+					"foreignTableId": "tblLdytoYinm1gPNK",
+					"relationship": "many",
+					"unreversed": true,
+					"symmetricColumnId": "fldCVlH4G3e97qw8Q"
+				}
+			},
+			{
+				"id": "fld3kRoFwePZEDZyI",
+				"name": "Language",
+				"type": "multiSelect",
+				"typeOptions": {
+					"choiceOrder": [
+						"selTJVX2H1U4x55eU",
+						"selUBOjRag1JIbKHt",
+						"sely63hGI1rSZSBuh",
+						"self0C9FNs6yaf64H",
+						"selJu6vFSCC3qnTev",
+						"selqPubyhrDo1hzjW"
+					],
+					"choices": {
+						"selTJVX2H1U4x55eU": {
+							"id": "selTJVX2H1U4x55eU",
+							"color": "blue",
+							"name": "English"
+						},
+						"selUBOjRag1JIbKHt": {
+							"id": "selUBOjRag1JIbKHt",
+							"color": "cyan",
+							"name": "Filipino"
+						},
+						"sely63hGI1rSZSBuh": {
+							"id": "sely63hGI1rSZSBuh",
+							"color": "teal",
+							"name": "Mandarin"
+						},
+						"self0C9FNs6yaf64H": {
+							"id": "self0C9FNs6yaf64H",
+							"color": "green",
+							"name": "Japanese"
+						},
+						"selJu6vFSCC3qnTev": {
+							"id": "selJu6vFSCC3qnTev",
+							"color": "yellow",
+							"name": "French"
+						},
+						"selqPubyhrDo1hzjW": {
+							"id": "selqPubyhrDo1hzjW",
+							"color": "orange",
+							"name": "German"
+						}
+					},
+					"disableColors": false
+				}
+			},
+			{
+				"id": "fld5eYWstdXGcxwKU",
+				"name": "Contact Person",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fld11RHYMhC93e23Q",
+				"name": "Contact Person Mobile No",
+				"type": "phone",
+				"typeOptions": null
+			},
+			{
+				"id": "fldLJVUdTiAIKm3vT",
+				"name": "Relation to Contact Person",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldeRmV6y2joachUO",
+				"name": "Job History",
+				"type": "multipleAttachment",
+				"typeOptions": {
+					"unreversed": true
+				}
+			},
+			{
+				"id": "fldGo1wIlHuaYJVhW",
+				"name": "Created By",
+				"type": "computation",
+				"typeOptions": {
+					"computationType": "createdBy",
+					"computationParams": {},
+					"dependencies": {
+						"referencedColumnIdsForValue": []
+					},
+					"resultType": "collaborator"
+				}
+			},
+			{
+				"id": "fldx6fXbgdGk88kMF",
+				"name": "Date Created",
 				"type": "formula",
 				"typeOptions": {
-					"formulaTextParsed": "column_value_fldSGKWTQiNSaZv4b*10",
+					"isDateTime": true,
+					"dateFormat": "Local",
+					"displayType": "createdTime",
+					"timeZone": "client",
+					"formulaTextParsed": "CREATED_TIME()",
+					"dependencies": {
+						"referencedColumnIdsForValue": []
+					},
+					"resultType": "date"
+				}
+			},
+			{
+				"id": "fldwu9EPDNGGypLej",
+				"name": "Last Modified By",
+				"type": "computation",
+				"typeOptions": {
+					"computationType": "lastModifiedBy",
+					"computationParams": {
+						"allColumns": true,
+						"columnIds": []
+					},
+					"dependencies": {
+						"referencedColumnIdsForValue": [],
+						"dependsOnAllColumnModifications": true
+					},
+					"resultType": "collaborator"
+				}
+			},
+			{
+				"id": "fld7gAfLJGPRwTgFF",
+				"name": "Last Modified",
+				"type": "formula",
+				"typeOptions": {
+					"isDateTime": true,
+					"dateFormat": "Local",
+					"displayType": "lastModifiedTime",
+					"timeZone": "client",
+					"formulaTextParsed": "LAST_MODIFIED_TIME()",
+					"dependencies": {
+						"referencedColumnIdsForValue": [],
+						"dependsOnAllColumnModifications": true
+					},
+					"resultType": "date"
+				}
+			},
+			{
+				"id": "fldgKrQnPY7xRMEQk",
+				"name": "LinkedIn Account",
+				"type": "text",
+				"typeOptions": {
+					"validatorName": "url"
+				}
+			},
+			{
+				"id": "fldKYl2MF9qLVQPqE",
+				"name": "Dependents",
+				"type": "multipleAttachment",
+				"typeOptions": {
+					"unreversed": true
+				}
+			},
+			{
+				"id": "fld4XY5T3Hse7x6Vb",
+				"name": "Attachments",
+				"type": "multipleAttachment",
+				"typeOptions": {
+					"unreversed": true
+				}
+			},
+			{
+				"id": "fld4SEpOk1HuihIQr",
+				"name": "Leave Accrual copy",
+				"type": "foreignKey",
+				"typeOptions": {
+					"foreignTableId": "tblxMJhUbQ9G8J10Z",
+					"symmetricColumnId": "fldomyl77ppltXGpY",
+					"relationship": "many",
+					"unreversed": true
+				}
+			},
+			{
+				"id": "fldBNXHP2fBJFMg8H",
+				"name": "Department 2",
+				"type": "foreignKey",
+				"typeOptions": {
+					"foreignTableId": "tblUfitCYsBy6AiNV",
+					"symmetricColumnId": "fldz66zByq4hQJn3L",
+					"relationship": "many",
+					"unreversed": true
+				}
+			}
+		]
+	},
+	{
+		"id": "tblVDkY6qqCieREeE",
+		"name": "Employee Allowance",
+		"columns": [
+			{
+				"id": "fldpdVvpG2pxMOVow",
+				"name": "Allowance",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldLM6brUREmYrT14",
+				"name": "Amount",
+				"type": "number",
+				"typeOptions": {
+					"format": "currency",
+					"precision": 2,
+					"symbol": "$",
+					"negative": false,
+					"validatorName": "positive"
+				}
+			},
+			{
+				"id": "fldWLtxDSdO0ho5p9",
+				"name": "Description",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldBpKHjMivqYKEZN",
+				"name": "Employee",
+				"type": "foreignKey",
+				"typeOptions": {
+					"foreignTableId": "tblwceR29WfuANzls",
+					"symmetricColumnId": "fldZmrVGqTSMRY3up",
+					"relationship": "many",
+					"unreversed": true
+				}
+			},
+			{
+				"id": "fldoJkoUIcmZQbzDv",
+				"name": "Employee copy",
+				"type": "text",
+				"typeOptions": null
+			}
+		]
+	},
+	{
+		"id": "tblLzP2ER3rp4X4TB",
+		"name": "Job Positions",
+		"columns": [
+			{
+				"id": "fldEXHrAeqvxfCxQE",
+				"name": "Job Position",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldRgN8DGeUSLawjK",
+				"name": "Description",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "flda1fdb4treSfJcg",
+				"name": "Attachments",
+				"type": "multipleAttachment",
+				"typeOptions": {
+					"unreversed": true
+				}
+			},
+			{
+				"id": "fldHkcyoit9dFmIsN",
+				"name": "Employee",
+				"type": "foreignKey",
+				"typeOptions": {
+					"foreignTableId": "tblwceR29WfuANzls",
+					"symmetricColumnId": "fldglzQjgUswZRuJ5",
+					"relationship": "many",
+					"unreversed": true
+				}
+			},
+			{
+				"id": "flduEMfZen0MxND6v",
+				"name": "Employee copy",
+				"type": "text",
+				"typeOptions": null
+			}
+		]
+	},
+	{
+		"id": "tbl4mQRdqzcEfNdns",
+		"name": "Job Roles",
+		"columns": [
+			{
+				"id": "fldWqmwEoX37XG6GS",
+				"name": "Job Role",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldqoFNVpPq5HizJ0",
+				"name": "Description",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldm2vriDiFkNW4lE",
+				"name": "Attachments",
+				"type": "multipleAttachment",
+				"typeOptions": {
+					"unreversed": true
+				}
+			},
+			{
+				"id": "fldwn3WC14w0pD5o2",
+				"name": "Employee",
+				"type": "foreignKey",
+				"typeOptions": {
+					"foreignTableId": "tblwceR29WfuANzls",
+					"symmetricColumnId": "fld3LYFrJGeYOUDKw",
+					"relationship": "many",
+					"unreversed": true
+				}
+			},
+			{
+				"id": "fldRO5fsLlmXqrDYc",
+				"name": "Job Skills",
+				"type": "foreignKey",
+				"typeOptions": {
+					"foreignTableId": "tblxRlXcBDKytogqB",
+					"relationship": "many",
+					"unreversed": true,
+					"symmetricColumnId": "fldzaW4FREqfbP4To"
+				}
+			},
+			{
+				"id": "fldSi7NWLaQ6Z0yRd",
+				"name": "Required (from Job Skills)",
+				"type": "lookup",
+				"typeOptions": {
+					"relationColumnId": "fldRO5fsLlmXqrDYc",
+					"foreignTableRollupColumnId": "fldK3695uQLJtsZok",
 					"dependencies": {
 						"referencedColumnIdsForValue": [
-							"fldSGKWTQiNSaZv4b"
+							"fldRO5fsLlmXqrDYc",
+							"fldK3695uQLJtsZok"
+						]
+					},
+					"resultType": "checkbox",
+					"color": "green",
+					"icon": "check"
+				}
+			},
+			{
+				"id": "fldhee7Ob5HegfkvS",
+				"name": "Level (from Job Skills)",
+				"type": "lookup",
+				"typeOptions": {
+					"relationColumnId": "fldRO5fsLlmXqrDYc",
+					"foreignTableRollupColumnId": "fldGSRaN71y7bfCYE",
+					"dependencies": {
+						"referencedColumnIdsForValue": [
+							"fldRO5fsLlmXqrDYc",
+							"fldGSRaN71y7bfCYE"
+						]
+					},
+					"resultType": "text"
+				}
+			},
+			{
+				"id": "fldjHDDdXYnzh402K",
+				"name": "Employee copy",
+				"type": "text",
+				"typeOptions": null
+			}
+		]
+	},
+	{
+		"id": "tblxRlXcBDKytogqB",
+		"name": "Job Skills",
+		"columns": [
+			{
+				"id": "fldHSLFEUrc0GJk4U",
+				"name": "Job Skill",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fld171DOUexiaLvC8",
+				"name": "Description",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldGSRaN71y7bfCYE",
+				"name": "Level",
+				"type": "select",
+				"typeOptions": {
+					"choiceOrder": [
+						"selXu4zKgSkQRQ8lw",
+						"selAGcMBZ3KCEmTYV",
+						"selU2PxlCuT24ZxHo",
+						"selyUbKyhamMu2LiG"
+					],
+					"choices": {
+						"selXu4zKgSkQRQ8lw": {
+							"id": "selXu4zKgSkQRQ8lw",
+							"color": "blue",
+							"name": "1 - Beginner"
+						},
+						"selAGcMBZ3KCEmTYV": {
+							"id": "selAGcMBZ3KCEmTYV",
+							"color": "cyan",
+							"name": "2 - Advanced"
+						},
+						"selU2PxlCuT24ZxHo": {
+							"id": "selU2PxlCuT24ZxHo",
+							"color": "teal",
+							"name": "3 - Expert"
+						},
+						"selyUbKyhamMu2LiG": {
+							"id": "selyUbKyhamMu2LiG",
+							"color": "green",
+							"name": ""
+						}
+					},
+					"disableColors": false
+				}
+			},
+			{
+				"id": "fldK3695uQLJtsZok",
+				"name": "Required",
+				"type": "checkbox",
+				"typeOptions": {
+					"color": "green",
+					"icon": "check"
+				}
+			},
+			{
+				"id": "fldzaW4FREqfbP4To",
+				"name": "Job Roles",
+				"type": "foreignKey",
+				"typeOptions": {
+					"foreignTableId": "tbl4mQRdqzcEfNdns",
+					"symmetricColumnId": "fldRO5fsLlmXqrDYc",
+					"relationship": "many",
+					"unreversed": true
+				}
+			}
+		]
+	},
+	{
+		"id": "tblLdytoYinm1gPNK",
+		"name": "Job Title",
+		"columns": [
+			{
+				"id": "fldXedXP2NlNlB1oL",
+				"name": "Individual Job Title",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fld0tWrIPBlSFg2KV",
+				"name": "Description",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldCVlH4G3e97qw8Q",
+				"name": "Employee",
+				"type": "foreignKey",
+				"typeOptions": {
+					"foreignTableId": "tblwceR29WfuANzls",
+					"symmetricColumnId": "fldY6eE4iQXZQuPVg",
+					"relationship": "many",
+					"unreversed": true
+				}
+			},
+			{
+				"id": "fldpfVoFCX5IZRrMy",
+				"name": "Employee copy",
+				"type": "text",
+				"typeOptions": null
+			}
+		]
+	},
+	{
+		"id": "tblJZ210YboETwCn2",
+		"name": "Leave Type",
+		"columns": [
+			{
+				"id": "fldVeWejvRPXDJcuk",
+				"name": "Leave Type",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldGJY0FdOJuYRr1Q",
+				"name": "7 Days Duration",
+				"type": "checkbox",
+				"typeOptions": {
+					"color": "green",
+					"icon": "check"
+				}
+			},
+			{
+				"id": "fldmkrFONfNXgtTrr",
+				"name": "Description",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fld9g0f8YiLMztdkl",
+				"name": "Leave Rules",
+				"type": "foreignKey",
+				"typeOptions": {
+					"foreignTableId": "tblWKqyufZInfeuB3",
+					"symmetricColumnId": "fld1UsxrXdnFA6TlA",
+					"relationship": "many",
+					"unreversed": true
+				}
+			},
+			{
+				"id": "fldVKmEujAS9TEB0A",
+				"name": "Default Leave Value",
+				"type": "number",
+				"typeOptions": {
+					"format": "decimal",
+					"precision": 1,
+					"negative": false,
+					"validatorName": "positive"
+				}
+			},
+			{
+				"id": "fldYRJWC51FQaKWll",
+				"name": "Leave Scheme",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fld6kOJC83wkgdtMS",
+				"name": "Leave Scheme 2",
+				"type": "foreignKey",
+				"typeOptions": {
+					"foreignTableId": "tblWFj6DwlXpQ0tCJ",
+					"symmetricColumnId": "fldUZAXCwq8HSCw8b",
+					"relationship": "many",
+					"unreversed": true
+				}
+			}
+		]
+	},
+	{
+		"id": "tblWFj6DwlXpQ0tCJ",
+		"name": "Leave Scheme",
+		"columns": [
+			{
+				"id": "fldDf2HHyB2Rqi89Y",
+				"name": "Leave Scheme",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldt3G54TgMUwFlwZ",
+				"name": "Employee",
+				"type": "foreignKey",
+				"typeOptions": {
+					"foreignTableId": "tblwceR29WfuANzls",
+					"symmetricColumnId": "fld95N5XBCBOL5Ive",
+					"relationship": "many",
+					"unreversed": true
+				}
+			},
+			{
+				"id": "fldD64lfww6bOg4qB",
+				"name": "Description",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldUZAXCwq8HSCw8b",
+				"name": "Leave Type",
+				"type": "foreignKey",
+				"typeOptions": {
+					"foreignTableId": "tblJZ210YboETwCn2",
+					"relationship": "many",
+					"unreversed": true,
+					"symmetricColumnId": "fld6kOJC83wkgdtMS"
+				}
+			},
+			{
+				"id": "fldgngMFPaDto6gaH",
+				"name": "Employee copy",
+				"type": "text",
+				"typeOptions": null
+			}
+		]
+	},
+	{
+		"id": "tblWKqyufZInfeuB3",
+		"name": "Leave Rules",
+		"columns": [
+			{
+				"id": "fld8EW6BPRyF2YzSu",
+				"name": "Leave Rule",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldiFJrWQDRuk9obw",
+				"name": "LOS Type",
+				"type": "select",
+				"typeOptions": {
+					"choiceOrder": [
+						"selriw2wnCQZyLSls",
+						"selq4Shzg4BrT1xeU",
+						"selofizs20lZwLwJF",
+						"selazo9Y8952EloaQ",
+						"sel77oAqVaKjR3w2w"
+					],
+					"choices": {
+						"selriw2wnCQZyLSls": {
+							"id": "selriw2wnCQZyLSls",
+							"color": "blue",
+							"name": "Year(s)"
+						},
+						"selq4Shzg4BrT1xeU": {
+							"id": "selq4Shzg4BrT1xeU",
+							"color": "cyan",
+							"name": "Month(s)"
+						},
+						"selofizs20lZwLwJF": {
+							"id": "selofizs20lZwLwJF",
+							"color": "teal",
+							"name": "Week(s)"
+						},
+						"sel77oAqVaKjR3w2w": {
+							"id": "sel77oAqVaKjR3w2w",
+							"color": "green",
+							"name": "NA"
+						},
+						"selazo9Y8952EloaQ": {
+							"id": "selazo9Y8952EloaQ",
+							"color": "yellow",
+							"name": "Day(s)"
+						}
+					},
+					"disableColors": false
+				}
+			},
+			{
+				"id": "fldtkDr1yTxC5QB2s",
+				"name": "Interval",
+				"type": "number",
+				"typeOptions": {
+					"format": "decimal",
+					"precision": 1,
+					"negative": false,
+					"validatorName": "positive"
+				}
+			},
+			{
+				"id": "fldrhOX9Bemmb3VIY",
+				"name": "Accrual Amount",
+				"type": "number",
+				"typeOptions": {
+					"format": "decimal",
+					"precision": 1,
+					"negative": false,
+					"validatorName": "positive"
+				}
+			},
+			{
+				"id": "fldCGhnT2g97fSbR2",
+				"name": "Accrual Unit",
+				"type": "select",
+				"typeOptions": {
+					"choiceOrder": [
+						"selPcDgZkUWdtx0po",
+						"sel8BAjNYHOO1xxjl"
+					],
+					"choices": {
+						"selPcDgZkUWdtx0po": {
+							"id": "selPcDgZkUWdtx0po",
+							"color": "teal",
+							"name": "Day(s)"
+						},
+						"sel8BAjNYHOO1xxjl": {
+							"id": "sel8BAjNYHOO1xxjl",
+							"color": "green",
+							"name": "Hour(s)"
+						}
+					},
+					"disableColors": false
+				}
+			},
+			{
+				"id": "fld0cnDz6Fd7r9I9l",
+				"name": "Accrue Type",
+				"type": "select",
+				"typeOptions": {
+					"choiceOrder": [
+						"selfquPVxetaqIT8W",
+						"sellLqSIbu1uoYkHh",
+						"selXaVwnOejXgiupS",
+						"selqQ0IsNMBVl7RyP",
+						"selSCcAv65nzep5oM",
+						"sel4WSzoyfu6fuDNb",
+						"sel8S8QRN3QXbj1xr"
+					],
+					"choices": {
+						"selqQ0IsNMBVl7RyP": {
+							"id": "selqQ0IsNMBVl7RyP",
+							"color": "green",
+							"name": "Every x month(s)"
+						},
+						"selSCcAv65nzep5oM": {
+							"id": "selSCcAv65nzep5oM",
+							"color": "orange",
+							"name": "Never Accrue"
+						},
+						"sel4WSzoyfu6fuDNb": {
+							"id": "sel4WSzoyfu6fuDNb",
+							"color": "red",
+							"name": "Skip Accrual"
+						},
+						"sel8S8QRN3QXbj1xr": {
+							"id": "sel8S8QRN3QXbj1xr",
+							"color": "pink",
+							"name": ""
+						},
+						"selfquPVxetaqIT8W": {
+							"id": "selfquPVxetaqIT8W",
+							"color": "purple",
+							"name": "First day of each Month"
+						},
+						"sellLqSIbu1uoYkHh": {
+							"id": "sellLqSIbu1uoYkHh",
+							"color": "gray",
+							"name": "Last day of each Month"
+						},
+						"selXaVwnOejXgiupS": {
+							"id": "selXaVwnOejXgiupS",
+							"color": "blueMedium",
+							"name": "Everyday"
+						}
+					},
+					"disableColors": false
+				}
+			},
+			{
+				"id": "fldyyOSS7ZX7Mn4co",
+				"name": "Accrue Value of X",
+				"type": "number",
+				"typeOptions": {
+					"format": "decimal",
+					"precision": 1,
+					"negative": false,
+					"validatorName": "positive"
+				}
+			},
+			{
+				"id": "fldNQsA6evGl13MYS",
+				"name": "Cycle Period Type",
+				"type": "select",
+				"typeOptions": {
+					"choiceOrder": [
+						"selOo85ngdEO69kOH",
+						"selJ6YDJSAAj7zxvj",
+						"selEiGR72o6hYv5Yp",
+						"selTKtnvnmnle8KYt"
+					],
+					"choices": {
+						"selOo85ngdEO69kOH": {
+							"id": "selOo85ngdEO69kOH",
+							"color": "blue",
+							"name": "Year(s)"
+						},
+						"selJ6YDJSAAj7zxvj": {
+							"id": "selJ6YDJSAAj7zxvj",
+							"color": "cyan",
+							"name": "Month(s)"
+						},
+						"selEiGR72o6hYv5Yp": {
+							"id": "selEiGR72o6hYv5Yp",
+							"color": "teal",
+							"name": "Week(s)"
+						},
+						"selTKtnvnmnle8KYt": {
+							"id": "selTKtnvnmnle8KYt",
+							"color": "green",
+							"name": "Day(s)"
+						}
+					},
+					"disableColors": false
+				}
+			},
+			{
+				"id": "fldZlPK8KqIGFOkAn",
+				"name": "Cycle Period Length",
+				"type": "number",
+				"typeOptions": {
+					"format": "decimal",
+					"precision": 1,
+					"negative": false,
+					"validatorName": "positive"
+				}
+			},
+			{
+				"id": "fldN2mMfTHDKbGeVa",
+				"name": "Max Accumulation",
+				"type": "number",
+				"typeOptions": {
+					"format": "decimal",
+					"precision": 1,
+					"negative": false,
+					"validatorName": "positive"
+				}
+			},
+			{
+				"id": "fldtLiEXphPiVLMN4",
+				"name": "Accumulate",
+				"type": "checkbox",
+				"typeOptions": {
+					"color": "green",
+					"icon": "check"
+				}
+			},
+			{
+				"id": "fldB3NssCrxKcXa73",
+				"name": "Lost Accumulated Type",
+				"type": "select",
+				"typeOptions": {
+					"choiceOrder": [
+						"selIkpCjWFNij0ueH",
+						"sely0M8fdgRBVWbOg",
+						"sel2cLRV09AfNAIj9",
+						"selHvdGhfocfva6Hb",
+						"sel8xt39OlN4f3uFZ"
+					],
+					"choices": {
+						"sely0M8fdgRBVWbOg": {
+							"id": "sely0M8fdgRBVWbOg",
+							"color": "blue",
+							"name": "Month(s)"
+						},
+						"sel2cLRV09AfNAIj9": {
+							"id": "sel2cLRV09AfNAIj9",
+							"color": "cyan",
+							"name": "Week(s)"
+						},
+						"selHvdGhfocfva6Hb": {
+							"id": "selHvdGhfocfva6Hb",
+							"color": "teal",
+							"name": "Day(s)"
+						},
+						"selIkpCjWFNij0ueH": {
+							"id": "selIkpCjWFNij0ueH",
+							"color": "green",
+							"name": "Year(s)"
+						},
+						"sel8xt39OlN4f3uFZ": {
+							"id": "sel8xt39OlN4f3uFZ",
+							"color": "yellow",
+							"name": "NA"
+						}
+					},
+					"disableColors": false
+				}
+			},
+			{
+				"id": "fld5gedguHUXXlj02",
+				"name": "Capitlize Within",
+				"type": "number",
+				"typeOptions": {
+					"format": "decimal",
+					"precision": 1,
+					"negative": false,
+					"validatorName": "positive"
+				}
+			},
+			{
+				"id": "fld1UsxrXdnFA6TlA",
+				"name": "Leave Type",
+				"type": "foreignKey",
+				"typeOptions": {
+					"relationship": "one",
+					"foreignTableId": "tblJZ210YboETwCn2",
+					"symmetricColumnId": "fld9g0f8YiLMztdkl",
+					"unreversed": true
+				}
+			},
+			{
+				"id": "fld1t7DC6zExuKt3J",
+				"name": "Leave Accrual",
+				"type": "foreignKey",
+				"typeOptions": {
+					"foreignTableId": "tblGQD9Bp6lcRXCaM",
+					"symmetricColumnId": "fldQQqMDvImkGVTs5",
+					"relationship": "many",
+					"unreversed": true
+				}
+			},
+			{
+				"id": "fldSpdLVSjs1LwSTW",
+				"name": "Leave Accrual copy",
+				"type": "foreignKey",
+				"typeOptions": {
+					"foreignTableId": "tblxMJhUbQ9G8J10Z",
+					"symmetricColumnId": "fldHMwUWhsaOXHiii",
+					"relationship": "many",
+					"unreversed": true
+				}
+			},
+			{
+				"id": "fldfbuko5E87mvgYT",
+				"name": "Description",
+				"type": "text",
+				"typeOptions": null
+			}
+		]
+	},
+	{
+		"id": "tblzZZytsbVbxTSAh",
+		"name": "Leave Balance",
+		"columns": [
+			{
+				"id": "fldGYUeungyCPmJ4d",
+				"name": "User ID",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldECPiyXfc0CrRRs",
+				"name": "Annual Balance",
+				"type": "number",
+				"typeOptions": {
+					"format": "decimal",
+					"precision": 2,
+					"negative": false,
+					"validatorName": "positive"
+				}
+			},
+			{
+				"id": "fldsVmPjW9N5wezAa",
+				"name": "Emergency Balance",
+				"type": "number",
+				"typeOptions": {
+					"format": "decimal",
+					"precision": 2,
+					"negative": false,
+					"validatorName": "positive"
+				}
+			},
+			{
+				"id": "fldhENx7BDXafkRlu",
+				"name": "Maternity Balance",
+				"type": "number",
+				"typeOptions": {
+					"format": "decimal",
+					"precision": 2,
+					"negative": false,
+					"validatorName": "positive"
+				}
+			},
+			{
+				"id": "fldjGZWR6jKc6Mq1L",
+				"name": "Annual Date Accrued",
+				"type": "date",
+				"typeOptions": {
+					"isDateTime": false,
+					"dateFormat": "Local"
+				}
+			},
+			{
+				"id": "fld18E4jDxxL8Rhco",
+				"name": "Annual Date Updated",
+				"type": "date",
+				"typeOptions": {
+					"isDateTime": false,
+					"dateFormat": "Local"
+				}
+			},
+			{
+				"id": "fldDhn7l1AEoQABu8",
+				"name": "Emergency Date Accrued",
+				"type": "date",
+				"typeOptions": {
+					"isDateTime": false,
+					"dateFormat": "Local"
+				}
+			},
+			{
+				"id": "fldC9qcTquVvCOq7D",
+				"name": "Emergency Date Updated",
+				"type": "date",
+				"typeOptions": {
+					"isDateTime": false,
+					"dateFormat": "Local"
+				}
+			},
+			{
+				"id": "fldBq3DuWnsMT22HN",
+				"name": "Annual Last Value",
+				"type": "number",
+				"typeOptions": {
+					"format": "decimal",
+					"precision": 2,
+					"negative": false,
+					"validatorName": "positive"
+				}
+			},
+			{
+				"id": "fldTWuvJxsGf9CHtq",
+				"name": "Emergency Last Value",
+				"type": "number",
+				"typeOptions": {
+					"format": "decimal",
+					"precision": 2,
+					"negative": false,
+					"validatorName": "positive"
+				}
+			},
+			{
+				"id": "fldNawGOfaemVsMH0",
+				"name": "Maternity Last Value",
+				"type": "number",
+				"typeOptions": {
+					"format": "decimal",
+					"precision": 2,
+					"negative": false,
+					"validatorName": "positive"
+				}
+			},
+			{
+				"id": "fldEwpconCwRlO9wQ",
+				"name": "Maternity Date Acrrued",
+				"type": "date",
+				"typeOptions": {
+					"isDateTime": false,
+					"dateFormat": "Local"
+				}
+			},
+			{
+				"id": "fldNCJ7Z9tdC4yne5",
+				"name": "Maternity Date Updated",
+				"type": "date",
+				"typeOptions": {
+					"isDateTime": false,
+					"dateFormat": "Local"
+				}
+			},
+			{
+				"id": "fld29NixEecjXIzUr",
+				"name": "Emergency Taken",
+				"type": "number",
+				"typeOptions": {
+					"format": "decimal",
+					"precision": 2,
+					"negative": false,
+					"validatorName": "positive"
+				}
+			},
+			{
+				"id": "fldAHEXJ6wEEIJnj2",
+				"name": "Emergency Accrued",
+				"type": "number",
+				"typeOptions": {
+					"format": "decimal",
+					"precision": 2,
+					"negative": false,
+					"validatorName": "positive"
+				}
+			},
+			{
+				"id": "fldCaOu65q91d5grA",
+				"name": "Maternity Taken",
+				"type": "number",
+				"typeOptions": {
+					"format": "decimal",
+					"precision": 1,
+					"negative": false,
+					"validatorName": "positive"
+				}
+			},
+			{
+				"id": "fldyjk9m772GClVZo",
+				"name": "Maternity Accrued",
+				"type": "number",
+				"typeOptions": {
+					"format": "decimal",
+					"precision": 1,
+					"negative": false,
+					"validatorName": "positive"
+				}
+			},
+			{
+				"id": "fldq2qEkXUcMhUBCW",
+				"name": "Annual Taken",
+				"type": "number",
+				"typeOptions": {
+					"format": "decimal",
+					"precision": 1,
+					"negative": false,
+					"validatorName": "positive"
+				}
+			},
+			{
+				"id": "fldYGLXNx3Oe5J7gI",
+				"name": "Annual Accrued",
+				"type": "number",
+				"typeOptions": {
+					"format": "decimal",
+					"precision": 1,
+					"negative": false,
+					"validatorName": "positive"
+				}
+			},
+			{
+				"id": "fldy1iB7GRnLjQCEV",
+				"name": "Leave Accrual",
+				"type": "foreignKey",
+				"typeOptions": {
+					"foreignTableId": "tblGQD9Bp6lcRXCaM",
+					"symmetricColumnId": "fldf3gvHqD3oA2thf",
+					"relationship": "many",
+					"unreversed": true
+				}
+			},
+			{
+				"id": "fldpXoJqsBbfAC1u8",
+				"name": "Leave Accrual copy",
+				"type": "foreignKey",
+				"typeOptions": {
+					"foreignTableId": "tblxMJhUbQ9G8J10Z",
+					"symmetricColumnId": "fld6ZmD0cnRSROS7s",
+					"relationship": "many",
+					"unreversed": true
+				}
+			}
+		]
+	},
+	{
+		"id": "tblGQD9Bp6lcRXCaM",
+		"name": "Leave Accrual",
+		"columns": [
+			{
+				"id": "fldAJwxSZbIzBBKN7",
+				"name": "Leave Accrual ID",
+				"type": "autoNumber",
+				"typeOptions": {
+					"maxUsedAutoNumber": 3
+				}
+			},
+			{
+				"id": "fldQQqMDvImkGVTs5",
+				"name": "Leave Rules",
+				"type": "foreignKey",
+				"typeOptions": {
+					"foreignTableId": "tblWKqyufZInfeuB3",
+					"relationship": "many",
+					"unreversed": true,
+					"symmetricColumnId": "fld1t7DC6zExuKt3J"
+				}
+			},
+			{
+				"id": "fldioESyzI9UJpqwX",
+				"name": "Leave Type (from Leave Rules)",
+				"type": "lookup",
+				"typeOptions": {
+					"relationColumnId": "fldQQqMDvImkGVTs5",
+					"foreignTableRollupColumnId": "fld1UsxrXdnFA6TlA",
+					"unreversed": true,
+					"dependencies": {
+						"referencedColumnIdsForValue": [
+							"fldQQqMDvImkGVTs5",
+							"fld1UsxrXdnFA6TlA"
+						]
+					},
+					"resultType": "foreignKey"
+				}
+			},
+			{
+				"id": "fldtk4Xh73sQldEEE",
+				"name": "Capitlize Within (from Leave Rules)",
+				"type": "lookup",
+				"typeOptions": {
+					"relationColumnId": "fldQQqMDvImkGVTs5",
+					"foreignTableRollupColumnId": "fld5gedguHUXXlj02",
+					"format": "decimal",
+					"precision": 1,
+					"dependencies": {
+						"referencedColumnIdsForValue": [
+							"fldQQqMDvImkGVTs5",
+							"fld5gedguHUXXlj02"
 						]
 					},
 					"resultType": "number"
 				}
 			},
 			{
-				"id": "fldCUKUWoGEKHotTn",
-				"name": "Link",
-				"type": "foreignKey",
+				"id": "fldOxvt2e3VY9GNuL",
+				"name": "Lost Accumulated Type (from Leave Rules)",
+				"type": "lookup",
 				"typeOptions": {
-					"foreignTableId": "tblr6DzR6n8lWWEv7",
-					"relationship": "many",
-					"unreversed": true,
-					"symmetricColumnId": "fldW51uaEIETGzd63"
-				}
-			},
-			{
-				"id": "fldhAWZJBltIuqcS5",
-				"name": "Single Link",
-				"type": "foreignKey",
-				"typeOptions": {
-					"relationship": "one",
-					"foreignTableId": "tblr6DzR6n8lWWEv7",
-					"symmetricColumnId": "fldmiGgJvhZQepdcg",
-					"unreversed": true
-				}
-			},
-			{
-				"id": "fldJPaijUxlt0U1sH",
-				"name": "Calculation 2",
-				"type": "formula",
-				"typeOptions": {
-					"formulaTextParsed": "AND(1!=1)",
+					"relationColumnId": "fldQQqMDvImkGVTs5",
+					"foreignTableRollupColumnId": "fldB3NssCrxKcXa73",
 					"dependencies": {
-						"referencedColumnIdsForValue": []
+						"referencedColumnIdsForValue": [
+							"fldQQqMDvImkGVTs5",
+							"fldB3NssCrxKcXa73"
+						]
+					},
+					"resultType": "text"
+				}
+			},
+			{
+				"id": "fldgBD5jNlxnv0nnU",
+				"name": "Accumulate (from Leave Rules)",
+				"type": "lookup",
+				"typeOptions": {
+					"relationColumnId": "fldQQqMDvImkGVTs5",
+					"foreignTableRollupColumnId": "fldtLiEXphPiVLMN4",
+					"dependencies": {
+						"referencedColumnIdsForValue": [
+							"fldQQqMDvImkGVTs5",
+							"fldtLiEXphPiVLMN4"
+						]
+					},
+					"resultType": "checkbox",
+					"color": "green",
+					"icon": "check"
+				}
+			},
+			{
+				"id": "fld7F1AuITVHAGmKx",
+				"name": "Max Accumlation (from Leave Rules)",
+				"type": "lookup",
+				"typeOptions": {
+					"relationColumnId": "fldQQqMDvImkGVTs5",
+					"foreignTableRollupColumnId": "fldN2mMfTHDKbGeVa",
+					"format": "decimal",
+					"precision": 1,
+					"dependencies": {
+						"referencedColumnIdsForValue": [
+							"fldQQqMDvImkGVTs5",
+							"fldN2mMfTHDKbGeVa"
+						]
 					},
 					"resultType": "number"
 				}
 			},
 			{
-				"id": "fldqttyusvKYUWaeM",
-				"name": "Calculation 3",
-				"type": "formula",
+				"id": "fldSB4WcE27l688R7",
+				"name": "Cycle Period Length (from Leave Rules)",
+				"type": "lookup",
 				"typeOptions": {
-					"formulaTextParsed": "RECORD_ID()",
+					"relationColumnId": "fldQQqMDvImkGVTs5",
+					"foreignTableRollupColumnId": "fldZlPK8KqIGFOkAn",
+					"format": "decimal",
+					"precision": 1,
 					"dependencies": {
-						"referencedColumnIdsForValue": []
+						"referencedColumnIdsForValue": [
+							"fldQQqMDvImkGVTs5",
+							"fldZlPK8KqIGFOkAn"
+						]
+					},
+					"resultType": "number"
+				}
+			},
+			{
+				"id": "fldWrUb5bxo2QZ5FZ",
+				"name": "Cycle Period Type (from Leave Rules)",
+				"type": "lookup",
+				"typeOptions": {
+					"relationColumnId": "fldQQqMDvImkGVTs5",
+					"foreignTableRollupColumnId": "fldNQsA6evGl13MYS",
+					"dependencies": {
+						"referencedColumnIdsForValue": [
+							"fldQQqMDvImkGVTs5",
+							"fldNQsA6evGl13MYS"
+						]
 					},
 					"resultType": "text"
 				}
+			},
+			{
+				"id": "fldKTi4neqxQRJ0oK",
+				"name": "Accrue Value of X (from Leave Rules)",
+				"type": "lookup",
+				"typeOptions": {
+					"relationColumnId": "fldQQqMDvImkGVTs5",
+					"foreignTableRollupColumnId": "fldyyOSS7ZX7Mn4co",
+					"format": "decimal",
+					"precision": 1,
+					"dependencies": {
+						"referencedColumnIdsForValue": [
+							"fldQQqMDvImkGVTs5",
+							"fldyyOSS7ZX7Mn4co"
+						]
+					},
+					"resultType": "number"
+				}
+			},
+			{
+				"id": "fldr6WvugTUP7lP34",
+				"name": "Accrue Type (from Leave Rules)",
+				"type": "lookup",
+				"typeOptions": {
+					"relationColumnId": "fldQQqMDvImkGVTs5",
+					"foreignTableRollupColumnId": "fld0cnDz6Fd7r9I9l",
+					"dependencies": {
+						"referencedColumnIdsForValue": [
+							"fldQQqMDvImkGVTs5",
+							"fld0cnDz6Fd7r9I9l"
+						]
+					},
+					"resultType": "text"
+				}
+			},
+			{
+				"id": "fldkRVU63oqZJ8HBE",
+				"name": "Accrual Unit (from Leave Rules)",
+				"type": "lookup",
+				"typeOptions": {
+					"relationColumnId": "fldQQqMDvImkGVTs5",
+					"foreignTableRollupColumnId": "fldCGhnT2g97fSbR2",
+					"dependencies": {
+						"referencedColumnIdsForValue": [
+							"fldQQqMDvImkGVTs5",
+							"fldCGhnT2g97fSbR2"
+						]
+					},
+					"resultType": "text"
+				}
+			},
+			{
+				"id": "fld4Rz3qWD1VIfNDU",
+				"name": "Accrual Amount (from Leave Rules)",
+				"type": "lookup",
+				"typeOptions": {
+					"relationColumnId": "fldQQqMDvImkGVTs5",
+					"foreignTableRollupColumnId": "fldrhOX9Bemmb3VIY",
+					"format": "decimal",
+					"precision": 1,
+					"dependencies": {
+						"referencedColumnIdsForValue": [
+							"fldQQqMDvImkGVTs5",
+							"fldrhOX9Bemmb3VIY"
+						]
+					},
+					"resultType": "number"
+				}
+			},
+			{
+				"id": "fldi81hAkHqhUZytm",
+				"name": "Interval (from Leave Rules)",
+				"type": "lookup",
+				"typeOptions": {
+					"relationColumnId": "fldQQqMDvImkGVTs5",
+					"foreignTableRollupColumnId": "fldtkDr1yTxC5QB2s",
+					"format": "decimal",
+					"precision": 1,
+					"dependencies": {
+						"referencedColumnIdsForValue": [
+							"fldQQqMDvImkGVTs5",
+							"fldtkDr1yTxC5QB2s"
+						]
+					},
+					"resultType": "number"
+				}
+			},
+			{
+				"id": "fldFA8pWnq1ZjaQBg",
+				"name": "LOS Type (from Leave Rules)",
+				"type": "lookup",
+				"typeOptions": {
+					"relationColumnId": "fldQQqMDvImkGVTs5",
+					"foreignTableRollupColumnId": "fldiFJrWQDRuk9obw",
+					"dependencies": {
+						"referencedColumnIdsForValue": [
+							"fldQQqMDvImkGVTs5",
+							"fldiFJrWQDRuk9obw"
+						]
+					},
+					"resultType": "text"
+				}
+			},
+			{
+				"id": "fldxm1RmNY2aH3pBj",
+				"name": "Leave Rule (from Leave Rules)",
+				"type": "lookup",
+				"typeOptions": {
+					"relationColumnId": "fldQQqMDvImkGVTs5",
+					"foreignTableRollupColumnId": "fld8EW6BPRyF2YzSu",
+					"dependencies": {
+						"referencedColumnIdsForValue": [
+							"fldQQqMDvImkGVTs5",
+							"fld8EW6BPRyF2YzSu"
+						]
+					},
+					"resultType": "text"
+				}
+			},
+			{
+				"id": "fldxqsdOlFBRcbhzL",
+				"name": "User ID",
+				"type": "foreignKey",
+				"typeOptions": {
+					"foreignTableId": "tblwceR29WfuANzls",
+					"relationship": "many",
+					"unreversed": true,
+					"symmetricColumnId": "flddWyhvyhT01vj0e"
+				}
+			},
+			{
+				"id": "fldvhZgb4APVLAchP",
+				"name": "Daily Work Hours (from Employee)",
+				"type": "lookup",
+				"typeOptions": {
+					"relationColumnId": "fldxqsdOlFBRcbhzL",
+					"foreignTableRollupColumnId": "fldCwVqzt14ZwrAm4",
+					"format": "decimal",
+					"precision": 1,
+					"dependencies": {
+						"referencedColumnIdsForValue": [
+							"fldxqsdOlFBRcbhzL",
+							"fldCwVqzt14ZwrAm4"
+						]
+					},
+					"resultType": "number"
+				}
+			},
+			{
+				"id": "fld6S6jOleBoPptNV",
+				"name": "Entry Date (from Employee)",
+				"type": "lookup",
+				"typeOptions": {
+					"relationColumnId": "fldxqsdOlFBRcbhzL",
+					"foreignTableRollupColumnId": "fldknRbMCzBF2fpat",
+					"isDateTime": false,
+					"dateFormat": "Local",
+					"dependencies": {
+						"referencedColumnIdsForValue": [
+							"fldxqsdOlFBRcbhzL",
+							"fldknRbMCzBF2fpat"
+						]
+					},
+					"resultType": "date"
+				}
+			},
+			{
+				"id": "fldRmCJWPDwrVXcAH",
+				"name": "YOS",
+				"type": "formula",
+				"typeOptions": {
+					"formulaTextParsed": "DATETIME_DIFF(TODAY(),{column_value_fld6S6jOleBoPptNV},'year')",
+					"dependencies": {
+						"referencedColumnIdsForValue": [
+							"fld6S6jOleBoPptNV"
+						],
+						"dependsOnCurrentTime": true,
+						"dependsOnCurrentTimeButOnlyOnToday": true
+					},
+					"resultType": "number"
+				}
+			},
+			{
+				"id": "fldr6ZPeb7oBv552Z",
+				"name": "MOS",
+				"type": "formula",
+				"typeOptions": {
+					"formulaTextParsed": "DATETIME_DIFF(TODAY(),{column_value_fld6S6jOleBoPptNV},'month')",
+					"dependencies": {
+						"referencedColumnIdsForValue": [
+							"fld6S6jOleBoPptNV"
+						],
+						"dependsOnCurrentTime": true,
+						"dependsOnCurrentTimeButOnlyOnToday": true
+					},
+					"resultType": "number"
+				}
+			},
+			{
+				"id": "fldexqTbj6llQS5Gd",
+				"name": "WOS",
+				"type": "formula",
+				"typeOptions": {
+					"formulaTextParsed": "DATETIME_DIFF(TODAY(),{column_value_fld6S6jOleBoPptNV},'weeks')",
+					"dependencies": {
+						"referencedColumnIdsForValue": [
+							"fld6S6jOleBoPptNV"
+						],
+						"dependsOnCurrentTime": true,
+						"dependsOnCurrentTimeButOnlyOnToday": true
+					},
+					"resultType": "number"
+				}
+			},
+			{
+				"id": "fldyiAkxazklMDWIB",
+				"name": "DOS",
+				"type": "formula",
+				"typeOptions": {
+					"formulaTextParsed": "DATETIME_DIFF(TODAY(),{column_value_fld6S6jOleBoPptNV},'day')",
+					"dependencies": {
+						"referencedColumnIdsForValue": [
+							"fld6S6jOleBoPptNV"
+						],
+						"dependsOnCurrentTime": true,
+						"dependsOnCurrentTimeButOnlyOnToday": true
+					},
+					"resultType": "number"
+				}
+			},
+			{
+				"id": "fldaq6KsWpqKfqTTf",
+				"name": "AA in Days",
+				"type": "formula",
+				"typeOptions": {
+					"format": "decimal",
+					"precision": 2,
+					"formulaTextParsed": "IF({column_value_fldkRVU63oqZJ8HBE}=\"Day(s)\",{column_value_fld4Rz3qWD1VIfNDU},{column_value_fld4Rz3qWD1VIfNDU}/{column_value_fldvhZgb4APVLAchP})",
+					"dependencies": {
+						"referencedColumnIdsForValue": [
+							"fldkRVU63oqZJ8HBE",
+							"fld4Rz3qWD1VIfNDU",
+							"fldvhZgb4APVLAchP"
+						]
+					},
+					"resultType": "number"
+				}
+			},
+			{
+				"id": "fldFFip2NzKGqlcjL",
+				"name": "Accrued Value",
+				"type": "formula",
+				"typeOptions": {
+					"format": "decimal",
+					"precision": 2,
+					"formulaTextParsed": "IF({column_value_fldFA8pWnq1ZjaQBg}=\"NA\",0,IF({column_value_fldFA8pWnq1ZjaQBg}=\"Year(s)\",IF(column_value_fldRmCJWPDwrVXcAH>={column_value_fldi81hAkHqhUZytm},{column_value_fldaq6KsWpqKfqTTf},0),IF({column_value_fldFA8pWnq1ZjaQBg}=\"Month(s)\",IF(column_value_fldr6ZPeb7oBv552Z>={column_value_fldi81hAkHqhUZytm},{column_value_fldaq6KsWpqKfqTTf},0),IF({column_value_fldFA8pWnq1ZjaQBg}=\"Week(s)\",IF(column_value_fldexqTbj6llQS5Gd>={column_value_fldi81hAkHqhUZytm},{column_value_fldaq6KsWpqKfqTTf},0),IF({column_value_fldFA8pWnq1ZjaQBg}=\"Day(s)\",IF(column_value_fldyiAkxazklMDWIB>={column_value_fldi81hAkHqhUZytm},{column_value_fldaq6KsWpqKfqTTf},0),0)))))",
+					"dependencies": {
+						"referencedColumnIdsForValue": [
+							"fldFA8pWnq1ZjaQBg",
+							"fldRmCJWPDwrVXcAH",
+							"fldi81hAkHqhUZytm",
+							"fldaq6KsWpqKfqTTf",
+							"fldr6ZPeb7oBv552Z",
+							"fldexqTbj6llQS5Gd",
+							"fldyiAkxazklMDWIB"
+						]
+					},
+					"resultType": "number"
+				}
+			},
+			{
+				"id": "fldhSmYEgizqPEWtJ",
+				"name": "Add Value?",
+				"type": "formula",
+				"typeOptions": {
+					"formulaTextParsed": "IF({column_value_fldr6WvugTUP7lP34}=\"First day of each Month\",IF(DAY(TODAY())=1,IF({column_value_fld2cp68Azj1pZlvs}<TODAY(),\"Yes\",\"No\"),\"No\"),IF({column_value_fldr6WvugTUP7lP34}=\"Last day of each Month\",IF(DAY(DATEADD(TODAY(),1,'day'))=1,IF({column_value_fld2cp68Azj1pZlvs}<TODAY(),\"Yes\",\"No\"),\"No\"),IF({column_value_fldr6WvugTUP7lP34}=\"Everyday\",IF({column_value_fld2cp68Azj1pZlvs}<TODAY(),\"Yes\",\"No\"),IF({column_value_fldr6WvugTUP7lP34}=\"Never Accrue\",\"No\",IF({column_value_fldr6WvugTUP7lP34}=\"Skip Accrual\",\"No\",IF(DATEADD({column_value_fld2cp68Azj1pZlvs},ROUND({column_value_fldKTi4neqxQRJ0oK},2),'month')<TODAY(),\"Yes\",\"No\"))))))",
+					"dependencies": {
+						"referencedColumnIdsForValue": [
+							"fldr6WvugTUP7lP34",
+							"fld2cp68Azj1pZlvs",
+							"fldKTi4neqxQRJ0oK"
+						],
+						"dependsOnCurrentTime": true,
+						"dependsOnCurrentTimeButOnlyOnToday": true
+					},
+					"resultType": "text"
+				}
+			},
+			{
+				"id": "fldf3gvHqD3oA2thf",
+				"name": "Leave Balance",
+				"type": "foreignKey",
+				"typeOptions": {
+					"foreignTableId": "tblzZZytsbVbxTSAh",
+					"relationship": "many",
+					"unreversed": true,
+					"symmetricColumnId": "fldy1iB7GRnLjQCEV"
+				}
+			},
+			{
+				"id": "fldWt3fk5LLGUvsOD",
+				"name": "Annual Accrued (from Leave Balance)",
+				"type": "lookup",
+				"typeOptions": {
+					"relationColumnId": "fldf3gvHqD3oA2thf",
+					"foreignTableRollupColumnId": "fldYGLXNx3Oe5J7gI",
+					"format": "decimal",
+					"precision": 1,
+					"dependencies": {
+						"referencedColumnIdsForValue": [
+							"fldf3gvHqD3oA2thf",
+							"fldYGLXNx3Oe5J7gI"
+						]
+					},
+					"resultType": "number"
+				}
+			},
+			{
+				"id": "fldeEiuoOGfufOKrN",
+				"name": "Annual Taken (from Leave Balance)",
+				"type": "lookup",
+				"typeOptions": {
+					"relationColumnId": "fldf3gvHqD3oA2thf",
+					"foreignTableRollupColumnId": "fldq2qEkXUcMhUBCW",
+					"format": "decimal",
+					"precision": 1,
+					"dependencies": {
+						"referencedColumnIdsForValue": [
+							"fldf3gvHqD3oA2thf",
+							"fldq2qEkXUcMhUBCW"
+						]
+					},
+					"resultType": "number"
+				}
+			},
+			{
+				"id": "fldkn3xsyXii3tnxN",
+				"name": "Maternity Accrued (from Leave Balance)",
+				"type": "lookup",
+				"typeOptions": {
+					"relationColumnId": "fldf3gvHqD3oA2thf",
+					"foreignTableRollupColumnId": "fldyjk9m772GClVZo",
+					"format": "decimal",
+					"precision": 1,
+					"dependencies": {
+						"referencedColumnIdsForValue": [
+							"fldf3gvHqD3oA2thf",
+							"fldyjk9m772GClVZo"
+						]
+					},
+					"resultType": "number"
+				}
+			},
+			{
+				"id": "fldWRUWkJGVkrYpIC",
+				"name": "Maternity Taken (from Leave Balance)",
+				"type": "lookup",
+				"typeOptions": {
+					"relationColumnId": "fldf3gvHqD3oA2thf",
+					"foreignTableRollupColumnId": "fldCaOu65q91d5grA",
+					"format": "decimal",
+					"precision": 1,
+					"dependencies": {
+						"referencedColumnIdsForValue": [
+							"fldf3gvHqD3oA2thf",
+							"fldCaOu65q91d5grA"
+						]
+					},
+					"resultType": "number"
+				}
+			},
+			{
+				"id": "fldYKofWphgBcg0g4",
+				"name": "Emergency Accrued (from Leave Balance)",
+				"type": "lookup",
+				"typeOptions": {
+					"relationColumnId": "fldf3gvHqD3oA2thf",
+					"foreignTableRollupColumnId": "fldAHEXJ6wEEIJnj2",
+					"format": "decimal",
+					"precision": 2,
+					"dependencies": {
+						"referencedColumnIdsForValue": [
+							"fldf3gvHqD3oA2thf",
+							"fldAHEXJ6wEEIJnj2"
+						]
+					},
+					"resultType": "number"
+				}
+			},
+			{
+				"id": "fldDLjY4lkWlisM7r",
+				"name": "Emergency Taken (from Leave Balance)",
+				"type": "lookup",
+				"typeOptions": {
+					"relationColumnId": "fldf3gvHqD3oA2thf",
+					"foreignTableRollupColumnId": "fld29NixEecjXIzUr",
+					"format": "decimal",
+					"precision": 2,
+					"dependencies": {
+						"referencedColumnIdsForValue": [
+							"fldf3gvHqD3oA2thf",
+							"fld29NixEecjXIzUr"
+						]
+					},
+					"resultType": "number"
+				}
+			},
+			{
+				"id": "fldg01WNk1Z8JXKJ6",
+				"name": "Maternity Date Updated (from Leave Balance)",
+				"type": "lookup",
+				"typeOptions": {
+					"relationColumnId": "fldf3gvHqD3oA2thf",
+					"foreignTableRollupColumnId": "fldNCJ7Z9tdC4yne5",
+					"isDateTime": false,
+					"dateFormat": "Local",
+					"dependencies": {
+						"referencedColumnIdsForValue": [
+							"fldf3gvHqD3oA2thf",
+							"fldNCJ7Z9tdC4yne5"
+						]
+					},
+					"resultType": "date"
+				}
+			},
+			{
+				"id": "fldypn51jRpiFfQui",
+				"name": "Maternity Date Acrrued (from Leave Balance)",
+				"type": "lookup",
+				"typeOptions": {
+					"relationColumnId": "fldf3gvHqD3oA2thf",
+					"foreignTableRollupColumnId": "fldEwpconCwRlO9wQ",
+					"isDateTime": false,
+					"dateFormat": "Local",
+					"dependencies": {
+						"referencedColumnIdsForValue": [
+							"fldf3gvHqD3oA2thf",
+							"fldEwpconCwRlO9wQ"
+						]
+					},
+					"resultType": "date"
+				}
+			},
+			{
+				"id": "fldcThKESynXWVMFN",
+				"name": "Maternity Last Value (from Leave Balance)",
+				"type": "lookup",
+				"typeOptions": {
+					"relationColumnId": "fldf3gvHqD3oA2thf",
+					"foreignTableRollupColumnId": "fldNawGOfaemVsMH0",
+					"format": "decimal",
+					"precision": 2,
+					"dependencies": {
+						"referencedColumnIdsForValue": [
+							"fldf3gvHqD3oA2thf",
+							"fldNawGOfaemVsMH0"
+						]
+					},
+					"resultType": "number"
+				}
+			},
+			{
+				"id": "fld1Mbux9MLJEi5uL",
+				"name": "Emergency Last Value (from Leave Balance)",
+				"type": "lookup",
+				"typeOptions": {
+					"relationColumnId": "fldf3gvHqD3oA2thf",
+					"foreignTableRollupColumnId": "fldTWuvJxsGf9CHtq",
+					"format": "decimal",
+					"precision": 2,
+					"dependencies": {
+						"referencedColumnIdsForValue": [
+							"fldf3gvHqD3oA2thf",
+							"fldTWuvJxsGf9CHtq"
+						]
+					},
+					"resultType": "number"
+				}
+			},
+			{
+				"id": "fldHQDcKUeNQqHpFT",
+				"name": "Annual Last Value (from Leave Balance)",
+				"type": "lookup",
+				"typeOptions": {
+					"relationColumnId": "fldf3gvHqD3oA2thf",
+					"foreignTableRollupColumnId": "fldBq3DuWnsMT22HN",
+					"format": "decimal",
+					"precision": 2,
+					"dependencies": {
+						"referencedColumnIdsForValue": [
+							"fldf3gvHqD3oA2thf",
+							"fldBq3DuWnsMT22HN"
+						]
+					},
+					"resultType": "number"
+				}
+			},
+			{
+				"id": "fld05c52R40fr8cI8",
+				"name": "Emergency Date Updated (from Leave Balance)",
+				"type": "lookup",
+				"typeOptions": {
+					"relationColumnId": "fldf3gvHqD3oA2thf",
+					"foreignTableRollupColumnId": "fldC9qcTquVvCOq7D",
+					"isDateTime": false,
+					"dateFormat": "Local",
+					"dependencies": {
+						"referencedColumnIdsForValue": [
+							"fldf3gvHqD3oA2thf",
+							"fldC9qcTquVvCOq7D"
+						]
+					},
+					"resultType": "date"
+				}
+			},
+			{
+				"id": "fldCUHHQuWRT4IbY0",
+				"name": "Emergency Date Accrued (from Leave Balance)",
+				"type": "lookup",
+				"typeOptions": {
+					"relationColumnId": "fldf3gvHqD3oA2thf",
+					"foreignTableRollupColumnId": "fldDhn7l1AEoQABu8",
+					"isDateTime": false,
+					"dateFormat": "Local",
+					"dependencies": {
+						"referencedColumnIdsForValue": [
+							"fldf3gvHqD3oA2thf",
+							"fldDhn7l1AEoQABu8"
+						]
+					},
+					"resultType": "date"
+				}
+			},
+			{
+				"id": "fld3CiZgezShdUa8T",
+				"name": "Annual Date Updated (from Leave Balance)",
+				"type": "lookup",
+				"typeOptions": {
+					"relationColumnId": "fldf3gvHqD3oA2thf",
+					"foreignTableRollupColumnId": "fld18E4jDxxL8Rhco",
+					"isDateTime": false,
+					"dateFormat": "Local",
+					"dependencies": {
+						"referencedColumnIdsForValue": [
+							"fldf3gvHqD3oA2thf",
+							"fld18E4jDxxL8Rhco"
+						]
+					},
+					"resultType": "date"
+				}
+			},
+			{
+				"id": "fld1yA7IsvKE43pMX",
+				"name": "Annual Date Accrued (from Leave Balance)",
+				"type": "lookup",
+				"typeOptions": {
+					"relationColumnId": "fldf3gvHqD3oA2thf",
+					"foreignTableRollupColumnId": "fldjGZWR6jKc6Mq1L",
+					"isDateTime": false,
+					"dateFormat": "Local",
+					"dependencies": {
+						"referencedColumnIdsForValue": [
+							"fldf3gvHqD3oA2thf",
+							"fldjGZWR6jKc6Mq1L"
+						]
+					},
+					"resultType": "date"
+				}
+			},
+			{
+				"id": "fldOLDq21hLTE7ye1",
+				"name": "Maternity Balance (from Leave Balance)",
+				"type": "lookup",
+				"typeOptions": {
+					"relationColumnId": "fldf3gvHqD3oA2thf",
+					"foreignTableRollupColumnId": "fldhENx7BDXafkRlu",
+					"format": "decimal",
+					"precision": 2,
+					"dependencies": {
+						"referencedColumnIdsForValue": [
+							"fldf3gvHqD3oA2thf",
+							"fldhENx7BDXafkRlu"
+						]
+					},
+					"resultType": "number"
+				}
+			},
+			{
+				"id": "fld6bHGWU5DGFQSmW",
+				"name": "Emergency Balance (from Leave Balance)",
+				"type": "lookup",
+				"typeOptions": {
+					"relationColumnId": "fldf3gvHqD3oA2thf",
+					"foreignTableRollupColumnId": "fldsVmPjW9N5wezAa",
+					"format": "decimal",
+					"precision": 2,
+					"dependencies": {
+						"referencedColumnIdsForValue": [
+							"fldf3gvHqD3oA2thf",
+							"fldsVmPjW9N5wezAa"
+						]
+					},
+					"resultType": "number"
+				}
+			},
+			{
+				"id": "fld8wKbgUwSIfsTpJ",
+				"name": "Annual Balance (from Leave Balance)",
+				"type": "lookup",
+				"typeOptions": {
+					"relationColumnId": "fldf3gvHqD3oA2thf",
+					"foreignTableRollupColumnId": "fldECPiyXfc0CrRRs",
+					"format": "decimal",
+					"precision": 2,
+					"dependencies": {
+						"referencedColumnIdsForValue": [
+							"fldf3gvHqD3oA2thf",
+							"fldECPiyXfc0CrRRs"
+						]
+					},
+					"resultType": "number"
+				}
+			},
+			{
+				"id": "fld6stWrcwAMP6bcX",
+				"name": "Employee User ID (from Leave Balance)",
+				"type": "lookup",
+				"typeOptions": {
+					"relationColumnId": "fldf3gvHqD3oA2thf",
+					"foreignTableRollupColumnId": "fldGYUeungyCPmJ4d",
+					"dependencies": {
+						"referencedColumnIdsForValue": [
+							"fldf3gvHqD3oA2thf",
+							"fldGYUeungyCPmJ4d"
+						]
+					},
+					"resultType": "text"
+				}
+			},
+			{
+				"id": "fld2cp68Azj1pZlvs",
+				"name": "Last Date Accrued",
+				"type": "formula",
+				"typeOptions": {
+					"dateFormat": "Local",
+					"isDateTime": false,
+					"timeZone": "UTC",
+					"formulaTextParsed": "IF({column_value_fldioESyzI9UJpqwX}=\"Annual\",{column_value_fld1yA7IsvKE43pMX},IF({column_value_fldioESyzI9UJpqwX}=\"Emergency\",{column_value_fld1yA7IsvKE43pMX},IF({column_value_fldioESyzI9UJpqwX}=\"Maternity\",{column_value_fldypn51jRpiFfQui},TODAY())))",
+					"dependencies": {
+						"referencedColumnIdsForValue": [
+							"fldioESyzI9UJpqwX",
+							"fld1yA7IsvKE43pMX",
+							"fldypn51jRpiFfQui"
+						],
+						"dependsOnCurrentTime": true,
+						"dependsOnCurrentTimeButOnlyOnToday": true
+					},
+					"resultType": "date"
+				}
+			},
+			{
+				"id": "fldvTGt6Cml56nMe4",
+				"name": "Accrued Leave",
+				"type": "formula",
+				"typeOptions": {
+					"dateFormat": "Local",
+					"isDateTime": false,
+					"timeZone": "UTC",
+					"format": "decimal",
+					"precision": 2,
+					"formulaTextParsed": "IF({column_value_fldhSmYEgizqPEWtJ}=\"Yes\",IF({column_value_fld7F1AuITVHAGmKx}>{column_value_fldsexi1CBOnvMxMQ},{column_value_fldFFip2NzKGqlcjL},{column_value_fldsexi1CBOnvMxMQ}-{column_value_fldFFip2NzKGqlcjL}),0)",
+					"dependencies": {
+						"referencedColumnIdsForValue": [
+							"fldhSmYEgizqPEWtJ",
+							"fld7F1AuITVHAGmKx",
+							"fldsexi1CBOnvMxMQ",
+							"fldFFip2NzKGqlcjL"
+						]
+					},
+					"resultType": "number"
+				}
+			},
+			{
+				"id": "fldsexi1CBOnvMxMQ",
+				"name": "Last Accrued Value",
+				"type": "formula",
+				"typeOptions": {
+					"format": "decimal",
+					"precision": 2,
+					"formulaTextParsed": "IF({column_value_fldioESyzI9UJpqwX}=\"Annual\",{column_value_fldWt3fk5LLGUvsOD},IF({column_value_fldioESyzI9UJpqwX}=\"Emergency\",{column_value_fldYKofWphgBcg0g4},IF({column_value_fldioESyzI9UJpqwX}=\"Maternity\",{column_value_fldkn3xsyXii3tnxN},0)))",
+					"dependencies": {
+						"referencedColumnIdsForValue": [
+							"fldioESyzI9UJpqwX",
+							"fldWt3fk5LLGUvsOD",
+							"fldYKofWphgBcg0g4",
+							"fldkn3xsyXii3tnxN"
+						]
+					},
+					"resultType": "number"
+				}
+			},
+			{
+				"id": "fldNyG3SzBh05HBmj",
+				"name": "Current Leave Balance",
+				"type": "formula",
+				"typeOptions": {
+					"format": "decimal",
+					"precision": 2,
+					"formulaTextParsed": "IF({column_value_fldioESyzI9UJpqwX}=\"Annual\",{column_value_fld8wKbgUwSIfsTpJ},IF({column_value_fldioESyzI9UJpqwX}=\"Emergency\",{column_value_fld6bHGWU5DGFQSmW},IF({column_value_fldioESyzI9UJpqwX}=\"Maternity\",{column_value_fldOLDq21hLTE7ye1},0)))",
+					"dependencies": {
+						"referencedColumnIdsForValue": [
+							"fldioESyzI9UJpqwX",
+							"fld8wKbgUwSIfsTpJ",
+							"fld6bHGWU5DGFQSmW",
+							"fldOLDq21hLTE7ye1"
+						]
+					},
+					"resultType": "number"
+				}
+			},
+			{
+				"id": "fldphOvDyPVRiVntT",
+				"name": "New Leave Balance",
+				"type": "formula",
+				"typeOptions": {
+					"format": "decimal",
+					"precision": 2,
+					"formulaTextParsed": "IF({column_value_fldgBD5jNlxnv0nnU},{column_value_fldNyG3SzBh05HBmj}+{column_value_fldvTGt6Cml56nMe4},{column_value_fldvTGt6Cml56nMe4})",
+					"dependencies": {
+						"referencedColumnIdsForValue": [
+							"fldgBD5jNlxnv0nnU",
+							"fldNyG3SzBh05HBmj",
+							"fldvTGt6Cml56nMe4"
+						]
+					},
+					"resultType": "number"
+				}
+			},
+			{
+				"id": "fldkK2Uphzsq4Ccdt",
+				"name": "Employee copy",
+				"type": "text",
+				"typeOptions": null
+			}
+		]
+	},
+	{
+		"id": "tblxMJhUbQ9G8J10Z",
+		"name": "Leave Adjustment",
+		"columns": [
+			{
+				"id": "fldrFCFbLVw3Sn9Dk",
+				"name": "Leave Accrual ID",
+				"type": "autoNumber",
+				"typeOptions": {
+					"maxUsedAutoNumber": 0
+				}
+			},
+			{
+				"id": "fldHMwUWhsaOXHiii",
+				"name": "Leave Rules",
+				"type": "foreignKey",
+				"typeOptions": {
+					"foreignTableId": "tblWKqyufZInfeuB3",
+					"relationship": "many",
+					"unreversed": true,
+					"symmetricColumnId": "fldSpdLVSjs1LwSTW"
+				}
+			},
+			{
+				"id": "fld9kK0RlsXo0bPma",
+				"name": "Leave Type (from Leave Rules)",
+				"type": "lookup",
+				"typeOptions": {
+					"relationColumnId": "fldHMwUWhsaOXHiii",
+					"foreignTableRollupColumnId": "fld1UsxrXdnFA6TlA",
+					"unreversed": true,
+					"dependencies": {
+						"referencedColumnIdsForValue": [
+							"fldHMwUWhsaOXHiii",
+							"fld1UsxrXdnFA6TlA"
+						]
+					},
+					"resultType": "foreignKey"
+				}
+			},
+			{
+				"id": "fldkga5ATNgkCZ3uR",
+				"name": "Capitlize Within (from Leave Rules)",
+				"type": "lookup",
+				"typeOptions": {
+					"relationColumnId": "fldHMwUWhsaOXHiii",
+					"foreignTableRollupColumnId": "fld5gedguHUXXlj02",
+					"format": "decimal",
+					"precision": 1,
+					"dependencies": {
+						"referencedColumnIdsForValue": [
+							"fldHMwUWhsaOXHiii",
+							"fld5gedguHUXXlj02"
+						]
+					},
+					"resultType": "number"
+				}
+			},
+			{
+				"id": "fldFtBBl0NJsqsckY",
+				"name": "Lost Accumulated Type (from Leave Rules)",
+				"type": "lookup",
+				"typeOptions": {
+					"relationColumnId": "fldHMwUWhsaOXHiii",
+					"foreignTableRollupColumnId": "fldB3NssCrxKcXa73",
+					"dependencies": {
+						"referencedColumnIdsForValue": [
+							"fldHMwUWhsaOXHiii",
+							"fldB3NssCrxKcXa73"
+						]
+					},
+					"resultType": "text"
+				}
+			},
+			{
+				"id": "fld7xJdCz5lRMMMd7",
+				"name": "Accumulate (from Leave Rules)",
+				"type": "lookup",
+				"typeOptions": {
+					"relationColumnId": "fldHMwUWhsaOXHiii",
+					"foreignTableRollupColumnId": "fldtLiEXphPiVLMN4",
+					"dependencies": {
+						"referencedColumnIdsForValue": [
+							"fldHMwUWhsaOXHiii",
+							"fldtLiEXphPiVLMN4"
+						]
+					},
+					"resultType": "checkbox",
+					"color": "green",
+					"icon": "check"
+				}
+			},
+			{
+				"id": "fldYB7INuDJbRsLAK",
+				"name": "Max Accumlation (from Leave Rules)",
+				"type": "lookup",
+				"typeOptions": {
+					"relationColumnId": "fldHMwUWhsaOXHiii",
+					"foreignTableRollupColumnId": "fldN2mMfTHDKbGeVa",
+					"format": "decimal",
+					"precision": 1,
+					"dependencies": {
+						"referencedColumnIdsForValue": [
+							"fldHMwUWhsaOXHiii",
+							"fldN2mMfTHDKbGeVa"
+						]
+					},
+					"resultType": "number"
+				}
+			},
+			{
+				"id": "fldJxa4vqMVPnUxHk",
+				"name": "Cycle Period Length (from Leave Rules)",
+				"type": "lookup",
+				"typeOptions": {
+					"relationColumnId": "fldHMwUWhsaOXHiii",
+					"foreignTableRollupColumnId": "fldZlPK8KqIGFOkAn",
+					"format": "decimal",
+					"precision": 1,
+					"dependencies": {
+						"referencedColumnIdsForValue": [
+							"fldHMwUWhsaOXHiii",
+							"fldZlPK8KqIGFOkAn"
+						]
+					},
+					"resultType": "number"
+				}
+			},
+			{
+				"id": "fldNn0joXhcw7Luvc",
+				"name": "Cycle Period Type (from Leave Rules)",
+				"type": "lookup",
+				"typeOptions": {
+					"relationColumnId": "fldHMwUWhsaOXHiii",
+					"foreignTableRollupColumnId": "fldNQsA6evGl13MYS",
+					"dependencies": {
+						"referencedColumnIdsForValue": [
+							"fldHMwUWhsaOXHiii",
+							"fldNQsA6evGl13MYS"
+						]
+					},
+					"resultType": "text"
+				}
+			},
+			{
+				"id": "fldBPocG0alk8vpeX",
+				"name": "Accrue Value of X (from Leave Rules)",
+				"type": "lookup",
+				"typeOptions": {
+					"relationColumnId": "fldHMwUWhsaOXHiii",
+					"foreignTableRollupColumnId": "fldyyOSS7ZX7Mn4co",
+					"format": "decimal",
+					"precision": 1,
+					"dependencies": {
+						"referencedColumnIdsForValue": [
+							"fldHMwUWhsaOXHiii",
+							"fldyyOSS7ZX7Mn4co"
+						]
+					},
+					"resultType": "number"
+				}
+			},
+			{
+				"id": "fldi22DN2DIjo7eTh",
+				"name": "Accrue Type (from Leave Rules)",
+				"type": "lookup",
+				"typeOptions": {
+					"relationColumnId": "fldHMwUWhsaOXHiii",
+					"foreignTableRollupColumnId": "fld0cnDz6Fd7r9I9l",
+					"dependencies": {
+						"referencedColumnIdsForValue": [
+							"fldHMwUWhsaOXHiii",
+							"fld0cnDz6Fd7r9I9l"
+						]
+					},
+					"resultType": "text"
+				}
+			},
+			{
+				"id": "fldbN12pP8et0U6rR",
+				"name": "Accrual Unit (from Leave Rules)",
+				"type": "lookup",
+				"typeOptions": {
+					"relationColumnId": "fldHMwUWhsaOXHiii",
+					"foreignTableRollupColumnId": "fldCGhnT2g97fSbR2",
+					"dependencies": {
+						"referencedColumnIdsForValue": [
+							"fldHMwUWhsaOXHiii",
+							"fldCGhnT2g97fSbR2"
+						]
+					},
+					"resultType": "text"
+				}
+			},
+			{
+				"id": "fldVNFbJInPpZ1ct7",
+				"name": "Accrual Amount (from Leave Rules)",
+				"type": "lookup",
+				"typeOptions": {
+					"relationColumnId": "fldHMwUWhsaOXHiii",
+					"foreignTableRollupColumnId": "fldrhOX9Bemmb3VIY",
+					"format": "decimal",
+					"precision": 1,
+					"dependencies": {
+						"referencedColumnIdsForValue": [
+							"fldHMwUWhsaOXHiii",
+							"fldrhOX9Bemmb3VIY"
+						]
+					},
+					"resultType": "number"
+				}
+			},
+			{
+				"id": "fld947pT6reLbLXjz",
+				"name": "Interval (from Leave Rules)",
+				"type": "lookup",
+				"typeOptions": {
+					"relationColumnId": "fldHMwUWhsaOXHiii",
+					"foreignTableRollupColumnId": "fldtkDr1yTxC5QB2s",
+					"format": "decimal",
+					"precision": 1,
+					"dependencies": {
+						"referencedColumnIdsForValue": [
+							"fldHMwUWhsaOXHiii",
+							"fldtkDr1yTxC5QB2s"
+						]
+					},
+					"resultType": "number"
+				}
+			},
+			{
+				"id": "fldwwexf9aPtAWfrt",
+				"name": "LOS Type (from Leave Rules)",
+				"type": "lookup",
+				"typeOptions": {
+					"relationColumnId": "fldHMwUWhsaOXHiii",
+					"foreignTableRollupColumnId": "fldiFJrWQDRuk9obw",
+					"dependencies": {
+						"referencedColumnIdsForValue": [
+							"fldHMwUWhsaOXHiii",
+							"fldiFJrWQDRuk9obw"
+						]
+					},
+					"resultType": "text"
+				}
+			},
+			{
+				"id": "fldoi7ZFzIQEYPOrw",
+				"name": "Leave Rule (from Leave Rules)",
+				"type": "lookup",
+				"typeOptions": {
+					"relationColumnId": "fldHMwUWhsaOXHiii",
+					"foreignTableRollupColumnId": "fld8EW6BPRyF2YzSu",
+					"dependencies": {
+						"referencedColumnIdsForValue": [
+							"fldHMwUWhsaOXHiii",
+							"fld8EW6BPRyF2YzSu"
+						]
+					},
+					"resultType": "text"
+				}
+			},
+			{
+				"id": "fldomyl77ppltXGpY",
+				"name": "Employee",
+				"type": "foreignKey",
+				"typeOptions": {
+					"foreignTableId": "tblwceR29WfuANzls",
+					"relationship": "many",
+					"unreversed": true,
+					"symmetricColumnId": "fld4SEpOk1HuihIQr"
+				}
+			},
+			{
+				"id": "fldmd5ouQkDp2mB72",
+				"name": "Daily Work Hours (from Employee)",
+				"type": "lookup",
+				"typeOptions": {
+					"relationColumnId": "fldomyl77ppltXGpY",
+					"foreignTableRollupColumnId": "fldCwVqzt14ZwrAm4",
+					"format": "decimal",
+					"precision": 1,
+					"dependencies": {
+						"referencedColumnIdsForValue": [
+							"fldomyl77ppltXGpY",
+							"fldCwVqzt14ZwrAm4"
+						]
+					},
+					"resultType": "number"
+				}
+			},
+			{
+				"id": "fldXOcr77YpS6bSD8",
+				"name": "Entry Date (from Employee)",
+				"type": "lookup",
+				"typeOptions": {
+					"relationColumnId": "fldomyl77ppltXGpY",
+					"foreignTableRollupColumnId": "fldknRbMCzBF2fpat",
+					"isDateTime": false,
+					"dateFormat": "Local",
+					"dependencies": {
+						"referencedColumnIdsForValue": [
+							"fldomyl77ppltXGpY",
+							"fldknRbMCzBF2fpat"
+						]
+					},
+					"resultType": "date"
+				}
+			},
+			{
+				"id": "fldIiIRfBnkVcJBqU",
+				"name": "YOS",
+				"type": "formula",
+				"typeOptions": {
+					"formulaTextParsed": "DATETIME_DIFF(TODAY(),{column_value_fldXOcr77YpS6bSD8},'year')",
+					"dependencies": {
+						"referencedColumnIdsForValue": [
+							"fldXOcr77YpS6bSD8"
+						],
+						"dependsOnCurrentTime": true,
+						"dependsOnCurrentTimeButOnlyOnToday": true
+					},
+					"resultType": "number"
+				}
+			},
+			{
+				"id": "fldi25XxXRc5MRuSc",
+				"name": "MOS",
+				"type": "formula",
+				"typeOptions": {
+					"formulaTextParsed": "DATETIME_DIFF(TODAY(),{column_value_fldXOcr77YpS6bSD8},'month')",
+					"dependencies": {
+						"referencedColumnIdsForValue": [
+							"fldXOcr77YpS6bSD8"
+						],
+						"dependsOnCurrentTime": true,
+						"dependsOnCurrentTimeButOnlyOnToday": true
+					},
+					"resultType": "number"
+				}
+			},
+			{
+				"id": "fld5tw1u5Q9P7Euwq",
+				"name": "WOS",
+				"type": "formula",
+				"typeOptions": {
+					"formulaTextParsed": "DATETIME_DIFF(TODAY(),{column_value_fldXOcr77YpS6bSD8},'weeks')",
+					"dependencies": {
+						"referencedColumnIdsForValue": [
+							"fldXOcr77YpS6bSD8"
+						],
+						"dependsOnCurrentTime": true,
+						"dependsOnCurrentTimeButOnlyOnToday": true
+					},
+					"resultType": "number"
+				}
+			},
+			{
+				"id": "fldpeGsQWj8P3plyO",
+				"name": "DOS",
+				"type": "formula",
+				"typeOptions": {
+					"formulaTextParsed": "DATETIME_DIFF(TODAY(),{column_value_fldXOcr77YpS6bSD8},'day')",
+					"dependencies": {
+						"referencedColumnIdsForValue": [
+							"fldXOcr77YpS6bSD8"
+						],
+						"dependsOnCurrentTime": true,
+						"dependsOnCurrentTimeButOnlyOnToday": true
+					},
+					"resultType": "number"
+				}
+			},
+			{
+				"id": "fld1mcSLI9eewciJs",
+				"name": "AA in Days",
+				"type": "formula",
+				"typeOptions": {
+					"format": "decimal",
+					"precision": 2,
+					"formulaTextParsed": "IF({column_value_fldbN12pP8et0U6rR}=\"Day(s)\",{column_value_fldVNFbJInPpZ1ct7},{column_value_fldVNFbJInPpZ1ct7}/{column_value_fldmd5ouQkDp2mB72})",
+					"dependencies": {
+						"referencedColumnIdsForValue": [
+							"fldbN12pP8et0U6rR",
+							"fldVNFbJInPpZ1ct7",
+							"fldmd5ouQkDp2mB72"
+						]
+					},
+					"resultType": "number"
+				}
+			},
+			{
+				"id": "fldwBoxlzjyaH7B9Y",
+				"name": "Accrued Value",
+				"type": "formula",
+				"typeOptions": {
+					"format": "decimal",
+					"precision": 2,
+					"formulaTextParsed": "IF({column_value_fldwwexf9aPtAWfrt}=\"NA\",0,IF({column_value_fldwwexf9aPtAWfrt}=\"Year(s)\",IF(column_value_fldIiIRfBnkVcJBqU>={column_value_fld947pT6reLbLXjz},{column_value_fld1mcSLI9eewciJs},0),IF({column_value_fldwwexf9aPtAWfrt}=\"Month(s)\",IF(column_value_fldi25XxXRc5MRuSc>={column_value_fld947pT6reLbLXjz},{column_value_fld1mcSLI9eewciJs},0),IF({column_value_fldwwexf9aPtAWfrt}=\"Week(s)\",IF(column_value_fld5tw1u5Q9P7Euwq>={column_value_fld947pT6reLbLXjz},{column_value_fld1mcSLI9eewciJs},0),IF({column_value_fldwwexf9aPtAWfrt}=\"Day(s)\",IF(column_value_fldpeGsQWj8P3plyO>={column_value_fld947pT6reLbLXjz},{column_value_fld1mcSLI9eewciJs},0),0)))))",
+					"dependencies": {
+						"referencedColumnIdsForValue": [
+							"fldwwexf9aPtAWfrt",
+							"fldIiIRfBnkVcJBqU",
+							"fld947pT6reLbLXjz",
+							"fld1mcSLI9eewciJs",
+							"fldi25XxXRc5MRuSc",
+							"fld5tw1u5Q9P7Euwq",
+							"fldpeGsQWj8P3plyO"
+						]
+					},
+					"resultType": "number"
+				}
+			},
+			{
+				"id": "fld8Os6X22nU6qljW",
+				"name": "Add Value?",
+				"type": "formula",
+				"typeOptions": {
+					"formulaTextParsed": "IF({column_value_fldi22DN2DIjo7eTh}=\"First day of each Month\",IF(DAY(TODAY())=1,IF({column_value_fldT8vermj7vGLKlF}<TODAY(),\"Yes\",\"No\"),\"No\"),IF({column_value_fldi22DN2DIjo7eTh}=\"Last day of each Month\",IF(DAY(DATEADD(TODAY(),1,'day'))=1,IF({column_value_fldT8vermj7vGLKlF}<TODAY(),\"Yes\",\"No\"),\"No\"),IF({column_value_fldi22DN2DIjo7eTh}=\"Everyday\",IF({column_value_fldT8vermj7vGLKlF}<TODAY(),\"Yes\",\"No\"),IF({column_value_fldi22DN2DIjo7eTh}=\"Never Accrue\",\"No\",IF({column_value_fldi22DN2DIjo7eTh}=\"Skip Accrual\",\"No\",IF(DATEADD({column_value_fldT8vermj7vGLKlF},ROUND({column_value_fldBPocG0alk8vpeX},2),'month')<TODAY(),\"Yes\",\"No\"))))))",
+					"dependencies": {
+						"referencedColumnIdsForValue": [
+							"fldi22DN2DIjo7eTh",
+							"fldT8vermj7vGLKlF",
+							"fldBPocG0alk8vpeX"
+						],
+						"dependsOnCurrentTime": true,
+						"dependsOnCurrentTimeButOnlyOnToday": true
+					},
+					"resultType": "text"
+				}
+			},
+			{
+				"id": "fld6ZmD0cnRSROS7s",
+				"name": "Leave Balance",
+				"type": "foreignKey",
+				"typeOptions": {
+					"foreignTableId": "tblzZZytsbVbxTSAh",
+					"relationship": "many",
+					"unreversed": true,
+					"symmetricColumnId": "fldpXoJqsBbfAC1u8"
+				}
+			},
+			{
+				"id": "fldNp9nDRvzabhREQ",
+				"name": "Annual Accrued (from Leave Balance)",
+				"type": "lookup",
+				"typeOptions": {
+					"relationColumnId": "fld6ZmD0cnRSROS7s",
+					"foreignTableRollupColumnId": "fldYGLXNx3Oe5J7gI",
+					"format": "decimal",
+					"precision": 1,
+					"dependencies": {
+						"referencedColumnIdsForValue": [
+							"fld6ZmD0cnRSROS7s",
+							"fldYGLXNx3Oe5J7gI"
+						]
+					},
+					"resultType": "number"
+				}
+			},
+			{
+				"id": "fld5AoCHAq3YwA9h0",
+				"name": "Annual Taken (from Leave Balance)",
+				"type": "lookup",
+				"typeOptions": {
+					"relationColumnId": "fld6ZmD0cnRSROS7s",
+					"foreignTableRollupColumnId": "fldq2qEkXUcMhUBCW",
+					"format": "decimal",
+					"precision": 1,
+					"dependencies": {
+						"referencedColumnIdsForValue": [
+							"fld6ZmD0cnRSROS7s",
+							"fldq2qEkXUcMhUBCW"
+						]
+					},
+					"resultType": "number"
+				}
+			},
+			{
+				"id": "fldbj9FLkH6MkfMn0",
+				"name": "Maternity Accrued (from Leave Balance)",
+				"type": "lookup",
+				"typeOptions": {
+					"relationColumnId": "fld6ZmD0cnRSROS7s",
+					"foreignTableRollupColumnId": "fldyjk9m772GClVZo",
+					"format": "decimal",
+					"precision": 1,
+					"dependencies": {
+						"referencedColumnIdsForValue": [
+							"fld6ZmD0cnRSROS7s",
+							"fldyjk9m772GClVZo"
+						]
+					},
+					"resultType": "number"
+				}
+			},
+			{
+				"id": "fldNN04DvqJOIKOyP",
+				"name": "Maternity Taken (from Leave Balance)",
+				"type": "lookup",
+				"typeOptions": {
+					"relationColumnId": "fld6ZmD0cnRSROS7s",
+					"foreignTableRollupColumnId": "fldCaOu65q91d5grA",
+					"format": "decimal",
+					"precision": 1,
+					"dependencies": {
+						"referencedColumnIdsForValue": [
+							"fld6ZmD0cnRSROS7s",
+							"fldCaOu65q91d5grA"
+						]
+					},
+					"resultType": "number"
+				}
+			},
+			{
+				"id": "fldPGunfb145t2p6h",
+				"name": "Emergency Accrued (from Leave Balance)",
+				"type": "lookup",
+				"typeOptions": {
+					"relationColumnId": "fld6ZmD0cnRSROS7s",
+					"foreignTableRollupColumnId": "fldAHEXJ6wEEIJnj2",
+					"format": "decimal",
+					"precision": 2,
+					"dependencies": {
+						"referencedColumnIdsForValue": [
+							"fld6ZmD0cnRSROS7s",
+							"fldAHEXJ6wEEIJnj2"
+						]
+					},
+					"resultType": "number"
+				}
+			},
+			{
+				"id": "flduHp6n74KPzebXE",
+				"name": "Emergency Taken (from Leave Balance)",
+				"type": "lookup",
+				"typeOptions": {
+					"relationColumnId": "fld6ZmD0cnRSROS7s",
+					"foreignTableRollupColumnId": "fld29NixEecjXIzUr",
+					"format": "decimal",
+					"precision": 2,
+					"dependencies": {
+						"referencedColumnIdsForValue": [
+							"fld6ZmD0cnRSROS7s",
+							"fld29NixEecjXIzUr"
+						]
+					},
+					"resultType": "number"
+				}
+			},
+			{
+				"id": "fld7W7466LNC0J9zj",
+				"name": "Maternity Date Updated (from Leave Balance)",
+				"type": "lookup",
+				"typeOptions": {
+					"relationColumnId": "fld6ZmD0cnRSROS7s",
+					"foreignTableRollupColumnId": "fldNCJ7Z9tdC4yne5",
+					"isDateTime": false,
+					"dateFormat": "Local",
+					"dependencies": {
+						"referencedColumnIdsForValue": [
+							"fld6ZmD0cnRSROS7s",
+							"fldNCJ7Z9tdC4yne5"
+						]
+					},
+					"resultType": "date"
+				}
+			},
+			{
+				"id": "fldpltdk5BdMW1fkv",
+				"name": "Maternity Date Acrrued (from Leave Balance)",
+				"type": "lookup",
+				"typeOptions": {
+					"relationColumnId": "fld6ZmD0cnRSROS7s",
+					"foreignTableRollupColumnId": "fldEwpconCwRlO9wQ",
+					"isDateTime": false,
+					"dateFormat": "Local",
+					"dependencies": {
+						"referencedColumnIdsForValue": [
+							"fld6ZmD0cnRSROS7s",
+							"fldEwpconCwRlO9wQ"
+						]
+					},
+					"resultType": "date"
+				}
+			},
+			{
+				"id": "fld3PnSXEibrdHbv0",
+				"name": "Maternity Last Value (from Leave Balance)",
+				"type": "lookup",
+				"typeOptions": {
+					"relationColumnId": "fld6ZmD0cnRSROS7s",
+					"foreignTableRollupColumnId": "fldNawGOfaemVsMH0",
+					"format": "decimal",
+					"precision": 2,
+					"dependencies": {
+						"referencedColumnIdsForValue": [
+							"fld6ZmD0cnRSROS7s",
+							"fldNawGOfaemVsMH0"
+						]
+					},
+					"resultType": "number"
+				}
+			},
+			{
+				"id": "fldSIhCQVwzdV4ukY",
+				"name": "Emergency Last Value (from Leave Balance)",
+				"type": "lookup",
+				"typeOptions": {
+					"relationColumnId": "fld6ZmD0cnRSROS7s",
+					"foreignTableRollupColumnId": "fldTWuvJxsGf9CHtq",
+					"format": "decimal",
+					"precision": 2,
+					"dependencies": {
+						"referencedColumnIdsForValue": [
+							"fld6ZmD0cnRSROS7s",
+							"fldTWuvJxsGf9CHtq"
+						]
+					},
+					"resultType": "number"
+				}
+			},
+			{
+				"id": "fldyMJk3GYBkHtOv6",
+				"name": "Annual Last Value (from Leave Balance)",
+				"type": "lookup",
+				"typeOptions": {
+					"relationColumnId": "fld6ZmD0cnRSROS7s",
+					"foreignTableRollupColumnId": "fldBq3DuWnsMT22HN",
+					"format": "decimal",
+					"precision": 2,
+					"dependencies": {
+						"referencedColumnIdsForValue": [
+							"fld6ZmD0cnRSROS7s",
+							"fldBq3DuWnsMT22HN"
+						]
+					},
+					"resultType": "number"
+				}
+			},
+			{
+				"id": "fldR1idlDOOJIUByl",
+				"name": "Emergency Date Updated (from Leave Balance)",
+				"type": "lookup",
+				"typeOptions": {
+					"relationColumnId": "fld6ZmD0cnRSROS7s",
+					"foreignTableRollupColumnId": "fldC9qcTquVvCOq7D",
+					"isDateTime": false,
+					"dateFormat": "Local",
+					"dependencies": {
+						"referencedColumnIdsForValue": [
+							"fld6ZmD0cnRSROS7s",
+							"fldC9qcTquVvCOq7D"
+						]
+					},
+					"resultType": "date"
+				}
+			},
+			{
+				"id": "fldtQNP9gGFnluAOd",
+				"name": "Emergency Date Accrued (from Leave Balance)",
+				"type": "lookup",
+				"typeOptions": {
+					"relationColumnId": "fld6ZmD0cnRSROS7s",
+					"foreignTableRollupColumnId": "fldDhn7l1AEoQABu8",
+					"isDateTime": false,
+					"dateFormat": "Local",
+					"dependencies": {
+						"referencedColumnIdsForValue": [
+							"fld6ZmD0cnRSROS7s",
+							"fldDhn7l1AEoQABu8"
+						]
+					},
+					"resultType": "date"
+				}
+			},
+			{
+				"id": "fldUyo7z0jGLuGzY6",
+				"name": "Annual Date Updated (from Leave Balance)",
+				"type": "lookup",
+				"typeOptions": {
+					"relationColumnId": "fld6ZmD0cnRSROS7s",
+					"foreignTableRollupColumnId": "fld18E4jDxxL8Rhco",
+					"isDateTime": false,
+					"dateFormat": "Local",
+					"dependencies": {
+						"referencedColumnIdsForValue": [
+							"fld6ZmD0cnRSROS7s",
+							"fld18E4jDxxL8Rhco"
+						]
+					},
+					"resultType": "date"
+				}
+			},
+			{
+				"id": "fldSuGf1efy8lPOCa",
+				"name": "Annual Date Accrued (from Leave Balance)",
+				"type": "lookup",
+				"typeOptions": {
+					"relationColumnId": "fld6ZmD0cnRSROS7s",
+					"foreignTableRollupColumnId": "fldjGZWR6jKc6Mq1L",
+					"isDateTime": false,
+					"dateFormat": "Local",
+					"dependencies": {
+						"referencedColumnIdsForValue": [
+							"fld6ZmD0cnRSROS7s",
+							"fldjGZWR6jKc6Mq1L"
+						]
+					},
+					"resultType": "date"
+				}
+			},
+			{
+				"id": "fldFHJylN1znVTX4e",
+				"name": "Maternity Balance (from Leave Balance)",
+				"type": "lookup",
+				"typeOptions": {
+					"relationColumnId": "fld6ZmD0cnRSROS7s",
+					"foreignTableRollupColumnId": "fldhENx7BDXafkRlu",
+					"format": "decimal",
+					"precision": 2,
+					"dependencies": {
+						"referencedColumnIdsForValue": [
+							"fld6ZmD0cnRSROS7s",
+							"fldhENx7BDXafkRlu"
+						]
+					},
+					"resultType": "number"
+				}
+			},
+			{
+				"id": "fldX7NOfGPraWChc9",
+				"name": "Emergency Balance (from Leave Balance)",
+				"type": "lookup",
+				"typeOptions": {
+					"relationColumnId": "fld6ZmD0cnRSROS7s",
+					"foreignTableRollupColumnId": "fldsVmPjW9N5wezAa",
+					"format": "decimal",
+					"precision": 2,
+					"dependencies": {
+						"referencedColumnIdsForValue": [
+							"fld6ZmD0cnRSROS7s",
+							"fldsVmPjW9N5wezAa"
+						]
+					},
+					"resultType": "number"
+				}
+			},
+			{
+				"id": "fldZsQjzGgGcweifW",
+				"name": "Annual Balance (from Leave Balance)",
+				"type": "lookup",
+				"typeOptions": {
+					"relationColumnId": "fld6ZmD0cnRSROS7s",
+					"foreignTableRollupColumnId": "fldECPiyXfc0CrRRs",
+					"format": "decimal",
+					"precision": 2,
+					"dependencies": {
+						"referencedColumnIdsForValue": [
+							"fld6ZmD0cnRSROS7s",
+							"fldECPiyXfc0CrRRs"
+						]
+					},
+					"resultType": "number"
+				}
+			},
+			{
+				"id": "fldXoz4KYgog6SA2a",
+				"name": "Employee User ID (from Leave Balance)",
+				"type": "lookup",
+				"typeOptions": {
+					"relationColumnId": "fld6ZmD0cnRSROS7s",
+					"foreignTableRollupColumnId": "fldGYUeungyCPmJ4d",
+					"dependencies": {
+						"referencedColumnIdsForValue": [
+							"fld6ZmD0cnRSROS7s",
+							"fldGYUeungyCPmJ4d"
+						]
+					},
+					"resultType": "text"
+				}
+			},
+			{
+				"id": "fldT8vermj7vGLKlF",
+				"name": "Last Date Accrued",
+				"type": "formula",
+				"typeOptions": {
+					"dateFormat": "Local",
+					"isDateTime": false,
+					"timeZone": "UTC",
+					"formulaTextParsed": "IF({column_value_fld9kK0RlsXo0bPma}=\"Annual\",{column_value_fldSuGf1efy8lPOCa},IF({column_value_fld9kK0RlsXo0bPma}=\"Emergency\",{column_value_fldSuGf1efy8lPOCa},IF({column_value_fld9kK0RlsXo0bPma}=\"Maternity\",{column_value_fldpltdk5BdMW1fkv},TODAY())))",
+					"dependencies": {
+						"referencedColumnIdsForValue": [
+							"fld9kK0RlsXo0bPma",
+							"fldSuGf1efy8lPOCa",
+							"fldpltdk5BdMW1fkv"
+						],
+						"dependsOnCurrentTime": true,
+						"dependsOnCurrentTimeButOnlyOnToday": true
+					},
+					"resultType": "date"
+				}
+			},
+			{
+				"id": "fldmPMBpo69zn9b4h",
+				"name": "Accrued Leave",
+				"type": "formula",
+				"typeOptions": {
+					"dateFormat": "Local",
+					"isDateTime": false,
+					"timeZone": "UTC",
+					"format": "decimal",
+					"precision": 2,
+					"formulaTextParsed": "IF({column_value_fld8Os6X22nU6qljW}=\"Yes\",IF({column_value_fldYB7INuDJbRsLAK}>{column_value_fldjaDqkolCRMyWC3},{column_value_fldwBoxlzjyaH7B9Y},{column_value_fldjaDqkolCRMyWC3}-{column_value_fldwBoxlzjyaH7B9Y}),0)",
+					"dependencies": {
+						"referencedColumnIdsForValue": [
+							"fld8Os6X22nU6qljW",
+							"fldYB7INuDJbRsLAK",
+							"fldjaDqkolCRMyWC3",
+							"fldwBoxlzjyaH7B9Y"
+						]
+					},
+					"resultType": "number"
+				}
+			},
+			{
+				"id": "fldjaDqkolCRMyWC3",
+				"name": "Last Accrued Value",
+				"type": "formula",
+				"typeOptions": {
+					"format": "decimal",
+					"precision": 2,
+					"formulaTextParsed": "IF({column_value_fld9kK0RlsXo0bPma}=\"Annual\",{column_value_fldNp9nDRvzabhREQ},IF({column_value_fld9kK0RlsXo0bPma}=\"Emergency\",{column_value_fldPGunfb145t2p6h},IF({column_value_fld9kK0RlsXo0bPma}=\"Maternity\",{column_value_fldbj9FLkH6MkfMn0},0)))",
+					"dependencies": {
+						"referencedColumnIdsForValue": [
+							"fld9kK0RlsXo0bPma",
+							"fldNp9nDRvzabhREQ",
+							"fldPGunfb145t2p6h",
+							"fldbj9FLkH6MkfMn0"
+						]
+					},
+					"resultType": "number"
+				}
+			},
+			{
+				"id": "fldEuMbbll5umt0cw",
+				"name": "Current Leave Balance",
+				"type": "formula",
+				"typeOptions": {
+					"format": "decimal",
+					"precision": 2,
+					"formulaTextParsed": "IF({column_value_fld9kK0RlsXo0bPma}=\"Annual\",{column_value_fldZsQjzGgGcweifW},IF({column_value_fld9kK0RlsXo0bPma}=\"Emergency\",{column_value_fldX7NOfGPraWChc9},IF({column_value_fld9kK0RlsXo0bPma}=\"Maternity\",{column_value_fldFHJylN1znVTX4e},0)))",
+					"dependencies": {
+						"referencedColumnIdsForValue": [
+							"fld9kK0RlsXo0bPma",
+							"fldZsQjzGgGcweifW",
+							"fldX7NOfGPraWChc9",
+							"fldFHJylN1znVTX4e"
+						]
+					},
+					"resultType": "number"
+				}
+			},
+			{
+				"id": "fldgdUDWkzJlzHMj6",
+				"name": "New Leave Balance",
+				"type": "formula",
+				"typeOptions": {
+					"format": "decimal",
+					"precision": 2,
+					"formulaTextParsed": "IF({column_value_fld7xJdCz5lRMMMd7},{column_value_fldEuMbbll5umt0cw}+{column_value_fldmPMBpo69zn9b4h},{column_value_fldmPMBpo69zn9b4h})",
+					"dependencies": {
+						"referencedColumnIdsForValue": [
+							"fld7xJdCz5lRMMMd7",
+							"fldEuMbbll5umt0cw",
+							"fldmPMBpo69zn9b4h"
+						]
+					},
+					"resultType": "number"
+				}
+			},
+			{
+				"id": "fldbG82I3jgUloB3G",
+				"name": "Employee copy",
+				"type": "text",
+				"typeOptions": null
+			}
+		]
+	},
+	{
+		"id": "tblUfitCYsBy6AiNV",
+		"name": "Department",
+		"columns": [
+			{
+				"id": "fldyhjOSNdncFV8gm",
+				"name": "Department",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldpyMw8OBbU8aYAU",
+				"name": "Description",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldz66zByq4hQJn3L",
+				"name": "Department Head",
+				"type": "foreignKey",
+				"typeOptions": {
+					"foreignTableId": "tblwceR29WfuANzls",
+					"relationship": "one",
+					"unreversed": true,
+					"symmetricColumnId": "fldBNXHP2fBJFMg8H"
+				}
+			},
+			{
+				"id": "fldmqGgcukVQIaiHt",
+				"name": "Employee copy",
+				"type": "text",
+				"typeOptions": null
 			}
 		]
 	}
