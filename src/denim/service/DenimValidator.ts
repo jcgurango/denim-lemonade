@@ -55,9 +55,9 @@ export default class DenimValidator<T extends DenimDataContext> {
     // Validate the shape.
     if (field.type === DenimColumnType.ForeignKey) {
       if (field.properties.multiple) {
-        return [['yup.object'], ['yup.shape', CommonShapes.RecordCollection], ['yup.nullable', true]];
+        return [['yup.object'], ['yup.shape', CommonShapes.RecordCollection], ['yup.nullable', true], ['yup.default', null]];
       } else {
-        return [['yup.object'], ['yup.shape', CommonShapes.Record], ['yup.nullable', true]];
+        return [['yup.object'], ['yup.shape', CommonShapes.Record], ['yup.nullable', true], ['yup.default', null]];
       }
     }
 
