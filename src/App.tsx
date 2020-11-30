@@ -4,6 +4,7 @@ import { createConnectedDataProvider } from './denim/forms/providers/DenimConnec
 import AirTableSchemaSource from './denim/connectors/airtable/AirTableSchemaSource';
 import { DenimSchemaSource, DenimValidator } from './denim/service';
 import TestDataSource from './TestDataSource';
+import DenimRemoteDataSource from './denim/service/DenimRemoteDataSource';
 
 class TestSchemaSource extends AirTableSchemaSource<{}> {
   createValidator(table: string): DenimValidator<{}> {
@@ -31,7 +32,7 @@ const schemaSource = new TestSchemaSource(
   require('./schema/airtable-schema.json'),
 );
 
-const dataSource = new TestDataSource(schemaSource);
+const dataSource = new DenimRemoteDataSource(schemaSource, 'http://localhost:9090/data');
 
 const { Provider, Form } = createConnectedDataProvider<
   {},
@@ -49,8 +50,8 @@ const App = () => {
           dataSource={dataSource}
         >
           <Form
-            table="Test Record CRUD"
-            record="recdz5EugExuuEvT8"
+            table="Employee"
+            record="recRcikjjU1emtvAo"
             schema={{
               id: 'test-form',
               sections: [
@@ -66,7 +67,7 @@ const App = () => {
                       controls: [
                         {
                           label: 'Full Name',
-                          id: 'Name',
+                          id: 'First Name',
                           relativeWidth: 1,
                         },
                       ],
@@ -75,7 +76,7 @@ const App = () => {
                       id: 'row1',
                       controls: [
                         {
-                          id: 'Notes',
+                          id: 'Date of Birth',
                           relativeWidth: 1,
                         },
                       ],

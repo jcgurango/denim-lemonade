@@ -1,10 +1,8 @@
-import * as Yup from 'yup';
-import { ObjectSchema, Schema } from 'yup';
+import dayjs from 'dayjs';
 import {
   DenimColumn,
   DenimColumnType,
   DenimDataContext,
-  DenimSchema,
   DenimTable,
   YupAst,
 } from '../core';
@@ -13,14 +11,16 @@ const RecordSchemaShape = {
   type: [['yup.string'], ['yup.required'], ['yup.equals', ['record']]],
   id: [['yup.string', ['yup.required']]],
   name: [['yup.string'], ['yup.nullable', true]],
-  record: [['yup.mixed'], ['yup.nullable']],
+  record: [['yup.mixed'], ['yup.nullable', true]],
 };
 
 const RecordCollectionSchemaShape = {
-  type: Yup.string().required().equals(['record-collection']),
-  record: [
-    ['yup.array', [['yup.object'], ['yup.shape', RecordSchemaShape]]],
+  type: [
+    ['yup.string'],
+    ['yup.required'],
+    ['yup.equals', ['record-collection']],
   ],
+  record: [['yup.array', [['yup.object'], ['yup.shape', RecordSchemaShape]]]],
 };
 
 export const CommonShapes = {
@@ -55,9 +55,19 @@ export default class DenimValidator<T extends DenimDataContext> {
     // Validate the shape.
     if (field.type === DenimColumnType.ForeignKey) {
       if (field.properties.multiple) {
-        return [['yup.object'], ['yup.shape', CommonShapes.RecordCollection], ['yup.nullable', true], ['yup.default', null]];
+        return [
+          ['yup.object'],
+          ['yup.shape', CommonShapes.RecordCollection],
+          ['yup.nullable', true],
+          ['yup.default', null],
+        ];
       } else {
-        return [['yup.object'], ['yup.shape', CommonShapes.Record], ['yup.nullable', true], ['yup.default', null]];
+        return [
+          ['yup.object'],
+          ['yup.shape', CommonShapes.Record],
+          ['yup.nullable', true],
+          ['yup.default', null],
+        ];
       }
     }
 
@@ -73,9 +83,30 @@ export default class DenimValidator<T extends DenimDataContext> {
       case DenimColumnType.ForeignKey:
         return this.createForeignKeyValidator(context, table, field);
       case DenimColumnType.Boolean:
-        return ['yup.boolean', ['yup.nullable', true]];
+        return [['yup.boolean'], ['yup.nullable', true]];
       case DenimColumnType.DateTime:
-        return ['yup.date', ['yup.nullable', true]];
+        if (!field.properties.includesTime) {
+          return [
+            ['yup.string'],
+            [
+              'yup.transform',
+              function (this: any, value: any) {
+                if (this.isType(value)) return value;
+
+                // First validate that this is a date.
+                const parsed = dayjs(value);
+
+                if (parsed.isValid()) {
+                  return parsed.format('YYYY-MM-DD');
+                }
+
+                return new Date('');
+              },
+            ],
+          ];
+        }
+
+        return [['yup.date'], ['yup.nullable', true]];
       case DenimColumnType.Select:
         return [
           ['yup.string'],
@@ -89,7 +120,6 @@ export default class DenimValidator<T extends DenimDataContext> {
         ];
       case DenimColumnType.MultiSelect:
         return [
-          ['yup.nullable', true],
           [
             'yup.array',
             [
@@ -97,6 +127,7 @@ export default class DenimValidator<T extends DenimDataContext> {
               ['yup.oneOf', field.properties.options.map(({ value }) => value)],
             ],
           ],
+          ['yup.nullable', true],
         ];
       case DenimColumnType.Number:
         return [['yup.number'], ['yup.nullable', true]];

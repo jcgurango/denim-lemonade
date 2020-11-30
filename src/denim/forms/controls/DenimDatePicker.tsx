@@ -255,7 +255,7 @@ const DenimDatePicker: FunctionComponent<
     const parsed = dayjs(value);
 
     if (!parsed.isValid()) {
-      return null;
+      return value;
     }
 
     const date = parsed.toDate();
