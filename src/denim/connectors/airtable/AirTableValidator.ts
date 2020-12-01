@@ -3,6 +3,7 @@ import {
   DenimColumn,
   DenimDataContext,
   DenimTable,
+  YupAst,
 } from '../../core';
 import DenimValidator from '../../service/DenimValidator';
 import { AirTable } from './types/schema';
@@ -19,7 +20,7 @@ export default class AirTableValidator<T extends DenimDataContext> extends Denim
     context: T,
     table: DenimTable,
     field: DenimColumn,
-  ): Schema<any, object> {
+  ): YupAst {
     let validation = super.createFieldValidator(context, table, field);
 
     // Find the corresponding AirTable field.
@@ -32,18 +33,25 @@ export default class AirTableValidator<T extends DenimDataContext> extends Denim
         (atField.type === 'multilineText' && atField.typeOptions)
       ) {
         if (atField.typeOptions?.validatorName == 'email') {
-          return (<StringSchema<any, object>>validation).email();
+          return [
+            ...validation,
+            ['yup.email']
+          ];
         }
 
         if (atField.typeOptions?.validatorName == 'url') {
-          return (<StringSchema<any, object>>validation).url();
+          return [
+            ...validation,
+            ['yup.url']
+          ];
         }
       }
 
       if (atField.type === 'phone') {
-        return (<StringSchema<any, object>>validation).matches(
-          /^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9]*$/g,
-        );
+        return [
+          ...validation,
+          ['yup.matches', /^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9]*$/g]
+        ];
       }
 
       if (atField.type === 'number') {
@@ -51,7 +59,10 @@ export default class AirTableValidator<T extends DenimDataContext> extends Denim
           atField?.typeOptions &&
           atField.typeOptions.validatorName === 'positive'
         ) {
-          return (<NumberSchema<any, object>>validation).min(0);
+          return [
+            ...validation,
+            ['yup.min', 0]
+          ];
         }
       }
     }

@@ -58,3 +58,5 @@ export interface DenimForeignKeyProperties {
   foreignTableId: string;
   multiple?: boolean;
 }
+
+export type YupAst = [string] | [string, any] | [string, any, string] | YupAst[];

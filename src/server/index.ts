@@ -21,7 +21,7 @@ const cors = require('cors');
 const schema = new AirTableSchemaSource<{}>(require('../schema/airtable-schema.json'));
 const data = new AirTableDataSource(schema, 'appjkBnHNyutcO3Wr');
 const fs = require('fs');
-const lark = new LarkUpdater('cli_9f4928350b2b9009', 'kNkgJYee06mDHfnnmgs6RfWtBy1gEtQJ');
+const lark = new LarkUpdater('cli_9f4c99b38b37100a', 'wF6wJHfm0wCUERavJXx0fbqsAcKAZr3x');
 
 app.use('/data', cors(), DenimDataSourceRouter(data));
 

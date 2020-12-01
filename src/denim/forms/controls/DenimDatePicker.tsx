@@ -231,18 +231,22 @@ const DenimDatePicker: FunctionComponent<
   const [typedText, setTypedText] = useState<any>(null);
 
   useEffect(() => {
-    if (typedText !== null && typedText) {
-      // Attempt to parse what was typed in.
-      const parsed = dayjs(typedText);
+    if (typedText !== null) {
+      if (typedText) {
+        // Attempt to parse what was typed in.
+        const parsed = dayjs(typedText);
 
-      if (parsed.isValid()) {
-        if (withTime) {
-          onChange(parsed);
+        if (parsed.isValid()) {
+          if (withTime) {
+            onChange(parsed);
+          } else {
+            onChange(`${parsed.year()}-${parsed.month() + 1}-${parsed.date()}`);
+          }
         } else {
-          onChange(`${parsed.year()}-${parsed.month() + 1}-${parsed.date()}`);
+          onChange(typedText);
         }
       } else {
-        onChange(typedText);
+        onChange(null);
       }
     }
   }, [typedText]);
@@ -255,7 +259,7 @@ const DenimDatePicker: FunctionComponent<
     const parsed = dayjs(value);
 
     if (!parsed.isValid()) {
-      return null;
+      return value;
     }
 
     const date = parsed.toDate();
@@ -274,7 +278,7 @@ const DenimDatePicker: FunctionComponent<
       value={typedText !== null ? typedText : getParsedValue()}
       onChange={(value: any) => setTypedText(value || '')}
       onBlur={() => setTypedText(null)}
-      placeholder={getLocaleDateString() + (withTime ? (' hh:mm') : '')}
+      placeholder={getLocaleDateString() + (withTime ? ' hh:mm' : '')}
     />
   );
 };

@@ -83,12 +83,12 @@ export default class AirTableDataProvider<
       const fieldValue = record.fields[column];
       (<any>newFields)[column] = fieldValue;
 
-      if (fieldValue && Array.isArray(fieldValue)) {
-        const columnSchema = this.airtableSchema.columns.find(
-          ({ name }) => name === column,
-        );
+      const columnSchema = this.airtableSchema.columns.find(
+        ({ name }) => name === column,
+      );
 
-        if (columnSchema && columnSchema.type === 'foreignKey') {
+      if (fieldValue && Array.isArray(fieldValue)) {
+        if (columnSchema?.type === 'foreignKey') {
           if (columnSchema.typeOptions?.relationship === 'many') {
             // Retrieve the name field asynchronously.
             newFields[column] = {

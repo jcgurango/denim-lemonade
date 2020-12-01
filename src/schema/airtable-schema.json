@@ -1,5 +1,73 @@
 [
 	{
+		"id": "tblUfitCYsBy6AiNV",
+		"name": "Department",
+		"columns": [
+			{
+				"id": "fldyhjOSNdncFV8gm",
+				"name": "Department",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldpyMw8OBbU8aYAU",
+				"name": "Description",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldz66zByq4hQJn3L",
+				"name": "Department Head",
+				"type": "foreignKey",
+				"typeOptions": {
+					"foreignTableId": "tblwceR29WfuANzls",
+					"relationship": "one",
+					"unreversed": true,
+					"symmetricColumnId": "fldBNXHP2fBJFMg8H"
+				}
+			},
+			{
+				"id": "fldmqGgcukVQIaiHt",
+				"name": "Employee copy",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldIzkdURlg9WHqgC",
+				"name": "Last Modified",
+				"type": "formula",
+				"typeOptions": {
+					"isDateTime": true,
+					"dateFormat": "Local",
+					"displayType": "lastModifiedTime",
+					"timeZone": "client",
+					"formulaTextParsed": "LAST_MODIFIED_TIME()",
+					"dependencies": {
+						"referencedColumnIdsForValue": [],
+						"dependsOnAllColumnModifications": true
+					},
+					"resultType": "date"
+				}
+			},
+			{
+				"id": "fldJmMDZiHpDSKhjc",
+				"name": "Department Head Lark ID",
+				"type": "lookup",
+				"typeOptions": {
+					"relationColumnId": "fldz66zByq4hQJn3L",
+					"foreignTableRollupColumnId": "fldDaog47aC4vuyuv",
+					"dependencies": {
+						"referencedColumnIdsForValue": [
+							"fldz66zByq4hQJn3L",
+							"fldDaog47aC4vuyuv"
+						]
+					},
+					"resultType": "text"
+				}
+			}
+		]
+	},
+	{
 		"id": "tblwceR29WfuANzls",
 		"name": "Employee",
 		"columns": [
@@ -745,6 +813,12 @@
 					"relationship": "many",
 					"unreversed": true
 				}
+			},
+			{
+				"id": "fldDaog47aC4vuyuv",
+				"name": "Lark ID",
+				"type": "text",
+				"typeOptions": null
 			}
 		]
 	},
@@ -3463,41 +3537,6 @@
 			},
 			{
 				"id": "fldbG82I3jgUloB3G",
-				"name": "Employee copy",
-				"type": "text",
-				"typeOptions": null
-			}
-		]
-	},
-	{
-		"id": "tblUfitCYsBy6AiNV",
-		"name": "Department",
-		"columns": [
-			{
-				"id": "fldyhjOSNdncFV8gm",
-				"name": "Department",
-				"type": "text",
-				"typeOptions": null
-			},
-			{
-				"id": "fldpyMw8OBbU8aYAU",
-				"name": "Description",
-				"type": "text",
-				"typeOptions": null
-			},
-			{
-				"id": "fldz66zByq4hQJn3L",
-				"name": "Department Head",
-				"type": "foreignKey",
-				"typeOptions": {
-					"foreignTableId": "tblwceR29WfuANzls",
-					"relationship": "one",
-					"unreversed": true,
-					"symmetricColumnId": "fldBNXHP2fBJFMg8H"
-				}
-			},
-			{
-				"id": "fldmqGgcukVQIaiHt",
 				"name": "Employee copy",
 				"type": "text",
 				"typeOptions": null
