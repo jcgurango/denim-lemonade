@@ -8,6 +8,7 @@ import { DenimDataRetriever } from './sync/retrievers/DenimDataRetriever';
 import { EmployeeMapper } from './sync/mappers/EmployeeMapper';
 import LarkUpdater from './sync/updaters/LarkUpdater';
 import { DepartmentMapper } from './sync/mappers/DepartmentMapper';
+import { DenimRecord } from '../denim/core';
 
 Airtable.configure({
   endpointUrl: 'https://api.airtable.com',
@@ -18,10 +19,15 @@ Airtable.configure({
 
 const app = express();
 const cors = require('cors');
-const schema = new AirTableSchemaSource<{}>(require('../schema/airtable-schema.json'));
+const schema = new AirTableSchemaSource<{}>(
+  require('../schema/airtable-schema.json'),
+);
 const data = new AirTableDataSource(schema, 'appjkBnHNyutcO3Wr');
 const fs = require('fs');
-const lark = new LarkUpdater('cli_9f4c99b38b37100a', 'wF6wJHfm0wCUERavJXx0fbqsAcKAZr3x');
+const lark = new LarkUpdater(
+  'cli_9f4c99b38b37100a',
+  'wF6wJHfm0wCUERavJXx0fbqsAcKAZr3x',
+);
 
 app.use('/data', cors(), DenimDataSourceRouter(data));
 
@@ -29,7 +35,8 @@ app.listen(9090, () => console.log('Listening...'));
 
 const updateCoordinator = new UpdateCoordinator({
   saveLastCheck: async (lastCheck) => fs.writeFileSync('.lastcheck', lastCheck),
-  saveBuckets: async (buckets) => fs.writeFileSync('.buckets', JSON.stringify(buckets)),
+  saveBuckets: async (buckets) =>
+    fs.writeFileSync('.buckets', JSON.stringify(buckets)),
   readLastCheck: async () => {
     if (fs.existsSync('.lastcheck')) {
       return parseInt(fs.readFileSync('.lastcheck'));
@@ -42,7 +49,7 @@ const updateCoordinator = new UpdateCoordinator({
       return JSON.parse(fs.readFileSync('.buckets'));
     }
 
-    return { };
+    return {};
   },
 });
 
@@ -51,27 +58,30 @@ const departmentDataProvider = data.createDataProvider('Department');
 
 updateCoordinator.registerRetriever(
   'departments',
-  DenimDataRetriever(departmentDataProvider, null, 'Last Modified', { }),
-  DepartmentMapper,
-);
-
-updateCoordinator.registerRetriever(
-  'employees',
-  DenimDataRetriever(employeeDataProvider, null, 'Last Modified', { }),
-  EmployeeMapper,
+  DenimDataRetriever(departmentDataProvider, null, 'Last Modified', {}),
 );
 
 updateCoordinator.registerUpdater(
   'departments',
+  DepartmentMapper.forward,
   lark.department(),
+);
+
+updateCoordinator.registerRetriever(
+  'employees',
+  DenimDataRetriever(employeeDataProvider, null, 'Last Modified', {}),
 );
 
 updateCoordinator.registerUpdater(
   'employees',
+  EmployeeMapper.forward,
   lark.employee(),
-  async (employee: any) => {
-    // Write the new ID back into AirTable.
-    const airtableId = employee.custom_attrs.airTableId;
+  async (employee: any, originalEmployee: DenimRecord) => {
+    if (!originalEmployee['Lark ID'] && employee.open_id) {
+      await employeeDataProvider.updateRecord({}, String(originalEmployee.id), {
+        'Lark ID': employee.open_id,
+      });
+    }
   },
 );
 

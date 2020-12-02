@@ -27,12 +27,6 @@
 				}
 			},
 			{
-				"id": "fldmqGgcukVQIaiHt",
-				"name": "Employee copy",
-				"type": "text",
-				"typeOptions": null
-			},
-			{
 				"id": "fldIzkdURlg9WHqgC",
 				"name": "Last Modified",
 				"type": "formula",
@@ -63,6 +57,27 @@
 						]
 					},
 					"resultType": "text"
+				}
+			},
+			{
+				"id": "flddKG6SmNUFk4V1s",
+				"name": "Parent Department",
+				"type": "foreignKey",
+				"typeOptions": {
+					"relationship": "one",
+					"foreignTableId": "tblUfitCYsBy6AiNV",
+					"unreversed": true
+				}
+			},
+			{
+				"id": "fldvz37OBeV2Fm7Ul",
+				"name": "Employee",
+				"type": "foreignKey",
+				"typeOptions": {
+					"foreignTableId": "tblwceR29WfuANzls",
+					"symmetricColumnId": "fldn4IGUp9nJpTi5k",
+					"relationship": "many",
+					"unreversed": true
 				}
 			}
 		]
@@ -445,7 +460,7 @@
 			},
 			{
 				"id": "fldSkcaKiGF9J1KMS",
-				"name": "Department",
+				"name": "Department - Old",
 				"type": "text",
 				"typeOptions": null
 			},
@@ -819,6 +834,17 @@
 				"name": "Lark ID",
 				"type": "text",
 				"typeOptions": null
+			},
+			{
+				"id": "fldn4IGUp9nJpTi5k",
+				"name": "Department",
+				"type": "foreignKey",
+				"typeOptions": {
+					"relationship": "one",
+					"foreignTableId": "tblUfitCYsBy6AiNV",
+					"symmetricColumnId": "fldvz37OBeV2Fm7Ul",
+					"unreversed": true
+				}
 			}
 		]
 	},

@@ -13,7 +13,8 @@ export const DenimDataRetriever = <T extends DenimDataContext>(
   context: T,
 ) => {
   return async (lastCheck: Date): Promise<DenimRecord[]> => {
-    console.log('Retrieving new/updated records from ' + tableData.tableSchema.name + ' on ' + updatedAtField + '...');
+    //console.log('Retrieving new/updated records from ' + tableData.tableSchema.name + ' on ' + updatedAtField + '...');
+
     return tableData.retrieveRecords(context, {
       ...(query || {}),
       conditions: {

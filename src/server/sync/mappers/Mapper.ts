@@ -1,7 +1,7 @@
 export interface Mapper {
   destinationColumn: string;
-  sourceToDestination: (data: any) => any;
-  destinationToSource: (data: any) => any;
+  sourceToDestination: (data: any, record: any) => any;
+  destinationToSource: (data: any, record: any) => any;
 }
 
 export interface Mapping {
@@ -27,7 +27,7 @@ export default <T extends MapRecord, D extends MapRecord>(mapping: Mapping) => {
           } else {
             destination[
               mapColumn.destinationColumn
-            ] = mapColumn.sourceToDestination(sourceValue);
+            ] = mapColumn.sourceToDestination(sourceValue, source);
           }
         }
       });
@@ -50,7 +50,7 @@ export default <T extends MapRecord, D extends MapRecord>(mapping: Mapping) => {
         }
 
         if (typeof(mapColumn) !== 'string') {
-          destinationValue = mapColumn.destinationToSource(destinationValue);
+          destinationValue = mapColumn.destinationToSource(destinationValue, destination);
         }
 
         if (typeof(destinationValue) !== 'undefined') {

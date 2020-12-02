@@ -17,7 +17,7 @@ export default class LarkUpdater {
     this.appSecret = appSecret;
   }
 
-  async withTenantAccessToken(callback: RequestCallback) {
+  async withTenantAccessToken(callback: RequestCallback, mapResponseData?: (responseData: any) => any) {
     const { tenant_access_token } = await bent('POST', 'json')(
       'https://open.larksuite.com/open-apis/auth/v3/tenant_access_token/internal/',
       {
@@ -34,69 +34,53 @@ export default class LarkUpdater {
       Authorization: 'Bearer ' + tenant_access_token,
     });
 
-    return callback({
+    const result = await callback({
       get,
       post,
     });
+
+    if (result) {
+      if (result.code) {
+        console.error(result);
+        throw new Error(result.msg);
+      }
+
+      return mapResponseData ? mapResponseData(result.data) : result.data;
+    }
   }
 
   department() {
     return (department: Department) =>
       this.withTenantAccessToken(async ({ get, post }) => {
-        console.log('Finding department ' + department.id);
-
         // Check if the department already exists.
         let isCreate = true;
         let existingDepartment: any = null;
+        existingDepartment = await get(
+          'https://open.larksuite.com/open-apis/contact/v1/department/info/get?department_id=' +
+            department.id,
+        );
 
-        try {
-          existingDepartment = await get(
-            'https://open.larksuite.com/open-apis/contact/v1/department/info/get?department_id=' +
-              department.id,
+        isCreate = existingDepartment?.code === 40013;
+
+        if (existingDepartment?.code && !isCreate) {
+          throw new Error(existingDepartment.message);
+        }
+
+        if (isCreate) {
+          console.log('Creating department ' + department.id);
+
+          return post(
+            'https://open.larksuite.com/open-apis/contact/v1/department/add',
+            department,
           );
-          
-          isCreate = existingDepartment?.code === 40013;
-
-          if (existingDepartment?.code && !isCreate) {
-            console.error(existingDepartment);
-            throw new Error(existingDepartment.message);
-          }
-        } catch (e) {
-          if (e.json) {
-            const json = await e.json();
-
-            if (json.code === 40013) {
-              // Not found.
-            } else {
-              console.error(json);
-              throw new Error(json.msg);
-            }
-          }
         }
 
-        try {
-          if (isCreate) {
-            console.log('Creating department ' + department.id);
-            const { id, ...departmentFields } = department;
+        console.log('Updating department ' + department.id);
 
-            await post(
-              'https://open.larksuite.com/open-apis/contact/v1/department/add',
-              {
-                ...departmentFields,
-                parent_id: department.parent_id || 0,
-              },
-            );
-          } else {
-          }
-        } catch (e) {
-          if (e.json) {
-            const json = await e.json();
-            console.error(json);
-            throw new Error(json.msg);
-          }
-        }
-
-        throw new Error('test');
+        return post(
+          'https://open.larksuite.com/open-apis/contact/v1/department/update',
+          department,
+        );
       });
   }
 
@@ -107,19 +91,22 @@ export default class LarkUpdater {
           console.log('Updating employee: ' + employee.open_id);
 
           // Update the employee.
-          const { data } = await post(
+          return post(
             'https://open.larksuite.com/open-apis/contact/v1/user/update',
             employee,
           );
-
-          return data;
         }
 
         console.log('Creating new employee user...');
-        const { data } = await post(
+
+        return post(
           'https://open.larksuite.com/open-apis/contact/v1/user/add',
           employee,
         );
+      }, (data) => {
+        if (data.user_info) {
+          return data.user_info;
+        }
 
         return data;
       });

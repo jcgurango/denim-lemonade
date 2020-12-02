@@ -11,11 +11,24 @@ export interface SourceDepartment {
   'Department Head Lark ID': string;
 }
 
-export const SingleDepartmentMapper = Mapper<SourceDepartment, Department>({
+export const DepartmentMapper = Mapper<SourceDepartment, Department>({
   'id': 'id',
   'Department': 'name',
   'Department Head Lark ID': 'leader_open_id',
+  'Parent Department': {
+    destinationColumn: 'parent_id',
+    sourceToDestination: (source) => {
+      if (source && source.id) {
+        return source.id;
+      }
+
+      return 0;
+    },
+    destinationToSource: (destination) => ({
+      type: 'record',
+      id: destination,
+    }),
+  },
 });
 
-export const DepartmentMapper = (departments: Partial<SourceDepartment>[]) =>
-  departments.map(SingleDepartmentMapper.forward);
+export default DepartmentMapper;

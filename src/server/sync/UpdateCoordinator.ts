@@ -4,7 +4,7 @@ export type RetrieveCallbackRegistration = {
 };
 export type RetrieveCallback = (lastCheckTime: Date) => Promise<any[]>;
 export type RetrieveTransformation = (data: any) => any[];
-export type UpdateCallback = (record: any, lastCallbackData?: any) => Promise<any>;
+export type UpdateCallback = (record: any, lastCallbackData?: any) => any;
 
 export interface UpdateCoordinatorPersistor {
   saveBuckets(buckets: { [key: string]: any[] }): Promise<void>;
@@ -98,6 +98,22 @@ export default class UpdateCoordinator {
 
                   // Push data into the buckets.
                   this.buckets[bucket].push(...result);
+
+                  // Deduplicate the bucket.
+                  let newBucket: any[] = [];
+
+                  for (let i = 0; i < this.buckets[bucket].length; i++) {
+                    const record = this.buckets[bucket][i];
+                    const existingIndex = newBucket.findIndex(({ id }) => record.id === id);
+
+                    if (existingIndex > -1) {
+                      newBucket.splice(existingIndex, 1);
+                    }
+
+                    newBucket.push(record);
+                  }
+
+                  this.buckets[bucket] = newBucket;
                 } catch (e) {
                   console.log('Error retrieving for ' + bucket + ':');
                   console.error(e);
@@ -120,12 +136,13 @@ export default class UpdateCoordinator {
                 const record = data[i];
 
                 try {
-                  let last = undefined;
+                  let last = record;
 
                   for (let c = 0; c < updateCallbacks.length; c++) {
-                    last = await updateCallbacks[c](record, last);
-                    success.push(record);
+                    last = await updateCallbacks[c](last, record);
                   }
+
+                  success.push(record);
                 } catch (e) {
                   console.log('Error updating for ' + bucket + ':');
                   console.error(e);

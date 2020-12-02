@@ -42,14 +42,15 @@ export interface SourceEmployee {
   Gender: 'Male' | 'Female';
 }
 
-export const SingleEmployeeMapper = Mapper<SourceEmployee, Employee>({
+export const EmployeeMapper = Mapper<SourceEmployee, Employee>({
   'Lark ID': 'open_id',
   'Full Name': 'name',
   'Employee ID': 'employee_no',
   'Mobile Number': 'mobile',
-  'City': 'city',
-  'Country': 'country',
-  'Gender': {
+  Email: 'email',
+  City: 'city',
+  Country: 'country',
+  Gender: {
     destinationColumn: 'gender',
     sourceToDestination: (source: 'Male' | 'Female') => {
       if (source === 'Male') {
@@ -71,14 +72,24 @@ export const SingleEmployeeMapper = Mapper<SourceEmployee, Employee>({
       }
     },
   },
-  'id': {
+  id: {
     destinationColumn: 'custom_attrs',
     sourceToDestination: (source) => ({
       airtableId: source,
     }),
     destinationToSource: (destination) => destination?.airtableId,
   },
+  Department: {
+    destinationColumn: 'department_ids',
+    sourceToDestination: (source) => (source?.id ? [source.id] : []),
+    destinationToSource: (source, item) =>
+      item.departments && item.departments.length
+        ? {
+            type: 'record',
+            id: item.departments[0],
+          }
+        : null,
+  },
 });
 
-export const EmployeeMapper = (employees: Partial<SourceEmployee>[]) =>
-  employees.map(SingleEmployeeMapper.forward);
+export default EmployeeMapper;
