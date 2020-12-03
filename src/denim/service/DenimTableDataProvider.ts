@@ -220,21 +220,46 @@ export default abstract class DenimTableDataProvider<
     id: string,
     expansion?: Expansion,
   ): Promise<DenimRecord | null> {
-    const record = await this.retrieve(id);
-    let expand = expansion;
+    const [
+      hookedContext,
+      hookedId,
+      hookedExpansion,
+    ] = await this.dataSource.executeHooks(
+      'pre-create',
+      this.tableSchema.name,
+      context,
+      id,
+      expansion,
+    );
+
+    const record = await this.retrieve(hookedId);
+    let expand = hookedExpansion;
 
     if (record) {
       await this.expandRecords(context, [record], expand);
     }
 
-    return record;
+    const [, hookedRecord] = await this.dataSource.executeHooks(
+      'post-create',
+      this.tableSchema.name,
+      hookedContext,
+      record,
+    );
+
+    return hookedRecord;
   }
 
   async retrieveRecords(
     context: T,
     query?: DenimQuery,
   ): Promise<DenimRecord[]> {
-    let passedQuery = query || {};
+    const [hookedContext, hookedQuery] = await this.dataSource.executeHooks(
+      'pre-retrieve-records',
+      this.tableSchema.name,
+      context,
+      query,
+    );
+    let passedQuery = hookedQuery || {};
 
     // Retrieve the records.
     const records = await this.query(passedQuery);
@@ -242,21 +267,72 @@ export default abstract class DenimTableDataProvider<
     // Perform expansions (if any).
     await this.expandRecords(context, records, passedQuery.expand);
 
-    return records;
+    const [, , hookedRecords] = await this.dataSource.executeHooks(
+      'post-retrieve-records',
+      this.tableSchema.name,
+      hookedContext,
+      hookedQuery,
+      records,
+    );
+
+    return hookedRecords;
   }
 
   async createRecord(context: T, record: DenimRecord): Promise<DenimRecord> {
-    const validator = transformAll(this.validator.createValidator(context));
+    const [hookedContext, hookedRecord] = await this.dataSource.executeHooks(
+      'pre-create',
+      this.tableSchema.name,
+      context,
+      record,
+    );
 
-    const validRecord = await validator.validate(record, { abortEarly: false });
+    const validator = transformAll(
+      this.validator.createValidator(hookedContext),
+    );
+
+    const [
+      hookedContextPreValidate,
+      hookedRecordPreValidate,
+      hookedValidator,
+    ] = await this.dataSource.executeHooks(
+      'pre-create-validate',
+      this.tableSchema.name,
+      hookedContext,
+      hookedRecord,
+      validator,
+    );
+
+    const validRecord = await hookedValidator.validate(
+      hookedRecordPreValidate,
+      {
+        abortEarly: false,
+      },
+    );
+
+    const [
+      hookedContextPostValidate,
+      hookedRecordPostValidate,
+    ] = await this.dataSource.executeHooks(
+      'post-create-validate',
+      this.tableSchema.name,
+      hookedContextPreValidate,
+      validRecord,
+    );
 
     // Create the record.
-    const newRecord = await this.save(validRecord);
+    const newRecord = await this.save(hookedRecordPostValidate);
 
     // Expand the record.
     await this.expandRecords(context, [newRecord], []);
 
-    return newRecord;
+    const [, hookedRecordPost] = await this.dataSource.executeHooks(
+      'post-create',
+      this.tableSchema.name,
+      hookedContextPostValidate,
+      newRecord,
+    );
+
+    return hookedRecordPost;
   }
 
   async updateRecord(
@@ -264,34 +340,92 @@ export default abstract class DenimTableDataProvider<
     id: string,
     record: DenimRecord,
   ): Promise<DenimRecord> {
-    const validator = transformAll(this.validator.createValidator(context));
+    const [
+      hookedContext,
+      hookedId,
+      hookedRecord,
+    ] = await this.dataSource.executeHooks(
+      'pre-update',
+      this.tableSchema.name,
+      context,
+      id,
+      record,
+    );
+
+    const validator = transformAll(
+      this.validator.createValidator(hookedContext),
+    );
 
     // Retrieve the record.
-    let existingRecord = await this.retrieveRecord(context, id);
+    let existingRecord = await this.retrieveRecord(hookedContext, hookedId);
 
     existingRecord = {
-      ...existingRecord,
+      ...hookedRecord,
       ...record,
     };
 
     // Expand the new record.
-    await this.expandRecords(context, [existingRecord]);
+    await this.expandRecords(hookedContext, [existingRecord]);
+
+    const [
+      hookedContextPreValidate,
+      hookedRecordPreValidate,
+      hookedValidator,
+    ] = await this.dataSource.executeHooks(
+      'pre-update-validate',
+      this.tableSchema.name,
+      hookedContext,
+      existingRecord,
+      validator,
+    );
 
     // Validate the updated record.
-    const validRecord = await validator.validate(existingRecord, {
-      abortEarly: false,
-    });
+    const validRecord = await hookedValidator.validate(
+      hookedRecordPreValidate,
+      {
+        abortEarly: false,
+      },
+    );
 
-    const updatedRecord = await this.save(validRecord);
+    const [
+      hookedContextPostValidate,
+      hookedRecordPostValidate,
+    ] = await this.dataSource.executeHooks(
+      'post-update-validate',
+      this.tableSchema.name,
+      hookedContextPreValidate,
+      validRecord,
+    );
+
+    const updatedRecord = await this.save(hookedRecordPostValidate);
 
     // Expand the record again.
-    await this.expandRecords(context, [updatedRecord]);
+    await this.expandRecords(hookedContextPostValidate, [updatedRecord]);
+
+    const [, hookedRecordPost] = await this.dataSource.executeHooks(
+      'post-update',
+      this.tableSchema.name,
+      hookedContextPostValidate,
+      updatedRecord,
+    );
 
     // Return the updated record.
-    return updatedRecord;
+    return hookedRecordPost;
   }
 
   async deleteRecord(context: DenimDataContext, id: string): Promise<void> {
-    await this.delete(id);
+    const [hookedContext, hookedId] = await this.dataSource.executeHooks(
+      'pre-delete',
+      this.tableSchema.name,
+      context,
+      id,
+    );
+    await this.delete(hookedId);
+    await this.dataSource.executeHooks(
+      'post-delete',
+      this.tableSchema.name,
+      hookedContext,
+      id,
+    );
   }
 }

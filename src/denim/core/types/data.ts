@@ -1,7 +1,3 @@
-export interface DenimUser {
-  id: string;
-}
-
 export interface DenimDataContext {
 }
 
