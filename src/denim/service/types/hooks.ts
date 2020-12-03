@@ -9,7 +9,7 @@ import {
 export interface DenimHook<
   T extends string,
   C extends DenimDataContext,
-  H extends (table: string, context: C, ...args: any[]) => Promise<[C, ...any]>
+  H extends (table: string, context: C, ...args: any[]) => Promise<[C, ...any[]]>
 > {
   table: string | RegExp;
   type: T;

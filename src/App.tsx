@@ -3,7 +3,6 @@ import { SafeAreaView, StatusBar } from 'react-native';
 import { createConnectedDataProvider } from './denim/forms/providers/DenimConnectedDataProvider';
 import AirTableSchemaSource from './denim/connectors/airtable/AirTableSchemaSource';
 import { DenimSchemaSource, DenimValidator } from './denim/service';
-import TestDataSource from './TestDataSource';
 import DenimRemoteDataSource from './denim/service/DenimRemoteDataSource';
 
 class TestSchemaSource extends AirTableSchemaSource<{}> {

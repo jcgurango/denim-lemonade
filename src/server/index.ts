@@ -8,7 +8,8 @@ import { DenimDataRetriever } from './sync/retrievers/DenimDataRetriever';
 import { EmployeeMapper } from './sync/mappers/EmployeeMapper';
 import LarkUpdater from './sync/updaters/LarkUpdater';
 import { DepartmentMapper } from './sync/mappers/DepartmentMapper';
-import { DenimRecord } from '../denim/core';
+import { DenimQueryOperator, DenimRecord } from '../denim/core';
+import LarkAuthentication from './LarkAuthentication';
 
 Airtable.configure({
   endpointUrl: 'https://api.airtable.com',
@@ -28,8 +29,33 @@ const lark = new LarkUpdater(
   'cli_9f4c99b38b37100a',
   'wF6wJHfm0wCUERavJXx0fbqsAcKAZr3x',
 );
+const auth = new LarkAuthentication(lark, 'test-secret-key');
 
-app.use('/data', cors(), DenimDataSourceRouter(data));
+app.use(
+  '/data',
+  cors(),
+  auth.middleware(async (id, req, res, next) => {
+    // Find the user.
+    console.log(id);
+
+    const [employee] = await employeeDataProvider.retrieveRecords({}, {
+      conditions: {
+        conditionType: 'single',
+        field: 'Lark ID',
+        operator: DenimQueryOperator.Equals,
+        value: id,
+      }
+    });
+
+    if (employee) {
+      console.log(employee);
+    }
+
+    return next();
+  }),
+  DenimDataSourceRouter(data),
+);
+app.use('/auth', auth.loginEndpoint());
 
 app.listen(9090, () => console.log('Listening...'));
 
