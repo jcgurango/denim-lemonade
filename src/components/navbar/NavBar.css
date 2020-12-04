@@ -1,0 +1,46 @@
+.NavBarItems {
+    background: linear-gradient(90deg, rgb(204, 212, 168) 0%, rgb(234, 238, 15) 100%);
+    height: 80px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.2 rem;
+}
+
+.navbar-logo{
+    color: #1a4e02;
+    justify-self:  start;
+    margin-left: 20px;
+    cursor: pointer;
+}
+
+.nav-menu{
+    display: grid;
+    grid-template-columns: repeat(5, auto);
+    grid-gap: 10px;
+    list-style: none;
+    text-align: center;
+    width: 70vw;
+    justify-content: end;
+    margin-right: 2rem;
+}
+
+.nav-links{
+    color: #1a4e02;
+    text-decoration: none;
+    padding: 0.5rem 1 rem;
+}
+
+.nav-links:hover{
+    background-color: rgb(199, 212, 16);
+    border-radius: 4px;
+    transition: all 0.2s ease-out;
+}
+
+.fa-bars{
+    color: #ffffff;
+}
+
+.nav-links-mobile {
+    display: none;
+}
