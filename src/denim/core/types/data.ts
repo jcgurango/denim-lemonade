@@ -1,4 +1,5 @@
 export interface DenimDataContext {
+  tags?: { [key: string]: any };
 }
 
 export type Expansion = string[];

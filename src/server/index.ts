@@ -10,6 +10,7 @@ import LarkUpdater from './sync/updaters/LarkUpdater';
 import { DepartmentMapper } from './sync/mappers/DepartmentMapper';
 import { DenimQueryOperator, DenimRecord } from '../denim/core';
 import LarkAuthentication from './LarkAuthentication';
+import { DenimAuthenticator } from '../denim/service';
 
 Airtable.configure({
   endpointUrl: 'https://api.airtable.com',
@@ -20,42 +21,130 @@ Airtable.configure({
 
 const app = express();
 const cors = require('cors');
-const schema = new AirTableSchemaSource<{}>(
+
+const schema = new AirTableSchemaSource<{
+  userData?: DenimRecord;
+}>(
   require('../schema/airtable-schema.json'),
 );
-const data = new AirTableDataSource(schema, 'appjkBnHNyutcO3Wr');
+const data = new AirTableDataSource<{}, AirTableSchemaSource<{}>>(schema, 'appjkBnHNyutcO3Wr');
+
+const securedSchema = new AirTableSchemaSource<{
+  userData?: DenimRecord;
+}>(require('../schema/airtable-schema.json'));
+const securedData = new AirTableDataSource<
+  {
+    userData?: DenimRecord;
+    tags?: { [key: string]: any };
+  },
+  AirTableSchemaSource<{ userData?: DenimRecord }>
+>(securedSchema, 'appjkBnHNyutcO3Wr');
+
+const denimAuth = new DenimAuthenticator(
+  [
+    {
+      id: 'hr',
+      readAction: 'allow',
+      createAction: 'allow',
+      updateAction: 'allow',
+      deleteAction: 'allow',
+      tables: [],
+      roleQuery: {
+        conditionType: 'single',
+        field: 'Is HR',
+        operator: DenimQueryOperator.Equals,
+        value: true,
+      },
+    },
+    {
+      id: 'employee',
+      readAction: 'block',
+      createAction: 'block',
+      updateAction: 'block',
+      deleteAction: 'block',
+      tables: [
+        {
+          table: 'Employee',
+          createAction: 'block',
+          readAction: {
+            conditionType: 'single',
+            field: 'id',
+            operator: DenimQueryOperator.Equals,
+            value: {
+              $user: 'id',
+            },
+          },
+          updateAction: {
+            conditionType: 'single',
+            field: 'id',
+            operator: DenimQueryOperator.Equals,
+            value: {
+              $user: 'id',
+            },
+            allowedFields: ['First Name', 'Last Name', 'Email'],
+          },
+        }
+      ],
+      roleQuery: {
+        conditionType: 'single',
+        field: 'Is HR',
+        operator: DenimQueryOperator.NotEquals,
+        value: true,
+      },
+    },
+  ],
+  schema.findTableSchema('Employee'),
+);
+
+denimAuth.attach(securedData);
+
 const fs = require('fs');
 const lark = new LarkUpdater(
   'cli_9f4c99b38b37100a',
   'wF6wJHfm0wCUERavJXx0fbqsAcKAZr3x',
 );
-const auth = new LarkAuthentication(lark, 'test-secret-key');
 
-app.use(
-  '/data',
-  cors(),
-  auth.middleware(async (id, req, res, next) => {
-    // Find the user.
-    console.log(id);
-
-    const [employee] = await employeeDataProvider.retrieveRecords({}, {
+const larkAuth = new LarkAuthentication(lark, 'test-secret-key');
+const dataRouter = DenimDataSourceRouter(securedData);
+const authMiddleware = larkAuth.middleware(async (id, req, res, next) => {
+  // Find the user.
+  const [employee] = await employeeDataProvider.retrieveRecords(
+    {},
+    {
       conditions: {
         conditionType: 'single',
         field: 'Lark ID',
         operator: DenimQueryOperator.Equals,
         value: id,
-      }
-    });
+      },
+    },
+  );
 
-    if (employee) {
-      console.log(employee);
-    }
+  if (employee) {
+    (<any>req).denimContext = {
+      userData: employee,
+    };
+  }
 
-    return next();
-  }),
-  DenimDataSourceRouter(data),
+  return next();
+});
+
+app.use('/auth/me', cors(), authMiddleware, (req, res) => {
+  if ((<any>(req)).denimContext) {
+    return res.json((<any>(req)).denimContext);
+  }
+
+  return res.json(null);
+});
+
+app.use(
+  '/data',
+  cors(),
+  authMiddleware,
+  dataRouter,
 );
-app.use('/auth', auth.loginEndpoint());
+
+app.use('/auth', cors(), larkAuth.loginEndpoint());
 
 app.listen(9090, () => console.log('Listening...'));
 
@@ -111,4 +200,4 @@ updateCoordinator.registerUpdater(
   },
 );
 
-updateCoordinator.poll(0);
+//updateCoordinator.poll(0);

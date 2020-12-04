@@ -10,3 +10,4 @@ export { default as DenimMultiDropDown } from './controls/DenimMultiDropDown';
 
 export { default as DenimFormProvider } from './providers/DenimFormProvider';
 export { default as TranslationProvider } from './providers/TranslationProvider';
+export { default as DenimUserProvider } from './providers/DenimUserProvider';

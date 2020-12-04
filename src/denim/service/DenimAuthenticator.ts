@@ -4,7 +4,7 @@ import {
   DenimAuthorizationAction,
   DenimLocalQuery,
 } from '.';
-import { DenimQuery, DenimQueryConditionOrGroup, DenimRecord } from '../core';
+import { DenimQuery, DenimQueryConditionOrGroup, DenimRecord, DenimTable } from '../core';
 import {
   DenimAuthenticationContext,
   DenimAuthorizationRole,
@@ -14,9 +14,11 @@ export type RolesCallback = (user: DenimRecord) => string[];
 
 export default class DenimAuthenticator<T extends DenimAuthenticationContext> {
   public roles: DenimAuthorizationRole[];
+  public userSchema: DenimTable;
 
-  constructor(roles: DenimAuthorizationRole[]) {
+  constructor(roles: DenimAuthorizationRole[], userSchema: DenimTable) {
     this.roles = roles;
+    this.userSchema = userSchema;
   }
 
   protected getAuthorizationActionFromKey(
@@ -28,18 +30,15 @@ export default class DenimAuthenticator<T extends DenimAuthenticationContext> {
 
   protected authorize(
     userData: DenimRecord | undefined,
-    roles: string[],
     actionKey: 'readAction' | 'createAction' | 'updateAction' | 'deleteAction',
     table: string,
   ): DenimAuthorizationAction {
-    const userRoles = <DenimAuthorizationRole[]>(
-      roles
-        .map((role) => this.roles.find(({ id }) => id === role))
-        .filter(Boolean)
-    );
+    const userRoles = this.roles.filter(({ roleQuery }) => {
+      return !roleQuery || (!!userData && DenimLocalQuery.matches(this.userSchema, userData, roleQuery));
+    });
     let query: DenimQueryConditionOrGroup | null = null;
 
-    for (let i = 0; i < roles.length; i++) {
+    for (let i = 0; i < userRoles.length; i++) {
       const role = userRoles[i];
 
       // Check if this table is in the role.
@@ -107,9 +106,8 @@ export default class DenimAuthenticator<T extends DenimAuthenticationContext> {
       table: /.*/g,
       callback: async (table, context, id, expansion, record) => {
         if (record) {
-          const authorization = await this.authorize(
+          const authorization = this.authorize(
             context.userData,
-            context.userRoles,
             'createAction',
             table,
           );
@@ -135,9 +133,8 @@ export default class DenimAuthenticator<T extends DenimAuthenticationContext> {
       type: 'pre-retrieve-records',
       table: /.*/g,
       callback: async (table, context, query) => {
-        let authorization = await this.authorize(
+        let authorization = this.authorize(
           context.userData,
-          context.userRoles,
           'createAction',
           table,
         );
@@ -172,12 +169,34 @@ export default class DenimAuthenticator<T extends DenimAuthenticationContext> {
     });
 
     dataSource.registerHook({
+      type: 'pre-create',
+      table: /.*/g,
+      callback: async (table, context, record) => {
+        const authorization = this.authorize(
+          context.userData,
+          'createAction',
+          table,
+        );
+
+        // Check for allowed fields.
+        if (typeof(authorization) !== 'string' && authorization.allowedFields) {
+          Object.keys(record).forEach((column) => {
+            if (!authorization.allowedFields?.includes(column)) {
+              throw new Error('Unauthorized field values.');
+            }
+          });
+        }
+
+        return [context, record];
+      },
+    });
+
+    dataSource.registerHook({
       type: 'pre-create-validate',
       table: /.*/g,
       callback: async (table, context, record, validator) => {
-        const authorization = await this.authorize(
+        const authorization = this.authorize(
           context.userData,
-          context.userRoles,
           'createAction',
           table,
         );
@@ -199,12 +218,34 @@ export default class DenimAuthenticator<T extends DenimAuthenticationContext> {
     });
 
     dataSource.registerHook({
+      type: 'pre-update',
+      table: /.*/g,
+      callback: async (table, context, id, record) => {
+        const authorization = this.authorize(
+          context.userData,
+          'updateAction',
+          table,
+        );
+
+        // Check for allowed fields.
+        if (typeof(authorization) !== 'string' && authorization.allowedFields) {
+          Object.keys(record).forEach((column) => {
+            if (!authorization.allowedFields?.includes(column)) {
+              throw new Error('Unauthorized field values.');
+            }
+          });
+        }
+
+        return [context, id, record];
+      },
+    });
+
+    dataSource.registerHook({
       type: 'pre-update-validate',
       table: /.*/g,
       callback: async (table, context, record, validator) => {
-        const authorization = await this.authorize(
+        const authorization = this.authorize(
           context.userData,
-          context.userRoles,
           'createAction',
           table,
         );
@@ -229,9 +270,8 @@ export default class DenimAuthenticator<T extends DenimAuthenticationContext> {
       type: 'pre-delete',
       table: /.*/g,
       callback: async (table, context, id) => {
-        const authorization = await this.authorize(
+        const authorization = this.authorize(
           context.userData,
-          context.userRoles,
           'createAction',
           table,
         );

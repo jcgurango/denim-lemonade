@@ -1,10 +1,11 @@
 import React from 'react';
-import { SafeAreaView, StatusBar, Image } from 'react-native';
+import { SafeAreaView, StatusBar } from 'react-native';
 import { createConnectedDataProvider } from './denim/forms/providers/DenimConnectedDataProvider';
 import AirTableSchemaSource from './denim/connectors/airtable/AirTableSchemaSource';
 import { DenimSchemaSource, DenimValidator } from './denim/service';
 import DenimRemoteDataSource from './denim/service/DenimRemoteDataSource';
 import NavBar from "./components/navbar/NavBar";
+import { DenimUserProvider } from './denim/forms';
 
 class TestSchemaSource extends AirTableSchemaSource<{}> {
   createValidator(table: string): DenimValidator<{}> {
@@ -440,5 +441,11 @@ const App = () => {
   );
 };
 
-export default App;
+export default () => {
+  return (
+    <DenimUserProvider authUrl="http://localhost:9090/auth">
+      <App />
+    </DenimUserProvider>
+  );
+};
 

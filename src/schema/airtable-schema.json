@@ -845,6 +845,15 @@
 					"symmetricColumnId": "fldvz37OBeV2Fm7Ul",
 					"unreversed": true
 				}
+			},
+			{
+				"id": "fldh0l5XLPThkOrId",
+				"name": "Is HR",
+				"type": "checkbox",
+				"typeOptions": {
+					"color": "green",
+					"icon": "check"
+				}
 			}
 		]
 	},

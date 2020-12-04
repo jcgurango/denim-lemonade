@@ -41,7 +41,11 @@ export default class LarkAuthentication {
       return res.json({
         url:
           'https://open.larksuite.com/open-apis/authen/v1/index?redirect_uri=' +
-          encodeURIComponent(redirectUrl) +
+          encodeURIComponent(
+            typeof req.query.redirect_url === 'string'
+              ? req.query.redirect_url
+              : redirectUrl,
+          ) +
           '&app_id=' +
           this.connection.appId,
       });
@@ -49,10 +53,7 @@ export default class LarkAuthentication {
 
     router.get('/callback', async (req: Request, res: Response) => {
       if (req.query.type === 'web') {
-        const {
-          open_id,
-        } = await withAppAccessToken(({ post, token }) => {
-          console.log(token);
+        const { open_id } = await withAppAccessToken(({ post, token }) => {
           return post(
             'https://open.larksuite.com/open-apis/authen/v1/access_token',
             {
@@ -64,7 +65,34 @@ export default class LarkAuthentication {
         }, res);
 
         res.json({
-          token: jwt.sign({ id: open_id, expiry: Date.now() + 30 * 60 * 1000 }, this.key),
+          token: jwt.sign(
+            { id: open_id, expiry: Date.now() + 30 * 60 * 1000 },
+            this.key,
+          ),
+        });
+      }
+    });
+
+    router.get('/verify', async (req: Request, res: Response) => {
+      try {
+        if (!req.query.token || typeof req.query.token !== 'string') {
+          throw new Error('No token provided.');
+        }
+
+        const { expiry }: any = jwt.verify(req.query.token, this.key);
+
+        if (expiry < Date.now()) {
+          throw new Error('Token expired.');
+        }
+
+        return res.json({
+          valid: true,
+        });
+      } catch (e) {
+        console.error(e);
+        return res.json({
+          valid: false,
+          message: e.message,
         });
       }
     });
@@ -86,6 +114,10 @@ export default class LarkAuthentication {
           if (typeof id === 'string' && Date.now() < expiry) {
             return callback(id, req, res, next);
           }
+
+          return res.status(403).json({
+            message: 'Unauthorized'
+          });
         }
 
         return next();
