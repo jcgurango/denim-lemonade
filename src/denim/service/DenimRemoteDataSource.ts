@@ -13,6 +13,7 @@ import {
 } from '../service';
 import dashify from 'dashify';
 import bent from 'bent';
+import qs from 'querystring';
 
 export interface DenimRemoteDataContext extends DenimDataContext {
   headers?: Headers;
@@ -58,7 +59,12 @@ export class DenimRemoteTableProvider<
       const response = await bent(
         'json',
         context.headers || {},
-      )(this.tableEndpoint + '/' + id + (expansion ? ('?expand=' + expansion.join(',')) : ''));
+      )(
+        this.tableEndpoint +
+          '/' +
+          id +
+          (expansion ? '?expand=' + expansion.join(',') : ''),
+      );
 
       return <DenimRecord>response || null;
     });
@@ -76,7 +82,11 @@ export class DenimRemoteTableProvider<
             context.headers || {},
           )(
             this.tableEndpoint +
-              (query.expand ? '?expand=' + query.expand.join(',') : ''),
+              '?' + qs.stringify({
+                expand: query.expand ? query.expand.join(',') : undefined,
+                page_size: query.pageSize ? query.pageSize : undefined,
+                page: query.page ? query.page : undefined,
+              }),
             query.conditions,
           )
         : await bent('json')(this.tableEndpoint);

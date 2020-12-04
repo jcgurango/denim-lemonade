@@ -91,7 +91,6 @@ const DenimUserProvider: FunctionComponent<{ authUrl: string }> = ({
 
       (async () => {
         const user = await get('/me');
-        console.log(user);
 
         if (!cancelled) {
           if (user) {

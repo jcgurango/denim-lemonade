@@ -1,60 +1,49 @@
 import React from 'react';
-import { SafeAreaView, StatusBar } from 'react-native';
-import { createConnectedDataProvider } from './denim/forms/providers/DenimConnectedDataProvider';
+import { createConnectedFormProvider } from './denim/forms/providers/DenimConnectedFormProvider';
 import AirTableSchemaSource from './denim/connectors/airtable/AirTableSchemaSource';
-import { DenimSchemaSource, DenimValidator } from './denim/service';
+import { DenimSchemaSource } from './denim/service';
 import DenimRemoteDataSource from './denim/service/DenimRemoteDataSource';
-import NavBar from "./components/navbar/NavBar";
-import { DenimUserProvider } from './denim/forms';
+import { DenimUserProvider, useDenimUser } from './denim/forms';
+import DenimApplication from './denim/application';
 
-class TestSchemaSource extends AirTableSchemaSource<{}> {
-  createValidator(table: string): DenimValidator<{}> {
-    const validator = super.createValidator(table);
-
-    validator.registerValidationHook(
-      'Employee',
-      (context, table, column, validation) => {
-        if (column?.name === 'User ID') {
-          return [
-            ...validation.filter(([func]) => func !== 'yup.nullable'),
-            ['yup.required'],
-          ];
-        }
-
-        return validation;
-      },
-    );
-
-    return validator;
-  }
-}
-
-const schemaSource = new TestSchemaSource(
+const schemaSource = new AirTableSchemaSource<{}>(
   require('./schema/airtable-schema.json'),
 );
 
-const dataSource = new DenimRemoteDataSource(schemaSource, 'http://localhost:9090/data');
+const dataSource = new DenimRemoteDataSource(
+  schemaSource,
+  'http://localhost:9090/data',
+);
 
-const { Provider, Form } = createConnectedDataProvider<
+const connectedFormProvider = createConnectedFormProvider<
   {},
   DenimSchemaSource<{}>
 >();
 
 const App = () => {
+  const user = useDenimUser();
+
   return (
-    <>
-    <NavBar />
-      <StatusBar barStyle="dark-content" />
-      <SafeAreaView>
-        <Provider
-          context={{}}
-          schemaSource={schemaSource}
-          dataSource={dataSource}
-        >
-          <Form 
-            table="Employee"
-            record="recowFaLyXtlu13w4"
-            schema={{
+    <DenimApplication
+      router={{
+        screens: [
+          {
+            id: 'employees',
+            slug: '/',
+            type: 'view',
+            table: 'Employee',
+            form: 'employee',
+            view: {
+              id: 'employee-view',
+              columns: ['First Name', 'Last Name'],
+              filterColumns: [],
+            },
+          },
+          {
+            id: 'employee',
+            type: 'form',
+            table: 'Employee',
+            form: {
               id: 'Employee-Form',
               sections: [
                 {
@@ -160,7 +149,7 @@ const App = () => {
                           label: 'Address 1',
                           id: 'Address 1',
                           relativeWidth: 5,
-                        },                                             
+                        },
                       ],
                     },
                     {
@@ -170,7 +159,7 @@ const App = () => {
                           label: 'Address 2',
                           id: 'Address 2',
                           relativeWidth: 5,
-                        },                        
+                        },
                       ],
                     },
                     {
@@ -180,7 +169,7 @@ const App = () => {
                           label: 'Address 3',
                           id: 'Address 3',
                           relativeWidth: 5,
-                        },                        
+                        },
                       ],
                     },
                     {
@@ -205,7 +194,7 @@ const App = () => {
                           label: 'Country',
                           id: 'Country',
                           relativeWidth: 2,
-                        },                       
+                        },
                       ],
                     },
                     {
@@ -220,7 +209,7 @@ const App = () => {
                           label: 'Mobile Number',
                           id: 'Mobile Number',
                           relativeWidth: 3,
-                        },                     
+                        },
                       ],
                     },
                     {
@@ -240,7 +229,7 @@ const App = () => {
                           label: 'Contact Person Mobile No',
                           id: 'Contact Person Mobile No',
                           relativeWidth: 1,
-                        },                      
+                        },
                       ],
                     },
                   ],
@@ -274,12 +263,12 @@ const App = () => {
                           label: 'Daily Work Hours',
                           id: 'Daily Work Hours',
                           relativeWidth: 1,
-                        },  
+                        },
                         {
                           label: 'Leave Scheme',
                           id: 'Leave Scheme',
                           relativeWidth: 1,
-                        },                     
+                        },
                       ],
                     },
                     {
@@ -309,7 +298,7 @@ const App = () => {
                           label: 'Direct Manager',
                           id: 'Direct Manager',
                           relativeWidth: 1,
-                        },                        
+                        },
                       ],
                     },
                     {
@@ -329,7 +318,7 @@ const App = () => {
                           label: 'Job Role',
                           id: 'Job Roles',
                           relativeWidth: 3,
-                        },                                              
+                        },
                       ],
                     },
                     {
@@ -344,7 +333,7 @@ const App = () => {
                           label: 'Skills',
                           id: 'Skills',
                           relativeWidth: 4,
-                        },                                              
+                        },
                       ],
                     },
                   ],
@@ -363,12 +352,12 @@ const App = () => {
                           label: 'Payroll ID',
                           id: 'Payroll ID',
                           relativeWidth: 2,
-                        },    
+                        },
                         {
                           label: 'Employee Wage',
                           id: 'Employee Wage',
                           relativeWidth: 3,
-                        },                
+                        },
                       ],
                     },
                     {
@@ -378,7 +367,7 @@ const App = () => {
                           label: 'Employee Allowance',
                           id: 'Employee Allowance',
                           relativeWidth: 5,
-                        },                      
+                        },
                       ],
                     },
                   ],
@@ -397,7 +386,7 @@ const App = () => {
                           label: 'Curriculum Vitae',
                           id: 'Curriculum Vitae',
                           relativeWidth: 5,
-                        },                    
+                        },
                       ],
                     },
                     {
@@ -407,7 +396,7 @@ const App = () => {
                           label: 'Dependents',
                           id: 'Dependents',
                           relativeWidth: 5,
-                        },                      
+                        },
                       ],
                     },
                     {
@@ -417,7 +406,7 @@ const App = () => {
                           label: 'Job History',
                           id: 'Job History',
                           relativeWidth: 5,
-                        },                                              
+                        },
                       ],
                     },
                     {
@@ -427,17 +416,41 @@ const App = () => {
                           label: 'Attachments',
                           id: 'Attachments',
                           relativeWidth: 5,
-                        },                                             
+                        },
                       ],
                     },
                   ],
                 },
               ],
-            }}
-          />
-        </Provider>
-      </SafeAreaView>
-    </>
+            },
+          },
+        ],
+      }}
+      menu={{
+        menuItems: [
+          {
+            screen: 'employees',
+            id: 'employees',
+            type: 'screen',
+            label: 'Employees',
+          },
+          {
+            screen: 'employee',
+            id: 'employee',
+            type: 'screen',
+            label: 'New Employee',
+          },
+        ],
+      }}
+      dataContext={{
+        headers: {
+          Authorization: 'Bearer ' + user.token,
+        },
+      }}
+      formProvider={connectedFormProvider}
+      schemaSource={schemaSource}
+      dataSource={dataSource}
+    />
   );
 };
 
@@ -448,4 +461,3 @@ export default () => {
     </DenimUserProvider>
   );
 };
-

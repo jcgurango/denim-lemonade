@@ -210,7 +210,7 @@ export default abstract class DenimTableDataProvider<
       hookedId,
       hookedExpansion,
     ] = await this.dataSource.executeHooks(
-      'pre-create',
+      'pre-retrieve-record',
       this.tableSchema.name,
       context,
       id,
@@ -225,7 +225,7 @@ export default abstract class DenimTableDataProvider<
     }
 
     const [, hookedRecord] = await this.dataSource.executeHooks(
-      'post-create',
+      'post-retrieve-record',
       this.tableSchema.name,
       hookedContext,
       record,
