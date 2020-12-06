@@ -2,10 +2,13 @@ import { DenimDataContext, DenimQueryConditionOrGroup, DenimRecord } from '../..
 
 export interface DenimAuthenticationContext extends DenimDataContext {
   userData?: DenimRecord;
-  userRoles: string[];
 }
 
-export type DenimAuthorizationAction = 'allow' | 'block' | DenimQueryConditionOrGroup;
+export interface AllowedFields {
+  allowedFields?: string[];
+}
+
+export type DenimAuthorizationAction = 'allow' | 'block' | (DenimQueryConditionOrGroup & AllowedFields);
 
 export interface DenimAuthorizationRole {
   id: string;
@@ -14,12 +17,13 @@ export interface DenimAuthorizationRole {
   updateAction: DenimAuthorizationAction;
   deleteAction: DenimAuthorizationAction;
   tables: DenimAuthorizationTable[];
+  roleQuery?: DenimQueryConditionOrGroup;
 }
 
 export interface DenimAuthorizationTable {
   table: string | RegExp;
-  readAction: DenimAuthorizationAction;
-  createAction: DenimAuthorizationAction;
-  updateAction: DenimAuthorizationAction;
-  deleteAction: DenimAuthorizationAction;
+  readAction?: DenimAuthorizationAction;
+  createAction?: DenimAuthorizationAction;
+  updateAction?: DenimAuthorizationAction;
+  deleteAction?: DenimAuthorizationAction;
 }

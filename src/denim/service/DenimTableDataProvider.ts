@@ -44,40 +44,26 @@ export default abstract class DenimTableDataProvider<
   async expandRecords(
     context: T,
     records: DenimRecord[],
-    expansion?: Expansion,
+    expansion: Expansion,
   ): Promise<void> {
     let relationships: RelationshipMap,
       childExpansions: { [relationship: string]: Expansion },
       rootExpansions: string[];
     relationships = {};
-    const defaultExpansion = !!expansion;
 
-    if (expansion) {
-      childExpansions = expansion.reduce<{ [relationship: string]: string[] }>(
-        (current, next) => {
-          const [root, field] = next.split('.', 2);
+    childExpansions = expansion.reduce<{ [relationship: string]: string[] }>(
+      (current, next) => {
+        const [root, field] = next.split('.', 2);
 
-          return {
-            ...current,
-            [root]: [...(current[root] || []), ...(field ? [field] : [])],
-          };
-        },
-        {},
-      );
-
-      rootExpansions = Object.keys(childExpansions);
-    } else {
-      rootExpansions = this.tableSchema.columns
-        .filter(({ type }) => type === DenimColumnType.ForeignKey)
-        .map(({ name }) => name);
-      childExpansions = rootExpansions.reduce(
-        (current, next) => ({
+        return {
           ...current,
-          [next]: [],
-        }),
-        {},
-      );
-    }
+          [root]: [...(current[root] || []), ...(field ? [field] : [])],
+        };
+      },
+      {},
+    );
+
+    rootExpansions = Object.keys(childExpansions);
 
     // Iterate through the expected expansions.
     await Promise.all(
@@ -130,7 +116,6 @@ export default abstract class DenimTableDataProvider<
                   })),
                 },
                 expand: childExpansions[relationship],
-                view: defaultExpansion ? 'related' : undefined,
                 retrieveAll: true,
               },
             );
@@ -225,7 +210,7 @@ export default abstract class DenimTableDataProvider<
       hookedId,
       hookedExpansion,
     ] = await this.dataSource.executeHooks(
-      'pre-create',
+      'pre-retrieve-record',
       this.tableSchema.name,
       context,
       id,
@@ -235,12 +220,12 @@ export default abstract class DenimTableDataProvider<
     const record = await this.retrieve(hookedId);
     let expand = hookedExpansion;
 
-    if (record) {
+    if (record && expand) {
       await this.expandRecords(context, [record], expand);
     }
 
     const [, hookedRecord] = await this.dataSource.executeHooks(
-      'post-create',
+      'post-retrieve-record',
       this.tableSchema.name,
       hookedContext,
       record,
@@ -265,7 +250,9 @@ export default abstract class DenimTableDataProvider<
     const records = await this.query(passedQuery);
 
     // Perform expansions (if any).
-    await this.expandRecords(context, records, passedQuery.expand);
+    if (passedQuery.expand) {
+      await this.expandRecords(context, records, passedQuery.expand);
+    }
 
     const [, , hookedRecords] = await this.dataSource.executeHooks(
       'post-retrieve-records',
@@ -364,9 +351,6 @@ export default abstract class DenimTableDataProvider<
       ...record,
     };
 
-    // Expand the new record.
-    await this.expandRecords(hookedContext, [existingRecord]);
-
     const [
       hookedContextPreValidate,
       hookedRecordPreValidate,
@@ -398,9 +382,6 @@ export default abstract class DenimTableDataProvider<
     );
 
     const updatedRecord = await this.save(hookedRecordPostValidate);
-
-    // Expand the record again.
-    await this.expandRecords(hookedContextPostValidate, [updatedRecord]);
 
     const [, hookedRecordPost] = await this.dataSource.executeHooks(
       'post-update',

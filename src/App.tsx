@@ -1,45 +1,30 @@
 import React from 'react';
-import { SafeAreaView, StatusBar } from 'react-native';
-import { createConnectedDataProvider } from './denim/forms/providers/DenimConnectedDataProvider';
+import { createConnectedFormProvider } from './denim/forms/providers/DenimConnectedFormProvider';
 import AirTableSchemaSource from './denim/connectors/airtable/AirTableSchemaSource';
-import { DenimSchemaSource, DenimValidator } from './denim/service';
+import { DenimSchemaSource } from './denim/service';
 import DenimRemoteDataSource from './denim/service/DenimRemoteDataSource';
+import { DenimUserProvider, useDenimUser } from './denim/forms';
+import DenimApplication from './denim/application';
 
-class TestSchemaSource extends AirTableSchemaSource<{}> {
-  createValidator(table: string): DenimValidator<{}> {
-    const validator = super.createValidator(table);
-
-    validator.registerValidationHook(
-      'Test Record CRUD',
-      (context, table, column, validation) => {
-        if (column?.name === 'Name') {
-          return [
-            ...validation.filter(([func]) => func !== 'yup.nullable'),
-            ['yup.required'],
-          ];
-        }
-
-        return validation;
-      },
-    );
-
-    return validator;
-  }
-}
-
-const schemaSource = new TestSchemaSource(
+const schemaSource = new AirTableSchemaSource<{}>(
   require('./schema/airtable-schema.json'),
 );
 
-const dataSource = new DenimRemoteDataSource(schemaSource, 'http://localhost:9090/data');
+const dataSource = new DenimRemoteDataSource(
+  schemaSource,
+  'http://localhost:9090/data',
+);
 
-const { Provider, Form } = createConnectedDataProvider<
+const connectedFormProvider = createConnectedFormProvider<
   {},
   DenimSchemaSource<{}>
 >();
 
 const App = () => {
+  const user = useDenimUser();
+
   return (
+<<<<<<< HEAD
     <>
       <StatusBar barStyle="dark-content" />
       <SafeAreaView>
@@ -52,6 +37,28 @@ const App = () => {
             table="Employee"
             record="recowFaLyXtlu13w4"
             schema={{
+=======
+    <DenimApplication
+      router={{
+        screens: [
+          {
+            id: 'employees',
+            slug: '/',
+            type: 'view',
+            table: 'Employee',
+            form: 'employee',
+            view: {
+              id: 'employee-view',
+              columns: ['First Name', 'Last Name'],
+              filterColumns: [],
+            },
+          },
+          {
+            id: 'employee',
+            type: 'form',
+            table: 'Employee',
+            form: {
+>>>>>>> ef63c32e657aa7c398b89ca64fa2662a8c4ef17c
               id: 'Employee-Form',
               sections: [
                 {
@@ -157,7 +164,11 @@ const App = () => {
                           label: 'Address 1',
                           id: 'Address 1',
                           relativeWidth: 5,
+<<<<<<< HEAD
                         },                                             
+=======
+                        },
+>>>>>>> ef63c32e657aa7c398b89ca64fa2662a8c4ef17c
                       ],
                     },
                     {
@@ -167,7 +178,11 @@ const App = () => {
                           label: 'Address 2',
                           id: 'Address 2',
                           relativeWidth: 5,
+<<<<<<< HEAD
                         },                        
+=======
+                        },
+>>>>>>> ef63c32e657aa7c398b89ca64fa2662a8c4ef17c
                       ],
                     },
                     {
@@ -177,7 +192,11 @@ const App = () => {
                           label: 'Address 3',
                           id: 'Address 3',
                           relativeWidth: 5,
+<<<<<<< HEAD
                         },                        
+=======
+                        },
+>>>>>>> ef63c32e657aa7c398b89ca64fa2662a8c4ef17c
                       ],
                     },
                     {
@@ -202,7 +221,11 @@ const App = () => {
                           label: 'Country',
                           id: 'Country',
                           relativeWidth: 2,
+<<<<<<< HEAD
                         },                       
+=======
+                        },
+>>>>>>> ef63c32e657aa7c398b89ca64fa2662a8c4ef17c
                       ],
                     },
                     {
@@ -217,7 +240,11 @@ const App = () => {
                           label: 'Mobile Number',
                           id: 'Mobile Number',
                           relativeWidth: 3,
+<<<<<<< HEAD
                         },                     
+=======
+                        },
+>>>>>>> ef63c32e657aa7c398b89ca64fa2662a8c4ef17c
                       ],
                     },
                     {
@@ -237,7 +264,11 @@ const App = () => {
                           label: 'Contact Person Mobile No',
                           id: 'Contact Person Mobile No',
                           relativeWidth: 1,
+<<<<<<< HEAD
                         },                      
+=======
+                        },
+>>>>>>> ef63c32e657aa7c398b89ca64fa2662a8c4ef17c
                       ],
                     },
                   ],
@@ -271,6 +302,7 @@ const App = () => {
                           label: 'Daily Work Hours',
                           id: 'Daily Work Hours',
                           relativeWidth: 1,
+<<<<<<< HEAD
                         },  
                         {
                           label: 'Leave Scheme',
@@ -335,6 +367,12 @@ const App = () => {
                         {
                           label: 'Language',
                           id: 'Language',
+=======
+                        },
+                        {
+                          label: 'Leave Scheme',
+                          id: 'Leave Scheme',
+>>>>>>> ef63c32e657aa7c398b89ca64fa2662a8c4ef17c
                           relativeWidth: 1,
                         },
                         {
@@ -427,16 +465,198 @@ const App = () => {
                         },                                             
                       ],
                     },
+                    {
+                      id: 'row1',
+                      controls: [
+                        {
+                          label: 'Base',
+                          id: 'Base',
+                          relativeWidth: 1,
+                        },
+                        {
+                          label: 'Department',
+                          id: 'Department',
+                          relativeWidth: 1,
+                        },
+                        {
+                          label: 'Department Supervisor',
+                          id: 'Department Supervisor',
+                          relativeWidth: 1,
+                        },
+                        {
+                          label: 'Member Type',
+                          id: 'Member Type',
+                          relativeWidth: 1,
+                        },
+                        {
+                          label: 'Direct Manager',
+                          id: 'Direct Manager',
+                          relativeWidth: 1,
+                        },
+                      ],
+                    },
+                    {
+                      id: 'row2',
+                      controls: [
+                        {
+                          label: 'Job Title',
+                          id: 'Job Title',
+                          relativeWidth: 1,
+                        },
+                        {
+                          label: 'Job Position',
+                          id: 'Job Positions',
+                          relativeWidth: 1,
+                        },
+                        {
+                          label: 'Job Role',
+                          id: 'Job Roles',
+                          relativeWidth: 3,
+                        },
+                      ],
+                    },
+                    {
+                      id: 'row3',
+                      controls: [
+                        {
+                          label: 'Language',
+                          id: 'Language',
+                          relativeWidth: 1,
+                        },
+                        {
+                          label: 'Skills',
+                          id: 'Skills',
+                          relativeWidth: 4,
+                        },
+                      ],
+                    },
+                  ],
+                },
+                {
+                  id: 'payroll-section',
+                  label: 'Payroll Information',
+                  showLabel: true,
+                  collapsible: true,
+                  defaultOpen: false,
+                  rows: [
+                    {
+                      id: 'row0',
+                      controls: [
+                        {
+                          label: 'Payroll ID',
+                          id: 'Payroll ID',
+                          relativeWidth: 2,
+                        },
+                        {
+                          label: 'Employee Wage',
+                          id: 'Employee Wage',
+                          relativeWidth: 3,
+                        },
+                      ],
+                    },
+                    {
+                      id: 'row1',
+                      controls: [
+                        {
+                          label: 'Employee Allowance',
+                          id: 'Employee Allowance',
+                          relativeWidth: 5,
+                        },
+                      ],
+                    },
+                  ],
+                },
+                {
+                  id: 'link-section',
+                  label: 'Link Attachment',
+                  showLabel: true,
+                  collapsible: true,
+                  defaultOpen: false,
+                  rows: [
+                    {
+                      id: 'row0',
+                      controls: [
+                        {
+                          label: 'Curriculum Vitae',
+                          id: 'Curriculum Vitae',
+                          relativeWidth: 5,
+                        },
+                      ],
+                    },
+                    {
+                      id: 'row1',
+                      controls: [
+                        {
+                          label: 'Dependents',
+                          id: 'Dependents',
+                          relativeWidth: 5,
+                        },
+                      ],
+                    },
+                    {
+                      id: 'row2',
+                      controls: [
+                        {
+                          label: 'Job History',
+                          id: 'Job History',
+                          relativeWidth: 5,
+                        },
+                      ],
+                    },
+                    {
+                      id: 'row3',
+                      controls: [
+                        {
+                          label: 'Attachments',
+                          id: 'Attachments',
+                          relativeWidth: 5,
+                        },
+                      ],
+                    },
                   ],
                 },
               ],
-            }}
-          />
-        </Provider>
-      </SafeAreaView>
-    </>
+            },
+          },
+        ],
+      }}
+      menu={{
+        menuItems: [
+          {
+            screen: 'employees',
+            id: 'employees',
+            type: 'screen',
+            label: 'Employees',
+          },
+          {
+            screen: 'employee',
+            id: 'employee',
+            type: 'screen',
+            label: 'New Employee',
+          },
+        ],
+      }}
+      dataContext={{
+        headers: {
+          Authorization: 'Bearer ' + user.token,
+        },
+      }}
+      formProvider={connectedFormProvider}
+      schemaSource={schemaSource}
+      dataSource={dataSource}
+    />
   );
 };
 
+<<<<<<< HEAD
 export default App;
 
+=======
+export default () => {
+  return (
+    <DenimUserProvider authUrl="http://localhost:9090/auth">
+      <App />
+    </DenimUserProvider>
+  );
+};
+>>>>>>> ef63c32e657aa7c398b89ca64fa2662a8c4ef17c

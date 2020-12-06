@@ -29,8 +29,10 @@ import {
   DenimTableDataProvider,
 } from '../../service';
 import DenimForm, { DenimFormProps } from '../DenimForm';
+import DenimView, { DenimViewProps } from '../DenimView';
 import DenimFormProvider, { useDenimForm } from './DenimFormProvider';
 import DenimLookupDataProvider from './DenimLookupDataProvider';
+import DenimViewDataProvider from './DenimViewDataProvider';
 
 interface DenimConnectedDataProviderProps<
   T extends DenimDataContext,
@@ -44,7 +46,7 @@ interface DenimConnectedDataProviderProps<
 interface ConnectedFormProps {
   table: string;
   record: string;
-  onSave?: (record: DenimRecord) => {};
+  onSave?: (record: DenimRecord) => void;
 }
 
 interface AsynchronousProps {
@@ -65,7 +67,18 @@ export interface DenimConnectedDataContext<T extends DenimDataContext> {
   context?: T;
 }
 
-export const createConnectedDataProvider = <
+export interface ConnectedForm<
+  T extends DenimDataContext,
+  S extends DenimSchemaSource<T>
+> {
+  Provider: FunctionComponent<DenimConnectedDataProviderProps<T, S>>;
+  Form: FunctionComponent<
+    DenimFormProps & ConnectedFormProps & AsynchronousProps
+  >;
+  View: FunctionComponent<DenimViewProps & { table: string }>;
+}
+
+export const createConnectedFormProvider = <
   T extends DenimDataContext,
   S extends DenimSchemaSource<T>
 >() => {
@@ -121,7 +134,7 @@ export const createConnectedDataProvider = <
                   type: DenimFormControlType.DropDown,
                   controlProps: {
                     options: column.properties.options,
-                    ...(control.controlProps || { }),
+                    ...(control.controlProps || {}),
                   },
                 };
               case DenimColumnType.MultiSelect:
@@ -132,7 +145,7 @@ export const createConnectedDataProvider = <
                   type: DenimFormControlType.MultiDropDown,
                   controlProps: {
                     options: column.properties.options,
-                    ...(control.controlProps || { }),
+                    ...(control.controlProps || {}),
                   },
                 };
               case DenimColumnType.ForeignKey:
@@ -145,7 +158,7 @@ export const createConnectedDataProvider = <
                     : DenimFormControlType.Lookup,
                   controlProps: {
                     relationship: column.name,
-                    ...(control.controlProps || { }),
+                    ...(control.controlProps || {}),
                   },
                 };
               case DenimColumnType.Text:
@@ -173,7 +186,7 @@ export const createConnectedDataProvider = <
                   type: DenimFormControlType.DatePicker,
                   controlProps: {
                     withTime: column.properties.includesTime,
-                    ...(control.controlProps || { }),
+                    ...(control.controlProps || {}),
                   },
                 };
             }
@@ -189,6 +202,61 @@ export const createConnectedDataProvider = <
       >
         {children}
       </Context.Provider>
+    );
+  };
+
+  const View: FunctionComponent<DenimViewProps & { table: string }> = ({
+    table,
+    ...props
+  }) => {
+    const context = useContext(Context);
+    const dataProvider = useMemo(() => context.getDataProviderFor(table), [
+      context,
+      table,
+    ]);
+    const tableSchema = useMemo(() => context.getTableSchema(table), [
+      context.getTableSchema,
+      table,
+    ]);
+    const [records, setRecords] = useState<DenimRecord[]>([]);
+    const [hasMore, setHasMore] = useState(true);
+    const [retrieving, setRetrieving] = useState(false);
+    const [page, setPage] = useState(1);
+
+    const retrieveMore = async () => {
+      if (context.context && dataProvider) {
+        setPage((page) => page + 1);
+        setRetrieving(true);
+
+        const records = await dataProvider.retrieveRecords(context.context, {
+          pageSize: 10,
+          page,
+        });
+
+        setRecords((r) => r.concat(records));
+        setRetrieving(false);
+        setHasMore(records.length >= 10);
+      }
+    };
+
+    useEffect(() => {
+      retrieveMore();
+    }, []);
+
+    if (!dataProvider || !tableSchema) {
+      throw new Error('No table ' + table);
+    }
+
+    return (
+      <DenimViewDataProvider
+        schema={tableSchema}
+        records={records}
+        hasMore={hasMore}
+        retrieving={retrieving}
+        retrieveMore={retrieveMore}
+      >
+        <DenimView {...props} />
+      </DenimViewDataProvider>
     );
   };
 
@@ -241,6 +309,7 @@ export const createConnectedDataProvider = <
         })),
       };
     }, [schema, context.getControlFor]);
+
     const [formValid, setFormValid] = useState(false);
     const [recordData, setRecordData] = useState<DenimRecord | null>(
       record ? null : {},
@@ -248,6 +317,27 @@ export const createConnectedDataProvider = <
     const [updateData, setUpdateData] = useState<DenimRecord | null>({});
     const [errors, setErrors] = useState<Yup.ValidationError[]>([]);
     const [saving, setSaving] = useState(false);
+    const expand = useMemo(() => {
+      const tableSchema = context.getTableSchema(table);
+      const fields: string[] = [];
+
+      schema.sections.forEach((section) => {
+        section.rows.forEach((row) => {
+          row.controls.forEach((control) => {
+            const column = tableSchema?.columns.find(
+              ({ name }) => name === control.id,
+            );
+
+            if (column && column.type === DenimColumnType.ForeignKey) {
+              fields.push(column.name);
+            }
+          });
+        });
+      });
+
+      return fields;
+    }, [table, schema]);
+
     const form = useDenimForm();
     const Button = form.componentRegistry.button;
 
@@ -260,6 +350,7 @@ export const createConnectedDataProvider = <
             const retrievedRecord = await dataProvider?.retrieveRecord(
               context.context,
               record,
+              expand,
             );
 
             if (!cancelled) {
@@ -313,8 +404,12 @@ export const createConnectedDataProvider = <
         const rec: any = updateData;
 
         try {
-          const savedRecord = await ((record || recordData?.id)
-            ? dataProvider.updateRecord(c, String(record || recordData?.id), rec)
+          const savedRecord = await (record || recordData?.id
+            ? dataProvider.updateRecord(
+                c,
+                String(record || recordData?.id),
+                rec,
+              )
             : dataProvider.createRecord(c, rec));
           setRecordData(savedRecord);
           setUpdateData({});
@@ -348,7 +443,9 @@ export const createConnectedDataProvider = <
           errors.filter((error) => {
             return (
               error.path &&
-              (error.path === field || error.path.startsWith(field + '.') || error.path.startsWith(field + '['))
+              (error.path === field ||
+                error.path.startsWith(field + '.') ||
+                error.path.startsWith(field + '['))
             );
           })
         }
@@ -412,5 +509,6 @@ export const createConnectedDataProvider = <
   return {
     Provider,
     Form,
+    View,
   };
 };
