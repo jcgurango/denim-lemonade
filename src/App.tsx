@@ -24,7 +24,6 @@ const App = () => {
   const user = useDenimUser();
 
   return (
-<<<<<<< HEAD
     <>
       <StatusBar barStyle="dark-content" />
       <SafeAreaView>
@@ -37,7 +36,6 @@ const App = () => {
             table="Employee"
             record="recowFaLyXtlu13w4"
             schema={{
-=======
     <DenimApplication
       router={{
         screens: [
@@ -58,7 +56,6 @@ const App = () => {
             type: 'form',
             table: 'Employee',
             form: {
->>>>>>> ef63c32e657aa7c398b89ca64fa2662a8c4ef17c
               id: 'Employee-Form',
               sections: [
                 {
@@ -164,11 +161,8 @@ const App = () => {
                           label: 'Address 1',
                           id: 'Address 1',
                           relativeWidth: 5,
-<<<<<<< HEAD
                         },                                             
-=======
                         },
->>>>>>> ef63c32e657aa7c398b89ca64fa2662a8c4ef17c
                       ],
                     },
                     {
@@ -178,11 +172,8 @@ const App = () => {
                           label: 'Address 2',
                           id: 'Address 2',
                           relativeWidth: 5,
-<<<<<<< HEAD
                         },                        
-=======
                         },
->>>>>>> ef63c32e657aa7c398b89ca64fa2662a8c4ef17c
                       ],
                     },
                     {
@@ -192,11 +183,8 @@ const App = () => {
                           label: 'Address 3',
                           id: 'Address 3',
                           relativeWidth: 5,
-<<<<<<< HEAD
                         },                        
-=======
                         },
->>>>>>> ef63c32e657aa7c398b89ca64fa2662a8c4ef17c
                       ],
                     },
                     {
@@ -221,11 +209,8 @@ const App = () => {
                           label: 'Country',
                           id: 'Country',
                           relativeWidth: 2,
-<<<<<<< HEAD
                         },                       
-=======
                         },
->>>>>>> ef63c32e657aa7c398b89ca64fa2662a8c4ef17c
                       ],
                     },
                     {
@@ -240,11 +225,8 @@ const App = () => {
                           label: 'Mobile Number',
                           id: 'Mobile Number',
                           relativeWidth: 3,
-<<<<<<< HEAD
                         },                     
-=======
                         },
->>>>>>> ef63c32e657aa7c398b89ca64fa2662a8c4ef17c
                       ],
                     },
                     {
@@ -264,11 +246,8 @@ const App = () => {
                           label: 'Contact Person Mobile No',
                           id: 'Contact Person Mobile No',
                           relativeWidth: 1,
-<<<<<<< HEAD
                         },                      
-=======
                         },
->>>>>>> ef63c32e657aa7c398b89ca64fa2662a8c4ef17c
                       ],
                     },
                   ],
@@ -302,7 +281,6 @@ const App = () => {
                           label: 'Daily Work Hours',
                           id: 'Daily Work Hours',
                           relativeWidth: 1,
-<<<<<<< HEAD
                         },  
                         {
                           label: 'Leave Scheme',
@@ -367,12 +345,10 @@ const App = () => {
                         {
                           label: 'Language',
                           id: 'Language',
-=======
                         },
                         {
                           label: 'Leave Scheme',
                           id: 'Leave Scheme',
->>>>>>> ef63c32e657aa7c398b89ca64fa2662a8c4ef17c
                           relativeWidth: 1,
                         },
                         {
@@ -648,10 +624,8 @@ const App = () => {
   );
 };
 
-<<<<<<< HEAD
 export default App;
 
-=======
 export default () => {
   return (
     <DenimUserProvider authUrl="http://localhost:9090/auth">
@@ -659,4 +633,3 @@ export default () => {
     </DenimUserProvider>
   );
 };
->>>>>>> ef63c32e657aa7c398b89ca64fa2662a8c4ef17c
