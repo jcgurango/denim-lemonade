@@ -14,7 +14,7 @@ const DenimMultiDropDown: FunctionComponent<
 > = ({ onChange, value, schema, form, errors, options, ...props }) => {
   const denimForm = useDenimForm();
   const ControlContainer = denimForm.componentRegistry.controlContainer;
-  const helpText = errors.map(({ message }) => message).join('\n');
+  const helpText = errors?.map(({ message }) => message).join('\n') || '';
 
   const select = (newValue: any) => {
     if (Array.isArray(value) && value.indexOf(newValue) > -1) {
@@ -34,7 +34,7 @@ const DenimMultiDropDown: FunctionComponent<
 
   return (
     <ControlContainer
-      error={errors.length > 0}
+      error={(errors?.length || 0) > 0}
       helpText={helpText}
     >
       {Array.isArray(value) ? (

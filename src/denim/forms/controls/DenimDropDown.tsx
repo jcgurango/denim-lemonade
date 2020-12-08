@@ -12,11 +12,11 @@ const DenimDropDown: FunctionComponent<
 > = ({ onChange, value, schema, form, errors, options, ...props }) => {
   const denimForm = useDenimForm();
   const ControlContainer = denimForm.componentRegistry.controlContainer;
-  const helpText = errors.map(({ message }) => message).join('\n');
+  const helpText = errors?.map(({ message }) => message).join('\n') || '';
 
   return (
     <ControlContainer
-      error={errors.length > 0}
+      error={(errors?.length || 0) > 0}
       helpText={helpText}
     >
       <NativeDropDown

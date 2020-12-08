@@ -1,6 +1,6 @@
 import React, { FunctionComponent, ReactChild } from 'react';
 import { Button } from 'react-native';
-import { DenimRecord, DenimViewSchema } from '../core';
+import { DenimColumnType, DenimRecord, DenimViewSchema } from '../core';
 import { useDenimViewData } from './providers/DenimViewDataProvider';
 
 export interface DenimViewProps {
@@ -14,13 +14,55 @@ const DenimView: FunctionComponent<DenimViewProps> = ({
 }) => {
   const view = useDenimViewData();
 
+  const mapRecordValue = (column: string, value: any) => {
+    if (value !== undefined && value !== null) {
+      const tableColumn = view.schema.columns.find(({ name }) => name === column);
+
+      if (tableColumn) {
+        if (tableColumn.type === DenimColumnType.DateTime) {
+          const date = new Date(value);
+
+          if (tableColumn.properties.includesTime) {
+            return `${date.toLocaleDateString()} ${date.toLocaleTimeString()}`;
+          }
+          
+          return `${date.toLocaleDateString()}`;
+        }
+
+        if (tableColumn.type === DenimColumnType.Boolean) {
+          return value ? 'Yes' : 'No';
+        }
+
+        if (tableColumn.type === DenimColumnType.ForeignKey) {
+          if (tableColumn.properties.multiple) {
+            return value.records.map(({ name }: any) => name).join(', ');
+          }
+
+          return value.name;
+        }
+      }
+    }
+
+    return value;
+  }
+
+  const getColumnLabel = (columnName: string) => {
+    const column = view.schema.columns.find(({ name }) => name === columnName);
+
+    if (column) {
+      return column.name;
+    }
+
+    return columnName;
+  }
+
   return (
     <>
       <table>
         <thead>
           <tr>
             {schema.columns.map((column) => (
-              <th>{column}</th>
+              <th>{getColumnLabel(column)}</th>
             ))}
             {renderActions ? <th>#</th> : null}
           </tr>
@@ -29,7 +71,7 @@ const DenimView: FunctionComponent<DenimViewProps> = ({
           {view.records.map((record) => (
             <tr key={record.id}>
               {schema.columns.map((column) => (
-                <td>{record[column]}</td>
+                <td>{mapRecordValue(column, record[column])}</td>
               ))}
               {renderActions ? <th>{renderActions(record)}</th> : null}
             </tr>

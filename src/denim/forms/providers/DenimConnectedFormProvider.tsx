@@ -19,15 +19,19 @@ import {
   DenimFormControlSchema,
   DenimFormControlType,
   DenimFormSchema,
+  DenimQueryConditionGroup,
   DenimQueryOperator,
   DenimRecord,
+  DenimRelatedRecord,
   DenimTable,
+  Expansion,
 } from '../../core';
 import {
   DenimDataSource,
   DenimSchemaSource,
   DenimTableDataProvider,
 } from '../../service';
+import DenimFilterControl from '../controls/DenimFilterControl';
 import DenimForm, { DenimFormProps } from '../DenimForm';
 import DenimView, { DenimViewProps } from '../DenimView';
 import DenimFormProvider, { useDenimForm } from './DenimFormProvider';
@@ -64,6 +68,9 @@ export interface DenimConnectedDataContext<T extends DenimDataContext> {
   getDataProviderFor: (
     table: string,
   ) => DenimTableDataProvider<T, DenimSchemaSource<T>> | null;
+  getLookupProviderFor: (
+    table: string,
+  ) => (relationship: string, query: string) => Promise<DenimRelatedRecord[]>;
   context?: T;
 }
 
@@ -87,6 +94,7 @@ export const createConnectedFormProvider = <
     getTableSchema: () => undefined,
     getControlFor: () => null,
     getDataProviderFor: () => null,
+    getLookupProviderFor: () => async () => [],
   });
 
   const Provider: FunctionComponent<DenimConnectedDataProviderProps<T, S>> = ({
@@ -95,6 +103,16 @@ export const createConnectedFormProvider = <
     context,
     children,
   }) => {
+    const getTableSchema = useCallback(
+      (table: string) =>
+        schemaSource.schema.tables.find(
+          ({ id, name }) => id === table || name === table,
+        ),
+      [schemaSource.schema],
+    );
+    const getDataProviderFor = (table: string) =>
+      dataSource.createDataProvider(table);
+
     return (
       <Context.Provider
         value={{
@@ -106,13 +124,7 @@ export const createConnectedFormProvider = <
             },
             [schemaSource],
           ),
-          getTableSchema: useCallback(
-            (table: string) =>
-              schemaSource.schema.tables.find(
-                ({ id, name }) => id === table || name === table,
-              ),
-            [schemaSource.schema],
-          ),
+          getTableSchema,
           getControlFor: (
             table: DenimTable,
             column: DenimColumn,
@@ -122,14 +134,14 @@ export const createConnectedFormProvider = <
               case DenimColumnType.Boolean:
                 return {
                   ...control,
-                  label: control.label || column.name,
+                  label: control.label || column.label,
                   id: column.name,
                   type: DenimFormControlType.CheckBox,
                 };
               case DenimColumnType.Select:
                 return {
                   ...control,
-                  label: control.label || column.name,
+                  label: control.label || column.label,
                   id: column.name,
                   type: DenimFormControlType.DropDown,
                   controlProps: {
@@ -140,7 +152,7 @@ export const createConnectedFormProvider = <
               case DenimColumnType.MultiSelect:
                 return {
                   ...control,
-                  label: control.label || column.name,
+                  label: control.label || column.label,
                   id: column.name,
                   type: DenimFormControlType.MultiDropDown,
                   controlProps: {
@@ -151,7 +163,7 @@ export const createConnectedFormProvider = <
               case DenimColumnType.ForeignKey:
                 return {
                   ...control,
-                  label: control.label || column.name,
+                  label: control.label || column.label,
                   id: column.name,
                   type: column.properties.multiple
                     ? DenimFormControlType.MultiLookup
@@ -166,7 +178,7 @@ export const createConnectedFormProvider = <
                 if (column.properties?.long) {
                   return {
                     ...control,
-                    label: control.label || column.name,
+                    label: control.label || column.label,
                     id: column.name,
                     type: DenimFormControlType.MultilineTextInput,
                   };
@@ -174,14 +186,14 @@ export const createConnectedFormProvider = <
 
                 return {
                   ...control,
-                  label: control.label || column.name,
+                  label: control.label || column.label,
                   id: column.name,
                   type: DenimFormControlType.TextInput,
                 };
               case DenimColumnType.DateTime:
                 return {
                   ...control,
-                  label: control.label || column.name,
+                  label: control.label || column.label,
                   id: column.name,
                   type: DenimFormControlType.DatePicker,
                   controlProps: {
@@ -193,11 +205,56 @@ export const createConnectedFormProvider = <
 
             return {
               ...control,
-              label: control.label || column.name,
+              label: control.label || column.label,
               type: DenimFormControlType.ReadOnly,
             };
           },
-          getDataProviderFor: (table) => dataSource.createDataProvider(table),
+          getDataProviderFor,
+          getLookupProviderFor: (table) => {
+            const tableSchema = getTableSchema(table);
+
+            if (tableSchema) {
+              return async (relationship: string, query: string) => {
+                const column = tableSchema?.columns.find(
+                  ({ name }) => name === relationship,
+                );
+
+                if (column?.type === DenimColumnType.ForeignKey) {
+                  const otherTable = column.properties.foreignTableId;
+                  const otherTableSchema = getTableSchema(otherTable);
+
+                  if (otherTableSchema) {
+                    const nameField = otherTableSchema.nameField;
+                    const data = getDataProviderFor(otherTableSchema.name);
+                    const c: any = context;
+
+                    if (data) {
+                      const records = await data.retrieveRecords(c, {
+                        conditions: {
+                          conditionType: 'single',
+                          field: nameField,
+                          operator: DenimQueryOperator.StringContains,
+                          value: query,
+                        },
+                        expand: [],
+                      });
+
+                      return records.map((record) => ({
+                        type: 'record',
+                        id: String(record.id),
+                        name: String(record[nameField]),
+                        record,
+                      }));
+                    }
+                  }
+                }
+
+                return [];
+              };
+            }
+
+            return async () => [];
+          },
         }}
       >
         {children}
@@ -218,10 +275,34 @@ export const createConnectedFormProvider = <
       context.getTableSchema,
       table,
     ]);
+    const expand = useMemo<Expansion>(() => {
+      if (tableSchema) {
+        const expand: Expansion = [];
+
+        props.schema.columns.forEach((columnName) => {
+          const column = tableSchema.columns.find(
+            ({ name }) => name === columnName,
+          );
+
+          if (column && column.type === DenimColumnType.ForeignKey) {
+            expand.push(columnName);
+          }
+        });
+
+        return expand;
+      }
+
+      return [];
+    }, [tableSchema]);
     const [records, setRecords] = useState<DenimRecord[]>([]);
     const [hasMore, setHasMore] = useState(true);
     const [retrieving, setRetrieving] = useState(false);
     const [page, setPage] = useState(1);
+    const [query, setQuery] = useState<DenimQueryConditionGroup>();
+    const lookup = useMemo(() => context.getLookupProviderFor(table), [
+      context,
+      table,
+    ]);
 
     const retrieveMore = async () => {
       if (context.context && dataProvider) {
@@ -231,6 +312,7 @@ export const createConnectedFormProvider = <
         const records = await dataProvider.retrieveRecords(context.context, {
           pageSize: 10,
           page,
+          expand,
         });
 
         setRecords((r) => r.concat(records));
@@ -255,7 +337,27 @@ export const createConnectedFormProvider = <
         retrieving={retrieving}
         retrieveMore={retrieveMore}
       >
-        <DenimView {...props} />
+        <DenimLookupDataProvider lookup={lookup}>
+          <DenimFilterControl
+            value={query}
+            onChange={setQuery}
+            columns={tableSchema.columns.filter(({ name }) =>
+              props.schema.filterColumns.includes(name),
+            )}
+            fieldControls={tableSchema.columns
+              .filter(({ name }) => props.schema.filterColumns.includes(name))
+              .reduce((previous, column) => {
+                return {
+                  ...previous,
+                  [column.name]: context.getControlFor(tableSchema, column, {
+                    id: column.name,
+                    relativeWidth: 1,
+                  }),
+                };
+              }, {})}
+          />
+          <DenimView {...props} />
+        </DenimLookupDataProvider>
       </DenimViewDataProvider>
     );
   };
@@ -337,6 +439,10 @@ export const createConnectedFormProvider = <
 
       return fields;
     }, [table, schema]);
+    const lookup = useMemo(() => context.getLookupProviderFor(table), [
+      context,
+      table,
+    ]);
 
     const form = useDenimForm();
     const Button = form.componentRegistry.button;
@@ -450,51 +556,7 @@ export const createConnectedFormProvider = <
           })
         }
       >
-        <DenimLookupDataProvider
-          lookup={async (relationship: string, query: string) => {
-            const tableSchema = context.getTableSchema(table);
-
-            if (tableSchema) {
-              const column = tableSchema?.columns.find(
-                ({ name }) => name === relationship,
-              );
-
-              if (column?.type === DenimColumnType.ForeignKey) {
-                const otherTable = column.properties.foreignTableId;
-                const otherTableSchema = context.getTableSchema(otherTable);
-
-                if (otherTableSchema) {
-                  const nameField = otherTableSchema.nameField;
-                  const data = context.getDataProviderFor(
-                    otherTableSchema.name,
-                  );
-                  const c: any = context.context;
-
-                  if (data) {
-                    const records = await data.retrieveRecords(c, {
-                      conditions: {
-                        conditionType: 'single',
-                        field: nameField,
-                        operator: DenimQueryOperator.StringContains,
-                        value: query,
-                      },
-                      expand: [],
-                    });
-
-                    return records.map((record) => ({
-                      type: 'record',
-                      id: String(record.id),
-                      name: String(record[nameField]),
-                      record,
-                    }));
-                  }
-                }
-              }
-            }
-
-            return [];
-          }}
-        >
+        <DenimLookupDataProvider lookup={lookup}>
           <DenimForm
             schema={convertedSchema}
             error={errors.filter((error) => !error.path).join('\n')}

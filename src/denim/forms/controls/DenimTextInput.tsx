@@ -16,11 +16,11 @@ const DenimTextInput: FunctionComponent<DenimControlProps & TextInputProps> = ({
 }) => {
   const denimForm = useDenimForm();
   const ControlContainer = denimForm.componentRegistry.controlContainer;
-  const helpText = errors.map(({ message }) => message).join('\n');
+  const helpText = errors?.map(({ message }) => message).join('\n') || '';
 
   return (
     <ControlContainer
-      error={errors.length > 0}
+      error={(errors?.length || 0) > 0}
       helpText={helpText}
     >
       <TextInput

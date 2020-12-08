@@ -6,7 +6,7 @@ import { useDenimForm } from './providers/DenimFormProvider';
 
 export interface DenimFormControlProps {
   schema: DenimFormControlSchema;
-  form: DenimFormSchema;
+  form?: DenimFormSchema;
 }
 
 const DenimFormControl: FunctionComponent<DenimFormControlProps> = ({
@@ -20,7 +20,7 @@ const DenimFormControl: FunctionComponent<DenimFormControlProps> = ({
 
   return (
     <>
-      <Text style={[styles.formLabel, denimForm.styleOverrides?.formControl?.formLabel]}>{schema.label || translation.translate(`Forms.${form.id}.Fields.${schema.id}`)}</Text>
+      <Text style={[styles.formLabel, denimForm.styleOverrides?.formControl?.formLabel]}>{schema.label || translation.translate(`Forms.${form?.id || 'generic'}.Fields.${schema.id}`)}</Text>
       {Control ? (
         <View>
           <Control
