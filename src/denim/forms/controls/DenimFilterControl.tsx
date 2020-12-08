@@ -3,10 +3,10 @@ import { Button, StyleSheet, Text, View } from 'react-native';
 import {
   DenimColumn,
   DenimFormControlSchema,
+  DenimQueryCondition,
   DenimQueryConditionGroup,
   DenimQueryOperator,
 } from '../../core';
-import DenimForm from '../DenimForm';
 import DenimFormControl from '../DenimFormControl';
 import DenimDropDown from './DenimDropDown';
 import NativeDropDown from './NativeDropDown';
@@ -14,6 +14,7 @@ import NativeDropDown from './NativeDropDown';
 export interface DenimFilterControlProps {
   value?: DenimQueryConditionGroup;
   onChange: (value: DenimQueryConditionGroup) => void;
+  onApply: () => void;
   columns: DenimColumn[];
   fieldControls: {
     [key: string]: DenimFormControlSchema;
@@ -23,6 +24,7 @@ export interface DenimFilterControlProps {
 const DenimFilterControl: FunctionComponent<DenimFilterControlProps> = ({
   value,
   onChange,
+  onApply,
   columns,
   fieldControls,
 }) => {
@@ -32,10 +34,98 @@ const DenimFilterControl: FunctionComponent<DenimFilterControlProps> = ({
     conditions: [],
   };
 
+  const renderCondition = (
+    column: DenimColumn,
+    columnSchema: DenimFormControlSchema,
+    condition: DenimQueryCondition,
+    key: string,
+    onChange: (value: DenimQueryCondition) => void,
+    onRemove: () => void,
+  ) => {
+    return (
+      <View style={styles.conditionContainer}>
+        <View style={styles.conditionPartContainer}>
+          <Text>{column.label}</Text>
+        </View>
+        <View style={styles.conditionPartContainer}>
+          <DenimDropDown
+            value={condition.operator}
+            onChange={(newOperator) =>
+              onChange({
+                ...condition,
+                operator: newOperator,
+              })
+            }
+            options={[
+              {
+                label: 'Is equal to',
+                value: 'eq',
+              },
+              {
+                label: 'Does not equal',
+                value: 'neq',
+              },
+              {
+                label: 'Text contains',
+                value: 'contains',
+              },
+              {
+                label: 'Text does not contain',
+                value: 'ncontains',
+              },
+              {
+                label: 'Is greater than',
+                value: 'gt',
+              },
+              {
+                label: 'Is greater than or equal to',
+                value: 'gte',
+              },
+              {
+                label: 'Is less than',
+                value: 'lt',
+              },
+              {
+                label: 'Is less than or equal to',
+                value: 'lte',
+              },
+              {
+                label: 'Has a value',
+                value: 'notnull',
+              },
+              {
+                label: 'Has no value',
+                value: 'null',
+              },
+            ]}
+          />
+        </View>
+        <View style={styles.conditionPartContainer}>
+          {!['notnull', 'null'].includes(condition.operator) ? (
+            <DenimFormControl
+              schema={{
+                ...columnSchema,
+                id: key,
+                hideLabel: true,
+              }}
+              value={condition.value}
+              onChange={(newValue) => onChange({
+                ...condition,
+                value: newValue,
+              })}
+            />
+          ) : null}
+        </View>
+        <Button title="Remove" color="red" onPress={onRemove} />
+      </View>
+    );
+  };
+
   const renderGroup = (
     group: DenimQueryConditionGroup,
     onChange: (value: DenimQueryConditionGroup) => void,
-    key = '',
+    onRemove: () => void,
+    parentKey = '',
   ) => {
     return (
       <View style={styles.conditionGroupContainer}>
@@ -72,21 +162,29 @@ const DenimFilterControl: FunctionComponent<DenimFilterControlProps> = ({
               const columnSchema = fieldControls[condition.field];
 
               if (column && columnSchema) {
-                return (
-                  <View style={styles.conditionContainer}>
-                    <View style={styles.conditionPartContainer}>
-                      <Text>{column.label}</Text>
-                    </View>
-                    <View style={styles.conditionPartContainer} />
-                    <View style={styles.conditionPartContainer}>
-                      <DenimFormControl
-                        schema={{
-                          ...columnSchema,
-                          id: key + '-' + i,
-                        }}
-                      />
-                    </View>
-                  </View>
+                return renderCondition(
+                  column,
+                  columnSchema,
+                  condition,
+                  parentKey + '-' + i,
+                  (newGroup) =>
+                    onChange({
+                      ...group,
+                      conditions: group.conditions.map((condition, x) => {
+                        if (x === i) {
+                          return newGroup;
+                        }
+
+                        return condition;
+                      }),
+                    }),
+                  () =>
+                    onChange({
+                      ...group,
+                      conditions: group.conditions.filter((condition, x) => {
+                        return x !== i;
+                      }),
+                    }),
                 );
               }
 
@@ -94,8 +192,29 @@ const DenimFilterControl: FunctionComponent<DenimFilterControlProps> = ({
             }
 
             return (
-              <Fragment key={key + '-' + i}>
-                {renderGroup(condition, () => {}, key + '-' + i)}
+              <Fragment key={parentKey + '-' + i}>
+                {renderGroup(
+                  condition,
+                  (newGroup) =>
+                    onChange({
+                      ...group,
+                      conditions: group.conditions.map((condition, x) => {
+                        if (x === i) {
+                          return newGroup;
+                        }
+
+                        return condition;
+                      }),
+                    }),
+                  () =>
+                    onChange({
+                      ...group,
+                      conditions: group.conditions.filter((condition, x) => {
+                        return x !== i;
+                      }),
+                    }),
+                  parentKey + '-' + i,
+                )}
               </Fragment>
             );
           })}
@@ -124,7 +243,6 @@ const DenimFilterControl: FunctionComponent<DenimFilterControlProps> = ({
                 placeholder="Select a field..."
               />
             </View>
-            <View style={styles.conditionPartContainer} />
             <View style={styles.conditionPartContainer}>
               <Button
                 title="Add group"
@@ -143,13 +261,27 @@ const DenimFilterControl: FunctionComponent<DenimFilterControlProps> = ({
                 }}
               />
             </View>
+            <View style={styles.conditionPartContainer}>
+              {group !== currentQuery ? (
+                <Button
+                  title="Remove Group"
+                  color="red"
+                  onPress={() => onRemove()}
+                />
+              ) : (
+                <Button
+                  title="Apply Filters / Refresh"
+                  onPress={() => onApply()}
+                />
+              )}
+            </View>
           </View>
         </View>
       </View>
     );
   };
 
-  return renderGroup(currentQuery, onChange);
+  return renderGroup(currentQuery, onChange, () => {});
 };
 
 export default DenimFilterControl;

@@ -78,7 +78,7 @@ const DenimView: FunctionComponent<DenimViewProps> = ({
           ))}
         </tbody>
       </table>
-      {view.hasMore ? (
+      {(view.hasMore || view.retrieving) ? (
         <Button
           title="Retrieve More"
           disabled={view.retrieving}

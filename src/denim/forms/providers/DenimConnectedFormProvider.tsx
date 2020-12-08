@@ -298,6 +298,7 @@ export const createConnectedFormProvider = <
     const [hasMore, setHasMore] = useState(true);
     const [retrieving, setRetrieving] = useState(false);
     const [page, setPage] = useState(1);
+    const [pendingQuery, setPendingQuery] = useState<DenimQueryConditionGroup>();
     const [query, setQuery] = useState<DenimQueryConditionGroup>();
     const lookup = useMemo(() => context.getLookupProviderFor(table), [
       context,
@@ -313,6 +314,7 @@ export const createConnectedFormProvider = <
           pageSize: 10,
           page,
           expand,
+          conditions: query,
         });
 
         setRecords((r) => r.concat(records));
@@ -321,9 +323,15 @@ export const createConnectedFormProvider = <
       }
     };
 
+    const applyQuery = useCallback(() => {
+      setQuery(pendingQuery);
+    }, [pendingQuery]);
+
     useEffect(() => {
+      setRecords([]);
       retrieveMore();
-    }, []);
+      setPage(1);
+    }, [query]);
 
     if (!dataProvider || !tableSchema) {
       throw new Error('No table ' + table);
@@ -339,8 +347,9 @@ export const createConnectedFormProvider = <
       >
         <DenimLookupDataProvider lookup={lookup}>
           <DenimFilterControl
-            value={query}
-            onChange={setQuery}
+            value={pendingQuery}
+            onChange={setPendingQuery}
+            onApply={applyQuery}
             columns={tableSchema.columns.filter(({ name }) =>
               props.schema.filterColumns.includes(name),
             )}
