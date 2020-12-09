@@ -16,11 +16,11 @@ const DenimReadOnly: FunctionComponent<DenimControlProps & TextProps> = ({
 }) => {
   const denimForm = useDenimForm();
   const ControlContainer = denimForm.componentRegistry.controlContainer;
-  const helpText = errors.map(({ message }) => message).join('\n');
+  const helpText = errors?.map(({ message }) => message).join('\n') || '';
 
   return (
     <ControlContainer
-      error={errors.length > 0}
+      error={(errors?.length || 0) > 0}
       helpText={helpText}
     >
       <Text style={[styles.text, Platform.OS === 'web' ? { height: 24 } : { }]} {...props}>

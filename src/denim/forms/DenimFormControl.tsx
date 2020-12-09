@@ -6,12 +6,18 @@ import { useDenimForm } from './providers/DenimFormProvider';
 
 export interface DenimFormControlProps {
   schema: DenimFormControlSchema;
-  form: DenimFormSchema;
+  form?: DenimFormSchema;
+  value?: any;
+  onChange?: (value: any) => void;
 }
+
+const Empty = Symbol('Empty');
 
 const DenimFormControl: FunctionComponent<DenimFormControlProps> = ({
   schema,
   form,
+  value = Empty,
+  onChange = Empty,
 }) => {
   const translation = useTranslation();
   const denimForm = useDenimForm();
@@ -20,12 +26,24 @@ const DenimFormControl: FunctionComponent<DenimFormControlProps> = ({
 
   return (
     <>
-      <Text style={[styles.formLabel, denimForm.styleOverrides?.formControl?.formLabel]}>{schema.label || translation.translate(`Forms.${form.id}.Fields.${schema.id}`)}</Text>
+      {!schema.hideLabel ? (
+        <Text
+          style={[
+            styles.formLabel,
+            denimForm.styleOverrides?.formControl?.formLabel,
+          ]}
+        >
+          {schema.label ||
+            translation.translate(
+              `Forms.${form?.id || 'generic'}.Fields.${schema.id}`,
+            )}
+        </Text>
+      ) : null}
       {Control ? (
         <View>
           <Control
-            value={denimForm.getValue(schema.id)}
-            onChange={denimForm.setValue(schema.id)}
+            value={value === Empty ? denimForm.getValue(schema.id) : value}
+            onChange={onChange === Empty ? denimForm.setValue(schema.id) : onChange}
             schema={schema}
             form={form}
             errors={controlErrors}

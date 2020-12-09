@@ -23,6 +23,7 @@ export interface DenimFormControlSchema {
   label?: String;
   type?: DenimFormControlType;
   controlProps?: any;
+  hideLabel?: boolean;
 }
 
 export enum DenimFormControlType {

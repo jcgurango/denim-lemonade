@@ -32,6 +32,7 @@ export default class AirTableSchemaSource<T> extends DenimSchemaSource<T> {
             if (column.type === 'text' || column.type === 'phone') {
               return {
                 name: column.name,
+                label: column.name,
                 type: DenimColumnType.Text,
                 properties: {
                   long: false,
@@ -42,6 +43,7 @@ export default class AirTableSchemaSource<T> extends DenimSchemaSource<T> {
             if (column.type === 'multilineText') {
               return {
                 name: column.name,
+                label: column.name,
                 type: DenimColumnType.Text,
                 properties: {
                   long: true,
@@ -52,6 +54,7 @@ export default class AirTableSchemaSource<T> extends DenimSchemaSource<T> {
             if (column.type === 'select') {
               return {
                 name: column.name,
+                label: column.name,
                 type: DenimColumnType.Select,
                 properties: getSelectProperties(column),
               };
@@ -60,6 +63,7 @@ export default class AirTableSchemaSource<T> extends DenimSchemaSource<T> {
             if (column.type === 'multiSelect') {
               return {
                 name: column.name,
+                label: column.name,
                 type: DenimColumnType.MultiSelect,
                 properties: getSelectProperties(column),
               };
@@ -68,6 +72,7 @@ export default class AirTableSchemaSource<T> extends DenimSchemaSource<T> {
             if (column.type === 'checkbox') {
               return {
                 name: column.name,
+                label: column.name,
                 type: DenimColumnType.Boolean,
               };
             }
@@ -75,6 +80,7 @@ export default class AirTableSchemaSource<T> extends DenimSchemaSource<T> {
             if (column.type === 'date') {
               return {
                 name: column.name,
+                label: column.name,
                 type: DenimColumnType.DateTime,
                 properties: {
                   includesTime: column.typeOptions?.isDateTime,
@@ -85,6 +91,7 @@ export default class AirTableSchemaSource<T> extends DenimSchemaSource<T> {
             if (column.type === 'number') {
               return {
                 name: column.name,
+                label: column.name,
                 type: DenimColumnType.Number,
               };
             }
@@ -92,6 +99,7 @@ export default class AirTableSchemaSource<T> extends DenimSchemaSource<T> {
             if (column.type === 'foreignKey') {
               return {
                 name: column.name,
+                label: column.name,
                 type: DenimColumnType.ForeignKey,
                 properties: {
                   foreignTableId: column.typeOptions?.foreignTableId || '',
@@ -102,6 +110,7 @@ export default class AirTableSchemaSource<T> extends DenimSchemaSource<T> {
 
             return {
               name: column.name,
+              label: column.name,
               type: DenimColumnType.ReadOnly,
             };
           }),

@@ -32,12 +32,6 @@ interface DenimLookupProps {
   relationship: string;
 }
 
-interface DenimMultiLookupProps {
-  onChange: (value: DenimRelatedRecordCollection | null) => void;
-  value: DenimRelatedRecordCollection | null;
-  relationship: string;
-}
-
 const LookupField: FunctionComponent<TextInputProps & DenimLookupProps> = ({
   onRecordChange,
   record,
@@ -164,10 +158,10 @@ const DenimLookup: FunctionComponent<
 > = ({ schema, form, errors, relationship, value, onChange, ...props }) => {
   const denimForm = useDenimForm();
   const ControlContainer = denimForm.componentRegistry.controlContainer;
-  const helpText = errors.map(({ message }) => message).join('\n');
+  const helpText = errors?.map(({ message }) => message).join('\n') || '';
 
   return (
-    <ControlContainer error={errors.length > 0} helpText={helpText}>
+    <ControlContainer error={(errors?.length || 0) > 0} helpText={helpText}>
       <LookupField
         relationship={relationship || ''}
         record={value}
@@ -183,7 +177,7 @@ export const DenimMultiLookup: FunctionComponent<
 > = ({ onChange, schema, form, errors, relationship, value, ...props }) => {
   const denimForm = useDenimForm();
   const ControlContainer = denimForm.componentRegistry.controlContainer;
-  const helpText = errors.map(({ message }) => message).join('\n');
+  const helpText = errors?.map(({ message }) => message).join('\n') || '';
 
   const deselect = (recordId: string) => {
     return (
@@ -204,7 +198,7 @@ export const DenimMultiLookup: FunctionComponent<
   };
 
   return (
-    <ControlContainer error={errors.length > 0} helpText={helpText}>
+    <ControlContainer error={(errors?.length || 0) > 0} helpText={helpText}>
       {value?.type === 'record-collection' && Array.isArray(value?.records)
         ? value.records.map((record: DenimRelatedRecord) => {
             return (

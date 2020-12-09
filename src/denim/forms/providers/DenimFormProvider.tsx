@@ -12,9 +12,9 @@ import { DenimButtonProps } from '../controls/DenimButton';
 export interface DenimControlProps {
   value: any;
   onChange: (newValue: any) => void;
-  schema: DenimFormControlSchema;
-  form: DenimFormSchema;
-  errors: ValidationError[];
+  schema?: DenimFormControlSchema;
+  form?: DenimFormSchema;
+  errors?: ValidationError[];
 }
 
 export interface DenimFormContextProps {
