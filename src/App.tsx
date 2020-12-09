@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { createConnectedFormProvider } from './denim/forms/providers/DenimConnectedFormProvider';
 import AirTableSchemaSource from './denim/connectors/airtable/AirTableSchemaSource';
@@ -24,18 +25,6 @@ const App = () => {
   const user = useDenimUser();
 
   return (
-    <>
-      <StatusBar barStyle="dark-content" />
-      <SafeAreaView>
-        <Provider
-          context={{}}
-          schemaSource={schemaSource}
-          dataSource={dataSource}
-        >
-          <Form 
-            table="Employee"
-            record="recowFaLyXtlu13w4"
-            schema={{
     <DenimApplication
       router={{
         screens: [
@@ -161,7 +150,6 @@ const App = () => {
                           label: 'Address 1',
                           id: 'Address 1',
                           relativeWidth: 5,
-                        },                                             
                         },
                       ],
                     },
@@ -172,7 +160,6 @@ const App = () => {
                           label: 'Address 2',
                           id: 'Address 2',
                           relativeWidth: 5,
-                        },                        
                         },
                       ],
                     },
@@ -183,7 +170,6 @@ const App = () => {
                           label: 'Address 3',
                           id: 'Address 3',
                           relativeWidth: 5,
-                        },                        
                         },
                       ],
                     },
@@ -209,7 +195,6 @@ const App = () => {
                           label: 'Country',
                           id: 'Country',
                           relativeWidth: 2,
-                        },                       
                         },
                       ],
                     },
@@ -225,7 +210,6 @@ const App = () => {
                           label: 'Mobile Number',
                           id: 'Mobile Number',
                           relativeWidth: 3,
-                        },                     
                         },
                       ],
                     },
@@ -246,7 +230,6 @@ const App = () => {
                           label: 'Contact Person Mobile No',
                           id: 'Contact Person Mobile No',
                           relativeWidth: 1,
-                        },                      
                         },
                       ],
                     },
@@ -281,164 +264,12 @@ const App = () => {
                           label: 'Daily Work Hours',
                           id: 'Daily Work Hours',
                           relativeWidth: 1,
-                        },  
-                        {
-                          label: 'Leave Scheme',
-                          id: 'Leave Scheme',
-                          relativeWidth: 1,
-                        },                     
-                      ],
-                    },
-                    {
-                      id: 'row1',
-                      controls: [
-                        {
-                          label: 'Base',
-                          id: 'Base',
-                          relativeWidth: 1,
-                        },
-                        {
-                          label: 'Department',
-                          id: 'Department',
-                          relativeWidth: 1,
-                        },
-                        {
-                          label: 'Department Supervisor',
-                          id: 'Department Supervisor',
-                          relativeWidth: 1,
-                        },
-                        {
-                          label: 'Member Type',
-                          id: 'Member Type',
-                          relativeWidth: 1,
-                        },
-                        {
-                          label: 'Direct Manager',
-                          id: 'Direct Manager',
-                          relativeWidth: 1,
-                        },                        
-                      ],
-                    },
-                    {
-                      id: 'row2',
-                      controls: [
-                        {
-                          label: 'Job Title',
-                          id: 'Job Title',
-                          relativeWidth: 1,
-                        },
-                        {
-                          label: 'Job Position',
-                          id: 'Job Positions',
-                          relativeWidth: 1,
-                        },
-                        {
-                          label: 'Job Role',
-                          id: 'Job Roles',
-                          relativeWidth: 3,
-                        },                                              
-                      ],
-                    },
-                    {
-                      id: 'row3',
-                      controls: [
-                        {
-                          label: 'Language',
-                          id: 'Language',
                         },
                         {
                           label: 'Leave Scheme',
                           id: 'Leave Scheme',
                           relativeWidth: 1,
                         },
-                        {
-                          label: 'Skills',
-                          id: 'Skills',
-                          relativeWidth: 4,
-                        },                                              
-                      ],
-                    },
-                  ],
-                },
-                {
-                  id: 'payroll-section',
-                  label: 'Payroll Information',
-                  showLabel: true,
-                  collapsible: true,
-                  defaultOpen: false,
-                  rows: [
-                    {
-                      id: 'row0',
-                      controls: [
-                        {
-                          label: 'Payroll ID',
-                          id: 'Payroll ID',
-                          relativeWidth: 2,
-                        },    
-                        {
-                          label: 'Employee Wage',
-                          id: 'Employee Wage',
-                          relativeWidth: 3,
-                        },                
-                      ],
-                    },
-                    {
-                      id: 'row1',
-                      controls: [
-                        {
-                          label: 'Employee Allowance',
-                          id: 'Employee Allowance',
-                          relativeWidth: 5,
-                        },                      
-                      ],
-                    },
-                  ],
-                },
-                {
-                  id: 'link-section',
-                  label: 'Link Attachment',
-                  showLabel: true,
-                  collapsible: true,
-                  defaultOpen: false,
-                  rows: [
-                    {
-                      id: 'row0',
-                      controls: [
-                        {
-                          label: 'Curriculum Vitae',
-                          id: 'Curriculum Vitae',
-                          relativeWidth: 5,
-                        },                    
-                      ],
-                    },
-                    {
-                      id: 'row1',
-                      controls: [
-                        {
-                          label: 'Dependents',
-                          id: 'Dependents',
-                          relativeWidth: 5,
-                        },                      
-                      ],
-                    },
-                    {
-                      id: 'row2',
-                      controls: [
-                        {
-                          label: 'Job History',
-                          id: 'Job History',
-                          relativeWidth: 5,
-                        },                                              
-                      ],
-                    },
-                    {
-                      id: 'row3',
-                      controls: [
-                        {
-                          label: 'Attachments',
-                          id: 'Attachments',
-                          relativeWidth: 5,
-                        },                                             
                       ],
                     },
                     {
@@ -623,8 +454,6 @@ const App = () => {
     />
   );
 };
-
-export default App;
 
 export default () => {
   return (
