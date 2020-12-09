@@ -36,8 +36,8 @@ const App = () => {
             form: 'employee',
             view: {
               id: 'employee-view',
-              columns: ['First Name', 'Last Name', 'Date of Birth', 'Employee Allowance', 'Phone Number Visibility', 'Direct Manager'],
-              filterColumns: ['First Name', 'Date of Birth', 'Employee Allowance', 'Phone Number Visiblity', 'Direct Manager'],
+              columns: ['Employee ID', 'Last Name', 'First Name', 'Full Name', 'Account Status', 'Job Title'],
+              filterColumns: ['Employee ID', 'Last Name', 'First Name', 'Payroll ID'],
             },
           },
           {
