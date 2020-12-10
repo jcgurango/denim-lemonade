@@ -139,8 +139,6 @@ export default class DenimAuthenticator<T extends DenimAuthenticationContext> {
           table,
         );
 
-        console.log('Records', table, authorization);
-
         if (authorization === 'block') {
           throw new Error('Unauthorized query.');
         } else if (authorization !== 'allow') {
