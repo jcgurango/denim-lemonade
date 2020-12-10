@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { createConnectedFormProvider } from './denim/forms/providers/DenimConnectedFormProvider';
 import AirTableSchemaSource from './denim/connectors/airtable/AirTableSchemaSource';
@@ -35,8 +36,8 @@ const App = () => {
             form: 'employee',
             view: {
               id: 'employee-view',
-              columns: ['First Name', 'Last Name', 'Date of Birth', 'Employee Allowance', 'Phone Number Visibility', 'Direct Manager'],
-              filterColumns: ['First Name', 'Date of Birth', 'Employee Allowance', 'Phone Number Visibility', 'Direct Manager', 'Skills'],
+              columns: ['Employee ID', 'Last Name', 'First Name', 'Full Name', 'Account Status', 'Job Title'],
+              filterColumns: ['Employee ID', 'Last Name', 'First Name', 'Payroll ID'],
             },
           },
           {

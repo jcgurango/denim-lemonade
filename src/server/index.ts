@@ -14,7 +14,7 @@ import { DenimAuthenticator } from '../denim/service';
 
 Airtable.configure({
   endpointUrl: 'https://api.airtable.com',
-  apiKey: 'keyAhv3IWg6qeJRZb',
+  apiKey: 'keyLuy77TiMrMgCUY',
   apiVersion: undefined,
   noRetryIfRateLimited: undefined,
 });
