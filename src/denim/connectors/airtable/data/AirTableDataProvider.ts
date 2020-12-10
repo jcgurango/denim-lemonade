@@ -17,6 +17,9 @@ import { DenimTableDataProvider } from '../../../service';
 import DenimValidator from '../../../service/DenimValidator';
 import AirTableSchemaSource from '../AirTableSchemaSource';
 
+/**
+ * Data provider for a single AirTable.
+ */
 export default class AirTableDataProvider<
   T extends DenimDataContext,
   S extends AirTableSchemaSource<T>

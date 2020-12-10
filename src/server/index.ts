@@ -67,12 +67,26 @@ const denimAuth = new DenimAuthenticator(
           table: 'Employee',
           createAction: 'block',
           readAction: {
-            conditionType: 'single',
-            field: 'id',
-            operator: DenimQueryOperator.Equals,
-            value: {
-              $user: 'id',
-            },
+            conditionType: 'group',
+            type: 'OR',
+            conditions: [
+              {
+                conditionType: 'single',
+                field: 'id',
+                operator: DenimQueryOperator.Equals,
+                value: {
+                  $user: 'id',
+                },
+              },
+              {
+                conditionType: 'single',
+                field: 'id',
+                operator: DenimQueryOperator.Equals,
+                value: {
+                  $user: 'Direct Manager',
+                },
+              }
+            ],
           },
           updateAction: {
             conditionType: 'single',
@@ -83,6 +97,36 @@ const denimAuth = new DenimAuthenticator(
             },
             allowedFields: ['First Name', 'Last Name', 'Email'],
           },
+        },
+        {
+          table: 'Leave Scheme',
+          createAction: 'block',
+          readAction: 'allow',
+          updateAction: 'block',
+        },
+        {
+          table: 'Department',
+          createAction: 'block',
+          readAction: 'allow',
+          updateAction: 'block',
+        },
+        {
+          table: 'Job Title',
+          createAction: 'block',
+          readAction: 'allow',
+          updateAction: 'block',
+        },
+        {
+          table: 'Job Roles',
+          createAction: 'block',
+          readAction: 'allow',
+          updateAction: 'block',
+        },
+        {
+          table: 'Employee Allowance',
+          createAction: 'block',
+          readAction: 'allow',
+          updateAction: 'block',
         }
       ],
       roleQuery: {
@@ -131,7 +175,10 @@ const authMiddleware = larkAuth.middleware(async (id, req, res, next) => {
 
 app.use('/auth/me', cors(), authMiddleware, (req, res) => {
   if ((<any>(req)).denimContext) {
-    return res.json((<any>(req)).denimContext);
+    return res.json({
+      ...(<any>(req)).denimContext,
+      roles: denimAuth.getRolesFor((<any>(req)).denimContext.userData),
+    });
   }
 
   return res.json(null);

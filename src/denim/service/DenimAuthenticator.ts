@@ -4,7 +4,12 @@ import {
   DenimAuthorizationAction,
   DenimLocalQuery,
 } from '.';
-import { DenimQuery, DenimQueryConditionOrGroup, DenimRecord, DenimTable } from '../core';
+import {
+  DenimQuery,
+  DenimQueryConditionOrGroup,
+  DenimRecord,
+  DenimTable,
+} from '../core';
 import {
   DenimAuthenticationContext,
   DenimAuthorizationRole,
@@ -34,7 +39,11 @@ export default class DenimAuthenticator<T extends DenimAuthenticationContext> {
     table: string,
   ): DenimAuthorizationAction {
     const userRoles = this.roles.filter(({ roleQuery }) => {
-      return !roleQuery || (!!userData && DenimLocalQuery.matches(this.userSchema, userData, roleQuery));
+      return (
+        !roleQuery ||
+        (!!userData &&
+          DenimLocalQuery.matches(this.userSchema, userData, roleQuery))
+      );
     });
     let query: DenimQueryConditionOrGroup | null = null;
 
@@ -66,6 +75,18 @@ export default class DenimAuthenticator<T extends DenimAuthenticationContext> {
     }
 
     return 'block';
+  }
+
+  public getRolesFor(userData: DenimRecord): string[] {
+    return this.roles
+      .filter(({ roleQuery }) => {
+        return (
+          !roleQuery ||
+          (!!userData &&
+            DenimLocalQuery.matches(this.userSchema, userData, roleQuery))
+        );
+      })
+      .map(({ id }) => id);
   }
 
   protected substituteQueryValue(
@@ -179,7 +200,7 @@ export default class DenimAuthenticator<T extends DenimAuthenticationContext> {
         );
 
         // Check for allowed fields.
-        if (typeof(authorization) !== 'string' && authorization.allowedFields) {
+        if (typeof authorization !== 'string' && authorization.allowedFields) {
           Object.keys(record).forEach((column) => {
             if (!authorization.allowedFields?.includes(column)) {
               throw new Error('Unauthorized field values.');
@@ -228,7 +249,7 @@ export default class DenimAuthenticator<T extends DenimAuthenticationContext> {
         );
 
         // Check for allowed fields.
-        if (typeof(authorization) !== 'string' && authorization.allowedFields) {
+        if (typeof authorization !== 'string' && authorization.allowedFields) {
           Object.keys(record).forEach((column) => {
             if (!authorization.allowedFields?.includes(column)) {
               throw new Error('Unauthorized field values.');

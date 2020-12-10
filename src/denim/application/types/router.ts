@@ -10,6 +10,7 @@ export interface DenimMenuItem<T extends string> {
   id: string;
   type: T;
   label: string;
+  roles?: string[];
 }
 
 export interface DenimScreenMenuItem extends DenimMenuItem<'screen'> {
@@ -26,11 +27,12 @@ interface DenimScreenSchema<T extends string> {
   id: string;
   slug?: string;
   type: T;
+  roles?: string[];
 }
 
 export interface DenimFormScreenSchema extends DenimScreenSchema<'form'> {
   table?: string;
-  record?: string;
+  record?: string | { $user: string };
   form: DenimFormSchema;
 }
 

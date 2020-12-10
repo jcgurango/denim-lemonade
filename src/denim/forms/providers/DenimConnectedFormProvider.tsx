@@ -85,6 +85,10 @@ export interface ConnectedForm<
   View: FunctionComponent<DenimViewProps & { table: string }>;
 }
 
+/**
+ * Creates a Provider, View, and Form component for rendering DENIM controls automatically
+ * connected to an existing schema and data source.
+ */
 export const createConnectedFormProvider = <
   T extends DenimDataContext,
   S extends DenimSchemaSource<T>

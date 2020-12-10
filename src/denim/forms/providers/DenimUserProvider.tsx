@@ -15,10 +15,12 @@ import { DenimRecord } from '../../core';
 export interface DenimUserContextProps {
   token?: string;
   user: DenimRecord | null;
+  roles: string[];
 }
 
 const DenimUserContext = createContext<DenimUserContextProps>({
   user: null,
+  roles: [],
 });
 
 export const useDenimUser = () => useContext(DenimUserContext);
@@ -28,7 +30,8 @@ const DenimUserProvider: FunctionComponent<{ authUrl: string }> = ({
   children,
 }) => {
   const [currentToken, setCurrentToken] = useState('');
-  const [currentUser, setCurrentUser] = useState(null);
+  const [user, setUser] = useState(null);
+  const [roles, setRoles] = useState([]);
   const { get, post } = useMemo(() => {
     return {
       get: bent('json', 'GET', authUrl, currentToken ? { Authorization: 'Bearer ' + currentToken } : { }),
@@ -94,7 +97,8 @@ const DenimUserProvider: FunctionComponent<{ authUrl: string }> = ({
 
         if (!cancelled) {
           if (user) {
-            setCurrentUser(user.userData);
+            setUser(user.userData);
+            setRoles(user.roles);
           } else {
             localStorage.removeItem('denimToken');
             setCurrentToken('');
@@ -108,13 +112,13 @@ const DenimUserProvider: FunctionComponent<{ authUrl: string }> = ({
     }
   }, [currentToken, get]);
 
-  if (!currentToken || !currentUser) {
+  if (!currentToken || !user) {
     return <ActivityIndicator />;
   }
 
   return (
     <DenimUserContext.Provider
-      value={{ token: currentToken, user: currentUser }}
+      value={{ token: currentToken, user, roles }}
     >
       {children}
     </DenimUserContext.Provider>
