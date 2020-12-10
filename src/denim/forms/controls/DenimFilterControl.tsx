@@ -7,6 +7,7 @@ import {
   DenimQueryConditionGroup,
   DenimQueryOperator,
 } from '../../core';
+import { DenimLocalQuery } from '../../service';
 import DenimFormControl from '../DenimFormControl';
 import DenimDropDown from './DenimDropDown';
 import NativeDropDown from './NativeDropDown';
@@ -66,11 +67,11 @@ const DenimFilterControl: FunctionComponent<DenimFilterControlProps> = ({
                 value: 'neq',
               },
               {
-                label: 'Text contains',
+                label: 'Contains',
                 value: 'contains',
               },
               {
-                label: 'Text does not contain',
+                label: 'Does not contain',
                 value: 'ncontains',
               },
               {
@@ -97,7 +98,9 @@ const DenimFilterControl: FunctionComponent<DenimFilterControlProps> = ({
                 label: 'Has no value',
                 value: 'null',
               },
-            ]}
+            ].filter(({ value }: any) =>
+              DenimLocalQuery.validOperatorsFor(column).includes(value),
+            )}
           />
         </View>
         <View style={styles.conditionPartContainer}>
@@ -109,10 +112,12 @@ const DenimFilterControl: FunctionComponent<DenimFilterControlProps> = ({
                 hideLabel: true,
               }}
               value={condition.value}
-              onChange={(newValue) => onChange({
-                ...condition,
-                value: newValue,
-              })}
+              onChange={(newValue) =>
+                onChange({
+                  ...condition,
+                  value: newValue,
+                })
+              }
             />
           ) : null}
         </View>

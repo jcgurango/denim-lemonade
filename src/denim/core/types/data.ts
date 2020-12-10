@@ -26,9 +26,9 @@ export interface DenimQueryConditionGroup {
 
 export enum DenimQueryOperator {
   Equals = 'eq',
-  NotEquals = 'neq',
-  StringContains = 'contains',
-  StringNotContains = 'ncontains',
+  DoesNotEqual = 'neq',
+  Contains = 'contains',
+  DoesNotContain = 'ncontains',
   GreaterThan = 'gt',
   LessThan = 'lt',
   GreaterThanOrEqual = 'gte',

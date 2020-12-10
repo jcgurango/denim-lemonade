@@ -73,6 +73,11 @@ const DenimTableRouter = <T extends DenimDataContext, S extends DenimSchemaSourc
 
     try {
       const record = await dataProvider.retrieveRecord(context, id.toString(), getExpansionFromQuery(req.query));
+
+      if (!record) {
+        return res.status(404).json(record);
+      }
+
       return res.json(record);
     } catch (e) {
       return res.status(500).json({

@@ -88,7 +88,7 @@ const denimAuth = new DenimAuthenticator(
       roleQuery: {
         conditionType: 'single',
         field: 'Is HR',
-        operator: DenimQueryOperator.NotEquals,
+        operator: DenimQueryOperator.DoesNotEqual,
         value: true,
       },
     },

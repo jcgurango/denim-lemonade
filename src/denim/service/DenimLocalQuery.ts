@@ -48,22 +48,26 @@ export default class DenimLocalQuery {
         throw new Error('Unknown field ' + field + '.');
       }
 
-      const { operator, value } = conditions;
+      let { operator, value } = conditions;
       const fieldValue = this.normalizeValue(fieldSchema, record[field]);
+
+      if (value?.id) {
+        value = value.id;
+      }
 
       if (operator === DenimQueryOperator.Equals) {
         return fieldValue === value;
-      } else if (operator === DenimQueryOperator.NotEquals) {
+      } else if (operator === DenimQueryOperator.DoesNotEqual) {
         return !this.matches(schema, record, {
           ...conditions,
           operator: DenimQueryOperator.Equals,
         });
-      } else if (operator === DenimQueryOperator.StringContains) {
-        return String(fieldValue).indexOf(value) > -1;
-      } else if (operator === DenimQueryOperator.StringNotContains) {
+      } else if (operator === DenimQueryOperator.Contains) {
+        return fieldValue && fieldValue.indexOf(value) > -1;
+      } else if (operator === DenimQueryOperator.DoesNotContain) {
         return !this.matches(schema, record, {
           ...conditions,
-          operator: DenimQueryOperator.StringContains,
+          operator: DenimQueryOperator.Contains,
         });
       } else if (operator === DenimQueryOperator.GreaterThan) {
         if (fieldSchema.type === DenimColumnType.DateTime) {
@@ -73,24 +77,30 @@ export default class DenimLocalQuery {
         return fieldValue > value;
       } else if (operator === DenimQueryOperator.GreaterThanOrEqual) {
         if (fieldSchema.type === DenimColumnType.DateTime) {
-          return dayjs(fieldValue).isAfter(value) || dayjs(fieldValue).isSame(value);
+          return (
+            dayjs(fieldValue).isAfter(value) || dayjs(fieldValue).isSame(value)
+          );
         }
 
         return fieldValue >= value;
       } else if (operator === DenimQueryOperator.LessThan) {
         if (fieldSchema.type === DenimColumnType.DateTime) {
-          return dayjs(fieldValue).isBefore(value) || dayjs(fieldValue).isSame(value);
+          return (
+            dayjs(fieldValue).isBefore(value) || dayjs(fieldValue).isSame(value)
+          );
         }
 
         return fieldValue < value;
       } else if (operator === DenimQueryOperator.LessThanOrEqual) {
         if (fieldSchema.type === DenimColumnType.DateTime) {
-          return dayjs(fieldValue).isBefore(value) || dayjs(fieldValue).isSame(value);
+          return (
+            dayjs(fieldValue).isBefore(value) || dayjs(fieldValue).isSame(value)
+          );
         }
 
         return fieldValue <= value;
       } else if (operator === DenimQueryOperator.Null) {
-        return typeof(fieldValue) === 'undefined' || fieldValue === null;
+        return typeof fieldValue === 'undefined' || fieldValue === null;
       } else if (operator === DenimQueryOperator.NotNull) {
         return !this.matches(schema, record, {
           ...conditions,
@@ -112,5 +122,82 @@ export default class DenimLocalQuery {
     }
 
     return true;
+  }
+
+  static validOperatorsFor(column: DenimColumn): DenimQueryOperator[] {
+    if (column.type === DenimColumnType.Boolean) {
+      return [
+        DenimQueryOperator.Equals,
+        DenimQueryOperator.DoesNotEqual,
+        DenimQueryOperator.Null,
+        DenimQueryOperator.NotNull,
+      ];
+    }
+
+    if (
+      column.type === DenimColumnType.DateTime ||
+      column.type === DenimColumnType.Number
+    ) {
+      return [
+        DenimQueryOperator.Equals,
+        DenimQueryOperator.DoesNotEqual,
+        DenimQueryOperator.GreaterThan,
+        DenimQueryOperator.GreaterThanOrEqual,
+        DenimQueryOperator.LessThan,
+        DenimQueryOperator.LessThanOrEqual,
+        DenimQueryOperator.Null,
+        DenimQueryOperator.NotNull,
+      ];
+    }
+
+    if (
+      column.type === DenimColumnType.ForeignKey ||
+      column.type === DenimColumnType.Select ||
+      column.type === DenimColumnType.MultiSelect
+    ) {
+      if (
+        (column.type === DenimColumnType.ForeignKey &&
+          column.properties.multiple) ||
+        column.type === DenimColumnType.MultiSelect
+      ) {
+        return [
+          DenimQueryOperator.Contains,
+          DenimQueryOperator.DoesNotContain,
+          DenimQueryOperator.NotNull,
+          DenimQueryOperator.Null,
+        ];
+      }
+
+      return [
+        DenimQueryOperator.Equals,
+        DenimQueryOperator.DoesNotEqual,
+        DenimQueryOperator.NotNull,
+        DenimQueryOperator.Null,
+      ];
+    }
+
+    if (column.type === DenimColumnType.Text) {
+      return [
+        DenimQueryOperator.Equals,
+        DenimQueryOperator.DoesNotEqual,
+        DenimQueryOperator.Contains,
+        DenimQueryOperator.DoesNotContain,
+        DenimQueryOperator.NotNull,
+        DenimQueryOperator.Null,
+      ];
+    }
+
+    return [
+      DenimQueryOperator.Equals,
+      DenimQueryOperator.DoesNotEqual,
+      DenimQueryOperator.Contains,
+      DenimQueryOperator.DoesNotContain,
+      DenimQueryOperator.GreaterThan,
+      DenimQueryOperator.LessThan,
+      DenimQueryOperator.GreaterThanOrEqual,
+      DenimQueryOperator.LessThanOrEqual,
+      DenimQueryOperator.NotNull,
+      DenimQueryOperator.Null,
+    ];
   }
 }

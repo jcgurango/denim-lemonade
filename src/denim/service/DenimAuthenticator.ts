@@ -47,7 +47,7 @@ export default class DenimAuthenticator<T extends DenimAuthenticationContext> {
       );
 
       if (roleTable) {
-        const action = this.getAuthorizationActionFromKey(role, actionKey);
+        const action = this.getAuthorizationActionFromKey(roleTable, actionKey);
 
         if (action === 'allow') {
           return 'allow';
@@ -108,7 +108,7 @@ export default class DenimAuthenticator<T extends DenimAuthenticationContext> {
         if (record) {
           const authorization = this.authorize(
             context.userData,
-            'createAction',
+            'readAction',
             table,
           );
 
@@ -135,9 +135,11 @@ export default class DenimAuthenticator<T extends DenimAuthenticationContext> {
       callback: async (table, context, query) => {
         let authorization = this.authorize(
           context.userData,
-          'createAction',
+          'readAction',
           table,
         );
+
+        console.log('Records', table, authorization);
 
         if (authorization === 'block') {
           throw new Error('Unauthorized query.');
@@ -246,7 +248,7 @@ export default class DenimAuthenticator<T extends DenimAuthenticationContext> {
       callback: async (table, context, record, validator) => {
         const authorization = this.authorize(
           context.userData,
-          'createAction',
+          'updateAction',
           table,
         );
 
@@ -272,7 +274,7 @@ export default class DenimAuthenticator<T extends DenimAuthenticationContext> {
       callback: async (table, context, id) => {
         const authorization = this.authorize(
           context.userData,
-          'createAction',
+          'deleteAction',
           table,
         );
 

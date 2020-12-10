@@ -126,12 +126,12 @@ export default class AirTableDataProvider<
     switch (operator) {
       case DenimQueryOperator.Equals:
         return `${left} = ${right}`;
-      case DenimQueryOperator.NotEquals:
+      case DenimQueryOperator.DoesNotEqual:
         return `${left} != ${right}`;
-      case DenimQueryOperator.StringContains:
+      case DenimQueryOperator.Contains:
         return `FIND(${right}, ${left})`;
-      case DenimQueryOperator.StringNotContains:
-        return `ISERROR(FIND(${right}, ${left}))`;
+      case DenimQueryOperator.DoesNotContain:
+        return `NOT(FIND(${right}, ${left}))`;
       case DenimQueryOperator.GreaterThan:
         return `${left} > ${right}`;
       case DenimQueryOperator.LessThan:

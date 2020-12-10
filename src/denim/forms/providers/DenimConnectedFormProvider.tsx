@@ -233,7 +233,7 @@ export const createConnectedFormProvider = <
                         conditions: {
                           conditionType: 'single',
                           field: nameField,
-                          operator: DenimQueryOperator.StringContains,
+                          operator: DenimQueryOperator.Contains,
                           value: query,
                         },
                         expand: [],
@@ -298,7 +298,10 @@ export const createConnectedFormProvider = <
     const [hasMore, setHasMore] = useState(true);
     const [retrieving, setRetrieving] = useState(false);
     const [page, setPage] = useState(1);
-    const [pendingQuery, setPendingQuery] = useState<DenimQueryConditionGroup>();
+    const [
+      pendingQuery,
+      setPendingQuery,
+    ] = useState<DenimQueryConditionGroup>();
     const [query, setQuery] = useState<DenimQueryConditionGroup>();
     const lookup = useMemo(() => context.getLookupProviderFor(table), [
       context,
@@ -356,12 +359,36 @@ export const createConnectedFormProvider = <
             fieldControls={tableSchema.columns
               .filter(({ name }) => props.schema.filterColumns.includes(name))
               .reduce((previous, column) => {
+                let transformedColumn: any = column;
+
+                // Convert any multiple values into single values.
+                if (transformedColumn.type === DenimColumnType.ForeignKey) {
+                  transformedColumn = {
+                    ...column,
+                    properties: {
+                      ...column.properties,
+                      multiple: false,
+                    },
+                  };
+                }
+
+                if (transformedColumn.type === DenimColumnType.MultiSelect) {
+                  transformedColumn = {
+                    ...column,
+                    type: DenimColumnType.Select,
+                  };
+                }
+
                 return {
                   ...previous,
-                  [column.name]: context.getControlFor(tableSchema, column, {
-                    id: column.name,
-                    relativeWidth: 1,
-                  }),
+                  [column.name]: context.getControlFor(
+                    tableSchema,
+                    transformedColumn,
+                    {
+                      id: column.name,
+                      relativeWidth: 1,
+                    },
+                  ),
                 };
               }, {})}
           />
