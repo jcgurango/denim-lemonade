@@ -7,6 +7,7 @@ import { DenimUserProvider, useDenimUser } from './denim/forms';
 import DenimApplication from './denim/application';
 import { DenimFormSchema } from './denim/core';
 import { ActivityIndicator } from 'react-native';
+import config from './config.json';
 
 const schemaSource = new AirTableSchemaSource<{}>(
   require('./schema/airtable-schema.json'),
@@ -14,7 +15,7 @@ const schemaSource = new AirTableSchemaSource<{}>(
 
 const dataSource = new DenimRemoteDataSource(
   schemaSource,
-  'http://localhost:9090/data',
+  config.serverUrl + '/data',
 );
 
 const employeeForm: DenimFormSchema = {
@@ -442,7 +443,7 @@ export default () => {
   }
 
   return (
-    <DenimUserProvider authUrl="http://localhost:9090/auth">
+    <DenimUserProvider authUrl={config.serverUrl + '/auth'}>
       <App />
     </DenimUserProvider>
   );
