@@ -7,6 +7,7 @@
     "ios": "react-native run-ios",
     "start": "react-native start",
     "web": "env SKIP_PREFLIGHT_CHECK=true craco start",
+    "build": "env SKIP_PREFLIGHT_CHECK=true craco build",
     "test": "jest",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
     "server": "ts-node --project src/server/tsconfig.json src/server/index.ts",
