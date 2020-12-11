@@ -164,20 +164,22 @@ const DenimApplication: FunctionComponent<DenimApplicationProps> = ({
           return null;
         })}
       </div>
-      <Switch>
-        {Object.keys(screens).map((id) => {
-          const screen = screens[id];
+      <main style={{ padding: '16px', width: '100%', boxSizing: 'border-box', maxWidth: '1200px', marginLeft: 'auto', marginRight: 'auto' }}>
+        <Switch>
+          {Object.keys(screens).map((id) => {
+            const screen = screens[id];
 
-          return screen.paths.map((path) => (
-            <Route
-              key={`${id}-${path}`}
-              path={path}
-              component={screen.Component}
-              exact
-            />
-          ));
-        })}
-      </Switch>
+            return screen.paths.map((path) => (
+              <Route
+                key={`${id}-${path}`}
+                path={path}
+                component={screen.Component}
+                exact
+              />
+            ));
+          })}
+        </Switch>
+      </main>
     </Router>
   );
 };

@@ -6,6 +6,7 @@ import DenimRemoteDataSource from './denim/service/DenimRemoteDataSource';
 import { DenimUserProvider, useDenimUser } from './denim/forms';
 import DenimApplication from './denim/application';
 import { DenimFormSchema } from './denim/core';
+import { ActivityIndicator } from 'react-native';
 
 const schemaSource = new AirTableSchemaSource<{}>(
   require('./schema/airtable-schema.json'),
@@ -492,6 +493,12 @@ const App = () => {
 };
 
 export default () => {
+  if (window.location.pathname === '/loading') {
+    return (
+      <ActivityIndicator />
+    );
+  }
+
   return (
     <DenimUserProvider authUrl="http://localhost:9090/auth">
       <App />

@@ -71,6 +71,23 @@ export default class LarkAuthentication {
           ),
         });
       }
+
+      if (req.query.type === 'app') {
+        const { open_id } = await withAppAccessToken(({ post, token }) => {
+          return post('https://open.larksuite.com/open-apis/mina/v2/tokenLoginValidate', {
+            code: req.query.code,
+          }, {
+            Authorization: 'Bearer ' + token,
+          });
+        }, res);
+
+        res.json({
+          token: jwt.sign(
+            { id: open_id, expiry: Date.now() + 30 * 60 * 1000 },
+            this.key,
+          ),
+        });
+      }
     });
 
     router.get('/verify', async (req: Request, res: Response) => {
