@@ -318,7 +318,7 @@ export const createConnectedFormProvider = <
         setRetrieving(true);
 
         const records = await dataProvider.retrieveRecords(context.context, {
-          pageSize: 10,
+          pageSize: 50,
           page,
           expand,
           conditions: query,
@@ -326,7 +326,7 @@ export const createConnectedFormProvider = <
 
         setRecords((r) => r.concat(records));
         setRetrieving(false);
-        setHasMore(records.length >= 10);
+        setHasMore(records.length >= 50);
       }
     };
 

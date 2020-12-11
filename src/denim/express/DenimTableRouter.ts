@@ -29,7 +29,7 @@ const DenimTableRouter = <T extends DenimDataContext, S extends DenimSchemaSourc
 
     if (req.query.page) {
       if (!req.query.page_size) {
-        req.query.page_size = '10';
+        req.query.page_size = '50';
       }
 
       query.page = Number(req.query.page);

@@ -22,7 +22,7 @@ const employeeForm: DenimFormSchema = {
   sections: [
     {
       id: 'personal-section',
-      label: 'Personal Information',
+      label: 'Personal',
       showLabel: true,
       collapsible: true,
       defaultOpen: true,
@@ -107,17 +107,8 @@ const employeeForm: DenimFormSchema = {
             },
           ],
         },
-      ],
-    },
-    {
-      id: 'contact-section',
-      label: 'Contact Information',
-      showLabel: true,
-      collapsible: true,
-      defaultOpen: false,
-      rows: [
         {
-          id: 'row0',
+          id: 'row4',
           controls: [
             {
               label: 'Address 1',
@@ -127,7 +118,7 @@ const employeeForm: DenimFormSchema = {
           ],
         },
         {
-          id: 'row1',
+          id: 'row5',
           controls: [
             {
               label: 'Address 2',
@@ -137,7 +128,7 @@ const employeeForm: DenimFormSchema = {
           ],
         },
         {
-          id: 'row2',
+          id: 'row6',
           controls: [
             {
               label: 'Address 3',
@@ -147,7 +138,7 @@ const employeeForm: DenimFormSchema = {
           ],
         },
         {
-          id: 'row3',
+          id: 'row7',
           controls: [
             {
               label: 'City',
@@ -172,7 +163,7 @@ const employeeForm: DenimFormSchema = {
           ],
         },
         {
-          id: 'row4',
+          id: 'row8',
           controls: [
             {
               label: 'Home Number',
@@ -187,7 +178,7 @@ const employeeForm: DenimFormSchema = {
           ],
         },
         {
-          id: 'row5',
+          id: 'row9',
           controls: [
             {
               label: 'Contact Person',
@@ -210,7 +201,7 @@ const employeeForm: DenimFormSchema = {
     },
     {
       id: 'job-section',
-      label: 'Job Information',
+      label: 'Employment',
       showLabel: true,
       collapsible: true,
       defaultOpen: false,
@@ -314,7 +305,7 @@ const employeeForm: DenimFormSchema = {
     },
     {
       id: 'payroll-section',
-      label: 'Payroll Information',
+      label: 'Compensation and Benefits',
       showLabel: true,
       collapsible: true,
       defaultOpen: false,
@@ -340,55 +331,6 @@ const employeeForm: DenimFormSchema = {
             {
               label: 'Employee Allowance',
               id: 'Employee Allowance',
-              relativeWidth: 5,
-            },
-          ],
-        },
-      ],
-    },
-    {
-      id: 'link-section',
-      label: 'Link Attachment',
-      showLabel: true,
-      collapsible: true,
-      defaultOpen: false,
-      rows: [
-        {
-          id: 'row0',
-          controls: [
-            {
-              label: 'Curriculum Vitae',
-              id: 'Curriculum Vitae',
-              relativeWidth: 5,
-            },
-          ],
-        },
-        {
-          id: 'row1',
-          controls: [
-            {
-              label: 'Dependents',
-              id: 'Dependents',
-              relativeWidth: 5,
-            },
-          ],
-        },
-        {
-          id: 'row2',
-          controls: [
-            {
-              label: 'Job History',
-              id: 'Job History',
-              relativeWidth: 5,
-            },
-          ],
-        },
-        {
-          id: 'row3',
-          controls: [
-            {
-              label: 'Attachments',
-              id: 'Attachments',
               relativeWidth: 5,
             },
           ],
