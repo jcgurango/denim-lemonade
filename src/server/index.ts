@@ -24,10 +24,11 @@ const cors = require('cors');
 
 const schema = new AirTableSchemaSource<{
   userData?: DenimRecord;
-}>(
-  require('../schema/airtable-schema.json'),
+}>(require('../schema/airtable-schema.json'));
+const data = new AirTableDataSource<{}, AirTableSchemaSource<{}>>(
+  schema,
+  'appjkBnHNyutcO3Wr',
 );
-const data = new AirTableDataSource<{}, AirTableSchemaSource<{}>>(schema, 'appjkBnHNyutcO3Wr');
 
 const securedSchema = new AirTableSchemaSource<{
   userData?: DenimRecord;
@@ -85,7 +86,7 @@ const denimAuth = new DenimAuthenticator(
                 value: {
                   $user: 'Direct Manager',
                 },
-              }
+              },
             ],
           },
           updateAction: {
@@ -127,7 +128,7 @@ const denimAuth = new DenimAuthenticator(
           createAction: 'block',
           readAction: 'allow',
           updateAction: 'block',
-        }
+        },
       ],
       roleQuery: {
         conditionType: 'single',
@@ -141,6 +142,9 @@ const denimAuth = new DenimAuthenticator(
 );
 
 denimAuth.attach(securedData);
+
+const employeeDataProvider = data.createDataProvider('Employee');
+const departmentDataProvider = data.createDataProvider('Department');
 
 const fs = require('fs');
 const lark = new LarkUpdater(
@@ -174,77 +178,76 @@ const authMiddleware = larkAuth.middleware(async (id, req, res, next) => {
 });
 
 app.use('/auth/me', cors(), authMiddleware, (req, res) => {
-  if ((<any>(req)).denimContext) {
+  if ((<any>req).denimContext) {
     return res.json({
-      ...(<any>(req)).denimContext,
-      roles: denimAuth.getRolesFor((<any>(req)).denimContext.userData),
+      ...(<any>req).denimContext,
+      roles: denimAuth.getRolesFor((<any>req).denimContext.userData),
     });
   }
 
   return res.json(null);
 });
 
-app.use(
-  '/data',
-  cors(),
-  authMiddleware,
-  dataRouter,
-);
+app.use('/data', cors(), authMiddleware, dataRouter);
 
 app.use('/auth', cors(), larkAuth.loginEndpoint());
 
 app.listen(9090, () => console.log('Listening...'));
 
-const updateCoordinator = new UpdateCoordinator({
-  saveLastCheck: async (lastCheck) => fs.writeFileSync('.lastcheck', lastCheck),
-  saveBuckets: async (buckets) =>
-    fs.writeFileSync('.buckets', JSON.stringify(buckets)),
-  readLastCheck: async () => {
-    if (fs.existsSync('.lastcheck')) {
-      return parseInt(fs.readFileSync('.lastcheck'));
-    }
+if (process.env.ENABLE_SYNC) {
+  const updateCoordinator = new UpdateCoordinator({
+    saveLastCheck: async (lastCheck) =>
+      fs.writeFileSync('.lastcheck', lastCheck),
+    saveBuckets: async (buckets) =>
+      fs.writeFileSync('.buckets', JSON.stringify(buckets)),
+    readLastCheck: async () => {
+      if (fs.existsSync('.lastcheck')) {
+        return parseInt(fs.readFileSync('.lastcheck'));
+      }
 
-    return null;
-  },
-  readBuckets: async () => {
-    if (fs.existsSync('.buckets')) {
-      return JSON.parse(fs.readFileSync('.buckets'));
-    }
+      return null;
+    },
+    readBuckets: async () => {
+      if (fs.existsSync('.buckets')) {
+        return JSON.parse(fs.readFileSync('.buckets'));
+      }
 
-    return {};
-  },
-});
+      return {};
+    },
+  });
 
-const employeeDataProvider = data.createDataProvider('Employee');
-const departmentDataProvider = data.createDataProvider('Department');
+  updateCoordinator.registerRetriever(
+    'departments',
+    DenimDataRetriever(departmentDataProvider, null, 'Last Modified', {}),
+  );
 
-updateCoordinator.registerRetriever(
-  'departments',
-  DenimDataRetriever(departmentDataProvider, null, 'Last Modified', {}),
-);
+  updateCoordinator.registerUpdater(
+    'departments',
+    DepartmentMapper.forward,
+    lark.department(),
+  );
 
-updateCoordinator.registerUpdater(
-  'departments',
-  DepartmentMapper.forward,
-  lark.department(),
-);
+  updateCoordinator.registerRetriever(
+    'employees',
+    DenimDataRetriever(employeeDataProvider, null, 'Last Modified', {}),
+  );
 
-updateCoordinator.registerRetriever(
-  'employees',
-  DenimDataRetriever(employeeDataProvider, null, 'Last Modified', {}),
-);
+  updateCoordinator.registerUpdater(
+    'employees',
+    EmployeeMapper.forward,
+    lark.employee(),
+    async (employee: any, originalEmployee: DenimRecord) => {
+      if (!originalEmployee['Lark ID'] && employee.open_id) {
+        await employeeDataProvider.updateRecord(
+          {},
+          String(originalEmployee.id),
+          {
+            'Lark ID': employee.open_id,
+          },
+        );
+      }
+    },
+  );
 
-updateCoordinator.registerUpdater(
-  'employees',
-  EmployeeMapper.forward,
-  lark.employee(),
-  async (employee: any, originalEmployee: DenimRecord) => {
-    if (!originalEmployee['Lark ID'] && employee.open_id) {
-      await employeeDataProvider.updateRecord({}, String(originalEmployee.id), {
-        'Lark ID': employee.open_id,
-      });
-    }
-  },
-);
-
-//updateCoordinator.poll(0);
+  updateCoordinator.poll(0);
+}
