@@ -344,11 +344,11 @@ export default abstract class DenimTableDataProvider<
     );
 
     // Retrieve the record.
-    let existingRecord = await this.retrieveRecord(hookedContext, hookedId);
+    const existingRecord = await this.retrieveRecord(hookedContext, hookedId);
 
-    existingRecord = {
+    const fullRecord = {
+      ...(existingRecord || { }),
       ...hookedRecord,
-      ...record,
     };
 
     const [
@@ -359,12 +359,12 @@ export default abstract class DenimTableDataProvider<
       'pre-update-validate',
       this.tableSchema.name,
       hookedContext,
-      existingRecord,
+      fullRecord,
       validator,
     );
 
     // Validate the updated record.
-    const validRecord = await hookedValidator.validate(
+    const validRecord: DenimRecord = await hookedValidator.validate(
       hookedRecordPreValidate,
       {
         abortEarly: false,
@@ -381,7 +381,45 @@ export default abstract class DenimTableDataProvider<
       validRecord,
     );
 
-    const updatedRecord = await this.save(hookedRecordPostValidate);
+    // Update any values that are different from their initial values.
+    const saveRequest: DenimRecord = {
+      id: hookedRecordPostValidate.id,
+    };
+
+    Object.keys(hookedRecordPostValidate).forEach((key) => {
+      let initialValue = existingRecord ? existingRecord[key] : null;
+      let newValue = hookedRecordPostValidate[key];
+
+      if (initialValue && typeof(initialValue) === 'object' && initialValue.type === 'record') {
+        initialValue = initialValue.id;
+      }
+      
+      if (newValue && typeof(newValue) === 'object' && newValue.type === 'record') {
+        newValue = newValue.id;
+      }
+
+      if (initialValue && typeof(initialValue) === 'object' && initialValue.type === 'record-collection') {
+        initialValue = initialValue.records.map(({ id }) => id).join(',') || null;
+      }
+      
+      if (newValue && typeof(newValue) === 'object' && newValue.type === 'record-collection') {
+        newValue = newValue.records.map(({ id }) => id).join(',') || null;
+      }
+
+      if (Array.isArray(initialValue)) {
+        initialValue = initialValue.join(',');
+      }
+
+      if (Array.isArray(newValue)) {
+        newValue = newValue.join(',');
+      }
+
+      if (initialValue != newValue) {
+        saveRequest[key] = hookedRecordPostValidate[key];
+      }
+    });
+
+    const updatedRecord = await this.save(saveRequest);
 
     const [, hookedRecordPost] = await this.dataSource.executeHooks(
       'post-update',

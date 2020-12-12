@@ -54,10 +54,29 @@ export default class LarkUpdater extends LarkConnection {
 
           console.log('Creating new employee user...');
 
-          return post(
+          const result = await post(
             'https://open.larksuite.com/open-apis/contact/v1/user/add',
             employee,
           );
+
+          if (result.code === 40013 && employee.email) {
+            // Email already exists in the system.
+            const searchResult = await get('https://open.larksuite.com/open-apis/user/v1/batch_get_id?emails=' + employee.email);
+            
+            if (!searchResult.code) {
+              const user = searchResult.data.email_users[employee.email];
+
+              if (user && user.length) {
+                const { open_id } = user[0];
+
+                return get('https://open.larksuite.com/open-apis/contact/v1/user/get?open_id=' + open_id);
+              }
+            } else {
+              return result;
+            }
+          }
+
+          return result;
         },
         (data) => {
           if (data.user_info) {

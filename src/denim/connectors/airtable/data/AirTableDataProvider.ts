@@ -239,6 +239,7 @@ export default class AirTableDataProvider<
   }
 
   protected async save(record: DenimRecord): Promise<DenimRecord> {
+    console.log(record);
     if (record.id) {
       const atRecord = await this.tableData.update(
         record.id,
