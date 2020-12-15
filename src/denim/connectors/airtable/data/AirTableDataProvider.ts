@@ -156,10 +156,19 @@ export default class AirTableDataProvider<
     }
 
     if (condition.conditionType === 'single') {
+      let left = condition.field === 'id' ? 'RECORD_ID()' : `{${condition.field}}`;
+      let right = `'${condition.value}'`;
+      const column = this.tableSchema.columns.find(({ name }) => name === condition.field);
+
+      if (column && column.type === DenimColumnType.Text) {
+        left = 'LOWER(' + left + ')';
+        right = 'LOWER(' + right + ')';
+      }
+
       return `${this.operatorToFormula(
         condition.operator,
-        condition.field === 'id' ? 'RECORD_ID()' : `{${condition.field}}`,
-        `'${condition.value}'`,
+        left,
+        right,
       )}`;
     }
 

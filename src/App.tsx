@@ -332,7 +332,10 @@ const employeeForm: DenimFormSchema = {
             {
               label: 'Employee Allowance',
               id: 'Employee Allowance',
-              relativeWidth: 5,
+              relativeWidth: 1,
+              controlProps: {
+                dropdown: true,
+              },
             },
           ],
         },

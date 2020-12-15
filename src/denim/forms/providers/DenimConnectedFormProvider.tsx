@@ -19,6 +19,7 @@ import {
   DenimFormControlSchema,
   DenimFormControlType,
   DenimFormSchema,
+  DenimQuery,
   DenimQueryConditionGroup,
   DenimQueryOperator,
   DenimRecord,
@@ -165,6 +166,23 @@ export const createConnectedFormProvider = <
                   },
                 };
               case DenimColumnType.ForeignKey:
+                const { dropdown, ...props } = control.controlProps || { };
+
+                if (dropdown) {
+                  return {
+                    ...control,
+                    label: control.label || column.label,
+                    id: column.name,
+                    type: column.properties.multiple
+                      ? DenimFormControlType.MultiDropDown
+                      : DenimFormControlType.DropDown,
+                    controlProps: {
+                      relationship: column.name,
+                      ...(props || {}),
+                    },
+                  };
+                }
+
                 return {
                   ...control,
                   label: control.label || column.label,
@@ -233,15 +251,24 @@ export const createConnectedFormProvider = <
                     const c: any = context;
 
                     if (data) {
-                      const records = await data.retrieveRecords(c, {
-                        conditions: {
-                          conditionType: 'single',
-                          field: nameField,
-                          operator: DenimQueryOperator.Contains,
-                          value: query,
-                        },
-                        expand: [],
-                      });
+                      const denimQuery: DenimQuery = (query === '**||**') ? (
+                        {
+                          expand: [],
+                          retrieveAll: true,
+                        }
+                      ) : (
+                        {
+                          conditions: {
+                            conditionType: 'single',
+                            field: nameField,
+                            operator: DenimQueryOperator.Contains,
+                            value: query,
+                          },
+                          expand: [],
+                        }
+                      );
+
+                      const records = await data.retrieveRecords(c, denimQuery);
 
                       return records.map((record) => ({
                         type: 'record',

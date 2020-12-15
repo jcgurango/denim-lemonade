@@ -40,6 +40,10 @@ const DenimTableRouter = <T extends DenimDataContext, S extends DenimSchemaSourc
       query.view = String(req.query.view);
     }
 
+    if (req.query.all) {
+      query.retrieveAll = Boolean(req.query.all);
+    }
+
     if (req.body) {
       query.conditions = req.body;
     }

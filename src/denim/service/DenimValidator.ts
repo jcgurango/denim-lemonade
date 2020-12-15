@@ -102,11 +102,11 @@ export default class DenimValidator<T extends DenimDataContext> {
                 if (parsed.isValid()) {
                   return parsed.format('YYYY-MM-DD');
                 }
-                
+
                 return new Date('');
               },
             ],
-            ['yup.typeError', field.name + ' must be a valid date.']
+            ['yup.typeError', field.name + ' must be a valid date.'],
           ];
         }
 
@@ -134,7 +134,18 @@ export default class DenimValidator<T extends DenimDataContext> {
           ['yup.nullable', true],
         ];
       case DenimColumnType.Number:
-        return [['yup.number'], ['yup.nullable', true]];
+        return [
+          ['yup.number'],
+          ['yup.transform', function (this: any, value: any, originalValue: any) {
+            if (isNaN(value) && typeof(originalValue) === 'string') {
+              console.log(value, originalValue, +originalValue.replace(/\,/g, ''));
+              return +originalValue.replace(/\,/g, '');
+            }
+
+            return value;
+          }],
+          ['yup.nullable', true],
+        ];
       case DenimColumnType.Text:
         return [['yup.string'], ['yup.nullable', true]];
       case DenimColumnType.ReadOnly:

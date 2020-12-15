@@ -86,6 +86,7 @@ export class DenimRemoteTableProvider<
                 expand: query.expand ? query.expand.join(',') : undefined,
                 page_size: query.pageSize ? query.pageSize : undefined,
                 page: query.page ? query.page : undefined,
+                all: query.retrieveAll ? query.retrieveAll : undefined,
               }),
             query.conditions,
           )
