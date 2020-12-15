@@ -56,7 +56,10 @@ export default class LarkUpdater extends LarkConnection {
 
           const result = await post(
             'https://open.larksuite.com/open-apis/contact/v1/user/add',
-            employee,
+            {
+              ...employee,
+              need_send_notification: true,
+            },
           );
 
           if (result.code === 40013 && employee.email) {

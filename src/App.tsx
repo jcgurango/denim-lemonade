@@ -349,8 +349,6 @@ const connectedFormProvider = createConnectedFormProvider<
 const App = () => {
   const user = useDenimUser();
 
-  return <>{JSON.stringify(user)}</>;
-
   return (
     <DenimApplication
       router={{
