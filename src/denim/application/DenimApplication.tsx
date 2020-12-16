@@ -80,11 +80,13 @@ const DenimApplication: FunctionComponent<DenimApplicationProps> = ({
                     dataSource={dataSource}
                     context={dataContext}
                   >
+                    {screen.preContent || null}
                     <Form
                       table={screen.table}
                       record={recordId || id || ''}
                       schema={screen.form}
                     />
+                    {screen.postContent || null}
                   </Provider>
                 );
               }
@@ -108,6 +110,7 @@ const DenimApplication: FunctionComponent<DenimApplicationProps> = ({
                   dataSource={dataSource}
                   context={dataContext}
                 >
+                  {screen.preContent || null}
                   <View
                     schema={screen.view}
                     table={screen.table}
@@ -133,6 +136,7 @@ const DenimApplication: FunctionComponent<DenimApplicationProps> = ({
                         : undefined
                     }
                   />
+                  {screen.postContent || null}
                 </Provider>
               );
             },

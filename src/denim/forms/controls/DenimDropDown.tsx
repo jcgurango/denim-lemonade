@@ -21,8 +21,6 @@ export const useRelatedRecords = (relationship: string | undefined, options: any
     }
   }, [relationship]);
 
-  console.log(loadedRecords);
-
   const passedOptions: DenimSelectOption[] = loadedRecords ? (
     loadedRecords.map((record) => ({
       label: record.name || '',

@@ -11,6 +11,7 @@ import { DepartmentMapper } from './sync/mappers/DepartmentMapper';
 import { DenimQueryOperator, DenimRecord } from '../denim/core';
 import LarkAuthentication from './LarkAuthentication';
 import { DenimAuthenticator } from '../denim/service';
+import LemonadeValidations from '../validation';
 
 Airtable.configure({
   endpointUrl: 'https://api.airtable.com',
@@ -40,6 +41,10 @@ const securedData = new AirTableDataSource<
   },
   AirTableSchemaSource<{ userData?: DenimRecord }>
 >(securedSchema, 'appjkBnHNyutcO3Wr');
+
+
+LemonadeValidations(securedSchema);
+LemonadeValidations(schema);
 
 const denimAuth = new DenimAuthenticator(
   [

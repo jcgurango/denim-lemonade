@@ -28,6 +28,8 @@ interface DenimScreenSchema<T extends string> {
   slug?: string;
   type: T;
   roles?: string[];
+  preContent?: any;
+  postContent?: any;
 }
 
 export interface DenimFormScreenSchema extends DenimScreenSchema<'form'> {

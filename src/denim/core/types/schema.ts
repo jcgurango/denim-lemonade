@@ -1,3 +1,5 @@
+import * as Yup from 'yup';
+
 export interface DenimSchema {
   tables: DenimTable[];
 }
@@ -60,4 +62,5 @@ export interface DenimForeignKeyProperties {
   multiple?: boolean;
 }
 
-export type YupAst = [string] | [string, any] | [string, any, string] | YupAst[];
+export type YupAst = [string] | [string, any] | [string, any, string] | ['yup.test', Yup.TestOptionsMessage<{}, any>] | YupAst[];
+  

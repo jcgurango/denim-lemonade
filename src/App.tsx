@@ -6,12 +6,21 @@ import DenimRemoteDataSource from './denim/service/DenimRemoteDataSource';
 import { DenimUserProvider, useDenimUser } from './denim/forms';
 import DenimApplication from './denim/application';
 import { DenimFormSchema } from './denim/core';
-import { ActivityIndicator } from 'react-native';
+import LemonadeValidations from './validation';
+import {
+  ActivityIndicator,
+  Platform,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import config from './config.json';
 
 const schemaSource = new AirTableSchemaSource<{}>(
   require('./schema/airtable-schema.json'),
 );
+
+LemonadeValidations(schemaSource);
 
 const dataSource = new DenimRemoteDataSource(
   schemaSource,
@@ -398,6 +407,19 @@ const App = () => {
             table: 'Employee',
             form: employeeForm,
             roles: ['hr'],
+            preContent: (
+              <View style={{ padding: 12, paddingTop: 0, alignItems: 'center' }}>
+                {Platform.OS === 'web' ? (
+                  <TouchableOpacity>
+                    <a href="http://www.google.com" target="_blank">Employee self-service form</a>
+                  </TouchableOpacity>
+                ) : (
+                  <TouchableOpacity>
+                    <Text>Employee self-service form</Text>
+                  </TouchableOpacity>
+                )}
+              </View>
+            ),
           },
         ],
       }}
@@ -440,9 +462,7 @@ const App = () => {
 
 export default () => {
   if (window.location.pathname === '/loading') {
-    return (
-      <ActivityIndicator />
-    );
+    return <ActivityIndicator />;
   }
 
   return (
