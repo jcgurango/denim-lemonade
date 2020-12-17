@@ -37,3 +37,16 @@ export enum DenimFormControlType {
   MultiLookup = 'multi-lookup',
   DatePicker = 'datepicker',
 }
+
+export interface DenimNotification {
+  type: 'error' | 'success' | 'info' | 'warning';
+  message: string;
+  code: number;
+}
+
+export enum DenimNotificationCodes {
+  SavingRecord = 1000,
+  SavingFailed = 1001,
+  SavingSuccessful = 1002,
+  RetrievingFailed = 2000,
+}

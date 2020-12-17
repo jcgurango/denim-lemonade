@@ -19,6 +19,7 @@ import {
   DenimFormControlSchema,
   DenimFormControlType,
   DenimFormSchema,
+  DenimNotificationCodes,
   DenimQuery,
   DenimQueryConditionGroup,
   DenimQueryOperator,
@@ -37,6 +38,7 @@ import DenimForm, { DenimFormProps } from '../DenimForm';
 import DenimView, { DenimViewProps } from '../DenimView';
 import DenimFormProvider, { useDenimForm } from './DenimFormProvider';
 import DenimLookupDataProvider from './DenimLookupDataProvider';
+import { useDenimNotifications } from './DenimNotificationProvider';
 import DenimViewDataProvider from './DenimViewDataProvider';
 
 interface DenimConnectedDataProviderProps<
@@ -166,7 +168,7 @@ export const createConnectedFormProvider = <
                   },
                 };
               case DenimColumnType.ForeignKey:
-                const { dropdown, ...props } = control.controlProps || { };
+                const { dropdown, ...props } = control.controlProps || {};
 
                 if (dropdown) {
                   return {
@@ -251,22 +253,21 @@ export const createConnectedFormProvider = <
                     const c: any = context;
 
                     if (data) {
-                      const denimQuery: DenimQuery = (query === '**||**') ? (
-                        {
-                          expand: [],
-                          retrieveAll: true,
-                        }
-                      ) : (
-                        {
-                          conditions: {
-                            conditionType: 'single',
-                            field: nameField,
-                            operator: DenimQueryOperator.Contains,
-                            value: query,
-                          },
-                          expand: [],
-                        }
-                      );
+                      const denimQuery: DenimQuery =
+                        query === '**||**'
+                          ? {
+                              expand: [],
+                              retrieveAll: true,
+                            }
+                          : {
+                              conditions: {
+                                conditionType: 'single',
+                                field: nameField,
+                                operator: DenimQueryOperator.Contains,
+                                value: query,
+                              },
+                              expand: [],
+                            };
 
                       const records = await data.retrieveRecords(c, denimQuery);
 
@@ -338,22 +339,34 @@ export const createConnectedFormProvider = <
       context,
       table,
     ]);
+    const notifications = useDenimNotifications();
 
     const retrieveMore = async () => {
       if (context.context && dataProvider) {
         setPage((page) => page + 1);
         setRetrieving(true);
 
-        const records = await dataProvider.retrieveRecords(context.context, {
-          pageSize: 50,
-          page,
-          expand,
-          conditions: query,
-        });
+        try {
+          const records = await dataProvider.retrieveRecords(context.context, {
+            pageSize: 50,
+            page,
+            expand,
+            conditions: query,
+          });
 
-        setRecords((r) => r.concat(records));
+          setRecords((r) => r.concat(records));
+          setHasMore(records.length >= 50);
+        } catch (e) {
+          if (!notifications.handleError(e)) {
+            notifications.notify({
+              type: 'error',
+              message: e.message,
+              code: DenimNotificationCodes.RetrievingFailed,
+            });
+          }
+        }
+
         setRetrieving(false);
-        setHasMore(records.length >= 50);
       }
     };
 
@@ -512,6 +525,7 @@ export const createConnectedFormProvider = <
     ]);
 
     const form = useDenimForm();
+    const notifications = useDenimNotifications();
     const Button = form.componentRegistry.button;
 
     useEffect(() => {
@@ -575,6 +589,11 @@ export const createConnectedFormProvider = <
         setSaving(true);
         const c: any = context.context;
         const rec: any = updateData;
+        notifications.notify({
+          type: 'info',
+          message: 'Saving record...',
+          code: DenimNotificationCodes.SavingRecord,
+        });
 
         try {
           const savedRecord = await (record || recordData?.id
@@ -587,11 +606,25 @@ export const createConnectedFormProvider = <
           setRecordData(savedRecord);
           setUpdateData({});
           onSave(savedRecord);
+
+          notifications.notify({
+            type: 'success',
+            message: 'Record saved.',
+            code: DenimNotificationCodes.SavingSuccessful,
+          });
         } catch (e) {
           if (e.inner) {
             setErrors(e.inner);
           } else {
             setErrors([e]);
+          }
+
+          if (!notifications.handleError(e)) {
+            notifications.notify({
+              type: 'error',
+              message: 'Failed to save the record.',
+              code: DenimNotificationCodes.SavingFailed,
+            });
           }
         }
 

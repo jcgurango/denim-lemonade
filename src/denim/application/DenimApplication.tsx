@@ -6,10 +6,12 @@ import {
   Route,
   Link,
   useParams,
+  useHistory,
 } from 'react-router-dom';
 import { DenimForm, ConnectedForm, useDenimUser } from '../forms';
 import { DenimDataSource, DenimSchemaSource } from '../service';
 import { DenimRecord } from '../core';
+import DenimApplicationNotifications from './DenimApplicationNotifications';
 
 interface DenimApplicationProps {
   router: DenimRouterSchema;
@@ -61,6 +63,7 @@ const DenimApplication: FunctionComponent<DenimApplicationProps> = ({
             linkPath: screen.slug || '/' + screen.id,
             Component: () => {
               const user = useDenimUser();
+              const history = useHistory();
               const { id } = useParams<{ id?: string }>();
 
               if (screen.table) {
@@ -85,6 +88,15 @@ const DenimApplication: FunctionComponent<DenimApplicationProps> = ({
                       table={screen.table}
                       record={recordId || id || ''}
                       schema={screen.form}
+                      onSave={(record) => {
+                        if (record.id) {
+                          const newPath = (screen.slug || '/' + screen.id) + '/' + record.id;
+
+                          if (history.location.pathname !== newPath) {
+                            history.push(newPath);
+                          }
+                        }
+                      }}
                     />
                     {screen.postContent || null}
                   </Provider>
@@ -151,39 +163,52 @@ const DenimApplication: FunctionComponent<DenimApplicationProps> = ({
   // Render a react-router for the screens.
   return (
     <Router>
-      <div style={{ padding: 16 }}>
-        {menu.menuItems.map((item) => {
-          if (
-            user.roles.find((role) => !item.roles || item.roles.includes(role))
-          ) {
-            if (item.type === 'screen') {
-              return (
-                <Link key={item.id} to={screens[item.screen].linkPath}>
-                  {item.label}
-                </Link>
-              );
+      <DenimApplicationNotifications>
+        <div style={{ padding: 16 }}>
+          {menu.menuItems.map((item) => {
+            if (
+              user.roles.find(
+                (role) => !item.roles || item.roles.includes(role),
+              )
+            ) {
+              if (item.type === 'screen') {
+                return (
+                  <Link key={item.id} to={screens[item.screen].linkPath}>
+                    {item.label}
+                  </Link>
+                );
+              }
             }
-          }
 
-          return null;
-        })}
-      </div>
-      <main style={{ padding: '16px', width: '100%', boxSizing: 'border-box', maxWidth: '1200px', marginLeft: 'auto', marginRight: 'auto' }}>
-        <Switch>
-          {Object.keys(screens).map((id) => {
-            const screen = screens[id];
-
-            return screen.paths.map((path) => (
-              <Route
-                key={`${id}-${path}`}
-                path={path}
-                component={screen.Component}
-                exact
-              />
-            ));
+            return null;
           })}
-        </Switch>
-      </main>
+        </div>
+        <main
+          style={{
+            padding: '16px',
+            width: '100%',
+            boxSizing: 'border-box',
+            maxWidth: '1200px',
+            marginLeft: 'auto',
+            marginRight: 'auto',
+          }}
+        >
+          <Switch>
+            {Object.keys(screens).map((id) => {
+              const screen = screens[id];
+
+              return screen.paths.map((path) => (
+                <Route
+                  key={`${id}-${path}`}
+                  path={path}
+                  component={screen.Component}
+                  exact
+                />
+              ));
+            })}
+          </Switch>
+        </main>
+      </DenimApplicationNotifications>
     </Router>
   );
 };
