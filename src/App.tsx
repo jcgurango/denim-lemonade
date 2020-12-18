@@ -411,7 +411,7 @@ const App = () => {
               <View style={{ padding: 12, paddingTop: 0, alignItems: 'center' }}>
                 {Platform.OS === 'web' ? (
                   <TouchableOpacity>
-                    <a href="https://airtable.com/shrMs1b9PvJW0F6D0" target="_blank">Employee self-service form</a>
+                    <a href="https://airtable.com/shrMs1b9PvJW0F6D0" target="_blank">Click here for employee self-service form</a>
                   </TouchableOpacity>
                 ) : (
                   <TouchableOpacity>
