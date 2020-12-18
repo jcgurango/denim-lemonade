@@ -12,6 +12,7 @@ import { DenimForm, ConnectedForm, useDenimUser } from '../forms';
 import { DenimDataSource, DenimSchemaSource } from '../service';
 import { DenimRecord } from '../core';
 import DenimApplicationNotifications from './DenimApplicationNotifications';
+import { StyleSheet, View } from 'react-native';
 
 interface DenimApplicationProps {
   router: DenimRouterSchema;
@@ -90,7 +91,8 @@ const DenimApplication: FunctionComponent<DenimApplicationProps> = ({
                       schema={screen.form}
                       onSave={(record) => {
                         if (record.id) {
-                          const newPath = (screen.slug || '/' + screen.id) + '/' + record.id;
+                          const newPath =
+                            (screen.slug || '/' + screen.id) + '/' + record.id;
 
                           if (history.location.pathname !== newPath) {
                             history.push(newPath);
@@ -164,7 +166,7 @@ const DenimApplication: FunctionComponent<DenimApplicationProps> = ({
   return (
     <Router>
       <DenimApplicationNotifications>
-        <div style={{ padding: 16 }}>
+        <View style={styles.menuHeader}>
           {menu.menuItems.map((item) => {
             if (
               user.roles.find(
@@ -182,7 +184,7 @@ const DenimApplication: FunctionComponent<DenimApplicationProps> = ({
 
             return null;
           })}
-        </div>
+        </View>
         <main
           style={{
             padding: '16px',
@@ -214,3 +216,19 @@ const DenimApplication: FunctionComponent<DenimApplicationProps> = ({
 };
 
 export default DenimApplication;
+
+const styles = StyleSheet.create({
+  menuHeader: {
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+    padding: 12,
+    flexDirection: 'row',
+    justifyContent: 'space-evenly',
+  },
+});
