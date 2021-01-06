@@ -3,6 +3,7 @@ import { Button, StyleSheet, Text, View } from 'react-native';
 import {
   DenimColumn,
   DenimFormControlSchema,
+  DenimFormControlType,
   DenimQueryCondition,
   DenimQueryConditionGroup,
   DenimQueryOperator,
@@ -43,6 +44,14 @@ const DenimFilterControl: FunctionComponent<DenimFilterControlProps> = ({
     onChange: (value: DenimQueryCondition) => void,
     onRemove: () => void,
   ) => {
+    const extraProps: any = { };
+
+    if (columnSchema.type === DenimFormControlType.TextInput) {
+      extraProps.onSubmitEditing = () => {
+        onApply();
+      };
+    }
+
     return (
       <View style={styles.conditionContainer}>
         <View style={styles.conditionPartContainer}>
@@ -110,6 +119,10 @@ const DenimFilterControl: FunctionComponent<DenimFilterControlProps> = ({
                 ...columnSchema,
                 id: key,
                 hideLabel: true,
+                controlProps: {
+                  ...(columnSchema.controlProps || { }),
+                  ...extraProps,
+                },
               }}
               value={condition.value}
               onChange={(newValue) =>
