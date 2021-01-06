@@ -138,7 +138,6 @@ export default class DenimValidator<T extends DenimDataContext> {
           ['yup.number'],
           ['yup.transform', function (this: any, value: any, originalValue: any) {
             if (isNaN(value) && typeof(originalValue) === 'string') {
-              console.log(value, originalValue, +originalValue.replace(/\,/g, ''));
               return +originalValue.replace(/\,/g, '');
             }
 

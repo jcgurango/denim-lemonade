@@ -198,7 +198,6 @@ export const createConnectedFormProvider = <
                   },
                 };
               case DenimColumnType.Text:
-              case DenimColumnType.Number:
                 if (column.properties?.long) {
                   return {
                     ...control,
@@ -210,6 +209,18 @@ export const createConnectedFormProvider = <
 
                 return {
                   ...control,
+                  label: control.label || column.label,
+                  id: column.name,
+                  type: DenimFormControlType.TextInput,
+                };
+              case DenimColumnType.Number:
+                return {
+                  ...control,
+                  controlProps: {
+                    ...control.controlProps,
+                    format: '{0:#,###,###,###,###,###,###,##0.00}',
+                    numerical: true,
+                  },
                   label: control.label || column.label,
                   id: column.name,
                   type: DenimFormControlType.TextInput,
