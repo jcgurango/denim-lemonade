@@ -53,7 +53,7 @@ const DenimFilterControl: FunctionComponent<DenimFilterControlProps> = ({
     }
 
     return (
-      <View style={styles.conditionContainer}>
+      <View style={styles.conditionContainer} key={key + '-' + column.name}>
         <View style={styles.conditionPartContainer}>
           <Text>{column.label}</Text>
         </View>
