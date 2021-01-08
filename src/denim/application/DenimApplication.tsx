@@ -63,6 +63,8 @@ const DenimApplication: FunctionComponent<DenimApplicationProps> = ({
             ],
             linkPath: screen.slug || '/' + screen.id,
             Component: () => {
+              const PreComponent = screen.preContent || (() => null);
+              const PostComponent = screen.postContent || (() => null);
               const user = useDenimUser();
               const history = useHistory();
               const { id } = useParams<{ id?: string }>();
@@ -84,7 +86,7 @@ const DenimApplication: FunctionComponent<DenimApplicationProps> = ({
                     dataSource={dataSource}
                     context={dataContext}
                   >
-                    {screen.preContent || null}
+                    <PreComponent />
                     <Form
                       table={screen.table}
                       record={recordId || id || ''}
@@ -100,7 +102,7 @@ const DenimApplication: FunctionComponent<DenimApplicationProps> = ({
                         }
                       }}
                     />
-                    {screen.postContent || null}
+                    <PostComponent />
                   </Provider>
                 );
               }
@@ -116,6 +118,8 @@ const DenimApplication: FunctionComponent<DenimApplicationProps> = ({
             paths: [screen.slug || '/' + screen.id],
             linkPath: screen.slug || '/' + screen.id,
             Component: () => {
+              const PreComponent = screen.preContent || (() => null);
+              const PostComponent = screen.postContent || (() => null);
               const { Provider, View } = formProvider;
 
               return (
@@ -124,7 +128,7 @@ const DenimApplication: FunctionComponent<DenimApplicationProps> = ({
                   dataSource={dataSource}
                   context={dataContext}
                 >
-                  {screen.preContent || null}
+                  <PreComponent />
                   <View
                     schema={screen.view}
                     table={screen.table}
@@ -150,7 +154,7 @@ const DenimApplication: FunctionComponent<DenimApplicationProps> = ({
                         : undefined
                     }
                   />
-                  {screen.postContent || null}
+                  <PostComponent />
                 </Provider>
               );
             },

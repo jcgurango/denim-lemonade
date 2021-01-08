@@ -1,4 +1,5 @@
 import React from 'react';
+import copyToClipboard from 'copy-to-clipboard';
 import { createConnectedFormProvider } from './denim/forms/providers/DenimConnectedFormProvider';
 import AirTableSchemaSource from './denim/connectors/airtable/AirTableSchemaSource';
 import { DenimSchemaSource } from './denim/service';
@@ -15,6 +16,7 @@ import {
   View,
 } from 'react-native';
 import config from './config.json';
+import { useDenimNotifications } from './denim/forms/providers/DenimNotificationProvider';
 
 const schemaSource = new AirTableSchemaSource<{}>(
   require('./schema/airtable-schema.json'),
@@ -407,19 +409,38 @@ const App = () => {
             table: 'Employee',
             form: employeeForm,
             roles: ['hr'],
-            preContent: (
-              <View style={{ padding: 12, paddingTop: 0, alignItems: 'center' }}>
-                {Platform.OS === 'web' ? (
-                  <TouchableOpacity>
-                    <a href="https://airtable.com/shrMs1b9PvJW0F6D0" target="_blank">Click here for employee self-service form</a>
-                  </TouchableOpacity>
-                ) : (
-                  <TouchableOpacity>
-                    <Text>Employee self-service form</Text>
-                  </TouchableOpacity>
-                )}
-              </View>
-            ),
+            preContent: () => {
+              const url = 'https://airtable.com/shrMs1b9PvJW0F6D0';
+              const notifications = useDenimNotifications();
+
+              const copy = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+                e.stopPropagation();
+                e.preventDefault();
+
+                copyToClipboard(url);
+                notifications.notify({
+                  type: 'success',
+                  message: 'Link copied to clipboard.',
+                  code: 1003,
+                });
+              };
+
+              return (
+                <View style={{ padding: 12, paddingTop: 0, alignItems: 'center' }}>
+                  {Platform.OS === 'web' ? (
+                    <a href={url} target="_blank" onClick={copy}>
+                      Share this link for the Employee Information Form
+                    </a>
+                  ) : (
+                    <TouchableOpacity>
+                      <Text>
+                        Share this link for the Employee Information Form
+                      </Text>
+                    </TouchableOpacity>
+                  )}
+                </View>
+              );
+            },
           },
         ],
       }}
