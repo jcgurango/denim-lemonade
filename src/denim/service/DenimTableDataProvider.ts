@@ -41,6 +41,10 @@ export default abstract class DenimTableDataProvider<
   protected abstract save(record: DenimRecord): Promise<DenimRecord>;
   protected abstract delete(id: string): Promise<void>;
 
+  getForeignTableProvider(table: string) {
+    return this.dataSource.createDataProvider(table);
+  }
+
   async expandRecords(
     context: T,
     records: DenimRecord[],
@@ -77,7 +81,7 @@ export default abstract class DenimTableDataProvider<
           column?.properties?.foreignTableId
         ) {
           const foreignTable = column?.properties?.foreignTableId;
-          const foreignTableProvider = this.dataSource.createDataProvider(
+          const foreignTableProvider = this.getForeignTableProvider(
             foreignTable,
           );
 
@@ -102,22 +106,10 @@ export default abstract class DenimTableDataProvider<
 
           if (relatedRecordIds.length > 0) {
             // Retrieve the related records.
-            const relatedRecords = await foreignTableProvider.retrieveRecords(
+            const relatedRecords = await foreignTableProvider.findById(
               context,
-              {
-                conditions: {
-                  conditionType: 'group',
-                  type: 'OR',
-                  conditions: relatedRecordIds.map((id) => ({
-                    conditionType: 'single',
-                    field: 'id',
-                    operator: DenimQueryOperator.Equals,
-                    value: id,
-                  })),
-                },
-                expand: childExpansions[relationship],
-                retrieveAll: true,
-              },
+              childExpansions[relationship],
+              ...relatedRecordIds,
             );
 
             relationships[relationship] = records.reduce<RelationshipRecordMap>(
@@ -200,6 +192,77 @@ export default abstract class DenimTableDataProvider<
     });
   }
 
+  async findById(
+    context: T,
+    expansion?: Expansion,
+    ...ids: string[]
+  ): Promise<DenimRecord[]> {
+    const [
+      hookedContext,
+      hookedIds,
+      hookedExpansion,
+    ] = await this.dataSource.executeHooks(
+      'pre-find',
+      this.tableSchema.name,
+      context,
+      ids,
+      expansion,
+    );
+
+    const query: DenimQuery = {
+      conditions: {
+        conditionType: 'group',
+        type: 'OR',
+        conditions: hookedIds.map((id) => ({
+          conditionType: 'single',
+          field: 'id',
+          operator: DenimQueryOperator.Equals,
+          value: id,
+        })),
+      },
+      expand: hookedExpansion,
+      retrieveAll: true,
+    };
+
+    const [
+      queryHookedContext,
+      queryHookedIds,
+      hookedQuery,
+      queryHookedExpansion,
+    ] = await this.dataSource.executeHooks(
+      'pre-find-query',
+      this.tableSchema.name,
+      hookedContext,
+      hookedIds,
+      query,
+      hookedExpansion,
+    );
+
+    const records = await this.query(hookedQuery);
+
+    const [
+      postHookedContext,
+      ,
+      ,
+      hookedRecords,
+      postHookedExpansion,
+    ] = await this.dataSource.executeHooks(
+      'post-find',
+      this.tableSchema.name,
+      queryHookedContext,
+      queryHookedIds,
+      hookedQuery,
+      records,
+      queryHookedExpansion,
+    );
+
+    if (postHookedExpansion) {
+      this.expandRecords(postHookedContext, hookedRecords, postHookedExpansion);
+    }
+
+    return hookedRecords;
+  }
+
   async retrieveRecord(
     context: T,
     id: string,
@@ -218,20 +281,33 @@ export default abstract class DenimTableDataProvider<
     );
 
     const record = await this.retrieve(hookedId);
-    let expand = hookedExpansion;
 
-    if (record && expand) {
-      await this.expandRecords(context, [record], expand);
-    }
-
-    const [, hookedRecord] = await this.dataSource.executeHooks(
-      'post-retrieve-record',
+    const [
+      preHookedContext,
+      preHookedId,
+      expand,
+      hookedRecord,
+    ] = await this.dataSource.executeHooks(
+      'pre-retrieve-record-expand',
       this.tableSchema.name,
       hookedContext,
+      hookedId,
+      hookedExpansion,
       record,
     );
 
-    return hookedRecord;
+    if (hookedRecord && expand) {
+      await this.expandRecords(context, [hookedRecord], expand);
+    }
+
+    const [, postHookedRecord] = await this.dataSource.executeHooks(
+      'post-retrieve-record',
+      this.tableSchema.name,
+      preHookedContext,
+      hookedRecord,
+    );
+
+    return postHookedRecord;
   }
 
   async retrieveRecords(
@@ -249,20 +325,32 @@ export default abstract class DenimTableDataProvider<
     // Retrieve the records.
     const records = await this.query(passedQuery);
 
-    // Perform expansions (if any).
-    if (passedQuery.expand) {
-      await this.expandRecords(context, records, passedQuery.expand);
-    }
-
-    const [, , hookedRecords] = await this.dataSource.executeHooks(
-      'post-retrieve-records',
+    const [
+      preHookedContext,
+      hookedRecords,
+      preHookedQuery,
+    ] = await this.dataSource.executeHooks(
+      'pre-retrieve-records-expand',
       this.tableSchema.name,
       hookedContext,
-      hookedQuery,
       records,
+      hookedQuery,
     );
 
-    return hookedRecords;
+    // Perform expansions (if any).
+    if (passedQuery.expand) {
+      await this.expandRecords(context, hookedRecords, passedQuery.expand);
+    }
+
+    const [, , postHookedRecords] = await this.dataSource.executeHooks(
+      'post-retrieve-records',
+      this.tableSchema.name,
+      preHookedContext,
+      preHookedQuery,
+      hookedRecords,
+    );
+
+    return postHookedRecords;
   }
 
   async createRecord(context: T, record: DenimRecord): Promise<DenimRecord> {
@@ -347,7 +435,7 @@ export default abstract class DenimTableDataProvider<
     const existingRecord = await this.retrieveRecord(hookedContext, hookedId);
 
     const fullRecord = {
-      ...(existingRecord || { }),
+      ...(existingRecord || {}),
       ...hookedRecord,
     };
 
@@ -390,19 +478,36 @@ export default abstract class DenimTableDataProvider<
       let initialValue = existingRecord ? existingRecord[key] : null;
       let newValue = hookedRecordPostValidate[key];
 
-      if (initialValue && typeof(initialValue) === 'object' && initialValue.type === 'record') {
+      if (
+        initialValue &&
+        typeof initialValue === 'object' &&
+        initialValue.type === 'record'
+      ) {
         initialValue = initialValue.id;
       }
-      
-      if (newValue && typeof(newValue) === 'object' && newValue.type === 'record') {
+
+      if (
+        newValue &&
+        typeof newValue === 'object' &&
+        newValue.type === 'record'
+      ) {
         newValue = newValue.id;
       }
 
-      if (initialValue && typeof(initialValue) === 'object' && initialValue.type === 'record-collection') {
-        initialValue = initialValue.records.map(({ id }) => id).join(',') || null;
+      if (
+        initialValue &&
+        typeof initialValue === 'object' &&
+        initialValue.type === 'record-collection'
+      ) {
+        initialValue =
+          initialValue.records.map(({ id }) => id).join(',') || null;
       }
-      
-      if (newValue && typeof(newValue) === 'object' && newValue.type === 'record-collection') {
+
+      if (
+        newValue &&
+        typeof newValue === 'object' &&
+        newValue.type === 'record-collection'
+      ) {
         newValue = newValue.records.map(({ id }) => id).join(',') || null;
       }
 
@@ -421,10 +526,11 @@ export default abstract class DenimTableDataProvider<
 
     const updatedRecord = await this.save(saveRequest);
 
-    const [, hookedRecordPost] = await this.dataSource.executeHooks(
+    const [, , hookedRecordPost] = await this.dataSource.executeHooks(
       'post-update',
       this.tableSchema.name,
       hookedContextPostValidate,
+      updatedRecord.id,
       updatedRecord,
     );
 

@@ -7,3 +7,4 @@ export * from './types/hooks';
 export * from './types/auth';
 export { default as DenimRemoteDataSource } from './DenimRemoteDataSource';
 export { default as DenimAuthenticator } from './DenimAuthenticator';
+export { default as DenimCombinedDataSource } from './DenimCombinedDataSource';

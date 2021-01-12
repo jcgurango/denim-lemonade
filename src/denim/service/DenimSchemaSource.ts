@@ -23,6 +23,10 @@ export default abstract class DenimSchemaSource<T extends DenimDataContext> {
 
   abstract createValidator(table: string): DenimValidator<T>;
 
+  hasTableSchema(table: string): DenimTable | undefined {
+    return this.schema.tables.find(({ id, name }) => id === table || name === table);
+  }
+
   findTableSchema(table: string): DenimTable {
     const tableSchema = this.schema.tables.find(({ id, name }) => id === table || name === table);
 

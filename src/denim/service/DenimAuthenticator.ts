@@ -123,6 +123,75 @@ export default class DenimAuthenticator<T extends DenimAuthenticationContext> {
 
   public attach(dataSource: DenimDataSource<T, DenimSchemaSource<T>>) {
     dataSource.registerHook({
+      type: 'pre-find-query',
+      table: /.*/g,
+      callback: async (table, context, ids, query, expansion) => {
+        let authorization = this.authorize(
+          context.userData,
+          'readAction',
+          table,
+        );
+
+        if (authorization === 'block') {
+          throw new Error('Unauthorized query.');
+        } else if (authorization !== 'allow') {
+          authorization = this.substituteQueryValues(context, authorization);
+
+          let newQuery: DenimQuery = {
+            conditions: authorization,
+          };
+
+          if (query) {
+            newQuery = {
+              ...query,
+              conditions: query.conditions
+                ? {
+                    conditionType: 'group',
+                    type: 'AND',
+                    conditions: [query.conditions, authorization],
+                  }
+                : authorization,
+            };
+          }
+
+          return [context, ids, newQuery, expansion];
+        }
+
+        return [context, ids, query, expansion];
+      },
+    });
+
+    dataSource.registerHook({
+      type: 'post-find',
+      table: /.*/g,
+      callback: async (table, context, ids, query, records, expansion) => {
+        const authorization = this.authorize(
+          context.userData,
+          'readAction',
+          table,
+        );
+
+        const filteredRecords = records.slice(0).filter((record) => {
+          if (
+            authorization === 'block' ||
+            (authorization !== 'allow' &&
+              !DenimLocalQuery.matches(
+                dataSource.schemaSource.findTableSchema(table),
+                record,
+                this.substituteQueryValues(context, authorization),
+              ))
+          ) {
+            return false;
+          }
+
+          return true;
+        });
+
+        return [context, ids, query, filteredRecords, expansion];
+      },
+    });
+
+    dataSource.registerHook({
       type: 'post-retrieve-record',
       table: /.*/g,
       callback: async (table, context, id, expansion, record) => {

@@ -28,6 +28,17 @@ export type DenimDataSourceHook<C extends DenimDataContext> =
       ) => Promise<[C, string, Expansion | undefined]>
     >
   | DenimHook<
+      'pre-retrieve-record-expand',
+      C,
+      (
+        table: string,
+        context: C,
+        id: string,
+        expansion: Expansion | undefined,
+        record: DenimRecord | null,
+      ) => Promise<[C, string, Expansion | undefined, DenimRecord | null]>
+    >
+  | DenimHook<
       'post-retrieve-record',
       C,
       (
@@ -46,6 +57,16 @@ export type DenimDataSourceHook<C extends DenimDataContext> =
         context: C,
         query?: DenimQuery,
       ) => Promise<[C, DenimQuery | undefined]>
+    >
+  | DenimHook<
+      'pre-retrieve-records-expand',
+      C,
+      (
+        table: string,
+        context: C,
+        records: DenimRecord[],
+        query?: DenimQuery,
+      ) => Promise<[C, DenimRecord[], DenimQuery | undefined]>
     >
   | DenimHook<
       'post-retrieve-records',
@@ -150,4 +171,37 @@ export type DenimDataSourceHook<C extends DenimDataContext> =
         context: C,
         id: string,
       ) => Promise<[C, string]>
+    >
+  | DenimHook<
+      'pre-find',
+      C,
+      (
+        table: string,
+        context: C,
+        ids: string[],
+        expansion?: Expansion
+      ) => Promise<[C, string[], Expansion | undefined]>
+    >
+  | DenimHook<
+      'pre-find-query',
+      C,
+      (
+        table: string,
+        context: C,
+        ids: string[],
+        query: DenimQuery,
+        expansion?: Expansion
+      ) => Promise<[C, string[], DenimQuery, Expansion | undefined]>
+    >
+  | DenimHook<
+      'post-find',
+      C,
+      (
+        table: string,
+        context: C,
+        ids: string[],
+        query: DenimQuery,
+        records: DenimRecord[],
+        expansion?: Expansion,
+      ) => Promise<[C, string[], DenimQuery, DenimRecord[], Expansion | undefined]>
     >;
