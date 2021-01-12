@@ -10,12 +10,13 @@ import LarkUpdater from './sync/updaters/LarkUpdater';
 import { DepartmentMapper } from './sync/mappers/DepartmentMapper';
 import { DenimQueryOperator, DenimRecord } from '../denim/core';
 import LarkAuthentication from './LarkAuthentication';
-import { DenimAuthenticator } from '../denim/service';
+import { DenimAuthenticator, DenimCombinedDataSource } from '../denim/service';
 import LemonadeValidations from '../validation';
+import combinedTest from './combined-test';
 
 Airtable.configure({
   endpointUrl: 'https://api.airtable.com',
-  apiKey: 'keyLuy77TiMrMgCUY',
+  apiKey: 'keyAhv3IWg6qeJRZb',
   apiVersion: undefined,
   noRetryIfRateLimited: undefined,
 });
@@ -41,7 +42,6 @@ const securedData = new AirTableDataSource<
   },
   AirTableSchemaSource<{ userData?: DenimRecord }>
 >(securedSchema, 'appjkBnHNyutcO3Wr');
-
 
 LemonadeValidations(securedSchema);
 LemonadeValidations(schema);
@@ -192,6 +192,12 @@ app.use('/auth/me', cors(), authMiddleware, (req, res) => {
 
   return res.json(null);
 });
+
+app.use(
+  '/data/combined',
+  cors(),
+  DenimDataSourceRouter(combinedTest(data)),
+);
 
 app.use('/data', cors(), authMiddleware, dataRouter);
 

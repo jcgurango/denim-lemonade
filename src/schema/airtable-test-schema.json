@@ -1,0 +1,26 @@
+[
+	{
+		"id": "tblyq4R7GJuW7bDZk",
+		"name": "Test Link",
+		"columns": [
+			{
+				"id": "fldFyiLrPmETr2SCb",
+				"name": "Name",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldauQnOOIP0YVcsS",
+				"name": "Test Link",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldW0ViOzbW5Z9K34",
+				"name": "Test Multi Link",
+				"type": "text",
+				"typeOptions": null
+			}
+		]
+	}
+]
