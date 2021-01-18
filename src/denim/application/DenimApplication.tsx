@@ -132,6 +132,8 @@ const DenimApplication: FunctionComponent<DenimApplicationProps> = ({
                   <View
                     schema={screen.view}
                     table={screen.table}
+                    filterColumns={screen.filterColumns}
+                    globalSearchColumns={screen.globalSearchColumns}
                     renderActions={
                       screen.form
                         ? (record: DenimRecord) => {

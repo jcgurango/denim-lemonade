@@ -373,6 +373,18 @@ const App = () => {
             type: 'view',
             table: 'Employee',
             form: 'employee',
+            filterColumns: [
+              'Employee ID',
+              'Last Name',
+              'First Name',
+              'Payroll ID',
+            ],
+            globalSearchColumns: [
+              'Employee ID',
+              'Last Name',
+              'First Name',
+              'Job Title',
+            ],
             view: {
               id: 'employee-view',
               columns: [
@@ -382,12 +394,6 @@ const App = () => {
                 'Full Name',
                 'Account Status',
                 'Job Title',
-              ],
-              filterColumns: [
-                'Employee ID',
-                'Last Name',
-                'First Name',
-                'Payroll ID',
               ],
             },
             roles: ['hr'],

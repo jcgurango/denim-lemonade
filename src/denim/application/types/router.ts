@@ -42,4 +42,6 @@ export interface DenimViewScreenSchema extends DenimScreenSchema<'view'> {
   form?: string;
   table: string;
   view: DenimViewSchema;
+  filterColumns: string[];
+  globalSearchColumns?: string[];
 }
