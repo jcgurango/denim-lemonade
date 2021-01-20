@@ -4,6 +4,7 @@ export { default as DenimFormRow } from './DenimFormRow';
 export { default as DenimFormSection } from './DenimFormSection';
 export { default as DenimView } from './DenimView';
 export { default as DenimViewDataProvider } from './providers/DenimViewDataProvider';
+export * from './DenimView';
 
 export { default as DenimControlContainer } from './controls/DenimControlContainer';
 export { default as DenimTextInput } from './controls/DenimTextInput';

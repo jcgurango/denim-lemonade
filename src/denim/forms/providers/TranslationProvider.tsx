@@ -1,7 +1,7 @@
 import React, { createContext, FunctionComponent, useContext } from 'react';
 
 const TranslationContext = createContext({
-  translate: (id: string) => `[no_translation_service ${id}]`,
+  translate: (id: string, fallback?: string) => fallback || `[no_translation_service ${id}]`,
 });
 
 export const useTranslation = () => useContext(TranslationContext);

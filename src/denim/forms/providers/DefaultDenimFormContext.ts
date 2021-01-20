@@ -13,6 +13,13 @@ import DenimTextInput, {
 import DenimFormControl from '../DenimFormControl';
 import DenimFormRow from '../DenimFormRow';
 import DenimFormSection from '../DenimFormSection';
+import {
+  DenimViewCell,
+  DenimViewHeaderCell,
+  DenimViewHeaderRow,
+  DenimViewRow,
+  DenimViewTableContainer,
+} from '../DenimView';
 
 export const DefaultDenimFormContext = {
   controlRegistry: {
@@ -32,6 +39,11 @@ export const DefaultDenimFormContext = {
     control: DenimFormControl,
     controlContainer: DenimControlContainer,
     button: DenimButton,
+    viewTable: DenimViewTableContainer,
+    viewHeaderRow: DenimViewHeaderRow,
+    viewHeaderCell: DenimViewHeaderCell,
+    viewRow: DenimViewRow,
+    viewCell: DenimViewCell,
   },
   setValue: () => () => {},
   getValue: () => null,

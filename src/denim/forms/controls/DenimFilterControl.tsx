@@ -10,6 +10,7 @@ import {
 } from '../../core';
 import { DenimLocalQuery } from '../../service';
 import DenimFormControl from '../DenimFormControl';
+import { useDenimForm } from '../providers/DenimFormProvider';
 import DenimDropDown from './DenimDropDown';
 import NativeDropDown from './NativeDropDown';
 
@@ -30,6 +31,7 @@ const DenimFilterControl: FunctionComponent<DenimFilterControlProps> = ({
   columns,
   fieldControls,
 }) => {
+  const { componentRegistry: { button: DenimButton } } = useDenimForm();
   const currentQuery: DenimQueryConditionGroup = value || {
     conditionType: 'group',
     type: 'AND',
@@ -134,7 +136,7 @@ const DenimFilterControl: FunctionComponent<DenimFilterControlProps> = ({
             />
           ) : null}
         </View>
-        <Button title="Remove" color="red" onPress={onRemove} />
+        <DenimButton text="Remove" type="danger" onPress={onRemove} />
       </View>
     );
   };
@@ -262,8 +264,8 @@ const DenimFilterControl: FunctionComponent<DenimFilterControlProps> = ({
               />
             </View>
             <View style={styles.conditionPartContainer}>
-              <Button
-                title="Add group"
+              <DenimButton
+                text="Add group"
                 onPress={() => {
                   onChange({
                     ...group,
@@ -281,14 +283,14 @@ const DenimFilterControl: FunctionComponent<DenimFilterControlProps> = ({
             </View>
             <View style={styles.conditionPartContainer}>
               {group !== currentQuery ? (
-                <Button
-                  title="Remove Group"
-                  color="red"
+                <DenimButton
+                  text="Remove Group"
+                  type="danger"
                   onPress={() => onRemove()}
                 />
               ) : (
-                <Button
-                  title="Apply Filters / Refresh"
+                <DenimButton
+                  text="Apply Filters / Refresh"
                   onPress={() => onApply()}
                 />
               )}

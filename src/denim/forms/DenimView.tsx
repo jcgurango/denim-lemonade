@@ -1,17 +1,78 @@
-import React, { FunctionComponent, ReactChild } from 'react';
+import React, {
+  createContext,
+  FunctionComponent,
+  ReactChild,
+  useContext,
+} from 'react';
 import { Button, StyleSheet, Text, View } from 'react-native';
 import { DenimColumnType, DenimRecord, DenimViewSchema } from '../core';
+import { useDenimForm } from './providers/DenimFormProvider';
 import { useDenimViewData } from './providers/DenimViewDataProvider';
+import { useTranslation } from './providers/TranslationProvider';
 
 export interface DenimViewProps {
   schema: DenimViewSchema;
   renderActions?: (record: DenimRecord) => ReactChild;
 }
 
+export const DenimViewTableContainer: FunctionComponent = ({ children }) => {
+  return <View style={styles.table}>{children}</View>;
+};
+
+export const DenimViewHeaderRow: FunctionComponent = ({ children }) => {
+  return <View style={styles.tableHeaderRow}>{children}</View>;
+};
+
+export const DenimViewHeaderCell: FunctionComponent = ({ children }) => {
+  return (
+    <View style={styles.tableHeaderCell}>
+      <Text style={styles.tableHeaderCellText}>{children}</Text>
+    </View>
+  );
+};
+
+export const DenimViewRow: FunctionComponent = ({ children }) => {
+  return <View style={styles.tableRow}>{children}</View>;
+};
+
+export const DenimViewCell: FunctionComponent = ({ children }) => {
+  return (
+    <View style={styles.tableCell}>
+      <Text style={styles.tableCellText}>{children}</Text>
+    </View>
+  );
+};
+
+const DenimViewContext = createContext<{
+  row: number;
+  column: number;
+  columnName: string;
+  record: any;
+  schema?: DenimViewSchema;
+}>({
+  row: 0,
+  column: 0,
+  columnName: '',
+  record: {},
+});
+
+export const useDenimView = () => useContext(DenimViewContext);
+
 const DenimView: FunctionComponent<DenimViewProps> = ({
   schema,
   renderActions,
 }) => {
+  const translation = useTranslation();
+  const {
+    componentRegistry: {
+      button: DenimButton,
+      viewTable: Table,
+      viewHeaderRow: HeaderRow,
+      viewHeaderCell: HeaderCell,
+      viewRow: Row,
+      viewCell: Cell,
+    },
+  } = useDenimForm();
   const view = useDenimViewData();
 
   const mapRecordValue = (column: string, value: any) => {
@@ -59,49 +120,88 @@ const DenimView: FunctionComponent<DenimViewProps> = ({
   };
 
   return (
-    <>
-      <View style={styles.table}>
-        <View style={styles.tableHeaderRow}>
-          {schema.columns.map((column) => (
-            <View style={styles.tableHeaderCell}>
-              <Text style={styles.tableHeaderCellText}>
-                {getColumnLabel(column)}
-              </Text>
-            </View>
+    <DenimViewContext.Provider
+      value={{ row: 0, column: 0, columnName: '', schema, record: null }}
+    >
+      <Table>
+        <HeaderRow>
+          {schema.columns.map((column, index) => (
+            <DenimViewContext.Provider
+              value={{
+                row: -1,
+                column: index,
+                columnName: column,
+                schema,
+                record: null,
+              }}
+            >
+              <HeaderCell>{getColumnLabel(column)}</HeaderCell>
+            </DenimViewContext.Provider>
           ))}
           {renderActions ? (
-            <View style={styles.tableHeaderCell}>
-              <Text style={styles.tableHeaderCellText}>#</Text>
-            </View>
+            <DenimViewContext.Provider
+              value={{
+                row: -1,
+                column: -1,
+                columnName: 'view.actions',
+                schema,
+                record: null,
+              }}
+            >
+              <HeaderCell>#</HeaderCell>
+            </DenimViewContext.Provider>
           ) : null}
-        </View>
-        {view.records.map((record) => (
-          <View style={styles.tableRow} key={record.id}>
-            {schema.columns.map((column) => (
-              <View style={styles.tableCell}>
-                <Text style={styles.tableCellText}>
-                  {mapRecordValue(column, record[column])}
-                </Text>
-              </View>
-            ))}
-            {renderActions ? (
-              <View style={styles.tableCell}>
-                <Text style={styles.tableCellText}>
-                  {renderActions(record)}
-                </Text>
-              </View>
-            ) : null}
-          </View>
+        </HeaderRow>
+        {view.records.map((record, row) => (
+          <DenimViewContext.Provider
+            value={{
+              row,
+              column: 0,
+              columnName: '',
+              schema,
+              record: null,
+            }}
+          >
+            <Row>
+              {schema.columns.map((column, index) => (
+                <DenimViewContext.Provider
+                  value={{
+                    row,
+                    column: index,
+                    columnName: column,
+                    schema,
+                    record,
+                  }}
+                >
+                  <Cell>{mapRecordValue(column, record[column])}</Cell>
+                </DenimViewContext.Provider>
+              ))}
+              {renderActions ? (
+                <DenimViewContext.Provider
+                  value={{
+                    row: -1,
+                    column: -1,
+                    columnName: 'view.actions',
+                    schema,
+                    record: null,
+                  }}
+                >
+                  <Cell>{renderActions(record)}</Cell>
+                </DenimViewContext.Provider>
+              ) : null}
+            </Row>
+          </DenimViewContext.Provider>
         ))}
-      </View>
+      </Table>
       {view.hasMore || view.retrieving ? (
-        <Button
-          title="Retrieve More"
+        <DenimButton
+          id="view.retrieve_more"
+          text={translation.translate('retrieve_more', 'Show More')}
           disabled={view.retrieving}
           onPress={view.retrieveMore}
         />
       ) : null}
-    </>
+    </DenimViewContext.Provider>
   );
 };
 

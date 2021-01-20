@@ -4,7 +4,11 @@ import { createConnectedFormProvider } from './denim/forms/providers/DenimConnec
 import AirTableSchemaSource from './denim/connectors/airtable/AirTableSchemaSource';
 import { DenimSchemaSource } from './denim/service';
 import DenimRemoteDataSource from './denim/service/DenimRemoteDataSource';
-import { DenimUserProvider, useDenimUser } from './denim/forms';
+import {
+  DenimFormProvider,
+  DenimUserProvider,
+  useDenimUser,
+} from './denim/forms';
 import DenimApplication from './denim/application';
 import { DenimFormSchema } from './denim/core';
 import LemonadeValidations from './validation';
@@ -17,6 +21,9 @@ import {
 } from 'react-native';
 import config from './config.json';
 import { useDenimNotifications } from './denim/forms/providers/DenimNotificationProvider';
+import LemonadeButton from './components/LemonadeButton';
+import { useDenimForm } from './denim/forms/providers/DenimFormProvider';
+import { LemonadeCell, LemonadeHeaderCell, LemonadeHeaderRow, LemonadeRow } from './components/LemonadeView';
 
 const schemaSource = new AirTableSchemaSource<{}>(
   require('./schema/airtable-schema.json'),
@@ -361,129 +368,145 @@ const connectedFormProvider = createConnectedFormProvider<
 >();
 
 const App = () => {
+  const form = useDenimForm();
   const user = useDenimUser();
 
   return (
-    <DenimApplication
-      router={{
-        screens: [
-          {
-            id: 'employees',
-            slug: '/',
-            type: 'view',
-            table: 'Employee',
-            form: 'employee',
-            filterColumns: [
-              'Employee ID',
-              'Last Name',
-              'First Name',
-              'Payroll ID',
-            ],
-            globalSearchColumns: [
-              'Employee ID',
-              'Last Name',
-              'First Name',
-              'Job Title',
-            ],
-            view: {
-              id: 'employee-view',
-              columns: [
+    <DenimFormProvider
+      componentRegistry={{
+        ...form.componentRegistry,
+        button: LemonadeButton,
+        viewHeaderRow: LemonadeHeaderRow,
+        viewHeaderCell: LemonadeHeaderCell,
+        viewRow: LemonadeRow,
+        viewCell: LemonadeCell,
+      }}
+    >
+      <DenimApplication
+        router={{
+          screens: [
+            {
+              id: 'employees',
+              slug: '/',
+              type: 'view',
+              table: 'Employee',
+              form: 'employee',
+              filterColumns: [
                 'Employee ID',
                 'Last Name',
                 'First Name',
-                'Full Name',
-                'Account Status',
+                'Payroll ID',
+              ],
+              globalSearchColumns: [
+                'Employee ID',
+                'Last Name',
+                'First Name',
                 'Job Title',
               ],
+              view: {
+                id: 'employee-view',
+                columns: [
+                  'Employee ID',
+                  'Last Name',
+                  'First Name',
+                  'Full Name',
+                  'Account Status',
+                  'Job Title',
+                ],
+              },
+              roles: ['hr'],
             },
-            roles: ['hr'],
-          },
-          {
-            id: 'employee-self',
-            slug: '/',
-            type: 'form',
-            table: 'Employee',
-            record: {
-              $user: 'id',
+            {
+              id: 'employee-self',
+              slug: '/',
+              type: 'form',
+              table: 'Employee',
+              record: {
+                $user: 'id',
+              },
+              form: employeeForm,
+              roles: ['employee'],
             },
-            form: employeeForm,
-            roles: ['employee'],
-          },
-          {
-            id: 'employee',
-            type: 'form',
-            table: 'Employee',
-            form: employeeForm,
-            roles: ['hr'],
-            preContent: () => {
-              const url = 'https://airtable.com/shrMs1b9PvJW0F6D0';
-              const notifications = useDenimNotifications();
+            {
+              id: 'employee',
+              type: 'form',
+              table: 'Employee',
+              form: employeeForm,
+              roles: ['hr'],
+              preContent: () => {
+                const url = 'https://airtable.com/shrMs1b9PvJW0F6D0';
+                const notifications = useDenimNotifications();
 
-              const copy = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
-                e.stopPropagation();
-                e.preventDefault();
+                const copy = (
+                  e: React.MouseEvent<HTMLAnchorElement, MouseEvent>,
+                ) => {
+                  e.stopPropagation();
+                  e.preventDefault();
 
-                copyToClipboard(url);
-                notifications.notify({
-                  type: 'success',
-                  message: 'Link copied to clipboard.',
-                  code: 1003,
-                });
-              };
+                  copyToClipboard(url);
+                  notifications.notify({
+                    type: 'success',
+                    message: 'Link copied to clipboard.',
+                    code: 1003,
+                  });
+                };
 
-              return (
-                <View style={{ padding: 12, paddingTop: 0, alignItems: 'center' }}>
-                  {Platform.OS === 'web' ? (
-                    <a href={url} target="_blank" onClick={copy}>
-                      Share this link for the Employee Information Form
-                    </a>
-                  ) : (
-                    <TouchableOpacity>
-                      <Text>
+                return (
+                  <View
+                    style={{ padding: 12, paddingTop: 0, alignItems: 'center' }}
+                  >
+                    {Platform.OS === 'web' ? (
+                      <a href={url} target="_blank" onClick={copy}>
                         Share this link for the Employee Information Form
-                      </Text>
-                    </TouchableOpacity>
-                  )}
-                </View>
-              );
+                      </a>
+                    ) : (
+                      <TouchableOpacity>
+                        <Text>
+                          Share this link for the Employee Information Form
+                        </Text>
+                      </TouchableOpacity>
+                    )}
+                  </View>
+                );
+              },
             },
+          ],
+        }}
+        menu={{
+          menuItems: [
+            {
+              screen: 'employees',
+              id: 'employees',
+              type: 'screen',
+              label: 'Employees',
+              roles: ['hr'],
+            },
+            {
+              screen: 'employee',
+              id: 'employee',
+              type: 'screen',
+              label: 'New Employee',
+              roles: ['hr'],
+            },
+            {
+              screen: 'employee-self',
+              id: 'employee-self',
+              type: 'screen',
+              label: 'My 201',
+              roles: ['employee'],
+            },
+          ],
+        }}
+        dataContext={{
+          headers: {
+            Authorization: 'Bearer ' + user.token,
           },
-        ],
-      }}
-      menu={{
-        menuItems: [
-          {
-            screen: 'employees',
-            id: 'employees',
-            type: 'screen',
-            label: 'Employees',
-            roles: ['hr'],
-          },
-          {
-            screen: 'employee',
-            id: 'employee',
-            type: 'screen',
-            label: 'New Employee',
-            roles: ['hr'],
-          },
-          {
-            screen: 'employee-self',
-            id: 'employee-self',
-            type: 'screen',
-            label: 'My 201',
-            roles: ['employee'],
-          },
-        ],
-      }}
-      dataContext={{
-        headers: {
-          Authorization: 'Bearer ' + user.token,
-        },
-      }}
-      formProvider={connectedFormProvider}
-      schemaSource={schemaSource}
-      dataSource={dataSource}
-    />
+        }}
+        formProvider={connectedFormProvider}
+        schemaSource={schemaSource}
+        dataSource={dataSource}
+      />
+    </DenimFormProvider>
   );
 };
 

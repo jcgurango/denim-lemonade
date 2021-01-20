@@ -40,6 +40,11 @@ type DenimComponentRegistry = {
   control: ComponentType<DenimFormControlProps>;
   controlContainer: ComponentType<DenimControlContainerProps>;
   button: ComponentType<DenimButtonProps>;
+  viewTable: ComponentType;
+  viewHeaderRow: ComponentType;
+  viewHeaderCell: ComponentType;
+  viewRow: ComponentType;
+  viewCell: ComponentType;
 }
 
 type DenimStyleOverrides = {

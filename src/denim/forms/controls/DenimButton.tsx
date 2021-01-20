@@ -4,6 +4,7 @@ import { Button } from 'react-native';
 export interface DenimButtonProps {
   text: string;
   type?: 'primary' | 'secondary' | 'danger';
+  id?: string;
   disabled?: boolean;
   onPress: () => void;
 }
