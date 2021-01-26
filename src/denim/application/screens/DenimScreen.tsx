@@ -152,15 +152,31 @@ const DenimScreen: FunctionComponent<DenimScreenProps> = ({
   const renderScreen = () => {
     if (schema.type === 'page') {
       return (
-        <View style={{ flexDirection: 'column' }}>
-          {schema.rows.map((row, r) => (
+        <View style={{ flexDirection: schema.flowDirection }}>
+          {schema.children.map((row, r) => (
             <View
-              style={{ flexDirection: 'row' }}
+              style={{
+                flexDirection:
+                  schema.flowDirection === 'row' ? 'column' : 'row',
+                flex: row.relativeWidth,
+                marginLeft:
+                  r > 0 && schema.flowDirection === 'row' ? 16 : undefined,
+                marginTop:
+                  r > 0 && schema.flowDirection === 'column' ? 16 : undefined,
+              }}
               key={`${schema.id}-row-${r}`}
             >
-              {row.columns.map((column) => (
+              {row.children.map((column, c) => (
                 <View
-                  style={{ flex: column.relativeWidth }}
+                  style={{
+                    flex: column.relativeWidth,
+                    marginLeft:
+                      c > 0 && schema.flowDirection === 'column'
+                        ? 16
+                        : undefined,
+                    marginTop:
+                      c > 0 && schema.flowDirection === 'row' ? 16 : undefined,
+                  }}
                   key={column.screen.id}
                 >
                   <DenimScreen

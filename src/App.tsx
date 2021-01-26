@@ -29,6 +29,7 @@ import {
   LemonadeHeaderRow,
   LemonadeRow,
 } from './components/LemonadeView';
+import { Link } from 'react-router-dom';
 
 const schemaSource = new AirTableSchemaSource<{}>(
   require('./schema/airtable-schema.json'),
@@ -394,9 +395,10 @@ const App = () => {
               id: 'employees',
               paths: ['/'],
               type: 'page',
-              rows: [
+              children: [
                 {
-                  columns: [
+                  relativeWidth: 1,
+                  children: [
                     {
                       relativeWidth: 1,
                       screen: {
@@ -439,7 +441,8 @@ const App = () => {
                   ],
                 },
                 {
-                  columns: [
+                  relativeWidth: 1,
+                  children: [
                     {
                       relativeWidth: 1,
                       screen: {
@@ -465,10 +468,10 @@ const App = () => {
                         actions: [
                           {
                             type: 'view',
-                            screen: 'employee'
+                            screen: 'employee',
                           },
                           {
-                            type: 'delete'
+                            type: 'delete',
                           },
                         ],
                       },
@@ -492,49 +495,170 @@ const App = () => {
             {
               id: 'employee',
               paths: ['/employee/:id', '/employee'],
-              type: 'form',
-              table: 'Employee',
-              record: {
-                $route: 'id',
-              },
-              form: employeeForm,
+              type: 'page',
               roles: ['hr'],
-              preContent: () => {
-                const url = 'https://airtable.com/shrMs1b9PvJW0F6D0';
-                const notifications = useDenimNotifications();
+              flowDirection: 'row',
+              children: [
+                {
+                  relativeWidth: 1,
+                  children: [
+                    {
+                      screen: {
+                        id: 'lemonade-logo',
+                        paths: [],
+                        type: 'content',
+                        content: (
+                          <Link to="/">
+                            <img
+                              src={require('./assets/images/logo.jpg').default}
+                              alt="Lemonade HR"
+                              style={{ width: '230px' }}
+                            />
+                          </Link>
+                        ),
+                      },
+                    },
+                    {
+                      screen: {
+                        id: 'employee-form',
+                        paths: ['/employee/:id', '/employee'],
+                        type: 'form',
+                        table: 'Employee',
+                        record: {
+                          $route: 'id',
+                        },
+                        form: {
+                          id: 'employee-mini-details',
+                          sections: [
+                            {
+                              id: 'mini-details',
+                              showLabel: false,
+                              rows: [
+                                {
+                                  id: 'Full Name',
+                                  controls: [
+                                    {
+                                      id: 'Full Name',
+                                      relativeWidth: 1,
+                                    },
+                                  ],
+                                },
+                                {
+                                  id: 'Job Title',
+                                  controls: [
+                                    {
+                                      id: 'Job Title',
+                                      relativeWidth: 1,
+                                    },
+                                  ],
+                                },
+                                {
+                                  id: 'Department',
+                                  controls: [
+                                    {
+                                      id: 'Department',
+                                      relativeWidth: 1,
+                                    },
+                                  ],
+                                },
+                                {
+                                  id: 'Entry Date',
+                                  controls: [
+                                    {
+                                      id: 'Entry Date',
+                                      relativeWidth: 1,
+                                    },
+                                  ],
+                                },
+                                {
+                                  id: 'Mobile Number',
+                                  controls: [
+                                    {
+                                      id: 'Mobile Number',
+                                      relativeWidth: 1,
+                                    },
+                                  ],
+                                },
+                                {
+                                  id: 'Email',
+                                  controls: [
+                                    {
+                                      id: 'Email',
+                                      relativeWidth: 1,
+                                    },
+                                  ],
+                                },
+                              ],
+                            },
+                          ],
+                        },
+                        roles: ['hr'],
+                      },
+                    },
+                  ],
+                },
+                {
+                  relativeWidth: 3,
+                  children: [
+                    {
+                      relativeWidth: 3,
+                      screen: {
+                        id: 'employee-form',
+                        paths: ['/employee/:id', '/employee'],
+                        type: 'form',
+                        table: 'Employee',
+                        record: {
+                          $route: 'id',
+                        },
+                        form: employeeForm,
+                        roles: ['hr'],
+                        preContent: () => {
+                          const url = 'https://airtable.com/shrMs1b9PvJW0F6D0';
+                          const notifications = useDenimNotifications();
 
-                const copy = (
-                  e: React.MouseEvent<HTMLAnchorElement, MouseEvent>,
-                ) => {
-                  e.stopPropagation();
-                  e.preventDefault();
+                          const copy = (
+                            e: React.MouseEvent<HTMLAnchorElement, MouseEvent>,
+                          ) => {
+                            e.stopPropagation();
+                            e.preventDefault();
 
-                  copyToClipboard(url);
-                  notifications.notify({
-                    type: 'success',
-                    message: 'Link copied to clipboard.',
-                    code: 1003,
-                  });
-                };
+                            copyToClipboard(url);
+                            notifications.notify({
+                              type: 'success',
+                              message: 'Link copied to clipboard.',
+                              code: 1003,
+                            });
+                          };
 
-                return (
-                  <View
-                    style={{ padding: 12, paddingTop: 0, alignItems: 'center' }}
-                  >
-                    {Platform.OS === 'web' ? (
-                      <a href={url} target="_blank" onClick={copy}>
-                        Share this link for the Employee Information Form
-                      </a>
-                    ) : (
-                      <TouchableOpacity>
-                        <Text>
-                          Share this link for the Employee Information Form
-                        </Text>
-                      </TouchableOpacity>
-                    )}
-                  </View>
-                );
-              },
+                          return (
+                            <View
+                              style={{
+                                padding: 12,
+                                paddingTop: 0,
+                                alignItems: 'center',
+                              }}
+                            >
+                              {Platform.OS === 'web' ? (
+                                <a href={url} target="_blank" onClick={copy}>
+                                  Share this link for the Employee Information
+                                  Form
+                                </a>
+                              ) : (
+                                <TouchableOpacity>
+                                  <Text>
+                                    Share this link for the Employee Information
+                                    Form
+                                  </Text>
+                                </TouchableOpacity>
+                              )}
+                            </View>
+                          );
+                        },
+                      },
+                    },
+                  ],
+                },
+              ],
             },
           ],
         }}

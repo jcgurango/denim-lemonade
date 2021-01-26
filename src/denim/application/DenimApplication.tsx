@@ -1,10 +1,6 @@
 import React, { FunctionComponent, Fragment } from 'react';
 import { DenimMenuSchema, DenimRouterSchema } from './types/router';
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-} from 'react-router-dom';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { ConnectedForm, useDenimUser } from '../forms';
 import { DenimDataSource, DenimSchemaSource } from '../service';
 import DenimApplicationNotifications from './DenimApplicationNotifications';
@@ -48,36 +44,32 @@ const DenimApplication: FunctionComponent<DenimApplicationProps> = ({
           }}
         >
           <Switch>
-            {router.screens.map((screen) => {
-              if (
+            {router.screens
+              .filter((screen) =>
                 user.roles.find(
                   (role) => !screen.roles || screen.roles.includes(role),
-                )
-              ) {
-                return (
-                  <Fragment key={screen.id}>
-                    {screen.paths.map((path) => (
-                      <Route
-                        key={path}
+                ),
+              )
+              .map((screen) => {
+                return screen.paths.map((path) => (
+                  <Route
+                    key={path}
+                    path={path}
+                    render={() => (
+                      <DenimScreen
+                        formProvider={formProvider}
+                        schemaSource={schemaSource}
+                        dataSource={dataSource}
+                        dataContext={dataContext}
+                        schema={screen}
                         path={path}
-                        render={() => (
-                          <DenimScreen
-                            formProvider={formProvider}
-                            schemaSource={schemaSource}
-                            dataSource={dataSource}
-                            dataContext={dataContext}
-                            schema={screen}
-                            path={path}
-                            routerSchema={router}
-                          />
-                        )}
-                        exact
+                        routerSchema={router}
                       />
-                    ))}
-                  </Fragment>
-                );
-              }
-            })}
+                    )}
+                    exact
+                  />
+                ));
+              })}
           </Switch>
         </main>
       </DenimApplicationNotifications>

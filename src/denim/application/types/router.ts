@@ -82,16 +82,18 @@ export interface DenimViewRecordPathActionSchema extends DenimViewActionSchemaTy
 }
 
 export interface DenimPageScreenColumn {
-  relativeWidth: number;
+  relativeWidth?: number;
   screen: DenimRouterScreenSchema;
 }
 
 export interface DenimPageScreenRow {
-  columns: DenimPageScreenColumn[];
+  relativeWidth?: number;
+  children: DenimPageScreenColumn[];
 }
 
 export interface DenimPageScreenSchema extends DenimScreenSchema<'page'> {
-  rows: DenimPageScreenRow[];
+  flowDirection?: 'row' | 'column';
+  children: DenimPageScreenRow[];
 }
 
 export interface DenimContentScreenSchema extends DenimScreenSchema<'content'> {
