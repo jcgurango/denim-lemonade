@@ -23,7 +23,12 @@ import config from './config.json';
 import { useDenimNotifications } from './denim/forms/providers/DenimNotificationProvider';
 import LemonadeButton from './components/LemonadeButton';
 import { useDenimForm } from './denim/forms/providers/DenimFormProvider';
-import { LemonadeCell, LemonadeHeaderCell, LemonadeHeaderRow, LemonadeRow } from './components/LemonadeView';
+import {
+  LemonadeCell,
+  LemonadeHeaderCell,
+  LemonadeHeaderRow,
+  LemonadeRow,
+} from './components/LemonadeView';
 
 const schemaSource = new AirTableSchemaSource<{}>(
   require('./schema/airtable-schema.json'),
@@ -387,38 +392,95 @@ const App = () => {
           screens: [
             {
               id: 'employees',
-              slug: '/',
-              type: 'view',
-              table: 'Employee',
-              form: 'employee',
-              filterColumns: [
-                'Employee ID',
-                'Last Name',
-                'First Name',
-                'Payroll ID',
+              paths: ['/'],
+              type: 'page',
+              rows: [
+                {
+                  columns: [
+                    {
+                      relativeWidth: 1,
+                      screen: {
+                        id: 'lemonade-logo',
+                        paths: [],
+                        type: 'content',
+                        content: (
+                          <img
+                            src={require('./assets/images/logo.jpg').default}
+                            alt="Lemonade HR"
+                            style={{ width: '230px' }}
+                          />
+                        ),
+                      },
+                    },
+                    {
+                      relativeWidth: 1,
+                      screen: {
+                        id: 'employee-filter',
+                        paths: [],
+                        table: 'Employee',
+                        type: 'filter',
+                        filterColumns: [
+                          'Employee ID',
+                          'Last Name',
+                          'First Name',
+                          'Payroll ID',
+                        ],
+                        globalSearchColumns: [
+                          'Employee ID',
+                          'Last Name',
+                          'First Name',
+                          'Job Title',
+                        ],
+                        filter: {
+                          $screen: 'filter',
+                        },
+                      },
+                    },
+                  ],
+                },
+                {
+                  columns: [
+                    {
+                      relativeWidth: 1,
+                      screen: {
+                        id: 'employee-list',
+                        paths: [],
+                        type: 'view',
+                        table: 'Employee',
+                        form: 'employee',
+                        view: {
+                          id: 'employee-view',
+                          columns: [
+                            'Employee ID',
+                            'Last Name',
+                            'First Name',
+                            'Full Name',
+                            'Account Status',
+                            'Job Title',
+                          ],
+                        },
+                        filter: {
+                          $screen: 'filter',
+                        },
+                        actions: [
+                          {
+                            type: 'view',
+                            screen: 'employee'
+                          },
+                          {
+                            type: 'delete'
+                          },
+                        ],
+                      },
+                    },
+                  ],
+                },
               ],
-              globalSearchColumns: [
-                'Employee ID',
-                'Last Name',
-                'First Name',
-                'Job Title',
-              ],
-              view: {
-                id: 'employee-view',
-                columns: [
-                  'Employee ID',
-                  'Last Name',
-                  'First Name',
-                  'Full Name',
-                  'Account Status',
-                  'Job Title',
-                ],
-              },
               roles: ['hr'],
             },
             {
               id: 'employee-self',
-              slug: '/',
+              paths: ['/'],
               type: 'form',
               table: 'Employee',
               record: {
@@ -429,8 +491,12 @@ const App = () => {
             },
             {
               id: 'employee',
+              paths: ['/employee/:id', '/employee'],
               type: 'form',
               table: 'Employee',
+              record: {
+                $route: 'id',
+              },
               form: employeeForm,
               roles: ['hr'],
               preContent: () => {

@@ -127,7 +127,6 @@ export class DenimRemoteTableProvider<
   async deleteRecord(context: T, id: string): Promise<void> {
     await this.wrapRequest(async () => {
       await bent(
-        'json',
         'DELETE',
         context.headers || {},
       )(this.tableEndpoint + '/' + id);

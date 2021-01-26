@@ -1,18 +1,15 @@
-import React, { ComponentType, FunctionComponent, useMemo } from 'react';
+import React, { FunctionComponent, Fragment } from 'react';
 import { DenimMenuSchema, DenimRouterSchema } from './types/router';
 import {
   BrowserRouter as Router,
   Switch,
   Route,
-  Link,
-  useParams,
-  useHistory,
 } from 'react-router-dom';
-import { DenimForm, ConnectedForm, useDenimUser } from '../forms';
+import { ConnectedForm, useDenimUser } from '../forms';
 import { DenimDataSource, DenimSchemaSource } from '../service';
-import { DenimRecord } from '../core';
 import DenimApplicationNotifications from './DenimApplicationNotifications';
 import { StyleSheet, View } from 'react-native';
+import DenimScreen from './screens/DenimScreen';
 
 interface DenimApplicationProps {
   router: DenimRouterSchema;
@@ -36,161 +33,10 @@ const DenimApplication: FunctionComponent<DenimApplicationProps> = ({
 }) => {
   const user = useDenimUser();
 
-  // Create components for each provided screen.
-  const screens = useMemo(() => {
-    // key = ID of the screen.
-    // paths = what paths to be bound for the screen.
-    // linkPath = main link path for the screen if it appears in a menu.
-    // Component = the component to be rendered for the screen.
-    const screens: {
-      [key: string]: {
-        paths: string[];
-        linkPath: string;
-        Component: ComponentType;
-      };
-    } = {};
-
-    router.screens.forEach((screen) => {
-      if (
-        user.roles.find((role) => !screen.roles || screen.roles.includes(role))
-      ) {
-        // Form screens
-        if (screen.type === 'form') {
-          screens[screen.id] = {
-            paths: [
-              screen.slug || '/' + screen.id,
-              (screen.slug || '/' + screen.id) + '/:id',
-            ],
-            linkPath: screen.slug || '/' + screen.id,
-            Component: () => {
-              const PreComponent = screen.preContent || (() => null);
-              const PostComponent = screen.postContent || (() => null);
-              const user = useDenimUser();
-              const history = useHistory();
-              const { id } = useParams<{ id?: string }>();
-
-              if (screen.table) {
-                const { Provider, Form } = formProvider;
-                let recordId: any = screen.record;
-
-                if (
-                  typeof recordId !== 'string' &&
-                  typeof recordId !== 'undefined'
-                ) {
-                  recordId = user.user ? user.user[recordId.$user] : null;
-                }
-
-                return (
-                  <Provider
-                    schemaSource={schemaSource}
-                    dataSource={dataSource}
-                    context={dataContext}
-                  >
-                    <PreComponent />
-                    <Form
-                      table={screen.table}
-                      record={recordId || id || ''}
-                      schema={screen.form}
-                      onSave={(record) => {
-                        if (record.id) {
-                          const newPath =
-                            (screen.slug || '/' + screen.id) + '/' + record.id;
-
-                          if (history.location.pathname !== newPath) {
-                            history.push(newPath);
-                          }
-                        }
-                      }}
-                    />
-                    <PostComponent />
-                  </Provider>
-                );
-              }
-
-              return <DenimForm schema={screen.form} />;
-            },
-          };
-        }
-
-        // View screens
-        if (screen.type === 'view') {
-          screens[screen.id] = {
-            paths: [screen.slug || '/' + screen.id],
-            linkPath: screen.slug || '/' + screen.id,
-            Component: () => {
-              const PreComponent = screen.preContent || (() => null);
-              const PostComponent = screen.postContent || (() => null);
-              const { Provider, View } = formProvider;
-
-              return (
-                <Provider
-                  schemaSource={schemaSource}
-                  dataSource={dataSource}
-                  context={dataContext}
-                >
-                  <PreComponent />
-                  <View
-                    schema={screen.view}
-                    table={screen.table}
-                    filterColumns={screen.filterColumns}
-                    globalSearchColumns={screen.globalSearchColumns}
-                    renderActions={
-                      screen.form
-                        ? (record: DenimRecord) => {
-                            if (screen.form) {
-                              return (
-                                <Link
-                                  to={
-                                    screens[screen.form].linkPath +
-                                    '/' +
-                                    record.id
-                                  }
-                                >
-                                  View
-                                </Link>
-                              );
-                            }
-
-                            return <></>;
-                          }
-                        : undefined
-                    }
-                  />
-                  <PostComponent />
-                </Provider>
-              );
-            },
-          };
-        }
-      }
-    });
-
-    return screens;
-  }, [router.screens, user]);
-
   // Render a react-router for the screens.
   return (
     <Router>
       <DenimApplicationNotifications>
-        <View style={styles.menuHeader}>
-          {menu.menuItems.map((item) => {
-            if (
-              user.roles.find(
-                (role) => !item.roles || item.roles.includes(role),
-              )
-            ) {
-              if (item.type === 'screen') {
-                return (
-                  <Link key={item.id} to={screens[item.screen].linkPath}>
-                    {item.label}
-                  </Link>
-                );
-              }
-            }
-
-            return null;
-          })}
-        </View>
         <main
           style={{
             padding: '16px',
@@ -202,17 +48,35 @@ const DenimApplication: FunctionComponent<DenimApplicationProps> = ({
           }}
         >
           <Switch>
-            {Object.keys(screens).map((id) => {
-              const screen = screens[id];
-
-              return screen.paths.map((path) => (
-                <Route
-                  key={`${id}-${path}`}
-                  path={path}
-                  component={screen.Component}
-                  exact
-                />
-              ));
+            {router.screens.map((screen) => {
+              if (
+                user.roles.find(
+                  (role) => !screen.roles || screen.roles.includes(role),
+                )
+              ) {
+                return (
+                  <Fragment key={screen.id}>
+                    {screen.paths.map((path) => (
+                      <Route
+                        key={path}
+                        path={path}
+                        render={() => (
+                          <DenimScreen
+                            formProvider={formProvider}
+                            schemaSource={schemaSource}
+                            dataSource={dataSource}
+                            dataContext={dataContext}
+                            schema={screen}
+                            path={path}
+                            routerSchema={router}
+                          />
+                        )}
+                        exact
+                      />
+                    ))}
+                  </Fragment>
+                );
+              }
             })}
           </Switch>
         </main>

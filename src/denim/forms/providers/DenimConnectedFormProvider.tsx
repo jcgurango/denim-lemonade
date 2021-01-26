@@ -1,5 +1,6 @@
 import { transformAll } from '@demvsystems/yup-ast';
 import React, {
+  ComponentType,
   createContext,
   FunctionComponent,
   ReactElement,
@@ -41,6 +42,14 @@ import DenimLookupDataProvider from './DenimLookupDataProvider';
 import { useDenimNotifications } from './DenimNotificationProvider';
 import DenimViewDataProvider from './DenimViewDataProvider';
 
+interface FilterProps {
+  table: string;
+  filterColumns: string[];
+  globalSearchColumns?: string[];
+  query: DenimQueryConditionGroup;
+  onQueryChange: (query?: DenimQueryConditionGroup) => void;
+}
+
 interface DenimConnectedDataProviderProps<
   T extends DenimDataContext,
   S extends DenimSchemaSource<T>
@@ -81,17 +90,18 @@ export interface ConnectedForm<
   T extends DenimDataContext,
   S extends DenimSchemaSource<T>
 > {
-  Provider: FunctionComponent<DenimConnectedDataProviderProps<T, S>>;
-  Form: FunctionComponent<
-    DenimFormProps & ConnectedFormProps & AsynchronousProps
-  >;
-  View: FunctionComponent<
+  Provider: ComponentType<DenimConnectedDataProviderProps<T, S>>;
+  Form: ComponentType<DenimFormProps & ConnectedFormProps & AsynchronousProps>;
+  View: ComponentType<
     DenimViewProps & {
       table: string;
-      filterColumns: string[];
-      globalSearchColumns?: string[];
+      query?: DenimQueryConditionGroup;
+      renderActions?: (record: DenimRecord) => any;
+      extraData?: any;
     }
   >;
+  Filter: ComponentType<FilterProps>;
+  Context: React.Context<DenimConnectedDataContext<T>>;
 }
 
 /**
@@ -311,13 +321,164 @@ export const createConnectedFormProvider = <
     );
   };
 
+  const Filter: FunctionComponent<FilterProps> = ({
+    table,
+    filterColumns,
+    globalSearchColumns,
+    query,
+    onQueryChange,
+  }) => {
+    const context = useContext(Context);
+    const tableSchema = useMemo(() => context.getTableSchema(table), [
+      context.getTableSchema,
+      table,
+    ]);
+    const [globalSearch, setGlobalSearch] = useState(
+      Boolean(globalSearchColumns?.length),
+    );
+    const [globalSearchText, setGlobalSearchText] = useState('');
+    const [
+      pendingQuery,
+      setPendingQuery,
+    ] = useState<DenimQueryConditionGroup>();
+    const applyQuery = useCallback(() => {
+      onQueryChange(pendingQuery);
+    }, [pendingQuery]);
+
+    useEffect(() => {
+      if (globalSearch) {
+        const timeout = setTimeout(() => {
+          if (globalSearchText) {
+            onQueryChange({
+              conditionType: 'group',
+              type: 'OR',
+              conditions:
+                globalSearchColumns?.map((column) => ({
+                  conditionType: 'single',
+                  field: column,
+                  operator: DenimQueryOperator.Contains,
+                  value: globalSearchText,
+                })) || [],
+            });
+          } else {
+            onQueryChange(undefined);
+          }
+        }, 200);
+
+        return () => {
+          clearTimeout(timeout);
+        };
+      }
+    }, [globalSearchText, globalSearch]);
+
+    if (!tableSchema) {
+      return null;
+    }
+
+    return (
+      <>
+        {globalSearch ? (
+          <DenimFormProvider
+            setValue={() => setGlobalSearchText}
+            getValue={() => globalSearchText}
+          >
+            <DenimForm
+              schema={{
+                id: `${table}-global-search`,
+                sections: [
+                  {
+                    id: 'search',
+                    showLabel: false,
+                    rows: [
+                      {
+                        id: 'search-row-first',
+                        controls: [
+                          {
+                            id: 'search-text',
+                            relativeWidth: 1,
+                            type: DenimFormControlType.TextInput,
+                            hideLabel: true,
+                            controlProps: {
+                              placeholder: 'Type here to search...',
+                            },
+                          },
+                        ],
+                      },
+                    ],
+                  },
+                ],
+              }}
+            />
+          </DenimFormProvider>
+        ) : (
+          <DenimFilterControl
+            value={pendingQuery}
+            onChange={setPendingQuery}
+            onApply={applyQuery}
+            columns={tableSchema.columns.filter(({ name }) =>
+              filterColumns.includes(name),
+            )}
+            fieldControls={tableSchema.columns
+              .filter(({ name }) => filterColumns.includes(name))
+              .reduce((previous, column) => {
+                let transformedColumn: any = column;
+
+                // Convert any multiple values into single values.
+                if (transformedColumn.type === DenimColumnType.ForeignKey) {
+                  transformedColumn = {
+                    ...column,
+                    properties: {
+                      ...column.properties,
+                      multiple: false,
+                    },
+                  };
+                }
+
+                if (transformedColumn.type === DenimColumnType.MultiSelect) {
+                  transformedColumn = {
+                    ...column,
+                    type: DenimColumnType.Select,
+                  };
+                }
+
+                return {
+                  ...previous,
+                  [column.name]: context.getControlFor(
+                    tableSchema,
+                    transformedColumn,
+                    {
+                      id: column.name,
+                      relativeWidth: 1,
+                    },
+                  ),
+                };
+              }, {})}
+          />
+        )}
+        <div style={{ textAlign: 'right', fontSize: 12 }}>
+          <a
+            href="/"
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              setGlobalSearch((s) => !s);
+            }}
+          >
+            Switch to {globalSearch ? 'Advanced Search' : 'Simple Search'}
+          </a>
+        </div>
+      </>
+    );
+  };
+
   const View: FunctionComponent<
     DenimViewProps & {
       table: string;
-      filterColumns: string[];
-      globalSearchColumns?: string[];
+      query?: DenimQueryConditionGroup;
+      renderActions?: (record: DenimRecord) => any;
+      extraData?: any;
     }
-  > = ({ table, globalSearchColumns, filterColumns, ...props }) => {
+  > = ({ table, query, extraData, ...props }) => {
     const context = useContext(Context);
     const dataProvider = useMemo(() => context.getDataProviderFor(table), [
       context,
@@ -350,19 +511,10 @@ export const createConnectedFormProvider = <
     const [hasMore, setHasMore] = useState(true);
     const [retrieving, setRetrieving] = useState(false);
     const [page, setPage] = useState(1);
-    const [
-      pendingQuery,
-      setPendingQuery,
-    ] = useState<DenimQueryConditionGroup>();
-    const [query, setQuery] = useState<DenimQueryConditionGroup>();
     const lookup = useMemo(() => context.getLookupProviderFor(table), [
       context,
       table,
     ]);
-    const [globalSearch, setGlobalSearch] = useState(
-      Boolean(globalSearchColumns?.length),
-    );
-    const [globalSearchText, setGlobalSearchText] = useState('');
     const notifications = useDenimNotifications();
 
     const retrieveMore = async () => {
@@ -394,41 +546,11 @@ export const createConnectedFormProvider = <
       }
     };
 
-    const applyQuery = useCallback(() => {
-      setQuery(pendingQuery);
-    }, [pendingQuery]);
-
-    useEffect(() => {
-      if (globalSearchText && globalSearch) {
-        const timeout = setTimeout(() => {
-          if (globalSearchText) {
-            setQuery({
-              conditionType: 'group',
-              type: 'OR',
-              conditions:
-                globalSearchColumns?.map((column) => ({
-                  conditionType: 'single',
-                  field: column,
-                  operator: DenimQueryOperator.Contains,
-                  value: globalSearchText,
-                })) || [],
-            });
-          } else {
-            setQuery(undefined);
-          }
-        }, 200);
-
-        return () => {
-          clearTimeout(timeout);
-        };
-      }
-    }, [globalSearchText, globalSearch]);
-
     useEffect(() => {
       setRecords([]);
       retrieveMore();
       setPage(1);
-    }, [query]);
+    }, [query, extraData]);
 
     if (!dataProvider || !tableSchema) {
       throw new Error('No table ' + table);
@@ -443,96 +565,6 @@ export const createConnectedFormProvider = <
         retrieveMore={retrieveMore}
       >
         <DenimLookupDataProvider lookup={lookup}>
-          {globalSearch ? (
-            <DenimFormProvider
-              setValue={() => setGlobalSearchText}
-              getValue={() => globalSearchText}
-            >
-              <DenimForm
-                schema={{
-                  id: `${table}-global-search`,
-                  sections: [
-                    {
-                      id: 'search',
-                      showLabel: false,
-                      rows: [
-                        {
-                          id: 'search-row-first',
-                          controls: [
-                            {
-                              id: 'search-text',
-                              relativeWidth: 1,
-                              type: DenimFormControlType.TextInput,
-                              hideLabel: true,
-                              controlProps: {
-                                placeholder: 'Type here to search...',
-                              },
-                            },
-                          ],
-                        },
-                      ],
-                    },
-                  ],
-                }}
-              />
-            </DenimFormProvider>
-          ) : (
-            <DenimFilterControl
-              value={pendingQuery}
-              onChange={setPendingQuery}
-              onApply={applyQuery}
-              columns={tableSchema.columns.filter(({ name }) =>
-                filterColumns.includes(name),
-              )}
-              fieldControls={tableSchema.columns
-                .filter(({ name }) => filterColumns.includes(name))
-                .reduce((previous, column) => {
-                  let transformedColumn: any = column;
-
-                  // Convert any multiple values into single values.
-                  if (transformedColumn.type === DenimColumnType.ForeignKey) {
-                    transformedColumn = {
-                      ...column,
-                      properties: {
-                        ...column.properties,
-                        multiple: false,
-                      },
-                    };
-                  }
-
-                  if (transformedColumn.type === DenimColumnType.MultiSelect) {
-                    transformedColumn = {
-                      ...column,
-                      type: DenimColumnType.Select,
-                    };
-                  }
-
-                  return {
-                    ...previous,
-                    [column.name]: context.getControlFor(
-                      tableSchema,
-                      transformedColumn,
-                      {
-                        id: column.name,
-                        relativeWidth: 1,
-                      },
-                    ),
-                  };
-                }, {})}
-            />
-          )}
-          <div style={{ textAlign: 'right', fontSize: 12 }}>
-            <a
-              href="/"
-              onClick={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                setGlobalSearch((s) => !s);
-              }}
-            >
-              Switch to {globalSearch ? 'Advanced Search' : 'Simple Search'}
-            </a>
-          </div>
           <DenimView {...props} />
         </DenimLookupDataProvider>
       </DenimViewDataProvider>
@@ -769,5 +801,7 @@ export const createConnectedFormProvider = <
     Provider,
     Form,
     View,
+    Filter,
+    Context,
   };
 };

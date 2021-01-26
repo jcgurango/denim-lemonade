@@ -43,6 +43,9 @@ export const DenimViewCell: FunctionComponent = ({ children }) => {
   );
 };
 
+export const DenimViewActionsCell: FunctionComponent = ({ children }) => {
+  return <View style={styles.tableCell}>{children}</View>;
+};
 const DenimViewContext = createContext<{
   row: number;
   column: number;
@@ -177,17 +180,9 @@ const DenimView: FunctionComponent<DenimViewProps> = ({
                 </DenimViewContext.Provider>
               ))}
               {renderActions ? (
-                <DenimViewContext.Provider
-                  value={{
-                    row: -1,
-                    column: -1,
-                    columnName: 'view.actions',
-                    schema,
-                    record: null,
-                  }}
-                >
-                  <Cell>{renderActions(record)}</Cell>
-                </DenimViewContext.Provider>
+                <DenimViewActionsCell>
+                  {renderActions(record)}
+                </DenimViewActionsCell>
               ) : null}
             </Row>
           </DenimViewContext.Provider>
@@ -234,5 +229,6 @@ const styles = StyleSheet.create({
   },
   tableCellText: {
     textAlign: 'center',
+    flex: 1,
   },
 });

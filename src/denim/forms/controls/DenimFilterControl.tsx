@@ -290,7 +290,7 @@ const DenimFilterControl: FunctionComponent<DenimFilterControlProps> = ({
                 />
               ) : (
                 <DenimButton
-                  text="Apply Filters / Refresh"
+                  text="Apply Filters"
                   onPress={() => onApply()}
                 />
               )}
