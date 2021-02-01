@@ -156,20 +156,19 @@ export default class AirTableDataProvider<
     }
 
     if (condition.conditionType === 'single') {
-      let left = condition.field === 'id' ? 'RECORD_ID()' : `{${condition.field}}`;
+      let left =
+        condition.field === 'id' ? 'RECORD_ID()' : `{${condition.field}}`;
       let right = `'${condition.value}'`;
-      const column = this.tableSchema.columns.find(({ name }) => name === condition.field);
+      const column = this.tableSchema.columns.find(
+        ({ name }) => name === condition.field,
+      );
 
       if (column && column.type === DenimColumnType.Text) {
         left = 'LOWER(' + left + ')';
         right = 'LOWER(' + right + ')';
       }
 
-      return `${this.operatorToFormula(
-        condition.operator,
-        left,
-        right,
-      )}`;
+      return `${this.operatorToFormula(condition.operator, left, right)}`;
     }
 
     return `1 = 1`;
@@ -210,6 +209,22 @@ export default class AirTableDataProvider<
         params.fields = [this.tableSchema.nameField];
       } else {
         params.view = query?.view || this.tableSchema.defaultView;
+      }
+    }
+
+    if (query?.sort) {
+      if (Array.isArray(query.sort)) {
+        params.sort = query.sort.map((sort) => ({
+          field: sort.column,
+          direction: sort.ascending ? 'asc' : 'desc',
+        }));
+      } else {
+        params.sort = [
+          {
+            field: query.sort.column,
+            direction: query.sort.ascending ? 'asc' : 'desc',
+          },
+        ];
       }
     }
 

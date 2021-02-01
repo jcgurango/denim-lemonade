@@ -4,7 +4,7 @@ import React, {
   ReactChild,
   useContext,
 } from 'react';
-import { Button, StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { DenimColumnType, DenimRecord, DenimViewSchema } from '../core';
 import { useDenimForm } from './providers/DenimFormProvider';
 import { useDenimViewData } from './providers/DenimViewDataProvider';
@@ -15,6 +15,12 @@ export interface DenimViewProps {
   renderActions?: (record: DenimRecord) => ReactChild;
 }
 
+export interface DenimViewHeaderCellProps {
+  sortDirection?: 'ascending' | 'descending';
+  onSort?: (ascending: boolean) => void;
+  onClearSort?: () => void;
+}
+
 export const DenimViewTableContainer: FunctionComponent = ({ children }) => {
   return <View style={styles.table}>{children}</View>;
 };
@@ -23,11 +29,27 @@ export const DenimViewHeaderRow: FunctionComponent = ({ children }) => {
   return <View style={styles.tableHeaderRow}>{children}</View>;
 };
 
-export const DenimViewHeaderCell: FunctionComponent = ({ children }) => {
+export const DenimViewHeaderCell: FunctionComponent<DenimViewHeaderCellProps> = ({
+  children,
+  sortDirection,
+  onSort = () => {},
+  onClearSort = () => {},
+}) => {
   return (
-    <View style={styles.tableHeaderCell}>
+    <TouchableOpacity
+      style={styles.tableHeaderCell}
+      onPress={() => {
+        if (sortDirection === 'ascending') {
+          onSort(false);
+        } else if (sortDirection === 'descending') {
+          onClearSort();
+        } else {
+          onSort(true);
+        }
+      }}
+    >
       <Text style={styles.tableHeaderCellText}>{children}</Text>
-    </View>
+    </TouchableOpacity>
   );
 };
 
@@ -46,6 +68,7 @@ export const DenimViewCell: FunctionComponent = ({ children }) => {
 export const DenimViewActionsCell: FunctionComponent = ({ children }) => {
   return <View style={styles.tableCell}>{children}</View>;
 };
+
 const DenimViewContext = createContext<{
   row: number;
   column: number;
@@ -138,7 +161,20 @@ const DenimView: FunctionComponent<DenimViewProps> = ({
                 record: null,
               }}
             >
-              <HeaderCell>{getColumnLabel(column)}</HeaderCell>
+              <HeaderCell
+                sortDirection={(view.sort && view.sort.column === column) ? (view.sort.ascending ? 'ascending' : 'descending') : undefined}
+                onSort={(ascending) => {
+                  view.setSort({
+                    column,
+                    ascending,
+                  })
+                }}
+                onClearSort={() => {
+                  view.setSort();
+                }}
+              >
+                {getColumnLabel(column)}
+              </HeaderCell>
             </DenimViewContext.Provider>
           ))}
           {renderActions ? (

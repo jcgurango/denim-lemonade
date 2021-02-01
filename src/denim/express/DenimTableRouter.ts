@@ -48,6 +48,13 @@ const DenimTableRouter = <T extends DenimDataContext, S extends DenimSchemaSourc
       query.conditions = req.body;
     }
 
+    if (req.query.sort) {
+      query.sort = {
+        column: String(req.query.sort),
+        ascending: Boolean(req.query.ascending),
+      };
+    }
+
     try {
       const record = await dataProvider.retrieveRecords(context, query);
       return res.json(record);

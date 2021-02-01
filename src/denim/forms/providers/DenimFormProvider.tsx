@@ -8,6 +8,7 @@ import { DenimControlContainerProps } from '../controls/DenimControlContainer';
 import { ValidationError } from 'yup';
 import { DefaultDenimFormContext } from './DefaultDenimFormContext';
 import { DenimButtonProps } from '../controls/DenimButton';
+import { DenimViewHeaderCellProps } from '../DenimView';
 
 export interface DenimControlProps {
   value: any;
@@ -42,7 +43,7 @@ type DenimComponentRegistry = {
   button: ComponentType<DenimButtonProps>;
   viewTable: ComponentType;
   viewHeaderRow: ComponentType;
-  viewHeaderCell: ComponentType;
+  viewHeaderCell: ComponentType<DenimViewHeaderCellProps>;
   viewRow: ComponentType;
   viewCell: ComponentType;
 }

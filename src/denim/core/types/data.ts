@@ -10,10 +10,16 @@ export interface DenimPlainQuery {
   pageSize?: number;
   view?: 'related' | string;
   retrieveAll?: boolean;
+  sort?: DenimSortExpression | DenimSortExpression[];
 }
 
 export interface DenimQuery extends DenimPlainQuery {
   expand?: Expansion;
+}
+
+export interface DenimSortExpression {
+  column: string;
+  ascending?: boolean;
 }
 
 export type DenimQueryConditionOrGroup = DenimQueryCondition | DenimQueryConditionGroup;

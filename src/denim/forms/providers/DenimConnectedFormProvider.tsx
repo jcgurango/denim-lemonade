@@ -26,6 +26,7 @@ import {
   DenimQueryOperator,
   DenimRecord,
   DenimRelatedRecord,
+  DenimSortExpression,
   DenimTable,
   Expansion,
 } from '../../core';
@@ -508,6 +509,7 @@ export const createConnectedFormProvider = <
       return [];
     }, [tableSchema]);
     const [records, setRecords] = useState<DenimRecord[]>([]);
+    const [sort, setSort] = useState<DenimSortExpression>();
     const [hasMore, setHasMore] = useState(true);
     const [retrieving, setRetrieving] = useState(false);
     const [page, setPage] = useState(1);
@@ -528,6 +530,7 @@ export const createConnectedFormProvider = <
             page,
             expand,
             conditions: query,
+            sort,
           });
 
           setRecords((r) => r.concat(records));
@@ -550,7 +553,7 @@ export const createConnectedFormProvider = <
       setRecords([]);
       retrieveMore();
       setPage(1);
-    }, [query, extraData]);
+    }, [query, extraData, sort]);
 
     if (!dataProvider || !tableSchema) {
       throw new Error('No table ' + table);
@@ -563,6 +566,8 @@ export const createConnectedFormProvider = <
         hasMore={hasMore}
         retrieving={retrieving}
         retrieveMore={retrieveMore}
+        setSort={setSort}
+        sort={sort}
       >
         <DenimLookupDataProvider lookup={lookup}>
           <DenimView {...props} />

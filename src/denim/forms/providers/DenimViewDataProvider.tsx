@@ -1,5 +1,5 @@
 import React, { createContext, FunctionComponent, useContext } from 'react';
-import { DenimRecord, DenimTable } from '../../core';
+import { DenimRecord, DenimSortExpression, DenimTable } from '../../core';
 
 export interface DenimViewDataContextProps {
   schema: DenimTable;
@@ -7,6 +7,8 @@ export interface DenimViewDataContextProps {
   hasMore: boolean;
   retrieving: boolean;
   retrieveMore: () => Promise<void>;
+  sort?: DenimSortExpression;
+  setSort: (sort?: DenimSortExpression) => void;
 }
 
 const DenimViewDataContext = createContext<DenimViewDataContextProps>({
@@ -21,6 +23,7 @@ const DenimViewDataContext = createContext<DenimViewDataContextProps>({
   hasMore: false,
   retrieving: false,
   retrieveMore: async () => {},
+  setSort: () => {},
 });
 
 export const useDenimViewData = () => useContext(DenimViewDataContext);

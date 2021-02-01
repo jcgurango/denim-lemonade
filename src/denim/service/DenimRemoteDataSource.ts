@@ -87,6 +87,8 @@ export class DenimRemoteTableProvider<
                 page_size: query.pageSize ? query.pageSize : undefined,
                 page: query.page ? query.page : undefined,
                 all: query.retrieveAll ? query.retrieveAll : undefined,
+                sort: query.sort && !Array.isArray(query.sort) && query.sort.column,
+                ascending: (query.sort && !Array.isArray(query.sort) && query.sort.ascending) ? 'Y' : '',
               }),
             query.conditions,
           )

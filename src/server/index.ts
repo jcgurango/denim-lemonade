@@ -194,6 +194,7 @@ app.use('/auth/me', cors(), authMiddleware, (req, res) => {
 });
 
 app.use('/data', cors(), authMiddleware, dataRouter);
+app.use('/data-us', cors(), DenimDataSourceRouter(data));
 
 app.use('/auth', cors(), larkAuth.loginEndpoint());
 
