@@ -199,6 +199,16 @@ const DenimScreen: FunctionComponent<DenimScreenProps> = ({
     }
 
     if (schema.type === 'content') {
+      if (typeof schema.content === 'function') {
+        const Element = schema.content;
+
+        return (
+          <View style={{ flex: 1 }}>
+            <Element state={state} onStateChange={setState} />
+          </View>
+        );
+      }
+
       return schema.content;
     }
 

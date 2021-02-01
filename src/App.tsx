@@ -497,122 +497,17 @@ const App = () => {
               paths: ['/employee/:id', '/employee'],
               type: 'page',
               roles: ['hr'],
-              flowDirection: 'row',
+              flowDirection: 'column',
               children: [
                 {
-                  relativeWidth: 1,
                   children: [
                     {
+                      relativeWidth: 1,
                       screen: {
-                        id: 'lemonade-logo',
+                        id: 'copy-click',
                         paths: [],
                         type: 'content',
-                        content: (
-                          <Link to="/">
-                            <img
-                              src={require('./assets/images/logo.jpg').default}
-                              alt="Lemonade HR"
-                              style={{ width: '230px' }}
-                            />
-                          </Link>
-                        ),
-                      },
-                    },
-                    {
-                      screen: {
-                        id: 'employee-form',
-                        paths: ['/employee/:id', '/employee'],
-                        type: 'form',
-                        table: 'Employee',
-                        record: {
-                          $route: 'id',
-                        },
-                        form: {
-                          id: 'employee-mini-details',
-                          sections: [
-                            {
-                              id: 'mini-details',
-                              showLabel: false,
-                              rows: [
-                                {
-                                  id: 'Full Name',
-                                  controls: [
-                                    {
-                                      id: 'Full Name',
-                                      relativeWidth: 1,
-                                    },
-                                  ],
-                                },
-                                {
-                                  id: 'Job Title',
-                                  controls: [
-                                    {
-                                      id: 'Job Title',
-                                      relativeWidth: 1,
-                                    },
-                                  ],
-                                },
-                                {
-                                  id: 'Department',
-                                  controls: [
-                                    {
-                                      id: 'Department',
-                                      relativeWidth: 1,
-                                    },
-                                  ],
-                                },
-                                {
-                                  id: 'Entry Date',
-                                  controls: [
-                                    {
-                                      id: 'Entry Date',
-                                      relativeWidth: 1,
-                                    },
-                                  ],
-                                },
-                                {
-                                  id: 'Mobile Number',
-                                  controls: [
-                                    {
-                                      id: 'Mobile Number',
-                                      relativeWidth: 1,
-                                    },
-                                  ],
-                                },
-                                {
-                                  id: 'Email',
-                                  controls: [
-                                    {
-                                      id: 'Email',
-                                      relativeWidth: 1,
-                                    },
-                                  ],
-                                },
-                              ],
-                            },
-                          ],
-                        },
-                        roles: ['hr'],
-                      },
-                    },
-                  ],
-                },
-                {
-                  relativeWidth: 3,
-                  children: [
-                    {
-                      relativeWidth: 3,
-                      screen: {
-                        id: 'employee-form',
-                        paths: ['/employee/:id', '/employee'],
-                        type: 'form',
-                        table: 'Employee',
-                        record: {
-                          $route: 'id',
-                        },
-                        form: employeeForm,
-                        roles: ['hr'],
-                        preContent: () => {
+                        content: () => {
                           const url = 'https://airtable.com/shrMs1b9PvJW0F6D0';
                           const notifications = useDenimNotifications();
 
@@ -630,30 +525,175 @@ const App = () => {
                             });
                           };
 
-                          return (
+                          return Platform.OS === 'web' ? (
+                            <a
+                              href={url}
+                              target="_blank"
+                              onClick={copy}
+                              style={{
+                                textAlign: 'center',
+                                fontFamily: 'Open Sans',
+                                fontSize: 18,
+                                textDecoration: 'none',
+                                color: '#555555',
+                              }}
+                            >
+                              💡 Click this to get the link off Employee
+                              Information Form
+                            </a>
+                          ) : (
                             <View
                               style={{
                                 padding: 12,
                                 paddingTop: 0,
                                 alignItems: 'center',
+                                flex: 1,
                               }}
                             >
-                              {Platform.OS === 'web' ? (
-                                <a href={url} target="_blank" onClick={copy}>
-                                  Share this link for the Employee Information
-                                  Form
-                                </a>
-                              ) : (
-                                <TouchableOpacity>
-                                  <Text>
-                                    Share this link for the Employee Information
-                                    Form
-                                  </Text>
-                                </TouchableOpacity>
-                              )}
+                              <TouchableOpacity>
+                                <Text>
+                                  💡 Click this to get the link off Employee
+                                  Information Form
+                                </Text>
+                              </TouchableOpacity>
                             </View>
                           );
                         },
+                      },
+                    },
+                  ],
+                },
+                {
+                  children: [
+                    {
+                      screen: {
+                        id: 'employee',
+                        paths: ['/employee/:id', '/employee'],
+                        type: 'page',
+                        roles: ['hr'],
+                        flowDirection: 'row',
+                        children: [
+                          {
+                            relativeWidth: 1,
+                            children: [
+                              {
+                                screen: {
+                                  id: 'lemonade-logo',
+                                  paths: [],
+                                  type: 'content',
+                                  content: (
+                                    <Link to="/" style={{ textAlign: 'center' }}>
+                                      <img
+                                        src={
+                                          require('./assets/images/logo.jpg')
+                                            .default
+                                        }
+                                        alt="Lemonade HR"
+                                        style={{ width: '230px' }}
+                                      />
+                                    </Link>
+                                  ),
+                                },
+                              },
+                              {
+                                screen: {
+                                  id: 'employee-form',
+                                  paths: ['/employee/:id', '/employee'],
+                                  type: 'form',
+                                  table: 'Employee',
+                                  record: {
+                                    $route: 'id',
+                                  },
+                                  form: {
+                                    id: 'employee-mini-details',
+                                    sections: [
+                                      {
+                                        id: 'mini-details',
+                                        showLabel: false,
+                                        rows: [
+                                          {
+                                            id: 'Full Name',
+                                            controls: [
+                                              {
+                                                id: 'Full Name',
+                                                relativeWidth: 1,
+                                              },
+                                            ],
+                                          },
+                                          {
+                                            id: 'Job Title',
+                                            controls: [
+                                              {
+                                                id: 'Job Title',
+                                                relativeWidth: 1,
+                                              },
+                                            ],
+                                          },
+                                          {
+                                            id: 'Department',
+                                            controls: [
+                                              {
+                                                id: 'Department',
+                                                relativeWidth: 1,
+                                              },
+                                            ],
+                                          },
+                                          {
+                                            id: 'Entry Date',
+                                            controls: [
+                                              {
+                                                id: 'Entry Date',
+                                                relativeWidth: 1,
+                                              },
+                                            ],
+                                          },
+                                          {
+                                            id: 'Mobile Number',
+                                            controls: [
+                                              {
+                                                id: 'Mobile Number',
+                                                relativeWidth: 1,
+                                              },
+                                            ],
+                                          },
+                                          {
+                                            id: 'Email',
+                                            controls: [
+                                              {
+                                                id: 'Email',
+                                                relativeWidth: 1,
+                                              },
+                                            ],
+                                          },
+                                        ],
+                                      },
+                                    ],
+                                  },
+                                  roles: ['hr'],
+                                },
+                              },
+                            ],
+                          },
+                          {
+                            relativeWidth: 3,
+                            children: [
+                              {
+                                relativeWidth: 3,
+                                screen: {
+                                  id: 'employee-form',
+                                  paths: ['/employee/:id', '/employee'],
+                                  type: 'form',
+                                  table: 'Employee',
+                                  record: {
+                                    $route: 'id',
+                                  },
+                                  form: employeeForm,
+                                  roles: ['hr'],
+                                },
+                              },
+                            ],
+                          },
+                        ],
                       },
                     },
                   ],
