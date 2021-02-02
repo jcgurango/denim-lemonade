@@ -2,7 +2,7 @@ import { DenimFormSchema, DenimViewSchema } from '../../core';
 import { DenimScreenProps } from '../screens/DenimScreen';
 
 export interface DenimRouterSchema {
-  screens: DenimRouterScreenSchema[];
+  screens: DenimRouterComponentSchema[];
 }
 
 export type DenimMenuItemSchema = DenimScreenMenuItem;
@@ -22,14 +22,15 @@ export interface DenimMenuSchema {
   menuItems: DenimMenuItemSchema[];
 }
 
-export type DenimRouterScreenSchema =
-  | DenimFormScreenSchema
-  | DenimViewScreenSchema
-  | DenimPageScreenSchema
-  | DenimFilterScreenSchema
-  | DenimContentScreenSchema;
+export type DenimRouterComponentSchema =
+  | DenimFormComponentSchema
+  | DenimViewComponentSchema
+  | DenimFilterComponentSchema
+  | DenimContentComponentSchema
+  | DenimTabsComponentSchema
+  | DenimLayoutComponentSchema;
 
-interface DenimScreenSchema<T extends string> {
+interface DenimComponentSchema<T extends string> {
   id: string;
   paths: string[];
   type: T;
@@ -44,20 +45,21 @@ export type DenimApplicationContextVariable =
   | { $route: string }
   | { $screen: string };
 
-export interface DenimFormScreenSchema extends DenimScreenSchema<'form'> {
+export interface DenimFormComponentSchema extends DenimComponentSchema<'form'> {
   table: string;
   record?: DenimApplicationContextVariable;
   form: DenimFormSchema;
 }
 
-export interface DenimFilterScreenSchema extends DenimScreenSchema<'filter'> {
+export interface DenimFilterComponentSchema
+  extends DenimComponentSchema<'filter'> {
   table: string;
   filterColumns: string[];
   globalSearchColumns?: string[];
   filter?: DenimApplicationContextVariable;
 }
 
-export interface DenimViewScreenSchema extends DenimScreenSchema<'view'> {
+export interface DenimViewComponentSchema extends DenimComponentSchema<'view'> {
   form?: string;
   table: string;
   view: DenimViewSchema;
@@ -65,37 +67,46 @@ export interface DenimViewScreenSchema extends DenimScreenSchema<'view'> {
   filter?: DenimApplicationContextVariable;
 }
 
-export type DenimViewActionSchema = DenimViewRecordScreenActionSchema | DenimViewRecordPathActionSchema | DenimViewActionSchemaType<'delete'>;
+export interface DenimTabsComponentSchema extends DenimComponentSchema<'tabs'> {
+  tabs: {
+    label: string;
+    component: DenimRouterComponentSchema;
+  }[];
+  tabIndex: DenimApplicationContextVariable;
+}
+
+export interface DenimLayoutComponentSchema
+  extends DenimComponentSchema<'layout'> {
+  flowDirection: 'row' | 'column';
+  children: {
+    id: string;
+    relativeWidth?: number;
+    component: DenimRouterComponentSchema;
+  }[];
+}
+
+export type DenimViewActionSchema =
+  | DenimViewRecordScreenActionSchema
+  | DenimViewRecordPathActionSchema
+  | DenimViewActionSchemaType<'delete'>;
 
 export interface DenimViewActionSchemaType<T extends string> {
   type: T;
   roles?: string[];
 }
 
-export interface DenimViewRecordScreenActionSchema extends DenimViewActionSchemaType<'view'> {
+export interface DenimViewRecordScreenActionSchema
+  extends DenimViewActionSchemaType<'view'> {
   screen: string;
   routeParameter?: string;
 }
 
-export interface DenimViewRecordPathActionSchema extends DenimViewActionSchemaType<'view'> {
+export interface DenimViewRecordPathActionSchema
+  extends DenimViewActionSchemaType<'view'> {
   path: string;
 }
 
-export interface DenimPageScreenColumn {
-  relativeWidth?: number;
-  screen: DenimRouterScreenSchema;
-}
-
-export interface DenimPageScreenRow {
-  relativeWidth?: number;
-  children: DenimPageScreenColumn[];
-}
-
-export interface DenimPageScreenSchema extends DenimScreenSchema<'page'> {
-  flowDirection?: 'row' | 'column';
-  children: DenimPageScreenRow[];
-}
-
-export interface DenimContentScreenSchema extends DenimScreenSchema<'content'> {
+export interface DenimContentComponentSchema
+  extends DenimComponentSchema<'content'> {
   content: any;
 }

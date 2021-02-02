@@ -2,7 +2,6 @@ import React, { FunctionComponent } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { useTranslation } from './providers/TranslationProvider';
 import { DenimFormControlSchema, DenimFormSchema } from '../core';
-import { useDenimForm } from './providers/DenimFormProvider';
 
 export interface DenimFormControlProps {
   schema: DenimFormControlSchema;
@@ -20,7 +19,7 @@ const DenimFormControl: FunctionComponent<DenimFormControlProps> = ({
   onChange = Empty,
 }) => {
   const translation = useTranslation();
-  const denimForm = useDenimForm();
+  const denimForm = require('./providers/DenimFormProvider').useDenimForm();
   const Control = schema.type ? denimForm.controlRegistry[schema.type] : null;
   const controlErrors = denimForm.getErrorsFor(schema.id);
 

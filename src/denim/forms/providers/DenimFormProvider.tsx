@@ -1,5 +1,5 @@
 import React, { ComponentType, createContext, useContext } from 'react';
-import { StyleProp, TextStyle } from 'react-native';
+import { StyleProp, TextStyle, ViewStyle } from 'react-native';
 import { DenimFormControlSchema, DenimFormSchema } from '../../core';
 import { DenimFormSectionProps } from '../DenimFormSection';
 import { DenimFormRowProps } from '../DenimFormRow';
@@ -27,13 +27,15 @@ export interface DenimFormContextProps {
   getErrorsFor: (field: string) => ValidationError[];
 }
 
-const DenimFormContext = createContext<DenimFormContextProps>(DefaultDenimFormContext);
+const DenimFormContext = createContext<DenimFormContextProps>(
+  DefaultDenimFormContext,
+);
 
 export const useDenimForm = () => useContext(DenimFormContext);
 
 type DenimControlRegistry = {
   [key: string]: ComponentType<DenimControlProps>;
-}
+};
 
 type DenimComponentRegistry = {
   section: ComponentType<DenimFormSectionProps>;
@@ -46,16 +48,27 @@ type DenimComponentRegistry = {
   viewHeaderCell: ComponentType<DenimViewHeaderCellProps>;
   viewRow: ComponentType;
   viewCell: ComponentType;
-}
+};
 
 type DenimStyleOverrides = {
   formControl?: {
-    formLabel: StyleProp<TextStyle>;
-  }
+    formLabel?: StyleProp<TextStyle>;
+  };
+  formSection?: {
+    label?: StyleProp<TextStyle>;
+  };
+  tabControl?: {
+    container?: StyleProp<ViewStyle>;
+    tabHeaderContainer?: StyleProp<ViewStyle>;
+    tabHeader?: StyleProp<ViewStyle>;
+    tabHeaderText?: StyleProp<TextStyle>;
+    selectedTabHeader?: StyleProp<ViewStyle>;
+    selectedTabHeaderText?: StyleProp<TextStyle>;
+    contentContainer?: StyleProp<ViewStyle>;
+  },
 };
 
-interface DenimFormProviderProps extends Partial<DenimFormContextProps> {
-}
+interface DenimFormProviderProps extends Partial<DenimFormContextProps> {}
 
 const DenimFormProvider: ComponentType<DenimFormProviderProps> = ({
   children,
@@ -65,21 +78,21 @@ const DenimFormProvider: ComponentType<DenimFormProviderProps> = ({
 
   return (
     <DenimFormContext.Provider
-    value={{
-      ...DefaultDenimFormContext,
-      ...parentContext,
-      ...props,
-      controlRegistry: {
-        ...DefaultDenimFormContext.controlRegistry,
-        ...parentContext.controlRegistry,
-        ...props.controlRegistry,
-      },
-      componentRegistry: {
-        ...DefaultDenimFormContext.componentRegistry,
-        ...parentContext.componentRegistry,
-        ...props.componentRegistry,
-      },
-    }}
+      value={{
+        ...DefaultDenimFormContext,
+        ...parentContext,
+        ...props,
+        controlRegistry: {
+          ...DefaultDenimFormContext.controlRegistry,
+          ...parentContext.controlRegistry,
+          ...props.controlRegistry,
+        },
+        componentRegistry: {
+          ...DefaultDenimFormContext.componentRegistry,
+          ...parentContext.componentRegistry,
+          ...props.componentRegistry,
+        },
+      }}
     >
       {children}
     </DenimFormContext.Provider>

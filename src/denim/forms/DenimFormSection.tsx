@@ -2,7 +2,7 @@ import React, { FunctionComponent, useState } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useTranslation } from './providers/TranslationProvider';
 import { DenimFormSchema, DenimFormSectionSchema } from '../core';
-import DenimFormRow from './DenimFormRow';
+import { useDenimForm } from './providers/DenimFormProvider';
 
 export interface DenimFormSectionProps {
   form: DenimFormSchema;
@@ -17,10 +17,15 @@ const DenimFormSection: FunctionComponent<DenimFormSectionProps> = ({
     schema.collapsible ? schema.defaultOpen : true,
   );
   const translation = useTranslation();
+  const {
+    componentRegistry: { row: DenimFormRow },
+    styleOverrides,
+  } = useDenimForm();
 
   const renderLabelText = () => (
-    <Text style={styles.sectionLabel}>
-      {schema.label || translation.translate(`Forms.${form.id}.Sections.${schema.id}`)}
+    <Text style={[styles.sectionLabel, styleOverrides?.formSection?.label]}>
+      {schema.label ||
+        translation.translate(`Forms.${form.id}.Sections.${schema.id}`)}
     </Text>
   );
 
@@ -34,7 +39,9 @@ const DenimFormSection: FunctionComponent<DenimFormSectionProps> = ({
     );
 
   const renderRows = () =>
-    schema.rows.map((row) => <DenimFormRow key={row.id} schema={row} form={form} />);
+    schema.rows.map((row) => (
+      <DenimFormRow key={row.id} schema={row} form={form} />
+    ));
 
   return (
     <View style={styles.section}>

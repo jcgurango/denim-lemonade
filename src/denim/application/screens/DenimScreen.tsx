@@ -3,18 +3,19 @@ import { Modal, StyleSheet, Text, View } from 'react-native';
 import { Link, useHistory, useParams } from 'react-router-dom';
 import { DenimRecord, isMobile } from '../../core';
 import { ConnectedForm, useDenimUser } from '../../forms';
+import DenimTabControl from '../../forms/controls/DenimTabControl';
 import { useDenimForm } from '../../forms/providers/DenimFormProvider';
 import { useDenimNotifications } from '../../forms/providers/DenimNotificationProvider';
 import { DenimDataSource, DenimSchemaSource } from '../../service';
 import {
   DenimApplicationContextVariable,
   DenimRouterSchema,
-  DenimRouterScreenSchema,
+  DenimRouterComponentSchema,
 } from '../types/router';
 
 export interface DenimScreenProps {
   routerSchema: DenimRouterSchema;
-  schema: DenimRouterScreenSchema;
+  schema: DenimRouterComponentSchema;
   state?: any;
   onStateChange?: React.Dispatch<any>;
   getScreenState?: (id: string) => any;
@@ -70,6 +71,22 @@ const DenimScreen: FunctionComponent<DenimScreenProps> = ({
   dataContext,
   path,
 }) => {
+  const renderChildSchema = (component: DenimRouterComponentSchema) => {
+    return (
+      <DenimScreen
+        schema={component}
+        state={state}
+        onStateChange={setState}
+        formProvider={formProvider}
+        schemaSource={schemaSource}
+        dataSource={dataSource}
+        dataContext={dataContext}
+        path={path}
+        routerSchema={routerSchema}
+      />
+    );
+  };
+
   const [internalState, setInternalState] = useState<any>({});
   const state =
     typeof passedState === 'undefined' ? internalState : passedState;
@@ -150,54 +167,6 @@ const DenimScreen: FunctionComponent<DenimScreenProps> = ({
   };
 
   const renderScreen = () => {
-    if (schema.type === 'page') {
-      return (
-        <View style={{ flexDirection: schema.flowDirection }}>
-          {schema.children.map((row, r) => (
-            <View
-              style={{
-                flexDirection:
-                  schema.flowDirection === 'row' ? 'column' : 'row',
-                flex: row.relativeWidth,
-                marginLeft:
-                  r > 0 && schema.flowDirection === 'row' ? 16 : undefined,
-                marginTop:
-                  r > 0 && schema.flowDirection === 'column' ? 16 : undefined,
-              }}
-              key={`${schema.id}-row-${r}`}
-            >
-              {row.children.map((column, c) => (
-                <View
-                  style={{
-                    flex: column.relativeWidth,
-                    marginLeft:
-                      c > 0 && schema.flowDirection === 'column'
-                        ? 16
-                        : undefined,
-                    marginTop:
-                      c > 0 && schema.flowDirection === 'row' ? 16 : undefined,
-                  }}
-                  key={column.screen.id}
-                >
-                  <DenimScreen
-                    schema={column.screen}
-                    state={state}
-                    onStateChange={setState}
-                    formProvider={formProvider}
-                    schemaSource={schemaSource}
-                    dataSource={dataSource}
-                    dataContext={dataContext}
-                    path={path}
-                    routerSchema={routerSchema}
-                  />
-                </View>
-              ))}
-            </View>
-          ))}
-        </View>
-      );
-    }
-
     if (schema.type === 'content') {
       if (typeof schema.content === 'function') {
         const Element = schema.content;
@@ -409,6 +378,44 @@ const DenimScreen: FunctionComponent<DenimScreenProps> = ({
             }
           }}
         />
+      );
+    }
+
+    if (schema.type === 'tabs') {
+      return (
+        <DenimTabControl
+          tab={readContextVariable(schema.tabIndex)}
+          onTabChange={(value) => writeContextVariable(schema.tabIndex, value)}
+          tabs={schema.tabs.map((tab) => ({
+            label: tab.label,
+            content: () => renderChildSchema(tab.component),
+          }))}
+        />
+      );
+    }
+
+    if (schema.type === 'layout') {
+      return (
+        <View style={{ flexDirection: schema.flowDirection, flex: 1 }}>
+          {schema.children.map(({ id, relativeWidth, component: content }, index) => (
+            <View
+              style={[
+                { flex: relativeWidth },
+                index > 0
+                  ? {
+                      marginLeft:
+                        schema.flowDirection === 'row' ? 12 : undefined,
+                      marginTop:
+                        schema.flowDirection === 'column' ? 12 : undefined,
+                    }
+                  : null,
+              ]}
+              key={id}
+            >
+              {renderChildSchema(content)}
+            </View>
+          ))}
+        </View>
       );
     }
 

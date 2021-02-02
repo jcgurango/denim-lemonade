@@ -2,7 +2,7 @@ import React, { FunctionComponent } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { DenimFormRowSchema, DenimFormSchema } from '../core';
 import isMobile from '../core/utils/isMobile';
-import DenimFormControl from './DenimFormControl';
+import { useDenimForm } from './providers/DenimFormProvider';
 
 export interface DenimFormRowProps {
   schema: DenimFormRowSchema;
@@ -10,6 +10,7 @@ export interface DenimFormRowProps {
 }
 
 const DenimFormRow: FunctionComponent<DenimFormRowProps> = ({ schema, form }) => {
+  const { componentRegistry: { control: DenimFormControl } } = useDenimForm();
   const mobile = isMobile();
 
   return (
