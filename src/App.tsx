@@ -46,7 +46,7 @@ const dataSource = new DenimRemoteDataSource(
 const employeePersonalSection = {
   id: 'personal-section',
   label: 'Personal',
-  showLabel: true,
+  showLabel: false,
   rows: [
     {
       id: 'row0',
@@ -224,7 +224,7 @@ const employeePersonalSection = {
 const employeeEmploymentSection = {
   id: 'job-section',
   label: 'Employment',
-  showLabel: true,
+  showLabel: false,
   rows: [
     {
       id: 'row0',
@@ -327,7 +327,7 @@ const employeeEmploymentSection = {
 const employeeCompensationSection = {
   id: 'payroll-section',
   label: 'Compensation and Benefits',
-  showLabel: true,
+  showLabel: false,
   rows: [
     {
       id: 'row0',
@@ -461,7 +461,7 @@ const App = () => {
                             <img
                               src={require('./assets/images/logo.jpg').default}
                               alt="Lemonade HR"
-                              style={{ width: '230px' }}
+                              style={{ width: '180px' }}
                             />
                           ),
                         },
@@ -663,7 +663,7 @@ const App = () => {
                                           .default
                                       }
                                       alt="Lemonade HR"
-                                      style={{ width: '230px' }}
+                                      style={{ width: '180px' }}
                                     />
                                   </Link>
                                 ),
@@ -768,6 +768,9 @@ const App = () => {
                                 type: 'form',
                                 table: 'Employee',
                                 paths: [],
+                                record: {
+                                  $route: 'id',
+                                },
                                 form: {
                                   id: 'employee-personal',
                                   sections: [employeePersonalSection],
@@ -781,6 +784,9 @@ const App = () => {
                                 type: 'form',
                                 table: 'Employee',
                                 paths: [],
+                                record: {
+                                  $route: 'id',
+                                },
                                 form: {
                                   id: 'employee-employment',
                                   sections: [employeeEmploymentSection],
@@ -794,6 +800,9 @@ const App = () => {
                                 type: 'form',
                                 table: 'Employee',
                                 paths: [],
+                                record: {
+                                  $route: 'id',
+                                },
                                 form: {
                                   id: 'employee-compensation',
                                   sections: [employeeCompensationSection],

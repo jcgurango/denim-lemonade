@@ -381,7 +381,7 @@ export const createConnectedFormProvider = <
         {globalSearch ? (
           <DenimFormProvider
             setValue={() => setGlobalSearchText}
-            getValue={() => globalSearchText}
+            getValue={() => (globalSearchText || '')}
           >
             <DenimForm
               schema={{
@@ -519,7 +519,7 @@ export const createConnectedFormProvider = <
     ]);
     const notifications = useDenimNotifications();
 
-    const retrieveMore = async () => {
+    const retrieveMore = async (cancelledCheck?: () => boolean) => {
       if (context.context && dataProvider) {
         setPage((page) => page + 1);
         setRetrieving(true);
@@ -533,8 +533,10 @@ export const createConnectedFormProvider = <
             sort,
           });
 
-          setRecords((r) => r.concat(records));
-          setHasMore(records.length >= 50);
+          if (!cancelledCheck || !cancelledCheck()) {
+            setRecords((r) => r.concat(records));
+            setHasMore(records.length >= 50);
+          }
         } catch (e) {
           if (!notifications.handleError(e)) {
             notifications.notify({
@@ -550,9 +552,15 @@ export const createConnectedFormProvider = <
     };
 
     useEffect(() => {
+      let cancelled = false;
+
       setRecords([]);
-      retrieveMore();
+      retrieveMore(() => cancelled);
       setPage(1);
+
+      return () => {
+        cancelled = true;
+      };
     }, [query, extraData, sort]);
 
     if (!dataProvider || !tableSchema) {

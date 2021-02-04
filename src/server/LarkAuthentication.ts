@@ -66,7 +66,7 @@ export default class LarkAuthentication {
 
         res.json({
           token: jwt.sign(
-            { id: open_id, expiry: Date.now() + 30 * 60 * 1000 },
+            { id: open_id, expiry: Date.now() + 24 * 60 * 60 * 1000 },
             this.key,
           ),
         });
