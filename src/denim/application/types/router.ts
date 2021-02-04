@@ -1,4 +1,8 @@
-import { DenimFormSchema, DenimViewSchema } from '../../core';
+import {
+  DenimFormControlSchema,
+  DenimFormSchema,
+  DenimViewSchema,
+} from '../../core';
 import { DenimScreenProps } from '../screens/DenimScreen';
 
 export interface DenimRouterSchema {
@@ -28,7 +32,9 @@ export type DenimRouterComponentSchema =
   | DenimFilterComponentSchema
   | DenimContentComponentSchema
   | DenimTabsComponentSchema
-  | DenimLayoutComponentSchema;
+  | DenimLayoutComponentSchema
+  | DenimFieldComponentSchema
+  | DenimFormProviderComponentSchema;
 
 interface DenimComponentSchema<T extends string> {
   id: string;
@@ -83,6 +89,17 @@ export interface DenimLayoutComponentSchema
     relativeWidth?: number;
     component: DenimRouterComponentSchema;
   }[];
+}
+
+export interface DenimFormProviderComponentSchema
+  extends DenimComponentSchema<'form-provider'> {
+  table: string;
+  record: DenimApplicationContextVariable;
+  component: DenimRouterComponentSchema;
+}
+
+export interface DenimFieldComponentSchema extends DenimComponentSchema<'field'> {
+  field: DenimFormControlSchema;
 }
 
 export type DenimViewActionSchema =

@@ -43,6 +43,28 @@ const dataSource = new DenimRemoteDataSource(
   config.serverUrl + '/data',
 );
 
+const field = (id: string): {
+  id: string,
+  component: {
+    id: string,
+    type: 'field',
+    paths: [],
+    field: {
+      id: string,
+    },
+  },
+} => ({
+  id,
+  component: {
+    id,
+    type: 'field',
+    paths: [],
+    field: {
+      id,
+    },
+  },
+});
+
 const employeePersonalSection = {
   id: 'personal-section',
   label: 'Personal',
@@ -253,6 +275,9 @@ const employeeEmploymentSection = {
           label: 'Leave Scheme',
           id: 'Leave Scheme',
           relativeWidth: 1,
+          controlProps: {
+            dropdown: true,
+          },
         },
       ],
     },
@@ -293,16 +318,25 @@ const employeeEmploymentSection = {
           label: 'Job Title',
           id: 'Job Title',
           relativeWidth: 1,
+          controlProps: {
+            dropdown: true,
+          },
         },
         {
           label: 'Job Position',
           id: 'Job Positions',
           relativeWidth: 1,
+          controlProps: {
+            dropdown: true,
+          },
         },
         {
           label: 'Job Role',
           id: 'Job Roles',
           relativeWidth: 3,
+          controlProps: {
+            dropdown: true,
+          },
         },
       ],
     },
@@ -568,245 +602,194 @@ const App = () => {
             {
               id: 'employee',
               paths: ['/employee/:id', '/employee'],
-              type: 'layout',
+              type: 'form-provider',
               roles: ['hr'],
-              flowDirection: 'column',
-              children: [
-                {
-                  id: 'copy-click',
-                  component: {
+              table: 'Employee',
+              record: {
+                $route: 'id',
+              },
+              component: {
+                id: 'employee',
+                paths: [],
+                type: 'layout',
+                roles: ['hr'],
+                flowDirection: 'column',
+                children: [
+                  {
                     id: 'copy-click',
-                    paths: [],
-                    type: 'content',
-                    content: () => {
-                      const url = 'https://airtable.com/shrMs1b9PvJW0F6D0';
-                      const notifications = useDenimNotifications();
-
-                      const copy = (
-                        e: React.MouseEvent<HTMLAnchorElement, MouseEvent>,
-                      ) => {
-                        e.stopPropagation();
-                        e.preventDefault();
-
-                        copyToClipboard(url);
-                        notifications.notify({
-                          type: 'success',
-                          message: 'Link copied to clipboard.',
-                          code: 1003,
-                        });
-                      };
-
-                      return Platform.OS === 'web' ? (
-                        <a
-                          href={url}
-                          target="_blank"
-                          onClick={copy}
-                          style={{
-                            textAlign: 'center',
-                            fontFamily: 'Open Sans',
-                            fontSize: 18,
-                            textDecoration: 'none',
-                            color: '#555555',
-                          }}
-                        >
-                          💡 Click this to get the link off Employee Information
-                          Form
-                        </a>
-                      ) : (
-                        <View
-                          style={{
-                            padding: 12,
-                            paddingTop: 0,
-                            alignItems: 'center',
-                            flex: 1,
-                          }}
-                        >
-                          <TouchableOpacity>
-                            <Text>
-                              💡 Click this to get the link off Employee
-                              Information Form
-                            </Text>
-                          </TouchableOpacity>
-                        </View>
-                      );
+                    component: {
+                      id: 'copy-click',
+                      paths: [],
+                      type: 'content',
+                      content: () => {
+                        const url = 'https://airtable.com/shrMs1b9PvJW0F6D0';
+                        const notifications = useDenimNotifications();
+  
+                        const copy = (
+                          e: React.MouseEvent<HTMLAnchorElement, MouseEvent>,
+                        ) => {
+                          e.stopPropagation();
+                          e.preventDefault();
+  
+                          copyToClipboard(url);
+                          notifications.notify({
+                            type: 'success',
+                            message: 'Link copied to clipboard.',
+                            code: 1003,
+                          });
+                        };
+  
+                        return Platform.OS === 'web' ? (
+                          <a
+                            href={url}
+                            target="_blank"
+                            onClick={copy}
+                            style={{
+                              textAlign: 'center',
+                              fontFamily: 'Open Sans',
+                              fontSize: 18,
+                              textDecoration: 'none',
+                              color: '#555555',
+                            }}
+                          >
+                            💡 Click this to get the link off Employee Information
+                            Form
+                          </a>
+                        ) : (
+                          <View
+                            style={{
+                              padding: 12,
+                              paddingTop: 0,
+                              alignItems: 'center',
+                              flex: 1,
+                            }}
+                          >
+                            <TouchableOpacity>
+                              <Text>
+                                💡 Click this to get the link off Employee
+                                Information Form
+                              </Text>
+                            </TouchableOpacity>
+                          </View>
+                        );
+                      },
                     },
                   },
-                },
-                {
-                  id: 'form',
-                  component: {
+                  {
                     id: 'form',
-                    type: 'layout',
-                    paths: [],
-                    flowDirection: 'row',
-                    children: [
-                      {
-                        id: 'left-side',
-                        relativeWidth: 1,
-                        component: {
+                    component: {
+                      id: 'form',
+                      type: 'layout',
+                      paths: [],
+                      flowDirection: 'row',
+                      children: [
+                        {
                           id: 'left-side',
-                          paths: [],
-                          type: 'layout',
-                          flowDirection: 'column',
-                          children: [
-                            {
-                              id: 'lemonade-logo',
-                              component: {
+                          relativeWidth: 1,
+                          component: {
+                            id: 'left-side',
+                            paths: [],
+                            type: 'layout',
+                            flowDirection: 'column',
+                            children: [
+                              {
                                 id: 'lemonade-logo',
-                                paths: [],
-                                type: 'content',
-                                content: (
-                                  <Link to="/" style={{ textAlign: 'center' }}>
-                                    <img
-                                      src={
-                                        require('./assets/images/logo.jpg')
-                                          .default
-                                      }
-                                      alt="Lemonade HR"
-                                      style={{ width: '230px' }}
-                                    />
-                                  </Link>
-                                ),
-                              },
-                            },
-                            {
-                              id: 'mini-details',
-                              component: {
-                                id: 'employee-form',
-                                paths: ['/employee/:id', '/employee'],
-                                type: 'form',
-                                table: 'Employee',
-                                record: {
-                                  $route: 'id',
+                                component: {
+                                  id: 'lemonade-logo',
+                                  paths: [],
+                                  type: 'content',
+                                  content: (
+                                    <Link to="/" style={{ textAlign: 'center' }}>
+                                      <img
+                                        src={
+                                          require('./assets/images/logo.jpg')
+                                            .default
+                                        }
+                                        alt="Lemonade HR"
+                                        style={{ width: '230px' }}
+                                      />
+                                    </Link>
+                                  ),
                                 },
-                                form: {
-                                  id: 'employee-mini-details',
-                                  sections: [
-                                    {
-                                      id: 'mini-details',
-                                      showLabel: false,
-                                      rows: [
-                                        {
-                                          id: 'Full Name',
-                                          controls: [
-                                            {
-                                              id: 'Full Name',
-                                              relativeWidth: 1,
-                                            },
-                                          ],
-                                        },
-                                        {
-                                          id: 'Job Title',
-                                          controls: [
-                                            {
-                                              id: 'Job Title',
-                                              relativeWidth: 1,
-                                            },
-                                          ],
-                                        },
-                                        {
-                                          id: 'Department',
-                                          controls: [
-                                            {
-                                              id: 'Department',
-                                              relativeWidth: 1,
-                                            },
-                                          ],
-                                        },
-                                        {
-                                          id: 'Entry Date',
-                                          controls: [
-                                            {
-                                              id: 'Entry Date',
-                                              relativeWidth: 1,
-                                            },
-                                          ],
-                                        },
-                                        {
-                                          id: 'Mobile Number',
-                                          controls: [
-                                            {
-                                              id: 'Mobile Number',
-                                              relativeWidth: 1,
-                                            },
-                                          ],
-                                        },
-                                        {
-                                          id: 'Email',
-                                          controls: [
-                                            {
-                                              id: 'Email',
-                                              relativeWidth: 1,
-                                            },
-                                          ],
-                                        },
-                                      ],
-                                    },
+                              },
+                              {
+                                id: 'mini-details',
+                                component: {
+                                  id: 'employee-form',
+                                  paths: ['/employee/:id', '/employee'],
+                                  type: 'layout',
+                                  flowDirection: 'column',
+                                  children: [
+                                    field('Full Name'),
+                                    field('Job Title'),
+                                    field('Department'),
+                                    field('Entry Date'),
+                                    field('Mobile Number'),
+                                    field('Email'),
                                   ],
                                 },
-                                roles: ['hr'],
                               },
-                            },
-                          ],
-                        },
-                      },
-                      {
-                        id: 'main-form',
-                        relativeWidth: 4,
-                        component: {
-                          id: 'employee-form-tabs',
-                          paths: [],
-                          type: 'tabs',
-                          tabIndex: {
-                            $screen: 'tab',
+                            ],
                           },
-                          tabs: [
-                            {
-                              label: 'Personal',
-                              component: {
-                                id: 'employee-personal',
-                                type: 'form',
-                                table: 'Employee',
-                                paths: [],
-                                form: {
-                                  id: 'employee-personal',
-                                  sections: [employeePersonalSection],
-                                },
-                              },
-                            },
-                            {
-                              label: 'Employment',
-                              component: {
-                                id: 'employee-employment',
-                                type: 'form',
-                                table: 'Employee',
-                                paths: [],
-                                form: {
-                                  id: 'employee-employment',
-                                  sections: [employeeEmploymentSection],
-                                },
-                              },
-                            },
-                            {
-                              label: 'Compensation & Benefits',
-                              component: {
-                                id: 'employee-compensation',
-                                type: 'form',
-                                table: 'Employee',
-                                paths: [],
-                                form: {
-                                  id: 'employee-compensation',
-                                  sections: [employeeCompensationSection],
-                                },
-                              },
-                            },
-                          ],
                         },
-                      },
-                    ],
+                        {
+                          id: 'main-form',
+                          relativeWidth: 4,
+                          component: {
+                            id: 'employee-form-tabs',
+                            paths: [],
+                            type: 'tabs',
+                            tabIndex: {
+                              $screen: 'tab',
+                            },
+                            tabs: [
+                              {
+                                label: 'Personal',
+                                component: {
+                                  id: 'employee-personal',
+                                  type: 'form',
+                                  table: 'Employee',
+                                  paths: [],
+                                  form: {
+                                    id: 'employee-personal',
+                                    sections: [employeePersonalSection],
+                                  },
+                                },
+                              },
+                              {
+                                label: 'Employment',
+                                component: {
+                                  id: 'employee-employment',
+                                  type: 'form',
+                                  table: 'Employee',
+                                  paths: [],
+                                  form: {
+                                    id: 'employee-employment',
+                                    sections: [employeeEmploymentSection],
+                                  },
+                                },
+                              },
+                              {
+                                label: 'Compensation & Benefits',
+                                component: {
+                                  id: 'employee-compensation',
+                                  type: 'form',
+                                  table: 'Employee',
+                                  paths: [],
+                                  form: {
+                                    id: 'employee-compensation',
+                                    sections: [employeeCompensationSection],
+                                  },
+                                },
+                              },
+                            ],
+                          },
+                        },
+                      ],
+                    },
                   },
-                },
-              ],
+                ],
+              },
             },
           ],
         }}

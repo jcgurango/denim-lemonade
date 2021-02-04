@@ -397,25 +397,48 @@ const DenimScreen: FunctionComponent<DenimScreenProps> = ({
     if (schema.type === 'layout') {
       return (
         <View style={{ flexDirection: schema.flowDirection, flex: 1 }}>
-          {schema.children.map(({ id, relativeWidth, component: content }, index) => (
-            <View
-              style={[
-                { flex: relativeWidth },
-                index > 0
-                  ? {
-                      marginLeft:
-                        schema.flowDirection === 'row' ? 12 : undefined,
-                      marginTop:
-                        schema.flowDirection === 'column' ? 12 : undefined,
-                    }
-                  : null,
-              ]}
-              key={id}
-            >
-              {renderChildSchema(content)}
-            </View>
-          ))}
+          {schema.children.map(
+            ({ id, relativeWidth, component: content }, index) => (
+              <View
+                style={[
+                  { flex: relativeWidth },
+                  index > 0
+                    ? {
+                        marginLeft:
+                          schema.flowDirection === 'row' ? 12 : undefined,
+                        marginTop:
+                          schema.flowDirection === 'column' ? 12 : undefined,
+                      }
+                    : null,
+                ]}
+                key={id}
+              >
+                {renderChildSchema(content)}
+              </View>
+            ),
+          )}
         </View>
+      );
+    }
+
+    if (schema.type === 'form-provider') {
+      const { FormProvider } = formProvider;
+      const recordId = schema.record
+        ? readContextVariable(schema.record)
+        : null;
+
+      return (
+        <FormProvider
+          table={schema.table}
+          record={recordId}
+          onSave={(record) => {
+            if (record.id && schema.record) {
+              writeContextVariable(schema.record, record.id);
+            }
+          }}
+        >
+          {renderChildSchema(schema.component)}
+        </FormProvider>
       );
     }
 

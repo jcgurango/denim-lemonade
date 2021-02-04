@@ -37,6 +37,7 @@ import {
 } from '../../service';
 import DenimFilterControl from '../controls/DenimFilterControl';
 import DenimForm, { DenimFormProps } from '../DenimForm';
+import DenimFormControl from '../DenimFormControl';
 import DenimView, { DenimViewProps } from '../DenimView';
 import DenimFormProvider, { useDenimForm } from './DenimFormProvider';
 import DenimLookupDataProvider from './DenimLookupDataProvider';
@@ -58,6 +59,17 @@ interface DenimConnectedDataProviderProps<
   dataSource: DenimDataSource<T, S>;
   schemaSource: S;
   context: T;
+}
+
+interface FormProviderProps {
+  table: string;
+  record: string;
+  onSave?: (record: DenimRecord) => void;
+  expand?: string[];
+}
+
+interface FormFieldProps {
+  schema: DenimFormControlSchema;
 }
 
 interface ConnectedFormProps {
@@ -103,6 +115,7 @@ export interface ConnectedForm<
   >;
   Filter: ComponentType<FilterProps>;
   Context: React.Context<DenimConnectedDataContext<T>>;
+  FormProvider: ComponentType<FormProviderProps>;
 }
 
 /**
@@ -379,38 +392,19 @@ export const createConnectedFormProvider = <
     return (
       <>
         {globalSearch ? (
-          <DenimFormProvider
-            setValue={() => setGlobalSearchText}
-            getValue={() => globalSearchText}
-          >
-            <DenimForm
-              schema={{
-                id: `${table}-global-search`,
-                sections: [
-                  {
-                    id: 'search',
-                    showLabel: false,
-                    rows: [
-                      {
-                        id: 'search-row-first',
-                        controls: [
-                          {
-                            id: 'search-text',
-                            relativeWidth: 1,
-                            type: DenimFormControlType.TextInput,
-                            hideLabel: true,
-                            controlProps: {
-                              placeholder: 'Type here to search...',
-                            },
-                          },
-                        ],
-                      },
-                    ],
-                  },
-                ],
-              }}
-            />
-          </DenimFormProvider>
+          <DenimFormControl
+            schema={{
+              id: 'search-text',
+              relativeWidth: 1,
+              type: DenimFormControlType.TextInput,
+              hideLabel: true,
+              controlProps: {
+                placeholder: 'Type here to search...',
+              },
+            }}
+            value={globalSearchText || ''}
+            onChange={setGlobalSearchText}
+          />
         ) : (
           <DenimFilterControl
             value={pendingQuery}
@@ -574,6 +568,179 @@ export const createConnectedFormProvider = <
         </DenimLookupDataProvider>
       </DenimViewDataProvider>
     );
+  };
+
+  const FormProvider: FunctionComponent<FormProviderProps> = ({
+    table,
+    record,
+    onSave = () => {},
+    expand,
+    children,
+  }) => {
+    const context = useContext(Context);
+    const dataProvider = useMemo(() => context.getDataProviderFor(table), [
+      context,
+      table,
+    ]);
+    const validator = useMemo(() => context.getTableValidator(table), [
+      context.getTableValidator,
+      table,
+    ]);
+
+    const [formValid, setFormValid] = useState(false);
+    const [recordData, setRecordData] = useState<DenimRecord | null>(
+      record ? null : {},
+    );
+    const [updateData, setUpdateData] = useState<DenimRecord | null>({});
+    const [errors, setErrors] = useState<Yup.ValidationError[]>([]);
+    const [saving, setSaving] = useState(false);
+    const lookup = useMemo(() => context.getLookupProviderFor(table), [
+      context,
+      table,
+    ]);
+
+    const form = useDenimForm();
+    const notifications = useDenimNotifications();
+    const Button = form.componentRegistry.button;
+
+    useEffect(() => {
+      if (record && (!recordData || recordData.id !== record)) {
+        let cancelled = false;
+
+        (async () => {
+          if (context.context) {
+            const retrievedRecord = await dataProvider?.retrieveRecord(
+              context.context,
+              record,
+              expand,
+            );
+
+            if (!cancelled) {
+              setRecordData(retrievedRecord || null);
+            }
+          }
+        })();
+
+        return () => {
+          cancelled = true;
+        };
+      }
+    }, [recordData, record]);
+
+    useEffect(() => {
+      let cancelled = false;
+
+      (async () => {
+        try {
+          await validator.validate(recordData, {
+            abortEarly: false,
+          });
+          if (!cancelled) {
+            setErrors([]);
+            setFormValid(true);
+          }
+        } catch (e) {
+          if (!cancelled) {
+            if (e.inner) {
+              setErrors(e.inner);
+            }
+            setFormValid(false);
+          }
+        }
+      })();
+
+      return () => {
+        cancelled = true;
+      };
+    }, [recordData]);
+
+    if (record && !recordData) {
+      return <ActivityIndicator />;
+    }
+
+    const save = async () => {
+      if (dataProvider) {
+        setErrors([]);
+        setSaving(true);
+        const c: any = context.context;
+        const rec: any = updateData;
+        notifications.notify({
+          type: 'info',
+          message: 'Saving record...',
+          code: DenimNotificationCodes.SavingRecord,
+        });
+
+        try {
+          const savedRecord = await (record || recordData?.id
+            ? dataProvider.updateRecord(
+                c,
+                String(record || recordData?.id),
+                rec,
+              )
+            : dataProvider.createRecord(c, rec));
+          setRecordData(savedRecord);
+          setUpdateData({});
+          onSave(savedRecord);
+
+          notifications.notify({
+            type: 'success',
+            message: 'Record saved.',
+            code: DenimNotificationCodes.SavingSuccessful,
+          });
+        } catch (e) {
+          if (e.inner) {
+            setErrors(e.inner);
+          } else {
+            setErrors([e]);
+          }
+
+          if (!notifications.handleError(e)) {
+            notifications.notify({
+              type: 'error',
+              message: 'Failed to save the record.',
+              code: DenimNotificationCodes.SavingFailed,
+            });
+          }
+        }
+
+        setSaving(false);
+      }
+    };
+
+    return (
+      <DenimFormProvider
+        getValue={(field) => recordData && recordData[field]}
+        setValue={(field) => (newValue) => {
+          setRecordData((current: any) => ({
+            ...current,
+            [field]: newValue,
+          }));
+          setUpdateData((current: any) => ({
+            ...current,
+            [field]: newValue,
+          }));
+        }}
+        getErrorsFor={(field) =>
+          errors.filter((error) => {
+            return (
+              error.path &&
+              (error.path === field ||
+                error.path.startsWith(field + '.') ||
+                error.path.startsWith(field + '['))
+            );
+          })
+        }
+      >
+        <DenimLookupDataProvider lookup={lookup}>
+          {children}
+          <Button text="Save" onPress={save} disabled={saving || !formValid} />
+        </DenimLookupDataProvider>
+      </DenimFormProvider>
+    );
+  };
+
+  const FormField: FunctionComponent<FormFieldProps> = () => {
+    return null;
   };
 
   const Form: FunctionComponent<
@@ -808,5 +975,6 @@ export const createConnectedFormProvider = <
     View,
     Filter,
     Context,
+    FormProvider,
   };
 };
