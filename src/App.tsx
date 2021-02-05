@@ -495,7 +495,7 @@ const App = () => {
                             <img
                               src={require('./assets/images/logo.jpg').default}
                               alt="Lemonade HR"
-                              style={{ width: '230px' }}
+                              style={{ width: '180px' }}
                             />
                           ),
                         },
@@ -706,7 +706,7 @@ const App = () => {
                                             .default
                                         }
                                         alt="Lemonade HR"
-                                        style={{ width: '230px' }}
+                                        style={{ width: '180px' }}
                                       />
                                     </Link>
                                   ),
