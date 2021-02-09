@@ -45,6 +45,7 @@ const DenimDropDown: FunctionComponent<
   options,
   relationship,
   placeholder,
+  disabled,
   ...props
 }) => {
   const denimForm = useDenimForm();
@@ -66,6 +67,7 @@ const DenimDropDown: FunctionComponent<
         value={(value && value.id) ? value.name : value}
         options={passedOptions}
         placeholder={(relationship && !records) ? 'Loading...' : placeholder}
+        disabled={disabled}
         {...props}
       />
     </ControlContainer>

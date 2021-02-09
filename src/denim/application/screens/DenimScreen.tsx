@@ -2,7 +2,7 @@ import React, { FunctionComponent, useContext, useState } from 'react';
 import { Modal, StyleSheet, Text, View } from 'react-native';
 import { Link, useHistory, useParams } from 'react-router-dom';
 import { DenimRecord, isMobile } from '../../core';
-import { ConnectedForm, useDenimUser } from '../../forms';
+import { ConnectedForm, DenimFormControl, useDenimUser } from '../../forms';
 import DenimTabControl from '../../forms/controls/DenimTabControl';
 import { useDenimForm } from '../../forms/providers/DenimFormProvider';
 import { useDenimNotifications } from '../../forms/providers/DenimNotificationProvider';
@@ -388,7 +388,7 @@ const DenimScreen: FunctionComponent<DenimScreenProps> = ({
           onTabChange={(value) => writeContextVariable(schema.tabIndex, value)}
           tabs={schema.tabs.map((tab) => ({
             label: tab.label,
-            content: () => renderChildSchema(tab.component),
+            content: renderChildSchema(tab.component),
           }))}
         />
       );
@@ -398,7 +398,7 @@ const DenimScreen: FunctionComponent<DenimScreenProps> = ({
       return (
         <View style={{ flexDirection: schema.flowDirection, flex: 1 }}>
           {schema.children.map(
-            ({ id, relativeWidth, component: content }, index) => (
+            ({ relativeWidth, component: content }, index) => (
               <View
                 style={[
                   { flex: relativeWidth },
@@ -411,7 +411,7 @@ const DenimScreen: FunctionComponent<DenimScreenProps> = ({
                       }
                     : null,
                 ]}
-                key={id}
+                key={content.id}
               >
                 {renderChildSchema(content)}
               </View>
@@ -442,19 +442,40 @@ const DenimScreen: FunctionComponent<DenimScreenProps> = ({
       );
     }
 
+    if (schema.type === 'field') {
+      const { table, tableSchema } = data;
+      let controlSchema = schema.field;
+
+      if (table && tableSchema) {
+        const column = tableSchema.columns.find(
+          ({ name }) => name === controlSchema.id,
+        );
+
+        if (column) {
+          const newSchema = data.getControlFor(
+            tableSchema,
+            column,
+            controlSchema,
+          );
+
+          if (newSchema) {
+            controlSchema = newSchema;
+          }
+        }
+      }
+
+      return <DenimFormControl schema={controlSchema} />;
+    }
+
     return null;
   };
 
   return (
-    <Provider
-      schemaSource={schemaSource}
-      dataSource={dataSource}
-      context={dataContext}
-    >
+    <>
       <PreComponent />
       {renderScreen()}
       <PostComponent />
-    </Provider>
+    </>
   );
 };
 

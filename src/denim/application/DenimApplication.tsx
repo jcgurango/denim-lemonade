@@ -27,52 +27,59 @@ const DenimApplication: FunctionComponent<DenimApplicationProps> = ({
   schemaSource,
   dataSource,
 }) => {
+  const { Provider } = formProvider;
   const user = useDenimUser();
 
   // Render a react-router for the screens.
   return (
     <Router>
-      <DenimApplicationNotifications>
-        <main
-          style={{
-            padding: '16px',
-            width: '100%',
-            boxSizing: 'border-box',
-            maxWidth: '1200px',
-            marginLeft: 'auto',
-            marginRight: 'auto',
-          }}
-        >
-          <Switch>
-            {router.screens
-              .filter((screen) =>
-                user.roles.find(
-                  (role) => !screen.roles || screen.roles.includes(role),
-                ),
-              )
-              .map((screen) => {
-                return screen.paths.map((path) => (
-                  <Route
-                    key={path}
-                    path={path}
-                    render={() => (
-                      <DenimScreen
-                        formProvider={formProvider}
-                        schemaSource={schemaSource}
-                        dataSource={dataSource}
-                        dataContext={dataContext}
-                        schema={screen}
-                        path={path}
-                        routerSchema={router}
-                      />
-                    )}
-                    exact
-                  />
-                ));
-              })}
-          </Switch>
-        </main>
-      </DenimApplicationNotifications>
+      <Provider
+        dataSource={dataSource}
+        schemaSource={schemaSource}
+        context={dataContext}      
+      >
+        <DenimApplicationNotifications>
+          <main
+            style={{
+              padding: '16px',
+              width: '100%',
+              boxSizing: 'border-box',
+              maxWidth: '1200px',
+              marginLeft: 'auto',
+              marginRight: 'auto',
+            }}
+          >
+            <Switch>
+              {router.screens
+                .filter((screen) =>
+                  user.roles.find(
+                    (role) => !screen.roles || screen.roles.includes(role),
+                  ),
+                )
+                .map((screen) => {
+                  return screen.paths.map((path) => (
+                    <Route
+                      key={path}
+                      path={path}
+                      render={() => (
+                        <DenimScreen
+                          formProvider={formProvider}
+                          schemaSource={schemaSource}
+                          dataSource={dataSource}
+                          dataContext={dataContext}
+                          schema={screen}
+                          path={path}
+                          routerSchema={router}
+                        />
+                      )}
+                      exact
+                    />
+                  ));
+                })}
+            </Switch>
+          </main>
+        </DenimApplicationNotifications>
+      </Provider>
     </Router>
   );
 };

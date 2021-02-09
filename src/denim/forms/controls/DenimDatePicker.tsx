@@ -227,7 +227,7 @@ interface DenimDatePickerProps {
 
 const DenimDatePicker: FunctionComponent<
   DenimControlProps & DenimDatePickerProps
-> = ({ value, onChange, withTime, ...props }) => {
+> = ({ value, onChange, withTime, disabled, ...props }) => {
   const [typedText, setTypedText] = useState<any>(null);
 
   useEffect(() => {
@@ -279,6 +279,7 @@ const DenimDatePicker: FunctionComponent<
       onChange={(value: any) => setTypedText(value || '')}
       onBlur={() => setTypedText(null)}
       placeholder={getLocaleDateString() + (withTime ? ' hh:mm' : '')}
+      disabled={disabled}
     />
   );
 };

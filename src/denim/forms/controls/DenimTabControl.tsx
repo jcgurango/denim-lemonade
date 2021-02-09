@@ -1,11 +1,11 @@
-import React, { FunctionComponent } from 'react';
+import React, { FunctionComponent, ReactChild } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useDenimForm } from '../providers/DenimFormProvider';
 
 export interface DenimTabControlProps {
   tabs: {
     label: string;
-    content: () => any;
+    content: ReactChild;
   }[];
   tab: number;
   onTabChange: (newTab: number) => void;
@@ -18,7 +18,6 @@ const DenimTabControl: FunctionComponent<DenimTabControlProps> = ({
 }) => {
   const form = useDenimForm();
   const currentTab = tabs[tab || 0];
-  const TabComponent = currentTab.content;
 
   return (
     <View
@@ -83,7 +82,7 @@ const DenimTabControl: FunctionComponent<DenimTabControlProps> = ({
           form.styleOverrides?.tabControl?.contentContainer,
         ]}
       >
-        <TabComponent />
+        {currentTab.content}
       </View>
     </View>
   );

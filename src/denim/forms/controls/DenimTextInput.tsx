@@ -51,7 +51,7 @@ const DenimTextInput: FunctionComponent<DenimControlProps & DenimTextInputProps 
       <TextInput
         style={[styles.textInput, (Platform.OS === 'web' && (numberOfLines || 0) <= 1) ? { height: 24 } : null]}
         onChangeText={(text) => onChange(text || null)}
-        value={displayedText}
+        value={displayedText || ''}
         numberOfLines={numberOfLines}
         onBlur={() => {
           setDisplayedText(formatValue(value, format));

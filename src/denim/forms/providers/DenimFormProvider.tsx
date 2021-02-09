@@ -16,6 +16,7 @@ export interface DenimControlProps {
   schema?: DenimFormControlSchema;
   form?: DenimFormSchema;
   errors?: ValidationError[];
+  disabled?: boolean;
 }
 
 export interface DenimFormContextProps {

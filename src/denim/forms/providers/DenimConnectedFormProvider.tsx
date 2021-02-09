@@ -10,7 +10,7 @@ import React, {
   useMemo,
   useState,
 } from 'react';
-import { ActivityIndicator } from 'react-native';
+import { ActivityIndicator, View as RNView } from 'react-native';
 import * as Yup from 'yup';
 import { Schema } from 'yup';
 import {
@@ -68,10 +68,6 @@ interface FormProviderProps {
   expand?: string[];
 }
 
-interface FormFieldProps {
-  schema: DenimFormControlSchema;
-}
-
 interface ConnectedFormProps {
   table: string;
   record: string;
@@ -97,6 +93,8 @@ export interface DenimConnectedDataContext<T extends DenimDataContext> {
     table: string,
   ) => (relationship: string, query: string) => Promise<DenimRelatedRecord[]>;
   context?: T;
+  table?: string;
+  tableSchema?: DenimTable;
 }
 
 export interface ConnectedForm<
@@ -739,16 +737,26 @@ export const createConnectedFormProvider = <
           })
         }
       >
-        <DenimLookupDataProvider lookup={lookup}>
-          {children}
-          <Button text="Save" onPress={save} disabled={saving || !formValid} />
-        </DenimLookupDataProvider>
+        <Context.Provider
+          value={{
+            ...context,
+            table,
+            tableSchema: context.getTableSchema(table),
+          }}
+        >
+          <DenimLookupDataProvider lookup={lookup}>
+            {children}
+            <RNView style={{ marginTop: 12 }}>
+              <Button
+                text="Save"
+                onPress={save}
+                disabled={saving || !formValid}
+              />
+            </RNView>
+          </DenimLookupDataProvider>
+        </Context.Provider>
       </DenimFormProvider>
     );
-  };
-
-  const FormField: FunctionComponent<FormFieldProps> = () => {
-    return null;
   };
 
   const Form: FunctionComponent<

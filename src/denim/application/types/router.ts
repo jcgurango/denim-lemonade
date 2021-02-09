@@ -85,7 +85,6 @@ export interface DenimLayoutComponentSchema
   extends DenimComponentSchema<'layout'> {
   flowDirection: 'row' | 'column';
   children: {
-    id: string;
     relativeWidth?: number;
     component: DenimRouterComponentSchema;
   }[];

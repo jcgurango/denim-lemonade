@@ -21,6 +21,7 @@ const DenimMultiDropDown: FunctionComponent<
   options,
   relationship,
   placeholder,
+  disabled,
   ...props
 }) => {
   const denimForm = useDenimForm();
@@ -100,9 +101,11 @@ const DenimMultiDropDown: FunctionComponent<
             >
               <View style={{ flexDirection: 'row' }}>
                 <Text style={{ color: 'white', flex: 1 }}>{label}</Text>
-                <TouchableOpacity onPress={() => onChange(deselect(val))}>
-                  <Text style={{ color: 'white' }}>Remove</Text>
-                </TouchableOpacity>
+                {!disabled ? (
+                  <TouchableOpacity onPress={() => onChange(deselect(val))}>
+                    <Text style={{ color: 'white' }}>Remove</Text>
+                  </TouchableOpacity>
+                ) : null}
               </View>
             </DenimTag>
           );
@@ -122,6 +125,7 @@ const DenimMultiDropDown: FunctionComponent<
             : !value || !Array.isArray(value) || !value.includes(optionValue),
         )}
         placeholder={relationship && !records ? 'Loading...' : placeholder}
+        disabled={disabled}
         {...props}
       />
     </ControlContainer>

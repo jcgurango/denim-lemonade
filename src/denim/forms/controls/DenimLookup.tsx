@@ -30,12 +30,14 @@ interface DenimLookupProps {
   onRecordChange: (value: DenimRelatedRecord | null) => void;
   record: DenimRelatedRecord | null;
   relationship: string;
+  disabled?: boolean;
 }
 
 const LookupField: FunctionComponent<TextInputProps & DenimLookupProps> = ({
   onRecordChange,
   record,
   relationship,
+  disabled,
   ...props
 }) => {
   const [searchText, setSearchText] = useState('');
@@ -92,16 +94,18 @@ const LookupField: FunctionComponent<TextInputProps & DenimLookupProps> = ({
 
   return (
     <>
-      <TextInput
-        style={[
-          styles.textInput,
-          Platform.OS === 'web' ? { height: 24 } : null,
-        ]}
-        placeholder="Select a record..."
-        value={displayText}
-        onFocus={() => setShowLookup(true)}
-        {...props}
-      />
+      {!disabled ? (
+        <TextInput
+          style={[
+            styles.textInput,
+            Platform.OS === 'web' ? { height: 24 } : null,
+          ]}
+          placeholder="Select a record..."
+          value={displayText}
+          onFocus={() => setShowLookup(true)}
+          {...props}
+        />
+      ) : null}
       <Modal transparent={true} visible={showLookup}>
         <View
           style={[
@@ -109,7 +113,12 @@ const LookupField: FunctionComponent<TextInputProps & DenimLookupProps> = ({
             mobile ? styles.mobileLookupModalContainer : null,
           ]}
         >
-          <View style={[styles.lookupModalBox, mobile ? styles.mobileLookupModalBox : null]}>
+          <View
+            style={[
+              styles.lookupModalBox,
+              mobile ? styles.mobileLookupModalBox : null,
+            ]}
+          >
             <ControlContainer>
               <TextInput
                 style={[
@@ -155,7 +164,16 @@ const LookupField: FunctionComponent<TextInputProps & DenimLookupProps> = ({
 
 const DenimLookup: FunctionComponent<
   DenimControlProps & TextInputProps & DenimLookupControlProps
-> = ({ schema, form, errors, relationship, value, onChange, ...props }) => {
+> = ({
+  schema,
+  form,
+  errors,
+  relationship,
+  value,
+  onChange,
+  disabled,
+  ...props
+}) => {
   const denimForm = useDenimForm();
   const ControlContainer = denimForm.componentRegistry.controlContainer;
   const helpText = errors?.map(({ message }) => message).join('\n') || '';
@@ -167,6 +185,7 @@ const DenimLookup: FunctionComponent<
         record={value}
         {...props}
         onRecordChange={onChange}
+        disabled={disabled}
       />
     </ControlContainer>
   );
@@ -174,7 +193,16 @@ const DenimLookup: FunctionComponent<
 
 export const DenimMultiLookup: FunctionComponent<
   DenimControlProps & TextInputProps & DenimLookupControlProps
-> = ({ onChange, schema, form, errors, relationship, value, ...props }) => {
+> = ({
+  onChange,
+  schema,
+  form,
+  errors,
+  relationship,
+  value,
+  disabled,
+  ...props
+}) => {
   const denimForm = useDenimForm();
   const ControlContainer = denimForm.componentRegistry.controlContainer;
   const helpText = errors?.map(({ message }) => message).join('\n') || '';
@@ -209,11 +237,13 @@ export const DenimMultiLookup: FunctionComponent<
               >
                 <View style={{ flexDirection: 'row' }}>
                   <Text style={{ color: 'white', flex: 1 }}>{record.name}</Text>
-                  <TouchableOpacity
-                    onPress={() => onChange(deselect(record.id))}
-                  >
-                    <Text style={{ color: 'white' }}>Remove</Text>
-                  </TouchableOpacity>
+                  {!disabled ? (
+                    <TouchableOpacity
+                      onPress={() => onChange(deselect(record.id))}
+                    >
+                      <Text style={{ color: 'white' }}>Remove</Text>
+                    </TouchableOpacity>
+                  ) : null}
                 </View>
               </DenimTag>
             );
@@ -225,6 +255,7 @@ export const DenimMultiLookup: FunctionComponent<
           record && onChange(select(record))
         }
         record={null}
+        disabled={disabled}
         {...props}
       />
     </ControlContainer>
