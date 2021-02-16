@@ -3,10 +3,12 @@ import { DenimRelatedRecord } from '../../core';
 
 interface DenimLookupDataProps {
   lookup: (relationship: string, query: string) => Promise<DenimRelatedRecord[]>;
+  find: (relationship: string, id: string) => Promise<DenimRelatedRecord | null>;
 }
 
 const DenimLookupDataContext = createContext<DenimLookupDataProps>({
-  lookup: async () => []
+  lookup: async () => [],
+  find: async () => null,
 });
 
 export const useDenimLookupData = () => useContext(DenimLookupDataContext);

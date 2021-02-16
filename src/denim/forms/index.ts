@@ -16,7 +16,9 @@ export * from './controls/DenimFilterControl';
 export { default as DenimFormProvider } from './providers/DenimFormProvider';
 export { default as TranslationProvider } from './providers/TranslationProvider';
 export { default as DenimUserProvider } from './providers/DenimUserProvider';
+export { default as DenimIcon } from './controls/DenimIcon';
 
 export * from './providers/DenimUserProvider';
 export * from './providers/DenimConnectedFormProvider';
 export * from './providers/DenimViewDataProvider';
+export * from './controls/DenimIcon';

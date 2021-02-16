@@ -1,8 +1,13 @@
-import React, { FunctionComponent, useContext, useState } from 'react';
+import React, { FunctionComponent, useContext, useMemo, useState } from 'react';
 import { Modal, StyleSheet, Text, View } from 'react-native';
 import { Link, useHistory, useParams } from 'react-router-dom';
-import { DenimRecord, isMobile } from '../../core';
-import { ConnectedForm, DenimFormControl, useDenimUser } from '../../forms';
+import { DenimQueryConditionOrGroup, DenimRecord, isMobile } from '../../core';
+import {
+  ConnectedForm,
+  DenimFormControl,
+  DenimIcon,
+  useDenimUser,
+} from '../../forms';
 import DenimTabControl from '../../forms/controls/DenimTabControl';
 import { useDenimForm } from '../../forms/providers/DenimFormProvider';
 import { useDenimNotifications } from '../../forms/providers/DenimNotificationProvider';
@@ -87,14 +92,16 @@ const DenimScreen: FunctionComponent<DenimScreenProps> = ({
     );
   };
 
-  const [internalState, setInternalState] = useState<any>({});
+  const [internalState, setInternalState] = useState<any>(
+    schema.defaultState || {},
+  );
   const state =
     typeof passedState === 'undefined' ? internalState : passedState;
   const setState =
     typeof setPassedState === 'undefined' ? setInternalState : setPassedState;
   const PreComponent = schema.preContent || (() => null);
   const PostComponent = schema.postContent || (() => null);
-  const { Provider, Context } = formProvider;
+  const { Context } = formProvider;
   const {
     componentRegistry: { button: DenimButton },
   } = useDenimForm();
@@ -104,7 +111,10 @@ const DenimScreen: FunctionComponent<DenimScreenProps> = ({
   const { user } = useDenimUser();
   const mobile = isMobile();
 
-  const readContextVariable = (variable: DenimApplicationContextVariable) => {
+  const readContextVariable = (
+    variable: DenimApplicationContextVariable,
+    record?: DenimRecord,
+  ) => {
     if (typeof variable === 'string') {
       return variable;
     }
@@ -125,6 +135,14 @@ const DenimScreen: FunctionComponent<DenimScreenProps> = ({
       if ('$screen' in variable) {
         return state[variable.$screen];
       }
+
+      if ('$record' in variable) {
+        if (!record) {
+          return null;
+        }
+
+        return record[variable.$record];
+      }
     }
 
     return variable;
@@ -133,6 +151,7 @@ const DenimScreen: FunctionComponent<DenimScreenProps> = ({
   const writeContextVariable = (
     variable: DenimApplicationContextVariable,
     newValue: any,
+    record?: DenimRecord,
   ) => {
     if (typeof variable === 'object') {
       if ('$route' in variable) {
@@ -140,11 +159,19 @@ const DenimScreen: FunctionComponent<DenimScreenProps> = ({
           ...route,
           [variable.$route]: newValue,
         };
+        const currentPath = Object.keys(newRoute).reduce((current, param) => {
+          return current.replace(
+            ':' + param,
+            readContextVariable(newRoute[param], record),
+          );
+        }, path);
         const newPath = Object.keys(newRoute).reduce((path, key) => {
           return path.replace(':' + key, newRoute[key]);
         }, path);
 
-        history.push(newPath);
+        if (currentPath !== newPath) {
+          history.push(newPath);
+        }
         return;
       }
 
@@ -166,6 +193,24 @@ const DenimScreen: FunctionComponent<DenimScreenProps> = ({
     }
   };
 
+  const iterateQueryContextVariables = (
+    query: DenimQueryConditionOrGroup,
+  ): DenimQueryConditionOrGroup => {
+    if (query.conditionType === 'single') {
+      return {
+        ...query,
+        value: readContextVariable(query.value),
+      };
+    }
+
+    return {
+      ...query,
+      conditions: query.conditions.map((condition) =>
+        iterateQueryContextVariables(condition),
+      ),
+    };
+  };
+
   const renderScreen = () => {
     if (schema.type === 'content') {
       if (typeof schema.content === 'function') {
@@ -183,7 +228,18 @@ const DenimScreen: FunctionComponent<DenimScreenProps> = ({
 
     if (schema.type === 'view') {
       const { View: DenimView } = formProvider;
-      const query = schema.filter ? readContextVariable(schema.filter) : null;
+      let query = null;
+
+      if (schema.filter) {
+        if (
+          typeof schema.filter === 'object' &&
+          'conditionType' in schema.filter
+        ) {
+          query = iterateQueryContextVariables(schema.filter);
+        } else {
+          query = readContextVariable(schema.filter);
+        }
+      }
 
       return (
         <>
@@ -246,6 +302,7 @@ const DenimScreen: FunctionComponent<DenimScreenProps> = ({
             table={schema.table}
             query={query}
             extraData={state.extraViewData}
+            defaultSort={schema.defaultSort}
             renderActions={
               schema.actions
                 ? (record: DenimRecord) => {
@@ -271,22 +328,9 @@ const DenimScreen: FunctionComponent<DenimScreenProps> = ({
                                       pendingRecordDeletion: record.id,
                                     }));
                                   }}
+                                  title={action.title || 'Delete'}
                                 >
-                                  <svg
-                                    width="20"
-                                    height="19"
-                                    viewBox="0 0 20 19"
-                                    fill="none"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                  >
-                                    <path
-                                      fill-rule="evenodd"
-                                      clip-rule="evenodd"
-                                      d="M5.00002 3.16667H8.33335L9.16669 3.95834H11.6667V5.54167H1.66669V3.95834H4.16669L5.00002 3.16667ZM4.16669 15.8333C3.25002 15.8333 2.50002 15.1208 2.50002 14.25V6.33334H10.8334V14.25C10.8334 15.1208 10.0834 15.8333 9.16669 15.8333H4.16669ZM18.3334 6.33334H12.5V7.91667H18.3334V6.33334ZM15.8334 12.6667H12.5V14.25H15.8334V12.6667ZM12.5 9.5H17.5V11.0833H12.5V9.5ZM4.16669 7.91667H9.16669V14.25H4.16669V7.91667Z"
-                                      fill="black"
-                                      fill-opacity="0.54"
-                                    />
-                                  </svg>
+                                  <DenimIcon type={action.icon || 'delete'} />
                                 </a>
                               );
                             }
@@ -296,30 +340,37 @@ const DenimScreen: FunctionComponent<DenimScreenProps> = ({
                                 const screen = routerSchema.screens.find(
                                   ({ id }) => id === action.screen,
                                 );
+                                const params: {
+                                  [
+                                    param: string
+                                  ]: DenimApplicationContextVariable;
+                                } = {
+                                  id: { $record: 'id' },
+                                  ...(action.params || {}),
+                                };
 
                                 if (screen) {
-                                  const path = screen.paths[0].replace(
-                                    ':' + (action.routeParameter || 'id'),
-                                    String(record.id),
+                                  const path = Object.keys(params).reduce(
+                                    (current, param) => {
+                                      return current.replace(
+                                        ':' + param,
+                                        readContextVariable(
+                                          params[param],
+                                          record,
+                                        ),
+                                      );
+                                    },
+                                    screen.paths[0],
                                   );
 
                                   return (
-                                    <Link to={path}>
-                                      <svg
-                                        width="20"
-                                        height="19"
-                                        viewBox="0 0 20 19"
-                                        fill="none"
-                                        xmlns="http://www.w3.org/2000/svg"
-                                      >
-                                        <path
-                                          fill-rule="evenodd"
-                                          clip-rule="evenodd"
-                                          d="M15.3073 2.60458L17.2573 4.45708C17.5823 4.76583 17.5823 5.26458 17.2573 5.57333L15.7323 7.02208L12.6073 4.05333L14.1323 2.60458C14.2906 2.45417 14.499 2.375 14.7156 2.375C14.9323 2.375 15.1406 2.44625 15.3073 2.60458ZM2.49896 13.6563V16.625H5.62396L14.8406 7.86918L11.7156 4.90043L2.49896 13.6563ZM4.9323 15.0417H4.16563V14.3133L11.7156 7.14083L12.4823 7.86916L4.9323 15.0417Z"
-                                          fill="black"
-                                          fill-opacity="0.54"
-                                        />
-                                      </svg>
+                                    <Link
+                                      to={path}
+                                      title={action.title || 'View'}
+                                    >
+                                      <DenimIcon
+                                        type={action.icon || 'pencil'}
+                                      />
                                     </Link>
                                   );
                                 }
@@ -374,7 +425,7 @@ const DenimScreen: FunctionComponent<DenimScreenProps> = ({
           schema={schema.form}
           onSave={(record) => {
             if (record.id && schema.record) {
-              writeContextVariable(schema.record, record.id);
+              writeContextVariable(schema.record, record.id, record);
             }
           }}
         />
@@ -426,14 +477,64 @@ const DenimScreen: FunctionComponent<DenimScreenProps> = ({
       const recordId = schema.record
         ? readContextVariable(schema.record)
         : null;
+      const prefill = useMemo(() => {
+        if (!schema.prefill) {
+          return schema.prefill;
+        }
+
+        return Object.keys(schema.prefill).reduce((current, next) => {
+          if (!schema.prefill) {
+            return current;
+          }
+
+          return {
+            [next]: readContextVariable(schema.prefill && schema.prefill[next]),
+          };
+        }, {});
+      }, [schema.prefill]);
 
       return (
         <FormProvider
           table={schema.table}
           record={recordId}
+          prefill={prefill}
           onSave={(record) => {
             if (record.id && schema.record) {
-              writeContextVariable(schema.record, record.id);
+              writeContextVariable(schema.record, record.id, record);
+            }
+
+            if (schema.saveRedirect) {
+              const screen = routerSchema.screens.find(
+                ({ id }) => id === schema.saveRedirect?.screen,
+              );
+              const params: {
+                [param: string]: DenimApplicationContextVariable;
+              } = {
+                id: { $record: 'id' },
+                ...(schema.saveRedirect.params || {}),
+              };
+
+              if (screen) {
+                const currentPath = Object.keys(params).reduce(
+                  (current, param) => {
+                    return current.replace(
+                      ':' + param,
+                      readContextVariable(params[param], record),
+                    );
+                  },
+                  path,
+                );
+                const newPath = Object.keys(params).reduce((current, param) => {
+                  return current.replace(
+                    ':' + param,
+                    readContextVariable(params[param], record),
+                  );
+                }, screen.paths[0]);
+
+                if (currentPath !== newPath) {
+                  history.push(newPath);
+                }
+              }
             }
           }}
         >
@@ -464,7 +565,13 @@ const DenimScreen: FunctionComponent<DenimScreenProps> = ({
         }
       }
 
-      return <DenimFormControl schema={controlSchema} />;
+      return (
+        <DenimFormControl
+          schema={controlSchema}
+          value={schema.value ? readContextVariable(schema.value) : null}
+          onChange={schema.onChange}
+        />
+      );
     }
 
     return null;

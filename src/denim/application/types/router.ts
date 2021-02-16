@@ -1,8 +1,11 @@
 import {
   DenimFormControlSchema,
   DenimFormSchema,
+  DenimQueryConditionOrGroup,
+  DenimSortExpression,
   DenimViewSchema,
 } from '../../core';
+import { DenimIconType } from '../../forms';
 import { DenimScreenProps } from '../screens/DenimScreen';
 
 export interface DenimRouterSchema {
@@ -43,13 +46,15 @@ interface DenimComponentSchema<T extends string> {
   roles?: string[];
   preContent?: any;
   postContent?: any;
+  defaultState?: any;
 }
 
 export type DenimApplicationContextVariable =
   | string
   | { $user: string }
   | { $route: string }
-  | { $screen: string };
+  | { $screen: string }
+  | { $record: string };
 
 export interface DenimFormComponentSchema extends DenimComponentSchema<'form'> {
   table: string;
@@ -70,7 +75,8 @@ export interface DenimViewComponentSchema extends DenimComponentSchema<'view'> {
   table: string;
   view: DenimViewSchema;
   actions?: DenimViewActionSchema[];
-  filter?: DenimApplicationContextVariable;
+  filter?: DenimApplicationContextVariable | DenimQueryConditionOrGroup;
+  defaultSort?: DenimSortExpression;
 }
 
 export interface DenimTabsComponentSchema extends DenimComponentSchema<'tabs'> {
@@ -95,10 +101,22 @@ export interface DenimFormProviderComponentSchema
   table: string;
   record: DenimApplicationContextVariable;
   component: DenimRouterComponentSchema;
+  prefill?: {
+    [key: string]: DenimApplicationContextVariable;
+  };
+  saveRedirect?: {
+    screen: string;
+    params?: {
+      [param: string]: DenimApplicationContextVariable;
+    };
+  };
 }
 
-export interface DenimFieldComponentSchema extends DenimComponentSchema<'field'> {
+export interface DenimFieldComponentSchema
+  extends DenimComponentSchema<'field'> {
   field: DenimFormControlSchema;
+  value?: DenimApplicationContextVariable;
+  onChange?: any;
 }
 
 export type DenimViewActionSchema =
@@ -107,6 +125,8 @@ export type DenimViewActionSchema =
   | DenimViewActionSchemaType<'delete'>;
 
 export interface DenimViewActionSchemaType<T extends string> {
+  title?: string;
+  icon?: DenimIconType;
   type: T;
   roles?: string[];
 }
@@ -114,7 +134,7 @@ export interface DenimViewActionSchemaType<T extends string> {
 export interface DenimViewRecordScreenActionSchema
   extends DenimViewActionSchemaType<'view'> {
   screen: string;
-  routeParameter?: string;
+  params?: { [param: string]: DenimApplicationContextVariable };
 }
 
 export interface DenimViewRecordPathActionSchema

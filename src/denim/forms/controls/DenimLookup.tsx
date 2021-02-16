@@ -174,15 +174,43 @@ const DenimLookup: FunctionComponent<
   disabled,
   ...props
 }) => {
+  const [nameCache, setNameCache] = useState<{ [id: string]: string }>({});
   const denimForm = useDenimForm();
+  const { find } = useDenimLookupData();
   const ControlContainer = denimForm.componentRegistry.controlContainer;
   const helpText = errors?.map(({ message }) => message).join('\n') || '';
+  let record = {
+    ...value,
+  };
+
+  if (record && record.id && !record.name) {
+    record.name = nameCache[record.id] || '...';
+  }
+
+  useEffect(() => {
+    if (value && value.id && !value.name && !nameCache[record.id]) {
+      if (record.id && relationship) {
+        (async () => {
+          const retrieved = await find(relationship, record.id);
+
+          if (retrieved && retrieved.id && retrieved.name) {
+            const name = String(retrieved.name);
+
+            setNameCache((cache) => ({
+              ...cache,
+              [retrieved.id]: name,
+            }));
+          }
+        })();
+      }
+    }
+  }, [record, nameCache, relationship]);
 
   return (
     <ControlContainer error={(errors?.length || 0) > 0} helpText={helpText}>
       <LookupField
         relationship={relationship || ''}
-        record={value}
+        record={record}
         {...props}
         onRecordChange={onChange}
         disabled={disabled}
@@ -203,7 +231,9 @@ export const DenimMultiLookup: FunctionComponent<
   disabled,
   ...props
 }) => {
+  const [nameCache, setNameCache] = useState<{ [id: string]: string }>({});
   const denimForm = useDenimForm();
+  const { find } = useDenimLookupData();
   const ControlContainer = denimForm.componentRegistry.controlContainer;
   const helpText = errors?.map(({ message }) => message).join('\n') || '';
 
@@ -225,6 +255,25 @@ export const DenimMultiLookup: FunctionComponent<
     };
   };
 
+  useEffect(() => {
+    if (value && value.records && relationship) {
+      value.records.forEach(async ({ id }: DenimRelatedRecord) => {
+        if (!nameCache[id]) {
+          const record = await find(relationship, id);
+
+          if (record) {
+            const name = String(record.name);
+
+            setNameCache((cache) => ({
+              ...cache,
+              [record.id]: name,
+            }));
+          }
+        }
+      });
+    }
+  }, [value, nameCache, relationship]);
+
   return (
     <ControlContainer error={(errors?.length || 0) > 0} helpText={helpText}>
       {value?.type === 'record-collection' && Array.isArray(value?.records)
@@ -236,7 +285,7 @@ export const DenimMultiLookup: FunctionComponent<
                 style={{ marginBottom: 8 }}
               >
                 <View style={{ flexDirection: 'row' }}>
-                  <Text style={{ color: 'white', flex: 1 }}>{record.name}</Text>
+                  <Text style={{ color: 'white', flex: 1 }}>{record.name || nameCache[record.id] || '...'}</Text>
                   {!disabled ? (
                     <TouchableOpacity
                       onPress={() => onChange(deselect(record.id))}

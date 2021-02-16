@@ -854,6 +854,30 @@
 					"color": "green",
 					"icon": "check"
 				}
+			},
+			{
+				"id": "fldUeh1uMavP0qNhv",
+				"name": "Calculation",
+				"type": "formula",
+				"typeOptions": {
+					"formulaTextParsed": "RECORD_ID()",
+					"dependencies": {
+						"referencedColumnIdsForValue": []
+					},
+					"resultType": "text"
+				}
+			},
+			{
+				"id": "fldXAFmtvDV7Wo2ae",
+				"name": "Current Job Position",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldeNrJEiDyaQOW4l",
+				"name": "Current Department",
+				"type": "text",
+				"typeOptions": null
 			}
 		]
 	},
@@ -942,6 +966,18 @@
 			{
 				"id": "flduEMfZen0MxND6v",
 				"name": "Employee copy",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldlcd1nhMkc5WAZM",
+				"name": "Test Synch",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldvEHFoU96hTkz8J",
+				"name": "Test Synch 2",
 				"type": "text",
 				"typeOptions": null
 			}
@@ -3573,6 +3609,703 @@
 			{
 				"id": "fldbG82I3jgUloB3G",
 				"name": "Employee copy",
+				"type": "text",
+				"typeOptions": null
+			}
+		]
+	},
+	{
+		"id": "tblzzIeK9hfroDRPW",
+		"name": "Employee Movement",
+		"columns": [
+			{
+				"id": "fldGWiFyLAjKExwVR",
+				"name": "User ID",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldUQFxjWVHI9K7uz",
+				"name": "Employee ID",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldEFwOWieOuhJWLi",
+				"name": "Account Status",
+				"type": "select",
+				"typeOptions": {
+					"choiceOrder": [
+						"selJrTDVnh1grIhxT",
+						"selkzYFHtdmRPFyk8"
+					],
+					"choices": {
+						"selJrTDVnh1grIhxT": {
+							"id": "selJrTDVnh1grIhxT",
+							"color": "blue",
+							"name": "Active"
+						},
+						"selkzYFHtdmRPFyk8": {
+							"id": "selkzYFHtdmRPFyk8",
+							"color": "cyan",
+							"name": "Inactive"
+						}
+					},
+					"disableColors": false
+				}
+			},
+			{
+				"id": "fldURcOxzmLBX1LmT",
+				"name": "Title",
+				"type": "select",
+				"typeOptions": {
+					"choiceOrder": [
+						"selH4MygMXiunwpuZ",
+						"selWp8CyTRck4cyJq",
+						"selpbwz3M2SAT8PUQ",
+						"selgHSNPI64flJuYS",
+						"selPjA4hmFMnJH7zF"
+					],
+					"choices": {
+						"selH4MygMXiunwpuZ": {
+							"id": "selH4MygMXiunwpuZ",
+							"color": "blue",
+							"name": "Mr."
+						},
+						"selWp8CyTRck4cyJq": {
+							"id": "selWp8CyTRck4cyJq",
+							"color": "cyan",
+							"name": "Mrs."
+						},
+						"selpbwz3M2SAT8PUQ": {
+							"id": "selpbwz3M2SAT8PUQ",
+							"color": "teal",
+							"name": "Ms."
+						},
+						"selgHSNPI64flJuYS": {
+							"id": "selgHSNPI64flJuYS",
+							"color": "green",
+							"name": "Miss"
+						},
+						"selPjA4hmFMnJH7zF": {
+							"id": "selPjA4hmFMnJH7zF",
+							"color": "yellow",
+							"name": "Madam"
+						}
+					},
+					"disableColors": false
+				}
+			},
+			{
+				"id": "fldO14Sypxm4JHJrw",
+				"name": "Last Name",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldGY7PCHeOjkiTuC",
+				"name": "First Name",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldqzpp4j1WErdK1G",
+				"name": "Middle Name",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldarSxLxYu8Q6KOX",
+				"name": "Full Name",
+				"type": "multilineText",
+				"typeOptions": null
+			},
+			{
+				"id": "fld9N9JDctTomt0at",
+				"name": "Nickname",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fld45hqmRpe50Ga49",
+				"name": "Picture",
+				"type": "multipleAttachment",
+				"typeOptions": {
+					"unreversed": true
+				}
+			},
+			{
+				"id": "fldsEwmP9kx2KGaYF",
+				"name": "Date of Birth",
+				"type": "date",
+				"typeOptions": {
+					"isDateTime": false,
+					"dateFormat": "Local"
+				}
+			},
+			{
+				"id": "fld0HkNMfhTvw9Wln",
+				"name": "Gender",
+				"type": "select",
+				"typeOptions": {
+					"choiceOrder": [
+						"selrzRWGi5ymPYlfG",
+						"selm2z0Q2Fpfw087i"
+					],
+					"choices": {
+						"selrzRWGi5ymPYlfG": {
+							"id": "selrzRWGi5ymPYlfG",
+							"color": "blue",
+							"name": "Male"
+						},
+						"selm2z0Q2Fpfw087i": {
+							"id": "selm2z0Q2Fpfw087i",
+							"color": "cyan",
+							"name": "Female"
+						}
+					},
+					"disableColors": false
+				}
+			},
+			{
+				"id": "fldFgDoqfnWBB6ogY",
+				"name": "Marital Status",
+				"type": "select",
+				"typeOptions": {
+					"choiceOrder": [
+						"sel8nxVp5gpF9fZGL",
+						"sel4jEObSBYG7BFvT",
+						"sela9C5VdGVbdGYHm",
+						"sels1PgTREtDOdrrP",
+						"selaCvraEUPV9LVmY",
+						"sel0ogQs0sB8jmBq3"
+					],
+					"choices": {
+						"sel8nxVp5gpF9fZGL": {
+							"id": "sel8nxVp5gpF9fZGL",
+							"color": "blue",
+							"name": "Single"
+						},
+						"sel4jEObSBYG7BFvT": {
+							"id": "sel4jEObSBYG7BFvT",
+							"color": "cyan",
+							"name": "Married"
+						},
+						"sela9C5VdGVbdGYHm": {
+							"id": "sela9C5VdGVbdGYHm",
+							"color": "teal",
+							"name": "Civil Partner"
+						},
+						"sels1PgTREtDOdrrP": {
+							"id": "sels1PgTREtDOdrrP",
+							"color": "green",
+							"name": "Separated"
+						},
+						"selaCvraEUPV9LVmY": {
+							"id": "selaCvraEUPV9LVmY",
+							"color": "yellow",
+							"name": "Divorced"
+						},
+						"sel0ogQs0sB8jmBq3": {
+							"id": "sel0ogQs0sB8jmBq3",
+							"color": "orange",
+							"name": "Widowed"
+						}
+					},
+					"disableColors": false
+				}
+			},
+			{
+				"id": "fldO3GQM2c2mCHDtv",
+				"name": "LinkedIn Account",
+				"type": "text",
+				"typeOptions": {
+					"validatorName": "url"
+				}
+			},
+			{
+				"id": "fldTXt4MOnmiJ82WH",
+				"name": "Email",
+				"type": "text",
+				"typeOptions": {
+					"validatorName": "email"
+				}
+			},
+			{
+				"id": "fldeXHz9dWUdXOdcr",
+				"name": "Base",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldgOPfcii6kslKdl",
+				"name": "Department - Old",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldYx4Ml6Zzh731Ri",
+				"name": "Department",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldfdoLqyOM2NwsWl",
+				"name": "Direct Manager",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fld37HUyKnKoU6SOJ",
+				"name": "Member Type",
+				"type": "select",
+				"typeOptions": {
+					"choiceOrder": [
+						"sel8e6Z6hMB7JN88p",
+						"selkDi9uHzgQXcLFp",
+						"sel5nk6ae9PQHzsDJ",
+						"sellzr0g5KFyDQj0S"
+					],
+					"choices": {
+						"sel8e6Z6hMB7JN88p": {
+							"id": "sel8e6Z6hMB7JN88p",
+							"color": "blue",
+							"name": "Employee"
+						},
+						"selkDi9uHzgQXcLFp": {
+							"id": "selkDi9uHzgQXcLFp",
+							"color": "cyan",
+							"name": "Contractor"
+						},
+						"sel5nk6ae9PQHzsDJ": {
+							"id": "sel5nk6ae9PQHzsDJ",
+							"color": "teal",
+							"name": "Consultant"
+						},
+						"sellzr0g5KFyDQj0S": {
+							"id": "sellzr0g5KFyDQj0S",
+							"color": "green",
+							"name": "Partner"
+						}
+					},
+					"disableColors": false
+				}
+			},
+			{
+				"id": "fldoie4RRaj5d5wfb",
+				"name": "Job Positions",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldy4XY6mzwTw48dD",
+				"name": "Job Roles",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fld98ZHSUGTpoWNGU",
+				"name": "Job Title",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldQBIqgdJy4RU143",
+				"name": "Department Supervisor",
+				"type": "checkbox",
+				"typeOptions": {
+					"color": "green",
+					"icon": "check"
+				}
+			},
+			{
+				"id": "fldqyv4RGZTX5NKmy",
+				"name": "Entry Date",
+				"type": "date",
+				"typeOptions": {
+					"isDateTime": false,
+					"dateFormat": "Local"
+				}
+			},
+			{
+				"id": "fldBGnEibFaYZhCv2",
+				"name": "Exit Date",
+				"type": "date",
+				"typeOptions": {
+					"isDateTime": false,
+					"dateFormat": "Local"
+				}
+			},
+			{
+				"id": "fldtyf60fDYiLWPOr",
+				"name": "Payroll ID",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fld94hWFwvwDGZDL8",
+				"name": "Employee Wage",
+				"type": "number",
+				"typeOptions": {
+					"format": "currency",
+					"precision": 2,
+					"symbol": "$",
+					"negative": false,
+					"validatorName": "positive"
+				}
+			},
+			{
+				"id": "fldnVCrFQmXv1tTVQ",
+				"name": "Employee Allowance",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldov7keteXZEyfWe",
+				"name": "Seat Number",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldRNcVjwfS7cLCO5",
+				"name": "Phone Number Visibility",
+				"type": "checkbox",
+				"typeOptions": {
+					"color": "green",
+					"icon": "check"
+				}
+			},
+			{
+				"id": "fld4SpLLt8OTvpnDI",
+				"name": "Nationality",
+				"type": "select",
+				"typeOptions": {
+					"choiceOrder": [
+						"sel6eracCDDL5y5xO",
+						"seli2ZX0y664Q9s58",
+						"selRzNakvYutBWtUO"
+					],
+					"choices": {
+						"sel6eracCDDL5y5xO": {
+							"id": "sel6eracCDDL5y5xO",
+							"color": "blue",
+							"name": "AU-Australia"
+						},
+						"seli2ZX0y664Q9s58": {
+							"id": "seli2ZX0y664Q9s58",
+							"color": "cyan",
+							"name": "SG-Singapore"
+						},
+						"selRzNakvYutBWtUO": {
+							"id": "selRzNakvYutBWtUO",
+							"color": "teal",
+							"name": "PH-Philippines"
+						}
+					},
+					"disableColors": false
+				}
+			},
+			{
+				"id": "fld4YCJr4Acv81DiZ",
+				"name": "Citizenship",
+				"type": "select",
+				"typeOptions": {
+					"choiceOrder": [],
+					"choices": {},
+					"disableColors": false
+				}
+			},
+			{
+				"id": "fldWB74VPoCASt3N5",
+				"name": "Address 1",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldY7v8OyFPx1Ob5m",
+				"name": "Address 2",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldi0jxhcszT8jfj7",
+				"name": "City",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldvZRw8TLih6bg1P",
+				"name": "State/Province",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldSJeSwgYElamwv1",
+				"name": "Zip",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldE2G77DfT7vqSXR",
+				"name": "Country",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldUjDXcBbJvYq4Ac",
+				"name": "Home Number",
+				"type": "phone",
+				"typeOptions": null
+			},
+			{
+				"id": "fldNrhzWrpsigOYMW",
+				"name": "Mobile Number",
+				"type": "phone",
+				"typeOptions": null
+			},
+			{
+				"id": "fldjTV6fZRp6gSCFv",
+				"name": "Language",
+				"type": "multiSelect",
+				"typeOptions": {
+					"choiceOrder": [
+						"selTJVX2H1U4x55eU",
+						"selUBOjRag1JIbKHt",
+						"sely63hGI1rSZSBuh",
+						"self0C9FNs6yaf64H",
+						"selJu6vFSCC3qnTev",
+						"selqPubyhrDo1hzjW"
+					],
+					"choices": {
+						"selTJVX2H1U4x55eU": {
+							"id": "selTJVX2H1U4x55eU",
+							"color": "blue",
+							"name": "English"
+						},
+						"selUBOjRag1JIbKHt": {
+							"id": "selUBOjRag1JIbKHt",
+							"color": "cyan",
+							"name": "Filipino"
+						},
+						"sely63hGI1rSZSBuh": {
+							"id": "sely63hGI1rSZSBuh",
+							"color": "teal",
+							"name": "Mandarin"
+						},
+						"self0C9FNs6yaf64H": {
+							"id": "self0C9FNs6yaf64H",
+							"color": "green",
+							"name": "Japanese"
+						},
+						"selJu6vFSCC3qnTev": {
+							"id": "selJu6vFSCC3qnTev",
+							"color": "yellow",
+							"name": "French"
+						},
+						"selqPubyhrDo1hzjW": {
+							"id": "selqPubyhrDo1hzjW",
+							"color": "orange",
+							"name": "German"
+						}
+					},
+					"disableColors": false
+				}
+			},
+			{
+				"id": "fldPkPgAIF5iFosST",
+				"name": "Curriculum Vitae",
+				"type": "multipleAttachment",
+				"typeOptions": {
+					"unreversed": true
+				}
+			},
+			{
+				"id": "fldTrOEuUCji6QX33",
+				"name": "Skills",
+				"type": "multiSelect",
+				"typeOptions": {
+					"choiceOrder": [
+						"selzy2RhO1TQGt8om",
+						"selgUmqA4EYtL0XQt",
+						"selyHYocAAVAaQcAx",
+						"selaIzN0eyju2n21Y",
+						"selSUd2kVpRlmElGx",
+						"selVzFZnQaT27B5OF"
+					],
+					"choices": {
+						"selzy2RhO1TQGt8om": {
+							"id": "selzy2RhO1TQGt8om",
+							"color": "blue",
+							"name": "Programming Skills - .Net"
+						},
+						"selgUmqA4EYtL0XQt": {
+							"id": "selgUmqA4EYtL0XQt",
+							"color": "cyan",
+							"name": "Programming Skills - PHP"
+						},
+						"selyHYocAAVAaQcAx": {
+							"id": "selyHYocAAVAaQcAx",
+							"color": "teal",
+							"name": "Programming Skills - Java"
+						},
+						"selaIzN0eyju2n21Y": {
+							"id": "selaIzN0eyju2n21Y",
+							"color": "green",
+							"name": "Database Management"
+						},
+						"selSUd2kVpRlmElGx": {
+							"id": "selSUd2kVpRlmElGx",
+							"color": "yellow",
+							"name": "Product Management"
+						},
+						"selVzFZnQaT27B5OF": {
+							"id": "selVzFZnQaT27B5OF",
+							"color": "orange",
+							"name": "Pre-Sales"
+						}
+					},
+					"disableColors": false
+				}
+			},
+			{
+				"id": "fldJOJ06JkPTnAxyS",
+				"name": "Leave Scheme",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fld8Ttk6yNJsEzHx3",
+				"name": "Daily Work Hours",
+				"type": "number",
+				"typeOptions": {
+					"format": "decimal",
+					"precision": 1,
+					"negative": false,
+					"validatorName": "positive"
+				}
+			},
+			{
+				"id": "fldykHib0cBTdrtuN",
+				"name": "Contact Person",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldDIpRGJ2SsczhfF",
+				"name": "Contact Person Mobile No",
+				"type": "phone",
+				"typeOptions": null
+			},
+			{
+				"id": "fldQOTxc0BHFOjZqd",
+				"name": "Relation to Contact Person",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldrXNoDYeF7pT6mg",
+				"name": "Job History",
+				"type": "multipleAttachment",
+				"typeOptions": {
+					"unreversed": true
+				}
+			},
+			{
+				"id": "fldPOOCpHARH5Pase",
+				"name": "Dependents",
+				"type": "multipleAttachment",
+				"typeOptions": {
+					"unreversed": true
+				}
+			},
+			{
+				"id": "fldmiYDvhmYMty4bg",
+				"name": "Attachments",
+				"type": "multipleAttachment",
+				"typeOptions": {
+					"unreversed": true
+				}
+			},
+			{
+				"id": "fldHa00ljR9DOSgMK",
+				"name": "Created By",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "flduPgclkSMOkmSUG",
+				"name": "Date Created",
+				"type": "date",
+				"typeOptions": {
+					"isDateTime": true,
+					"timeZone": "client",
+					"dateFormat": "Local"
+				}
+			},
+			{
+				"id": "fldCwvMxHZGNvPrRo",
+				"name": "Last Modified By",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldnMYKLDtH59tTig",
+				"name": "Last Modified",
+				"type": "date",
+				"typeOptions": {
+					"isDateTime": true,
+					"timeZone": "client",
+					"dateFormat": "Local"
+				}
+			},
+			{
+				"id": "fldSd6oYM8VL9Al9c",
+				"name": "Lark ID",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldjWaE3x9j79mFEY",
+				"name": "Is HR",
+				"type": "checkbox",
+				"typeOptions": {
+					"color": "green",
+					"icon": "check"
+				}
+			},
+			{
+				"id": "fldV2cb1jTnS2U4RY",
+				"name": "Calculation",
+				"type": "multilineText",
+				"typeOptions": null
+			},
+			{
+				"id": "fldoft7PdGIfb6bWT",
+				"name": "Current Job Position",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldlgG0jejuzkcKyK",
+				"name": "Current Department",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fld3UreoQOhSIxfz7",
+				"name": "BasicPay",
+				"type": "number",
+				"typeOptions": {
+					"format": "currency",
+					"precision": 2,
+					"symbol": "$",
+					"negative": false,
+					"validatorName": "positive"
+				}
+			},
+			{
+				"id": "fldQbM9CdBIPPuPw9",
+				"name": "Current Employment Status",
 				"type": "text",
 				"typeOptions": null
 			}

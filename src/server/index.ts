@@ -8,9 +8,13 @@ import { DenimDataRetriever } from './sync/retrievers/DenimDataRetriever';
 import { EmployeeMapper } from './sync/mappers/EmployeeMapper';
 import LarkUpdater from './sync/updaters/LarkUpdater';
 import { DepartmentMapper } from './sync/mappers/DepartmentMapper';
-import { DenimQueryOperator, DenimRecord } from '../denim/core';
+import {
+  DenimDataContext,
+  DenimQueryOperator,
+  DenimRecord,
+} from '../denim/core';
 import LarkAuthentication from './LarkAuthentication';
-import { DenimAuthenticator } from '../denim/service';
+import { DenimAuthenticator, DenimCombinedDataSource } from '../denim/service';
 import LemonadeValidations from '../validation';
 
 Airtable.configure({
@@ -23,28 +27,47 @@ Airtable.configure({
 const app = express();
 const cors = require('cors');
 
-const schema = new AirTableSchemaSource<{
-  userData?: DenimRecord;
-}>(require('../schema/airtable-schema.json'));
-const data = new AirTableDataSource<{}, AirTableSchemaSource<{}>>(
-  schema,
-  'appjkBnHNyutcO3Wr',
-);
+const dataSource = () => {
+  const coreSchema = new AirTableSchemaSource<
+    {
+      userData?: DenimRecord;
+    } & DenimDataContext
+  >(require('../schema/airtable-schema.json'));
+  const coreData = new AirTableDataSource<
+    {
+      userData?: DenimRecord;
+    } & DenimDataContext,
+    AirTableSchemaSource<
+      {
+        userData?: DenimRecord;
+      } & DenimDataContext
+    >
+  >(coreSchema, 'appjkBnHNyutcO3Wr');
 
-const securedSchema = new AirTableSchemaSource<{
-  userData?: DenimRecord;
-}>(require('../schema/airtable-schema.json'));
-const securedData = new AirTableDataSource<
-  {
-    userData?: DenimRecord;
-    tags?: { [key: string]: any };
-  },
-  AirTableSchemaSource<{ userData?: DenimRecord }>
->(securedSchema, 'appjkBnHNyutcO3Wr');
+  const movementSchema = new AirTableSchemaSource<
+    {
+      userData?: DenimRecord;
+    } & DenimDataContext
+  >(require('../schema/airtable-movement-schema.json'));
+  const movementData = new AirTableDataSource<
+    {
+      userData?: DenimRecord;
+    } & DenimDataContext,
+    AirTableSchemaSource<
+      {
+        userData?: DenimRecord;
+      } & DenimDataContext
+    >
+  >(movementSchema, 'appjU7N7cU8txX6SJ');
 
+  LemonadeValidations(coreSchema);
+  LemonadeValidations(movementSchema);
 
-LemonadeValidations(securedSchema);
-LemonadeValidations(schema);
+  return new DenimCombinedDataSource(coreData, movementData);
+};
+
+const data = dataSource();
+const securedData = dataSource();
 
 const denimAuth = new DenimAuthenticator(
   [
@@ -143,7 +166,7 @@ const denimAuth = new DenimAuthenticator(
       },
     },
   ],
-  schema.findTableSchema('Employee'),
+  securedData.schemaSource.findTableSchema('Employee'),
 );
 
 denimAuth.attach(securedData);
@@ -194,7 +217,7 @@ app.use('/auth/me', cors(), authMiddleware, (req, res) => {
 });
 
 app.use('/data', cors(), authMiddleware, dataRouter);
-app.use('/data-us', cors(), DenimDataSourceRouter(data));
+//app.use('/data-us', cors(), DenimDataSourceRouter(data));
 
 app.use('/auth', cors(), larkAuth.loginEndpoint());
 

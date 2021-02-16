@@ -66,6 +66,7 @@ interface FormProviderProps {
   record: string;
   onSave?: (record: DenimRecord) => void;
   expand?: string[];
+  prefill?: DenimRecord;
 }
 
 interface ConnectedFormProps {
@@ -91,7 +92,16 @@ export interface DenimConnectedDataContext<T extends DenimDataContext> {
   ) => DenimTableDataProvider<T, DenimSchemaSource<T>> | null;
   getLookupProviderFor: (
     table: string,
-  ) => (relationship: string, query: string) => Promise<DenimRelatedRecord[]>;
+  ) => {
+    lookup: (
+      relationship: string,
+      query: string,
+    ) => Promise<DenimRelatedRecord[]>;
+    find: (
+      relationship: string,
+      id: string,
+    ) => Promise<DenimRelatedRecord | null>;
+  };
   context?: T;
   table?: string;
   tableSchema?: DenimTable;
@@ -109,6 +119,7 @@ export interface ConnectedForm<
       query?: DenimQueryConditionGroup;
       renderActions?: (record: DenimRecord) => any;
       extraData?: any;
+      defaultSort?: DenimSortExpression;
     }
   >;
   Filter: ComponentType<FilterProps>;
@@ -129,7 +140,10 @@ export const createConnectedFormProvider = <
     getTableSchema: () => undefined,
     getControlFor: () => null,
     getDataProviderFor: () => null,
-    getLookupProviderFor: () => async () => [],
+    getLookupProviderFor: () => ({
+      lookup: async () => [],
+      find: async () => null,
+    }),
   });
 
   const Provider: FunctionComponent<DenimConnectedDataProviderProps<T, S>> = ({
@@ -277,54 +291,93 @@ export const createConnectedFormProvider = <
             const tableSchema = getTableSchema(table);
 
             if (tableSchema) {
-              return async (relationship: string, query: string) => {
-                const column = tableSchema?.columns.find(
-                  ({ name }) => name === relationship,
-                );
+              return {
+                lookup: async (relationship: string, query: string) => {
+                  const column = tableSchema?.columns.find(
+                    ({ name }) => name === relationship,
+                  );
 
-                if (column?.type === DenimColumnType.ForeignKey) {
-                  const otherTable = column.properties.foreignTableId;
-                  const otherTableSchema = getTableSchema(otherTable);
+                  if (column?.type === DenimColumnType.ForeignKey) {
+                    const otherTable = column.properties.foreignTableId;
+                    const otherTableSchema = getTableSchema(otherTable);
 
-                  if (otherTableSchema) {
-                    const nameField = otherTableSchema.nameField;
-                    const data = getDataProviderFor(otherTableSchema.name);
-                    const c: any = context;
+                    if (otherTableSchema) {
+                      const nameField = otherTableSchema.nameField;
+                      const data = getDataProviderFor(otherTableSchema.name);
+                      const c: any = context;
 
-                    if (data) {
-                      const denimQuery: DenimQuery =
-                        query === '**||**'
-                          ? {
-                              expand: [],
-                              retrieveAll: true,
-                            }
-                          : {
-                              conditions: {
-                                conditionType: 'single',
-                                field: nameField,
-                                operator: DenimQueryOperator.Contains,
-                                value: query,
-                              },
-                              expand: [],
-                            };
+                      if (data) {
+                        const denimQuery: DenimQuery =
+                          query === '**||**'
+                            ? {
+                                expand: [],
+                                retrieveAll: true,
+                              }
+                            : {
+                                conditions: {
+                                  conditionType: 'single',
+                                  field: nameField,
+                                  operator: DenimQueryOperator.Contains,
+                                  value: query,
+                                },
+                                expand: [],
+                              };
 
-                      const records = await data.retrieveRecords(c, denimQuery);
+                        const records = await data.retrieveRecords(
+                          c,
+                          denimQuery,
+                        );
 
-                      return records.map((record) => ({
-                        type: 'record',
-                        id: String(record.id),
-                        name: String(record[nameField]),
-                        record,
-                      }));
+                        return records.map((record) => ({
+                          type: 'record',
+                          id: String(record.id),
+                          name: String(record[nameField]),
+                          record,
+                        }));
+                      }
                     }
                   }
-                }
 
-                return [];
+                  return [];
+                },
+                find: async (relationship: string, id: string) => {
+                  const column = tableSchema?.columns.find(
+                    ({ name }) => name === relationship,
+                  );
+
+                  if (column?.type === DenimColumnType.ForeignKey) {
+                    const otherTable = column.properties.foreignTableId;
+                    const otherTableSchema = getTableSchema(otherTable);
+
+                    if (otherTableSchema) {
+                      const nameField = otherTableSchema.nameField;
+                      const data = getDataProviderFor(otherTableSchema.name);
+                      const c: any = context;
+
+                      if (data) {
+                        const record = await data.retrieveRecord(c, id);
+
+                        if (record) {
+                          return {
+                            type: 'record',
+                            id: String(record.id),
+                            name: String(record[nameField]),
+                            record,
+                          };
+                        }
+                      }
+                    }
+                  }
+
+                  return null;
+                },
               };
             }
 
-            return async () => [];
+            return {
+              lookup: async () => [],
+              find: async () => null,
+            };
           },
         }}
       >
@@ -470,8 +523,9 @@ export const createConnectedFormProvider = <
       query?: DenimQueryConditionGroup;
       renderActions?: (record: DenimRecord) => any;
       extraData?: any;
+      defaultSort?: DenimSortExpression;
     }
-  > = ({ table, query, extraData, ...props }) => {
+  > = ({ table, query, extraData, defaultSort, ...props }) => {
     const context = useContext(Context);
     const dataProvider = useMemo(() => context.getDataProviderFor(table), [
       context,
@@ -501,14 +555,16 @@ export const createConnectedFormProvider = <
       return [];
     }, [tableSchema]);
     const [records, setRecords] = useState<DenimRecord[]>([]);
-    const [sort, setSort] = useState<DenimSortExpression>();
+    const [sort, setSort] = useState<DenimSortExpression | undefined>(
+      defaultSort,
+    );
     const [hasMore, setHasMore] = useState(true);
     const [retrieving, setRetrieving] = useState(false);
     const [page, setPage] = useState(1);
-    const lookup = useMemo(() => context.getLookupProviderFor(table), [
-      context,
-      table,
-    ]);
+    const { lookup, find } = useMemo(
+      () => context.getLookupProviderFor(table),
+      [context, table],
+    );
     const notifications = useDenimNotifications();
 
     const retrieveMore = async (cancelledCheck?: () => boolean) => {
@@ -569,7 +625,7 @@ export const createConnectedFormProvider = <
         setSort={setSort}
         sort={sort}
       >
-        <DenimLookupDataProvider lookup={lookup}>
+        <DenimLookupDataProvider lookup={lookup} find={find}>
           <DenimView {...props} />
         </DenimLookupDataProvider>
       </DenimViewDataProvider>
@@ -581,6 +637,7 @@ export const createConnectedFormProvider = <
     record,
     onSave = () => {},
     expand,
+    prefill = {},
     children,
   }) => {
     const context = useContext(Context);
@@ -592,18 +649,24 @@ export const createConnectedFormProvider = <
       context.getTableValidator,
       table,
     ]);
+    const tableSchema = useMemo(() => context.getTableSchema(table), [
+      context.getTableSchema,
+      table,
+    ]);
 
     const [formValid, setFormValid] = useState(false);
     const [recordData, setRecordData] = useState<DenimRecord | null>(
-      record ? null : {},
+      record ? null : prefill,
     );
-    const [updateData, setUpdateData] = useState<DenimRecord | null>({});
+    const [updateData, setUpdateData] = useState<DenimRecord | null>(
+      recordData === prefill ? prefill : {},
+    );
     const [errors, setErrors] = useState<Yup.ValidationError[]>([]);
     const [saving, setSaving] = useState(false);
-    const lookup = useMemo(() => context.getLookupProviderFor(table), [
-      context,
-      table,
-    ]);
+    const { lookup, find } = useMemo(
+      () => context.getLookupProviderFor(table),
+      [context, table],
+    );
 
     const form = useDenimForm();
     const notifications = useDenimNotifications();
@@ -669,11 +732,43 @@ export const createConnectedFormProvider = <
         setErrors([]);
         setSaving(true);
         const c: any = context.context;
-        const rec: any = updateData;
+        const rec: any = {
+          ...updateData,
+        };
         notifications.notify({
           type: 'info',
           message: 'Saving record...',
           code: DenimNotificationCodes.SavingRecord,
+        });
+
+        Object.keys(rec).forEach((key) => {
+          const value = rec[key];
+
+          if (typeof value === 'string') {
+            // Convert any string fields on foreign keys to proper records.
+            const field = tableSchema?.columns.find(({ name }) => name === key);
+
+            if (field && field.type === DenimColumnType.ForeignKey) {
+              if (field.properties.multiple) {
+                rec[key] = {
+                  type: 'record-collection',
+                  records: [
+                    {
+                      type: 'record',
+                      id: value,
+                      name: '',
+                    }
+                  ],
+                };
+              } else {
+                rec[key] = {
+                  type: 'record',
+                  id: value,
+                  name: '',
+                };
+              }
+            }
+          }
         });
 
         try {
@@ -744,7 +839,7 @@ export const createConnectedFormProvider = <
             tableSchema: context.getTableSchema(table),
           }}
         >
-          <DenimLookupDataProvider lookup={lookup}>
+          <DenimLookupDataProvider lookup={lookup} find={find}>
             {children}
             <RNView style={{ marginTop: 12 }}>
               <Button
@@ -836,10 +931,10 @@ export const createConnectedFormProvider = <
 
       return fields;
     }, [table, schema]);
-    const lookup = useMemo(() => context.getLookupProviderFor(table), [
-      context,
-      table,
-    ]);
+    const { lookup, find } = useMemo(
+      () => context.getLookupProviderFor(table),
+      [context, table],
+    );
 
     const form = useDenimForm();
     const notifications = useDenimNotifications();
@@ -973,7 +1068,7 @@ export const createConnectedFormProvider = <
           })
         }
       >
-        <DenimLookupDataProvider lookup={lookup}>
+        <DenimLookupDataProvider lookup={lookup} find={find}>
           <DenimForm
             schema={convertedSchema}
             error={errors.filter((error) => !error.path).join('\n')}
