@@ -568,7 +568,7 @@ const DenimScreen: FunctionComponent<DenimScreenProps> = ({
       return (
         <DenimFormControl
           schema={controlSchema}
-          value={schema.value ? readContextVariable(schema.value) : null}
+          value={schema.value ? readContextVariable(schema.value) : undefined}
           onChange={schema.onChange}
         />
       );
