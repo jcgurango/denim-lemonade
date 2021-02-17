@@ -449,9 +449,9 @@ const movementScreen = (
                 },
               },
               {
-                relativeWidth: 1,
+                relativeWidth: 2,
                 component: {
-                  id: 'switch',
+                  id: 'movements-switch',
                   paths: [],
                   type: 'field',
                   value: id,
@@ -462,7 +462,7 @@ const movementScreen = (
                     );
                   },
                   field: {
-                    id: 'switch',
+                    id: 'movements-switch',
                     type: DenimFormControlType.DropDown,
                     label: 'Movement Type',
                     controlProps: {

@@ -17,6 +17,40 @@ const LemonadeFormControl: FunctionComponent<DenimFormControlProps> = ({
   const Control = schema.type ? denimForm.controlRegistry[schema.type] : null;
   const controlErrors = denimForm.getErrorsFor(schema.id);
 
+  if (schema.id === 'movements-switch') {
+    return (
+      <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+        {!schema.hideLabel ? (
+          <Text
+            style={[
+              styles.formLabel,
+              denimForm.styleOverrides?.formControl?.formLabel,
+            ]}
+          >
+            {schema.label ||
+              translation.translate(
+                `Forms.${form?.id || 'generic'}.Fields.${schema.id}`,
+              )}
+          </Text>
+        ) : null}
+        {Control ? (
+          <View style={{ flex: 1 }}>
+            <Control
+              value={value === Empty ? denimForm.getValue(schema.id) : value}
+              onChange={
+                onChange === Empty ? denimForm.setValue(schema.id) : onChange
+              }
+              schema={schema}
+              form={form}
+              errors={controlErrors}
+              {...schema.controlProps}
+            />
+          </View>
+        ) : null}
+      </View>
+    );
+  }
+
   return (
     <>
       {Control ? (

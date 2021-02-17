@@ -2,12 +2,7 @@ import React, { FunctionComponent, useContext, useMemo, useState } from 'react';
 import { Modal, StyleSheet, Text, View } from 'react-native';
 import { Link, useHistory, useParams } from 'react-router-dom';
 import { DenimQueryConditionOrGroup, DenimRecord, isMobile } from '../../core';
-import {
-  ConnectedForm,
-  DenimFormControl,
-  DenimIcon,
-  useDenimUser,
-} from '../../forms';
+import { ConnectedForm, DenimIcon, useDenimUser } from '../../forms';
 import DenimTabControl from '../../forms/controls/DenimTabControl';
 import { useDenimForm } from '../../forms/providers/DenimFormProvider';
 import { useDenimNotifications } from '../../forms/providers/DenimNotificationProvider';
@@ -103,7 +98,7 @@ const DenimScreen: FunctionComponent<DenimScreenProps> = ({
   const PostComponent = schema.postContent || (() => null);
   const { Context } = formProvider;
   const {
-    componentRegistry: { button: DenimButton },
+    componentRegistry: { button: DenimButton, control: DenimFormControl },
   } = useDenimForm();
   const data = useContext(Context);
   const history = useHistory();
