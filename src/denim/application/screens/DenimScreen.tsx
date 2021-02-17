@@ -312,7 +312,7 @@ const DenimScreen: FunctionComponent<DenimScreenProps> = ({
                           style={{
                             flexDirection: 'row',
                             alignItems: 'center',
-                            justifyContent: 'space-evenly',
+                            justifyContent: 'flex-start',
                           }}
                         >
                           {schema.actions.map((action) => {
@@ -329,6 +329,7 @@ const DenimScreen: FunctionComponent<DenimScreenProps> = ({
                                     }));
                                   }}
                                   title={action.title || 'Delete'}
+                                  style={{ marginRight: 12 }}
                                 >
                                   <DenimIcon type={action.icon || 'delete'} />
                                 </a>
@@ -367,6 +368,7 @@ const DenimScreen: FunctionComponent<DenimScreenProps> = ({
                                     <Link
                                       to={path}
                                       title={action.title || 'View'}
+                                      style={{ marginRight: 12 }}
                                     >
                                       <DenimIcon
                                         type={action.icon || 'pencil'}
