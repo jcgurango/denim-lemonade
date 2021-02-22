@@ -58,6 +58,7 @@ const field = (
   id: string,
   relativeWidth?: number,
   controlProps?: any,
+  extraSchema?: Partial<DenimFormControlSchema>,
 ): {
   relativeWidth?: number;
   component: {
@@ -75,6 +76,7 @@ const field = (
     field: {
       id,
       controlProps,
+      ...(extraSchema || {}),
     },
   },
 });
@@ -624,7 +626,11 @@ const movementScreen = (
         flowDirection: 'row',
         children: [
           field('Effective Date', 1),
-          ...columns.map((column) => field(column, 1)),
+          ...columns.map((column) =>
+            field(column, 1, undefined, {
+              label: 'New ' + column,
+            }),
+          ),
         ],
       },
       prefill: {
@@ -714,21 +720,10 @@ const App = () => {
                     component: {
                       id: 'create',
                       paths: [],
-                      type: 'content',
-                      content: () => {
-                        const {
-                          componentRegistry: { button: DenimButton },
-                        } = useDenimForm();
-
-                        return (
-                          <Link
-                            to="/employee"
-                            style={{ textDecoration: 'none' }}
-                          >
-                            <DenimButton text="Create" onPress={() => {}} />
-                          </Link>
-                        );
-                      },
+                      type: 'button',
+                      text: 'Create',
+                      buttonAction: 'screen',
+                      screen: 'employee',
                     },
                   },
                 ],
@@ -771,6 +766,11 @@ const App = () => {
                   {
                     type: 'view',
                     screen: 'employee',
+                    params: {
+                      id: {
+                        $record: 'id',
+                      },
+                    },
                   },
                   {
                     type: 'delete',
@@ -922,6 +922,19 @@ const App = () => {
                                   disabled: true,
                                 }),
                                 field('Email', 1, { disabled: true }),
+                                {
+                                  component: {
+                                    type: 'button',
+                                    buttonAction: 'screen',
+                                    screen: 'movements-allowance',
+                                    text: 'View Allowances',
+                                    params: {
+                                      id: {
+                                        $record: 'Employee ID',
+                                      },
+                                    },
+                                  },
+                                },
                               ],
                             },
                           },
@@ -1158,19 +1171,6 @@ const App = () => {
                                     children: [
                                       field('Payroll ID', 2),
                                       field('Employee Wage', 3),
-                                    ],
-                                  },
-                                },
-                                {
-                                  component: {
-                                    id: 'row1',
-                                    type: 'layout',
-                                    flowDirection: 'row',
-                                    paths: [],
-                                    children: [
-                                      field('Employee Allowance', 1, {
-                                        dropdown: true,
-                                      }),
                                     ],
                                   },
                                 },

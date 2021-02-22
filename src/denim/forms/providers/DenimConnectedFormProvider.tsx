@@ -23,6 +23,7 @@ import {
   DenimNotificationCodes,
   DenimQuery,
   DenimQueryConditionGroup,
+  DenimQueryConditionOrGroup,
   DenimQueryOperator,
   DenimRecord,
   DenimRelatedRecord,
@@ -63,7 +64,7 @@ interface DenimConnectedDataProviderProps<
 
 interface FormProviderProps {
   table: string;
-  record: string;
+  record: string | DenimQueryConditionOrGroup;
   onSave?: (record: DenimRecord) => void;
   expand?: string[];
   prefill?: DenimRecord;
@@ -105,6 +106,7 @@ export interface DenimConnectedDataContext<T extends DenimDataContext> {
   context?: T;
   table?: string;
   tableSchema?: DenimTable;
+  currentRecord?: DenimRecord;
 }
 
 export interface ConnectedForm<
@@ -321,6 +323,7 @@ export const createConnectedFormProvider = <
                                   value: query,
                                 },
                                 expand: [],
+                                pageSize: 10,
                               };
 
                         const records = await data.retrieveRecords(
@@ -679,14 +682,31 @@ export const createConnectedFormProvider = <
 
         (async () => {
           if (context.context) {
-            const retrievedRecord = await dataProvider?.retrieveRecord(
-              context.context,
-              record,
-              expand,
-            );
+            let retrievedRecord: DenimRecord | null = null;
+
+            if (typeof record === 'string') {
+              retrievedRecord =
+                (await dataProvider?.retrieveRecord(
+                  context.context,
+                  record,
+                  expand,
+                )) || null;
+            } else {
+              const records = await dataProvider?.retrieveRecords(
+                context.context,
+                {
+                  pageSize: 1,
+                  conditions: record,
+                },
+              );
+
+              if (records?.length) {
+                retrievedRecord = records[0];
+              }
+            }
 
             if (!cancelled) {
-              setRecordData(retrievedRecord || null);
+              setRecordData(retrievedRecord);
             }
           }
         })();
@@ -758,7 +778,7 @@ export const createConnectedFormProvider = <
                       type: 'record',
                       id: value,
                       name: '',
-                    }
+                    },
                   ],
                 };
               } else {
@@ -838,6 +858,7 @@ export const createConnectedFormProvider = <
             ...context,
             table,
             tableSchema: context.getTableSchema(table),
+            currentRecord: recordData || undefined,
           }}
         >
           <DenimLookupDataProvider lookup={lookup} find={find}>
@@ -1070,12 +1091,23 @@ export const createConnectedFormProvider = <
         }
       >
         <DenimLookupDataProvider lookup={lookup} find={find}>
-          <DenimForm
-            schema={convertedSchema}
-            error={errors.filter((error) => !error.path).join('\n')}
-            {...props}
-          />
-          <Button text="Save" onPress={save} disabled={saving || !formValid} />
+          <Context.Provider
+            value={{
+              ...context,
+              currentRecord: recordData || undefined,
+            }}
+          >
+            <DenimForm
+              schema={convertedSchema}
+              error={errors.filter((error) => !error.path).join('\n')}
+              {...props}
+            />
+            <Button
+              text="Save"
+              onPress={save}
+              disabled={saving || !formValid}
+            />
+          </Context.Provider>
         </DenimLookupDataProvider>
       </DenimFormProvider>
     );

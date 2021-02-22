@@ -37,7 +37,8 @@ export type DenimRouterComponentSchema =
   | DenimTabsComponentSchema
   | DenimLayoutComponentSchema
   | DenimFieldComponentSchema
-  | DenimFormProviderComponentSchema;
+  | DenimFormProviderComponentSchema
+  | DenimLinkButtonComponentSchema;
 
 interface DenimComponentSchema<T extends string> {
   id: string;
@@ -48,6 +49,10 @@ interface DenimComponentSchema<T extends string> {
   postContent?: any;
   defaultState?: any;
 }
+
+export type DenimRouterParameterMap = {
+  [key: string]: DenimApplicationContextVariable;
+};
 
 export type DenimApplicationContextVariable =
   | string
@@ -99,16 +104,12 @@ export interface DenimLayoutComponentSchema
 export interface DenimFormProviderComponentSchema
   extends DenimComponentSchema<'form-provider'> {
   table: string;
-  record: DenimApplicationContextVariable;
+  record: DenimApplicationContextVariable | DenimQueryConditionOrGroup;
   component: DenimRouterComponentSchema;
-  prefill?: {
-    [key: string]: DenimApplicationContextVariable;
-  };
+  prefill?: DenimRouterParameterMap;
   saveRedirect?: {
     screen: string;
-    params?: {
-      [param: string]: DenimApplicationContextVariable;
-    };
+    params?: DenimRouterParameterMap;
   };
 }
 
@@ -124,6 +125,18 @@ export type DenimViewActionSchema =
   | DenimViewRecordPathActionSchema
   | DenimViewActionSchemaType<'delete'>;
 
+export interface DenimButtonComponentSchema<T extends string>
+  extends DenimComponentSchema<'button'> {
+  buttonAction: T;
+  text: DenimApplicationContextVariable;
+}
+
+export interface DenimLinkButtonComponentSchema
+  extends DenimButtonComponentSchema<'screen'> {
+  screen: string;
+  params?: DenimRouterParameterMap;
+}
+
 export interface DenimViewActionSchemaType<T extends string> {
   title?: string;
   icon?: DenimIconType;
@@ -134,7 +147,7 @@ export interface DenimViewActionSchemaType<T extends string> {
 export interface DenimViewRecordScreenActionSchema
   extends DenimViewActionSchemaType<'view'> {
   screen: string;
-  params?: { [param: string]: DenimApplicationContextVariable };
+  params?: DenimRouterParameterMap;
 }
 
 export interface DenimViewRecordPathActionSchema

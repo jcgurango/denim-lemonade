@@ -11,6 +11,7 @@ import {
   DenimApplicationContextVariable,
   DenimRouterSchema,
   DenimRouterComponentSchema,
+  DenimRouterParameterMap,
 } from '../types/router';
 
 export interface DenimScreenProps {
@@ -108,7 +109,7 @@ const DenimScreen: FunctionComponent<DenimScreenProps> = ({
 
   const readContextVariable = (
     variable: DenimApplicationContextVariable,
-    record?: DenimRecord,
+    record: DenimRecord | undefined = data.currentRecord,
   ) => {
     if (typeof variable === 'string') {
       return variable;
@@ -186,6 +187,45 @@ const DenimScreen: FunctionComponent<DenimScreenProps> = ({
         return;
       }
     }
+  };
+
+  const buildScreenPathFromParams = (
+    routerSchema: DenimRouterSchema,
+    screenId: string,
+    record?: DenimRecord,
+    paramsSchema?: DenimRouterParameterMap,
+  ) => {
+    const screen = routerSchema.screens.find(({ id }) => id === screenId);
+    const params: {
+      [param: string]: DenimApplicationContextVariable;
+    } = {
+      ...(paramsSchema || {}),
+    };
+    const pathParameters = Object.keys(params).sort().join('|');
+    const path = screen?.paths.find((path) => {
+      const params = [];
+      const regex = /:([\w-]+)/g;
+      let match;
+
+      while ((match = regex.exec(path))) {
+        params.push(match[1]);
+      }
+
+      return params.sort().join('|') === pathParameters;
+    });
+
+    if (screen && path) {
+      const newPath = Object.keys(params).reduce((current, param) => {
+        return current.replace(
+          ':' + param,
+          readContextVariable(params[param], record),
+        );
+      }, path);
+
+      return newPath;
+    }
+
+    return '';
   };
 
   const iterateQueryContextVariables = (
@@ -333,35 +373,17 @@ const DenimScreen: FunctionComponent<DenimScreenProps> = ({
 
                             if (action.type === 'view') {
                               if ('screen' in action) {
-                                const screen = routerSchema.screens.find(
-                                  ({ id }) => id === action.screen,
+                                const newPath = buildScreenPathFromParams(
+                                  routerSchema,
+                                  action.screen,
+                                  record,
+                                  action.params,
                                 );
-                                const params: {
-                                  [
-                                    param: string
-                                  ]: DenimApplicationContextVariable;
-                                } = {
-                                  id: { $record: 'id' },
-                                  ...(action.params || {}),
-                                };
 
-                                if (screen) {
-                                  const path = Object.keys(params).reduce(
-                                    (current, param) => {
-                                      return current.replace(
-                                        ':' + param,
-                                        readContextVariable(
-                                          params[param],
-                                          record,
-                                        ),
-                                      );
-                                    },
-                                    screen.paths[0],
-                                  );
-
+                                if (newPath) {
                                   return (
                                     <Link
-                                      to={path}
+                                      to={newPath}
                                       title={action.title || 'View'}
                                       style={{ marginRight: 12 }}
                                     >
@@ -472,7 +494,16 @@ const DenimScreen: FunctionComponent<DenimScreenProps> = ({
     if (schema.type === 'form-provider') {
       const { FormProvider } = formProvider;
       const recordId = schema.record
-        ? readContextVariable(schema.record)
+        ? typeof schema.record === 'string' ||
+          !('conditionType' in schema.record)
+          ? readContextVariable(schema.record)
+          : useMemo(
+              () =>
+                iterateQueryContextVariables(
+                  schema.record as DenimQueryConditionOrGroup,
+                ),
+              [schema.record],
+            )
         : null;
       const prefill = useMemo(() => {
         if (!schema.prefill) {
@@ -496,20 +527,18 @@ const DenimScreen: FunctionComponent<DenimScreenProps> = ({
           record={recordId}
           prefill={prefill}
           onSave={(record) => {
-            if (record.id && schema.record) {
-              writeContextVariable(schema.record, record.id, record);
-            }
-
             if (schema.saveRedirect) {
-              const screen = routerSchema.screens.find(
-                ({ id }) => id === schema.saveRedirect?.screen,
-              );
               const params: {
                 [param: string]: DenimApplicationContextVariable;
               } = {
-                id: { $record: 'id' },
                 ...(schema.saveRedirect.params || {}),
               };
+              const newPath = buildScreenPathFromParams(
+                routerSchema,
+                schema.saveRedirect.screen,
+                undefined,
+                schema.saveRedirect.params,
+              );
 
               if (screen) {
                 const currentPath = Object.keys(params).reduce(
@@ -521,12 +550,6 @@ const DenimScreen: FunctionComponent<DenimScreenProps> = ({
                   },
                   path,
                 );
-                const newPath = Object.keys(params).reduce((current, param) => {
-                  return current.replace(
-                    ':' + param,
-                    readContextVariable(params[param], record),
-                  );
-                }, screen.paths[0]);
 
                 if (currentPath !== newPath) {
                   history.push(newPath);
@@ -569,6 +592,26 @@ const DenimScreen: FunctionComponent<DenimScreenProps> = ({
           onChange={schema.onChange}
         />
       );
+    }
+
+    if (schema.type === 'button') {
+      if (schema.buttonAction === 'screen') {
+        const path = buildScreenPathFromParams(
+          routerSchema,
+          schema.screen,
+          undefined,
+          schema.params,
+        );
+
+        return (
+          <Link to={path} style={{ textDecoration: 'none' }}>
+            <DenimButton
+              text={readContextVariable(schema.text)}
+              onPress={() => {}}
+            />
+          </Link>
+        );
+      }
     }
 
     return null;
