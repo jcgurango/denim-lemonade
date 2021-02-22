@@ -324,6 +324,7 @@ export const createConnectedFormProvider = <
                                 },
                                 expand: [],
                                 pageSize: 10,
+                                page: 1,
                               };
 
                         const records = await data.retrieveRecords(
