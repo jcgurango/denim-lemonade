@@ -66,3 +66,4 @@ buck-out/
 .lastcheck
 .eslintcache
 config.json
+app.env

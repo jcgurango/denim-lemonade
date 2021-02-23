@@ -42,7 +42,7 @@ const dataSource = () => {
         userData?: DenimRecord;
       } & DenimDataContext
     >
-  >(coreSchema, 'appjkBnHNyutcO3Wr');
+  >(coreSchema, process.env.CORE_BASE_ID);
 
   const movementSchema = new AirTableSchemaSource<
     {
@@ -58,7 +58,7 @@ const dataSource = () => {
         userData?: DenimRecord;
       } & DenimDataContext
     >
-  >(movementSchema, 'appjU7N7cU8txX6SJ');
+  >(movementSchema, process.env.MOVEMENT_BASE_ID);
 
   LemonadeValidations(coreSchema);
   LemonadeValidations(movementSchema);
