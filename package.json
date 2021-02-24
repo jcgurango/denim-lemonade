@@ -10,6 +10,7 @@
     "build": "node scripts/build.js",
     "test": "jest",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
+    "serve": "env PORT=3000 npx serve build",
     "server": "ts-node --project src/server/tsconfig.json src/server/index.ts",
     "server:dev": "nodemon"
   },
@@ -116,6 +117,7 @@
     "nodemon": "^2.0.6",
     "patch-package": "^6.2.2",
     "react-test-renderer": "16.13.1",
+    "serve": "^11.3.2",
     "typescript": "^3.8.3"
   },
   "browserslist": {

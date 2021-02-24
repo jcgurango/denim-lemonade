@@ -205,7 +205,7 @@ const authMiddleware = larkAuth.middleware(async (id, req, res, next) => {
   return next();
 });
 
-app.use('/auth/me', cors(), authMiddleware, (req, res) => {
+app.use('/api/auth/me', cors(), authMiddleware, (req, res) => {
   if ((<any>req).denimContext) {
     return res.json({
       ...(<any>req).denimContext,
@@ -216,10 +216,9 @@ app.use('/auth/me', cors(), authMiddleware, (req, res) => {
   return res.json(null);
 });
 
-app.use('/data', cors(), authMiddleware, dataRouter);
-//app.use('/data-us', cors(), DenimDataSourceRouter(data));
+app.use('/api/data', cors(), authMiddleware, dataRouter);
 
-app.use('/auth', cors(), larkAuth.loginEndpoint());
+app.use('/api/auth', cors(), larkAuth.loginEndpoint());
 
 app.listen(9090, () => console.log('Listening...'));
 

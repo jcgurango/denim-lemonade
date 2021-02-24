@@ -28,10 +28,9 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import config from './config.json';
 import { useDenimNotifications } from './denim/forms/providers/DenimNotificationProvider';
 import { useDenimForm } from './denim/forms/providers/DenimFormProvider';
-import { Link, useHistory, useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import LemonadeButton from './components/LemonadeButton';
 import {
   LemonadeCell,
@@ -51,7 +50,7 @@ LemonadeValidations(schemaSource);
 
 const dataSource = new DenimRemoteDataSource(
   schemaSource,
-  config.serverUrl + '/data',
+  '/api/data',
 );
 
 const field = (
@@ -1322,7 +1321,7 @@ export default () => {
   }
 
   return (
-    <DenimUserProvider authUrl={config.serverUrl + '/auth'}>
+    <DenimUserProvider authUrl={window.location.origin + '/api/auth'}>
       <App />
     </DenimUserProvider>
   );

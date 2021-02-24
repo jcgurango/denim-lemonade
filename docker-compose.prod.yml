@@ -6,10 +6,10 @@ services:
       context: ./.docker/gateway
     env_file: app.env
     ports:
-      - 30000:80
+      - 80:80
   server:
     image: node:12
-    command: bash -c 'yarn install && (yarn web & yarn server:dev)'
+    command: bash -c 'yarn install && yarn build && (yarn serve & yarn server:dev)'
     working_dir: /app
     env_file: app.env
     volumes:
