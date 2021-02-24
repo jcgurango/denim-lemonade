@@ -86,6 +86,20 @@ const denimAuth = new DenimAuthenticator(
       },
     },
     {
+      id: 'hr',
+      readAction: 'allow',
+      createAction: 'block',
+      updateAction: 'block',
+      deleteAction: 'block',
+      tables: [],
+      roleQuery: {
+        conditionType: 'single',
+        field: 'Is HR User',
+        operator: DenimQueryOperator.Equals,
+        value: true,
+      },
+    },
+    {
       id: 'employee',
       readAction: 'block',
       createAction: 'block',

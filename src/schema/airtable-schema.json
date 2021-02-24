@@ -878,6 +878,15 @@
 				"name": "Current Department",
 				"type": "text",
 				"typeOptions": null
+			},
+			{
+				"id": "fldBbZI7CSQ9TWI1r",
+				"name": "Is HR User",
+				"type": "checkbox",
+				"typeOptions": {
+					"color": "green",
+					"icon": "check"
+				}
 			}
 		]
 	},

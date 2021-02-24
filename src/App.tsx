@@ -50,7 +50,7 @@ LemonadeValidations(schemaSource);
 
 const dataSource = new DenimRemoteDataSource(
   schemaSource,
-  '/api/data',
+  window.location.origin + '/api/data',
 );
 
 const field = (
@@ -597,7 +597,7 @@ const movementScreen = (
           },
         },
       ],
-      roles: ['hr'],
+      roles: ['hr', 'hr-user'],
     },
     {
       id: 'movement-' + id,
@@ -606,7 +606,7 @@ const movementScreen = (
         '/movements/:eid/' + id + '-new',
       ],
       type: 'form-provider',
-      roles: ['hr'],
+      roles: ['hr', 'hr-user'],
       table,
       record: {
         $route: 'id',
@@ -621,7 +621,7 @@ const movementScreen = (
         id: 'movement',
         paths: [],
         type: 'layout',
-        roles: ['hr'],
+        roles: ['hr', 'hr-user'],
         flowDirection: 'row',
         children: [
           field('Effective Date', 1),
@@ -778,7 +778,7 @@ const App = () => {
               },
             },
           ],
-          roles: ['hr'],
+          roles: ['hr', 'hr-user'],
         },
         {
           id: 'employee-self',
@@ -795,7 +795,7 @@ const App = () => {
           id: 'employee',
           paths: ['/employee/:id', '/employee'],
           type: 'form-provider',
-          roles: ['hr'],
+          roles: ['hr', 'hr-user'],
           table: 'Employee',
           record: {
             $route: 'id',
@@ -810,7 +810,7 @@ const App = () => {
             id: 'employee',
             paths: [],
             type: 'layout',
-            roles: ['hr'],
+            roles: ['hr', 'hr-user'],
             flowDirection: 'column',
             children: [
               {
@@ -921,19 +921,6 @@ const App = () => {
                                   disabled: true,
                                 }),
                                 field('Email', 1, { disabled: true }),
-                                {
-                                  component: {
-                                    type: 'button',
-                                    buttonAction: 'screen',
-                                    screen: 'movements-allowance',
-                                    text: 'View Allowances',
-                                    params: {
-                                      id: {
-                                        $record: 'Employee ID',
-                                      },
-                                    },
-                                  },
-                                },
                               ],
                             },
                           },
@@ -1173,6 +1160,19 @@ const App = () => {
                                     ],
                                   },
                                 },
+                                {
+                                  component: {
+                                    type: 'button',
+                                    buttonAction: 'screen',
+                                    screen: 'movements-allowance',
+                                    text: 'View Allowances',
+                                    params: {
+                                      id: {
+                                        $record: 'Employee ID',
+                                      },
+                                    },
+                                  },
+                                },
                               ],
                             },
                           },
@@ -1284,14 +1284,14 @@ const App = () => {
               id: 'employees',
               type: 'screen',
               label: 'Employees',
-              roles: ['hr'],
+              roles: ['hr', 'hr-user'],
             },
             {
               screen: 'employee',
               id: 'employee',
               type: 'screen',
               label: 'New Employee',
-              roles: ['hr'],
+              roles: ['hr', 'hr-user'],
             },
             {
               screen: 'employee-self',
