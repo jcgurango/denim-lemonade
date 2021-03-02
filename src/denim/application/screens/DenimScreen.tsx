@@ -536,11 +536,11 @@ const DenimScreen: FunctionComponent<DenimScreenProps> = ({
               const newPath = buildScreenPathFromParams(
                 routerSchema,
                 schema.saveRedirect.screen,
-                undefined,
+                record,
                 schema.saveRedirect.params,
               );
 
-              if (screen) {
+              if (newPath) {
                 const currentPath = Object.keys(params).reduce(
                   (current, param) => {
                     return current.replace(
