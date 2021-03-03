@@ -39,6 +39,7 @@ import {
   LemonadeRow,
 } from './components/LemonadeView';
 import LemonadeFormControl from './components/LemonadeFormControl';
+import LemonadeAuthenticator from './server/LemonadeAuthenticator';
 
 const schemaSource = new AirTableSchemaSource<{}>(
   require('./schema/airtable-schema.json').concat(
@@ -50,8 +51,10 @@ LemonadeValidations(schemaSource);
 
 const dataSource = new DenimRemoteDataSource(
   schemaSource,
-  window.location.origin + '/api/data',
+  (process.env.REACT_APP_API_BASE || window.location.origin) + '/api/data',
 );
+
+const auth = LemonadeAuthenticator(schemaSource.findTableSchema('Employee'));
 
 const field = (
   id: string,
@@ -1310,19 +1313,22 @@ const App = () => {
         formProvider={connectedFormProvider}
         schemaSource={schemaSource}
         dataSource={dataSource}
+        auth={auth}
       />
     </DenimFormProvider>
   );
 };
 
-export default () => {
+const Default = () => {
   if (window.location.pathname === '/loading') {
     return <ActivityIndicator />;
   }
 
   return (
-    <DenimUserProvider authUrl={window.location.origin + '/api/auth'}>
+    <DenimUserProvider authUrl={(process.env.REACT_APP_API_BASE || window.location.origin) + '/api/auth'}>
       <App />
     </DenimUserProvider>
   );
 };
+
+export default Default;

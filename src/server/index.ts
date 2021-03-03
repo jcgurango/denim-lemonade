@@ -14,8 +14,9 @@ import {
   DenimRecord,
 } from '../denim/core';
 import LarkAuthentication from './LarkAuthentication';
-import { DenimAuthenticator, DenimCombinedDataSource } from '../denim/service';
+import { DenimCombinedDataSource } from '../denim/service';
 import LemonadeValidations from '../validation';
+import LemonadeAuthenticator from './LemonadeAuthenticator';
 
 Airtable.configure({
   endpointUrl: 'https://api.airtable.com',
@@ -69,119 +70,7 @@ const dataSource = () => {
 const data = dataSource();
 const securedData = dataSource();
 
-const denimAuth = new DenimAuthenticator(
-  [
-    {
-      id: 'hr',
-      readAction: 'allow',
-      createAction: 'allow',
-      updateAction: 'allow',
-      deleteAction: 'allow',
-      tables: [],
-      roleQuery: {
-        conditionType: 'single',
-        field: 'Is HR',
-        operator: DenimQueryOperator.Equals,
-        value: true,
-      },
-    },
-    {
-      id: 'hr',
-      readAction: 'allow',
-      createAction: 'block',
-      updateAction: 'block',
-      deleteAction: 'block',
-      tables: [],
-      roleQuery: {
-        conditionType: 'single',
-        field: 'Is HR User',
-        operator: DenimQueryOperator.Equals,
-        value: true,
-      },
-    },
-    {
-      id: 'employee',
-      readAction: 'block',
-      createAction: 'block',
-      updateAction: 'block',
-      deleteAction: 'block',
-      tables: [
-        {
-          table: 'Employee',
-          createAction: 'block',
-          readAction: {
-            conditionType: 'group',
-            type: 'OR',
-            conditions: [
-              {
-                conditionType: 'single',
-                field: 'id',
-                operator: DenimQueryOperator.Equals,
-                value: {
-                  $user: 'id',
-                },
-              },
-              {
-                conditionType: 'single',
-                field: 'id',
-                operator: DenimQueryOperator.Equals,
-                value: {
-                  $user: 'Direct Manager',
-                },
-              },
-            ],
-          },
-          updateAction: {
-            conditionType: 'single',
-            field: 'id',
-            operator: DenimQueryOperator.Equals,
-            value: {
-              $user: 'id',
-            },
-            allowedFields: ['First Name', 'Last Name', 'Email'],
-          },
-        },
-        {
-          table: 'Leave Scheme',
-          createAction: 'block',
-          readAction: 'allow',
-          updateAction: 'block',
-        },
-        {
-          table: 'Department',
-          createAction: 'block',
-          readAction: 'allow',
-          updateAction: 'block',
-        },
-        {
-          table: 'Job Title',
-          createAction: 'block',
-          readAction: 'allow',
-          updateAction: 'block',
-        },
-        {
-          table: 'Job Roles',
-          createAction: 'block',
-          readAction: 'allow',
-          updateAction: 'block',
-        },
-        {
-          table: 'Employee Allowance',
-          createAction: 'block',
-          readAction: 'allow',
-          updateAction: 'block',
-        },
-      ],
-      roleQuery: {
-        conditionType: 'single',
-        field: 'Is HR',
-        operator: DenimQueryOperator.DoesNotEqual,
-        value: true,
-      },
-    },
-  ],
-  securedData.schemaSource.findTableSchema('Employee'),
-);
+const denimAuth = LemonadeAuthenticator(securedData.schemaSource.findTableSchema('Employee'));
 
 denimAuth.attach(securedData);
 
@@ -211,7 +100,7 @@ const authMiddleware = larkAuth.middleware(async (id, req, res, next) => {
   );
 
   if (employee) {
-    (<any>req).denimContext = {
+    (req as any).denimContext = {
       userData: employee,
     };
   }
@@ -220,10 +109,10 @@ const authMiddleware = larkAuth.middleware(async (id, req, res, next) => {
 });
 
 app.use('/api/auth/me', cors(), authMiddleware, (req, res) => {
-  if ((<any>req).denimContext) {
+  if ((req as any).denimContext) {
     return res.json({
-      ...(<any>req).denimContext,
-      roles: denimAuth.getRolesFor((<any>req).denimContext.userData),
+      ...(req as any).denimContext,
+      roles: denimAuth.getRolesFor((req as any).denimContext.userData),
     });
   }
 

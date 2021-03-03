@@ -6,7 +6,11 @@ import { ConnectedForm, DenimIcon, useDenimUser } from '../../forms';
 import DenimTabControl from '../../forms/controls/DenimTabControl';
 import { useDenimForm } from '../../forms/providers/DenimFormProvider';
 import { useDenimNotifications } from '../../forms/providers/DenimNotificationProvider';
-import { DenimDataSource, DenimSchemaSource } from '../../service';
+import {
+  DenimAuthenticator,
+  DenimDataSource,
+  DenimSchemaSource,
+} from '../../service';
 import {
   DenimApplicationContextVariable,
   DenimRouterSchema,
@@ -25,6 +29,7 @@ export interface DenimScreenProps {
   dataSource: DenimDataSource<any, any>;
   dataContext: any;
   path: string;
+  auth?: DenimAuthenticator<any>;
 }
 
 const DeleteButton: FunctionComponent<{
@@ -71,6 +76,7 @@ const DenimScreen: FunctionComponent<DenimScreenProps> = ({
   dataSource,
   dataContext,
   path,
+  auth,
 }) => {
   const renderChildSchema = (component: DenimRouterComponentSchema) => {
     return (
@@ -84,6 +90,7 @@ const DenimScreen: FunctionComponent<DenimScreenProps> = ({
         dataContext={dataContext}
         path={path}
         routerSchema={routerSchema}
+        auth={auth}
       />
     );
   };
@@ -104,7 +111,7 @@ const DenimScreen: FunctionComponent<DenimScreenProps> = ({
   const data = useContext(Context);
   const history = useHistory();
   const route = useParams<any>();
-  const { user } = useDenimUser();
+  const { user, roles } = useDenimUser();
   const mobile = isMobile();
 
   const readContextVariable = (
@@ -497,14 +504,17 @@ const DenimScreen: FunctionComponent<DenimScreenProps> = ({
         ? typeof schema.record === 'string' ||
           !('conditionType' in schema.record)
           ? readContextVariable(schema.record)
+          // eslint-disable-next-line react-hooks/rules-of-hooks
           : useMemo(
               () =>
                 iterateQueryContextVariables(
                   schema.record as DenimQueryConditionOrGroup,
                 ),
+              // eslint-disable-next-line react-hooks/exhaustive-deps
               [schema.record],
             )
         : null;
+      // eslint-disable-next-line react-hooks/rules-of-hooks
       const prefill = useMemo(() => {
         if (!schema.prefill) {
           return schema.prefill;
@@ -519,6 +529,7 @@ const DenimScreen: FunctionComponent<DenimScreenProps> = ({
             [next]: readContextVariable(schema.prefill && schema.prefill[next]),
           };
         }, {});
+      // eslint-disable-next-line react-hooks/exhaustive-deps
       }, [schema.prefill]);
 
       return (
@@ -573,6 +584,7 @@ const DenimScreen: FunctionComponent<DenimScreenProps> = ({
         );
 
         if (column) {
+          const readonly = auth && !auth.authorizeField(table, controlSchema.id, roles, data.currentRecord);
           const newSchema = data.getControlFor(
             tableSchema,
             column,
@@ -581,6 +593,13 @@ const DenimScreen: FunctionComponent<DenimScreenProps> = ({
 
           if (newSchema) {
             controlSchema = newSchema;
+
+            if (readonly) {
+              controlSchema.controlProps = {
+                ...(controlSchema.controlProps || { }),
+                disabled: true,
+              };
+            }
           }
         }
       }

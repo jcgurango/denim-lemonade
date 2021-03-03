@@ -6,6 +6,7 @@ import {
   useDenimForm,
 } from '../providers/DenimFormProvider';
 import { useRelatedRecords } from './DenimDropDown';
+import { useNameCache } from './DenimLookup';
 import DenimPickerProps from './DenimPickerProps';
 import DenimTag from './DenimTag';
 import NativeDropDown from './NativeDropDown';
@@ -25,6 +26,7 @@ const DenimMultiDropDown: FunctionComponent<
   ...props
 }) => {
   const denimForm = useDenimForm();
+  const nameCache = useNameCache(value && value.records && value.records.map(({ id }: DenimRelatedRecord) => id), relationship);
   const ControlContainer = denimForm.componentRegistry.controlContainer;
   const helpText = errors?.map(({ message }) => message).join('\n') || '';
   const { records, passedOptions } = useRelatedRecords(relationship, options);
@@ -89,7 +91,7 @@ const DenimMultiDropDown: FunctionComponent<
 
         if (typeof val === 'object') {
           value = val.id;
-          label = val.name || '';
+          label = val.name || nameCache[value] || (val.id ? '...' : '');
         }
 
         if (value && label) {
@@ -103,7 +105,7 @@ const DenimMultiDropDown: FunctionComponent<
                 <Text style={{ color: 'white', flex: 1 }}>{label}</Text>
                 {!disabled ? (
                   <TouchableOpacity onPress={() => onChange(deselect(val))}>
-                    <Text style={{ color: 'white' }}>Remove</Text>
+                    <Text style={{ color: 'white' }}>❌</Text>
                   </TouchableOpacity>
                 ) : null}
               </View>

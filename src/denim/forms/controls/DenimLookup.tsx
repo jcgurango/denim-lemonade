@@ -85,7 +85,7 @@ const LookupField: FunctionComponent<TextInputProps & DenimLookupProps> = ({
         cancelled = true;
       };
     }
-  }, [searchText, relationship]);
+  }, [searchText, relationship, denimLookupData]);
 
   const select = (record?: DenimRelatedRecord) => {
     onRecordChange(record || null);
@@ -162,6 +162,32 @@ const LookupField: FunctionComponent<TextInputProps & DenimLookupProps> = ({
   );
 };
 
+export const useNameCache = (ids?: string[], relationship?: string) => {
+  const [nameCache, setNameCache] = useState<{ [id: string]: string }>({});
+  const { find } = useDenimLookupData();
+
+  useEffect(() => {
+    if (ids && relationship) {
+      ids.forEach(async (id: string) => {
+        if (!nameCache[id]) {
+          const record = await find(relationship, id);
+
+          if (record) {
+            const name = String(record.name);
+
+            setNameCache((cache) => ({
+              ...cache,
+              [record.id]: name,
+            }));
+          }
+        }
+      });
+    }
+  }, [ids, nameCache, relationship, find]);
+
+  return nameCache;
+};
+
 const DenimLookup: FunctionComponent<
   DenimControlProps & TextInputProps & DenimLookupControlProps
 > = ({
@@ -174,9 +200,8 @@ const DenimLookup: FunctionComponent<
   disabled,
   ...props
 }) => {
-  const [nameCache, setNameCache] = useState<{ [id: string]: string }>({});
+  const nameCache = useNameCache((value && value.id && !value.name && [value.id]) || undefined, relationship);
   const denimForm = useDenimForm();
-  const { find } = useDenimLookupData();
   const ControlContainer = denimForm.componentRegistry.controlContainer;
   const helpText = errors?.map(({ message }) => message).join('\n') || '';
   let record = {
@@ -186,25 +211,6 @@ const DenimLookup: FunctionComponent<
   if (record && record.id && !record.name) {
     record.name = nameCache[record.id] || '...';
   }
-
-  useEffect(() => {
-    if (value && value.id && !value.name && !nameCache[record.id]) {
-      if (record.id && relationship) {
-        (async () => {
-          const retrieved = await find(relationship, record.id);
-
-          if (retrieved && retrieved.id && retrieved.name) {
-            const name = String(retrieved.name);
-
-            setNameCache((cache) => ({
-              ...cache,
-              [retrieved.id]: name,
-            }));
-          }
-        })();
-      }
-    }
-  }, [record, nameCache, relationship]);
 
   return (
     <ControlContainer error={(errors?.length || 0) > 0} helpText={helpText}>
@@ -231,9 +237,8 @@ export const DenimMultiLookup: FunctionComponent<
   disabled,
   ...props
 }) => {
-  const [nameCache, setNameCache] = useState<{ [id: string]: string }>({});
+  const nameCache = useNameCache(value && value.records && value.records.map(({ id }: DenimRelatedRecord) => id), relationship);
   const denimForm = useDenimForm();
-  const { find } = useDenimLookupData();
   const ControlContainer = denimForm.componentRegistry.controlContainer;
   const helpText = errors?.map(({ message }) => message).join('\n') || '';
 
@@ -255,25 +260,6 @@ export const DenimMultiLookup: FunctionComponent<
     };
   };
 
-  useEffect(() => {
-    if (value && value.records && relationship) {
-      value.records.forEach(async ({ id }: DenimRelatedRecord) => {
-        if (!nameCache[id]) {
-          const record = await find(relationship, id);
-
-          if (record) {
-            const name = String(record.name);
-
-            setNameCache((cache) => ({
-              ...cache,
-              [record.id]: name,
-            }));
-          }
-        }
-      });
-    }
-  }, [value, nameCache, relationship]);
-
   return (
     <ControlContainer error={(errors?.length || 0) > 0} helpText={helpText}>
       {value?.type === 'record-collection' && Array.isArray(value?.records)
@@ -285,7 +271,9 @@ export const DenimMultiLookup: FunctionComponent<
                 style={{ marginBottom: 8 }}
               >
                 <View style={{ flexDirection: 'row' }}>
-                  <Text style={{ color: 'white', flex: 1 }}>{record.name || nameCache[record.id] || '...'}</Text>
+                  <Text style={{ color: 'white', flex: 1 }}>
+                    {record.name || nameCache[record.id] || '...'}
+                  </Text>
                   {!disabled ? (
                     <TouchableOpacity
                       onPress={() => onChange(deselect(record.id))}

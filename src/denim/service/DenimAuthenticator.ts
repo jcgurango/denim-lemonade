@@ -33,18 +33,11 @@ export default class DenimAuthenticator<T extends DenimAuthenticationContext> {
     return obj[actionKey];
   }
 
-  protected authorize(
-    userData: DenimRecord | undefined,
+  protected authorizeFromRoles(
+    userRoles: DenimAuthorizationRole[],
     actionKey: 'readAction' | 'createAction' | 'updateAction' | 'deleteAction',
     table: string,
   ): DenimAuthorizationAction {
-    const userRoles = this.roles.filter(({ roleQuery }) => {
-      return (
-        !roleQuery ||
-        (!!userData &&
-          DenimLocalQuery.matches(this.userSchema, userData, roleQuery))
-      );
-    });
     let query: DenimQueryConditionOrGroup | null = null;
 
     for (let i = 0; i < userRoles.length; i++) {
@@ -75,6 +68,38 @@ export default class DenimAuthenticator<T extends DenimAuthenticationContext> {
     }
 
     return 'block';
+  }
+
+  protected authorize(
+    userData: DenimRecord | undefined,
+    actionKey: 'readAction' | 'createAction' | 'updateAction' | 'deleteAction',
+    table: string,
+  ): DenimAuthorizationAction {
+    const userRoles = this.roles.filter(({ roleQuery }) => {
+      return (
+        !roleQuery ||
+        (!!userData &&
+          DenimLocalQuery.matches(this.userSchema, userData, roleQuery))
+      );
+    });
+
+    return this.authorizeFromRoles(userRoles, actionKey, table);
+  }
+
+  public authorizeField(
+    table: string,
+    field: string,
+    roles: string[],
+    record?: DenimRecord,
+  ): boolean {
+    // Field-level isn't implemented yet. Table level will have to do for now.
+    const authorizationAction = this.authorizeFromRoles(
+      this.roles.filter(({ id }) => roles.includes(id)),
+      record?.id ? 'createAction' : 'updateAction',
+      table,
+    );
+
+    return authorizationAction === 'allow';
   }
 
   public getRolesFor(userData: DenimRecord): string[] {

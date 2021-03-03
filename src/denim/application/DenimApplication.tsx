@@ -2,7 +2,11 @@ import React, { FunctionComponent, Fragment } from 'react';
 import { DenimMenuSchema, DenimRouterSchema } from './types/router';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { ConnectedForm, useDenimUser } from '../forms';
-import { DenimDataSource, DenimSchemaSource } from '../service';
+import {
+  DenimAuthenticator,
+  DenimDataSource,
+  DenimSchemaSource,
+} from '../service';
 import DenimApplicationNotifications from './DenimApplicationNotifications';
 import { StyleSheet, View } from 'react-native';
 import DenimScreen from './screens/DenimScreen';
@@ -14,6 +18,7 @@ interface DenimApplicationProps {
   formProvider: ConnectedForm<any, any>;
   schemaSource: DenimSchemaSource<any>;
   dataSource: DenimDataSource<any, any>;
+  auth?: DenimAuthenticator<any>;
 }
 
 /**
@@ -21,7 +26,7 @@ interface DenimApplicationProps {
  */
 const DenimApplication: FunctionComponent<DenimApplicationProps> = ({
   router,
-  menu,
+  auth,
   dataContext,
   formProvider,
   schemaSource,
@@ -36,7 +41,7 @@ const DenimApplication: FunctionComponent<DenimApplicationProps> = ({
       <Provider
         dataSource={dataSource}
         schemaSource={schemaSource}
-        context={dataContext}      
+        context={dataContext}
       >
         <DenimApplicationNotifications>
           <main
@@ -70,6 +75,7 @@ const DenimApplication: FunctionComponent<DenimApplicationProps> = ({
                           schema={screen}
                           path={path}
                           routerSchema={router}
+                          auth={auth}
                         />
                       )}
                       exact
