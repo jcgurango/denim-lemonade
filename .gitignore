@@ -67,3 +67,5 @@ buck-out/
 .eslintcache
 config.json
 app.env
+.lark/
+dist.zip

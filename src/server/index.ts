@@ -79,8 +79,8 @@ const departmentDataProvider = data.createDataProvider('Department');
 
 const fs = require('fs');
 const lark = new LarkUpdater(
-  'cli_9f4c99b38b37100a',
-  'wF6wJHfm0wCUERavJXx0fbqsAcKAZr3x',
+  String(process.env.LARK_APP_ID),
+  String(process.env.LARK_APP_SECRET),
 );
 
 const larkAuth = new LarkAuthentication(lark, 'test-secret-key');
