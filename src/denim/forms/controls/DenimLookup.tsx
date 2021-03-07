@@ -278,7 +278,7 @@ export const DenimMultiLookup: FunctionComponent<
                     <TouchableOpacity
                       onPress={() => onChange(deselect(record.id))}
                     >
-                      <Text style={{ color: 'white' }}>Remove</Text>
+                      <Text style={{ color: 'white' }}>×</Text>
                     </TouchableOpacity>
                   ) : null}
                 </View>

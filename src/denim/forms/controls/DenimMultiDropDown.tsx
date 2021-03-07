@@ -105,7 +105,7 @@ const DenimMultiDropDown: FunctionComponent<
                 <Text style={{ color: 'white', flex: 1 }}>{label}</Text>
                 {!disabled ? (
                   <TouchableOpacity onPress={() => onChange(deselect(val))}>
-                    <Text style={{ color: 'white' }}>❌</Text>
+                    <Text style={{ color: 'white' }}>×</Text>
                   </TouchableOpacity>
                 ) : null}
               </View>
