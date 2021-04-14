@@ -143,6 +143,10 @@ export class DenimRemoteTableProvider<
         const json = await e.json();
 
         if (json.errors) {
+          if (json.errors.length === 1) {
+            throw json.errors[0];
+          }
+
           const error: any = new Error('Multiple errors occured.');
           error.inner = json.errors;
           throw error;

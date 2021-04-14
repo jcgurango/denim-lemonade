@@ -1,7 +1,4 @@
-import {
-  DenimQueryOperator,
-  DenimTable,
-} from '../denim/core';
+import { DenimQueryOperator, DenimTable } from '../denim/core';
 import { DenimAuthenticator } from '../denim/service';
 
 const LemonadeAuthenticator = (userTable: DenimTable) => {
@@ -102,6 +99,12 @@ const LemonadeAuthenticator = (userTable: DenimTable) => {
             updateAction: 'block',
           },
           {
+            table: 'Job Positions',
+            createAction: 'block',
+            readAction: 'allow',
+            updateAction: 'block',
+          },
+          {
             table: 'Employee Allowance',
             createAction: 'block',
             readAction: 'allow',
@@ -109,10 +112,22 @@ const LemonadeAuthenticator = (userTable: DenimTable) => {
           },
         ],
         roleQuery: {
-          conditionType: 'single',
-          field: 'Is HR',
-          operator: DenimQueryOperator.DoesNotEqual,
-          value: true,
+          conditionType: 'group',
+          type: 'AND',
+          conditions: [
+            {
+              conditionType: 'single',
+              field: 'Is HR',
+              operator: DenimQueryOperator.DoesNotEqual,
+              value: true,
+            },
+            {
+              conditionType: 'single',
+              field: 'Is HR User',
+              operator: DenimQueryOperator.DoesNotEqual,
+              value: true,
+            },
+          ],
         },
       },
     ],
