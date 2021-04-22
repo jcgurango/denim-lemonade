@@ -13,7 +13,7 @@ const LemonadeAuthenticator = (userTable: DenimTable) => {
         tables: [],
         roleQuery: {
           conditionType: 'single',
-          field: 'Is HR',
+          field: 'Is HR Admin',
           operator: DenimQueryOperator.Equals,
           value: true,
         },
@@ -117,7 +117,7 @@ const LemonadeAuthenticator = (userTable: DenimTable) => {
           conditions: [
             {
               conditionType: 'single',
-              field: 'Is HR',
+              field: 'Is HR Admin',
               operator: DenimQueryOperator.DoesNotEqual,
               value: true,
             },
