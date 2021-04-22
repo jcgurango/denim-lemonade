@@ -918,7 +918,7 @@ const App = () => {
                               children: [
                                 field('Full Name', 1, { disabled: true }),
                                 field('Job Title', 1, { disabled: true }),
-                                field('Department', 1, { disabled: true }),
+                                field('Department', 1, { disabled: true, test: true }),
                                 field('Entry Date', 1, { disabled: true }),
                                 field('Mobile Number', 1, {
                                   disabled: true,

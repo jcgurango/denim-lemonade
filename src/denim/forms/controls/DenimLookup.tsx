@@ -37,7 +37,6 @@ const LookupField: FunctionComponent<TextInputProps & DenimLookupProps> = ({
   onRecordChange,
   record,
   relationship,
-  disabled,
   ...props
 }) => {
   const [searchText, setSearchText] = useState('');
@@ -94,18 +93,16 @@ const LookupField: FunctionComponent<TextInputProps & DenimLookupProps> = ({
 
   return (
     <>
-      {!disabled ? (
-        <TextInput
-          style={[
-            styles.textInput,
-            Platform.OS === 'web' ? { height: 24 } : null,
-          ]}
-          placeholder="Select a record..."
-          value={displayText}
-          onFocus={() => setShowLookup(true)}
-          {...props}
-        />
-      ) : null}
+      <TextInput
+        style={[
+          styles.textInput,
+          Platform.OS === 'web' ? { height: 24 } : null,
+        ]}
+        placeholder="Select a record..."
+        value={displayText}
+        onFocus={() => setShowLookup(true)}
+        {...props}
+      />
       <Modal transparent={true} visible={showLookup}>
         <View
           style={[
