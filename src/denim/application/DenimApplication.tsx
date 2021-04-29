@@ -1,4 +1,4 @@
-import React, { FunctionComponent, Fragment } from 'react';
+import React, { FunctionComponent } from 'react';
 import { DenimMenuSchema, DenimRouterSchema } from './types/router';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { ConnectedForm, useDenimUser } from '../forms';
@@ -8,7 +8,7 @@ import {
   DenimSchemaSource,
 } from '../service';
 import DenimApplicationNotifications from './DenimApplicationNotifications';
-import { StyleSheet, View } from 'react-native';
+import DenimApplicationDataContextProvider from './providers/DenimApplicationDataContextProvider';
 import DenimScreen from './screens/DenimScreen';
 
 interface DenimApplicationProps {
@@ -55,33 +55,36 @@ const DenimApplication: FunctionComponent<DenimApplicationProps> = ({
             }}
           >
             <Switch>
-              {router.screens
-                .filter((screen) =>
-                  user.roles.find(
-                    (role) => !screen.roles || screen.roles.includes(role),
-                  ),
-                )
-                .map((screen) => {
-                  return screen.paths.map((path) => (
-                    <Route
-                      key={path}
-                      path={path}
-                      render={() => (
-                        <DenimScreen
-                          formProvider={formProvider}
-                          schemaSource={schemaSource}
-                          dataSource={dataSource}
-                          dataContext={dataContext}
-                          schema={screen}
-                          path={path}
-                          routerSchema={router}
-                          auth={auth}
-                        />
-                      )}
-                      exact
-                    />
-                  ));
-                })}
+              <DenimApplicationDataContextProvider
+                routerSchema={router}
+                auth={auth}
+                formProvider={formProvider}
+                schemaSource={schemaSource}
+                dataSource={dataSource}
+                dataContext={dataContext}
+              >
+                {router.screens
+                  .filter((screen) =>
+                    user.roles.find(
+                      (role) => !screen.roles || screen.roles.includes(role),
+                    ),
+                  )
+                  .map((screen) => {
+                    return screen.paths.map((path) => (
+                      <Route
+                        key={path}
+                        path={path}
+                        render={() => (
+                          <DenimScreen
+                            schema={screen}
+                            path={path}
+                          />
+                        )}
+                        exact
+                      />
+                    ));
+                  })}
+              </DenimApplicationDataContextProvider>
             </Switch>
           </main>
         </DenimApplicationNotifications>
@@ -91,19 +94,3 @@ const DenimApplication: FunctionComponent<DenimApplicationProps> = ({
 };
 
 export default DenimApplication;
-
-const styles = StyleSheet.create({
-  menuHeader: {
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
-    padding: 12,
-    flexDirection: 'row',
-    justifyContent: 'space-evenly',
-  },
-});

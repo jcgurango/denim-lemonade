@@ -207,31 +207,12 @@
 			{
 				"id": "fldXueYJpTRbDGwC6",
 				"name": "Nationality",
-				"type": "select",
+				"type": "foreignKey",
 				"typeOptions": {
-					"choiceOrder": [
-						"sel6eracCDDL5y5xO",
-						"seli2ZX0y664Q9s58",
-						"selRzNakvYutBWtUO"
-					],
-					"choices": {
-						"sel6eracCDDL5y5xO": {
-							"id": "sel6eracCDDL5y5xO",
-							"color": "blue",
-							"name": "AU-Australia"
-						},
-						"seli2ZX0y664Q9s58": {
-							"id": "seli2ZX0y664Q9s58",
-							"color": "cyan",
-							"name": "SG-Singapore"
-						},
-						"selRzNakvYutBWtUO": {
-							"id": "selRzNakvYutBWtUO",
-							"color": "teal",
-							"name": "PH-Philippines"
-						}
-					},
-					"disableColors": false
+					"foreignTableId": "tblw8533b1vRulMKI",
+					"relationship": "one",
+					"unreversed": true,
+					"symmetricColumnId": "fldKpRAK2eemWjXFD"
 				}
 			},
 			{
@@ -373,12 +354,6 @@
 				}
 			},
 			{
-				"id": "fldEdQxQxLs0D7naL",
-				"name": "Base",
-				"type": "text",
-				"typeOptions": null
-			},
-			{
 				"id": "fldKfLoZF5ksvjgMq",
 				"name": "Direct Manager",
 				"type": "foreignKey",
@@ -434,12 +409,6 @@
 				}
 			},
 			{
-				"id": "fldvcBOqdfaJOnakZ",
-				"name": "Seat Number",
-				"type": "text",
-				"typeOptions": null
-			},
-			{
 				"id": "fldknRbMCzBF2fpat",
 				"name": "Entry Date",
 				"type": "date",
@@ -460,32 +429,13 @@
 			{
 				"id": "fldfsTH5f02AkKpeR",
 				"name": "Account Status",
-				"type": "select",
+				"type": "foreignKey",
 				"typeOptions": {
-					"choiceOrder": [
-						"selJrTDVnh1grIhxT",
-						"selkzYFHtdmRPFyk8"
-					],
-					"choices": {
-						"selJrTDVnh1grIhxT": {
-							"id": "selJrTDVnh1grIhxT",
-							"color": "blue",
-							"name": "Active"
-						},
-						"selkzYFHtdmRPFyk8": {
-							"id": "selkzYFHtdmRPFyk8",
-							"color": "cyan",
-							"name": "Inactive"
-						}
-					},
-					"disableColors": false
+					"relationship": "one",
+					"unreversed": true,
+					"foreignTableId": "tblFlvQQdxVF778WO",
+					"symmetricColumnId": "fldipBHjOPlQJ5HrG"
 				}
-			},
-			{
-				"id": "fldSkcaKiGF9J1KMS",
-				"name": "Department - Old",
-				"type": "text",
-				"typeOptions": null
 			},
 			{
 				"id": "fldpRMSNGO24MokMF",
@@ -567,9 +517,13 @@
 			},
 			{
 				"id": "fldSxu6cgqGjbTtJB",
-				"name": "Payroll ID",
-				"type": "text",
-				"typeOptions": null
+				"name": "PDY ID",
+				"type": "number",
+				"typeOptions": {
+					"format": "integer",
+					"negative": false,
+					"validatorName": "positive"
+				}
 			},
 			{
 				"id": "fldHuLcjW5BhRbpGG",
@@ -582,7 +536,7 @@
 			},
 			{
 				"id": "fldfevYa5libJ9G7S",
-				"name": "Employee Wage",
+				"name": "Basic Pay",
 				"type": "number",
 				"typeOptions": {
 					"format": "currency",
@@ -734,14 +688,6 @@
 				"name": "Relation to Contact Person",
 				"type": "text",
 				"typeOptions": null
-			},
-			{
-				"id": "fldeRmV6y2joachUO",
-				"name": "Job History",
-				"type": "multipleAttachment",
-				"typeOptions": {
-					"unreversed": true
-				}
 			},
 			{
 				"id": "fldGo1wIlHuaYJVhW",
@@ -922,6 +868,172 @@
 					"symmetricColumnId": "fldHt3s4dC4W89K93",
 					"relationship": "many",
 					"unreversed": true
+				}
+			},
+			{
+				"id": "fldyHhmgPTUoLlP05",
+				"name": "Basic Pay Frequency",
+				"type": "select",
+				"typeOptions": {
+					"choiceOrder": [
+						"sel6wnofY3HLXqlmK",
+						"selCu6rEdZG7zQ0Qi",
+						"selYYjPPMQyidgHpd",
+						"selwsq1JGG5DG288T"
+					],
+					"choices": {
+						"sel6wnofY3HLXqlmK": {
+							"id": "sel6wnofY3HLXqlmK",
+							"color": "blue",
+							"name": "Monthly"
+						},
+						"selCu6rEdZG7zQ0Qi": {
+							"id": "selCu6rEdZG7zQ0Qi",
+							"color": "cyan",
+							"name": "Daily"
+						},
+						"selYYjPPMQyidgHpd": {
+							"id": "selYYjPPMQyidgHpd",
+							"color": "teal",
+							"name": "Weekly"
+						},
+						"selwsq1JGG5DG288T": {
+							"id": "selwsq1JGG5DG288T",
+							"color": "green",
+							"name": "Hourly"
+						}
+					},
+					"disableColors": false
+				}
+			},
+			{
+				"id": "fldMr1rNuKIsp9GY9",
+				"name": "SSS Number",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldbZ1l9ICJup5N1Y",
+				"name": "Philhealth Number",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldGddhZYvR9VXMQ1",
+				"name": "Pag-ibig Number",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldmbKe70rdzncdmi",
+				"name": "Tax Identification Number",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fld7iFk08dddQzQcI",
+				"name": "Pay Basis",
+				"type": "foreignKey",
+				"typeOptions": {
+					"relationship": "one",
+					"foreignTableId": "tblyHYdZLwVkSqgze",
+					"symmetricColumnId": "fldYxlctwYTx475WO",
+					"unreversed": true
+				}
+			},
+			{
+				"id": "fldHMusg9yZGqdaha",
+				"name": "Bank Account",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldcauIf9RGjWxTOU",
+				"name": "E-Cola",
+				"type": "number",
+				"typeOptions": {
+					"format": "currency",
+					"precision": 2,
+					"symbol": "",
+					"negative": false,
+					"validatorName": "positive"
+				}
+			},
+			{
+				"id": "fldTwrJ3b32kBAHvK",
+				"name": "Payment Method",
+				"type": "foreignKey",
+				"typeOptions": {
+					"relationship": "one",
+					"foreignTableId": "tblhDDztQi8OBJCNe",
+					"symmetricColumnId": "fldAYS1CuFYXrdD04",
+					"unreversed": true
+				}
+			},
+			{
+				"id": "fldoXHEdmWVqAfa4l",
+				"name": "Days of Work Per Year",
+				"type": "foreignKey",
+				"typeOptions": {
+					"relationship": "one",
+					"foreignTableId": "tbliT3IBrNO2VGdb0",
+					"symmetricColumnId": "fldKzDHrmAexLIk8D",
+					"unreversed": true
+				}
+			},
+			{
+				"id": "fldUEKgKkQueG98Pl",
+				"name": "Payroll Grouping",
+				"type": "foreignKey",
+				"typeOptions": {
+					"relationship": "one",
+					"foreignTableId": "tblQCN5OpZAI7MbCi",
+					"symmetricColumnId": "fldfgpn3tJAk0ez02",
+					"unreversed": true
+				}
+			},
+			{
+				"id": "fldnqfBHD6Ycx2QSU",
+				"name": "Workplace",
+				"type": "foreignKey",
+				"typeOptions": {
+					"relationship": "one",
+					"unreversed": true,
+					"foreignTableId": "tbl5ByffS6m43x4BQ",
+					"symmetricColumnId": "fldKMNOyBCzrUeYUv"
+				}
+			},
+			{
+				"id": "fldyU6QS2dNOh5hz1",
+				"name": "Employment Status",
+				"type": "foreignKey",
+				"typeOptions": {
+					"relationship": "one",
+					"unreversed": true,
+					"foreignTableId": "tbl2uxEcOynRt6xci",
+					"symmetricColumnId": "fldiCVBOArtN5OEjW"
+				}
+			},
+			{
+				"id": "fldgPtj5A0oO8KBsH",
+				"name": "Wage Zone",
+				"type": "foreignKey",
+				"typeOptions": {
+					"relationship": "many",
+					"unreversed": true,
+					"foreignTableId": "tbllVaXsNUWsDzpfh",
+					"symmetricColumnId": "fldhgL7wYlccdMy9v"
+				}
+			},
+			{
+				"id": "fldLqsElW9zy0C6n2",
+				"name": "Company",
+				"type": "foreignKey",
+				"typeOptions": {
+					"foreignTableId": "tblOsBIEJR6fo0U6h",
+					"relationship": "one",
+					"unreversed": true,
+					"symmetricColumnId": "fldbflMObAGpxlJVC"
 				}
 			}
 		]
@@ -3684,26 +3796,8 @@
 			{
 				"id": "fldEFwOWieOuhJWLi",
 				"name": "Account Status",
-				"type": "select",
-				"typeOptions": {
-					"choiceOrder": [
-						"selJrTDVnh1grIhxT",
-						"selkzYFHtdmRPFyk8"
-					],
-					"choices": {
-						"selJrTDVnh1grIhxT": {
-							"id": "selJrTDVnh1grIhxT",
-							"color": "blue",
-							"name": "Active"
-						},
-						"selkzYFHtdmRPFyk8": {
-							"id": "selkzYFHtdmRPFyk8",
-							"color": "cyan",
-							"name": "Inactive"
-						}
-					},
-					"disableColors": false
-				}
+				"type": "text",
+				"typeOptions": null
 			},
 			{
 				"id": "fldURcOxzmLBX1LmT",
@@ -3871,18 +3965,6 @@
 				}
 			},
 			{
-				"id": "fldeXHz9dWUdXOdcr",
-				"name": "Base",
-				"type": "text",
-				"typeOptions": null
-			},
-			{
-				"id": "fldgOPfcii6kslKdl",
-				"name": "Department - Old",
-				"type": "text",
-				"typeOptions": null
-			},
-			{
 				"id": "fldYx4Ml6Zzh731Ri",
 				"name": "Department",
 				"type": "text",
@@ -3978,8 +4060,12 @@
 			{
 				"id": "fldtyf60fDYiLWPOr",
 				"name": "Payroll ID",
-				"type": "text",
-				"typeOptions": null
+				"type": "number",
+				"typeOptions": {
+					"format": "integer",
+					"negative": false,
+					"validatorName": "positive"
+				}
 			},
 			{
 				"id": "fld94hWFwvwDGZDL8",
@@ -4000,12 +4086,6 @@
 				"typeOptions": null
 			},
 			{
-				"id": "fldov7keteXZEyfWe",
-				"name": "Seat Number",
-				"type": "text",
-				"typeOptions": null
-			},
-			{
 				"id": "fldRNcVjwfS7cLCO5",
 				"name": "Phone Number Visibility",
 				"type": "checkbox",
@@ -4017,32 +4097,8 @@
 			{
 				"id": "fld4SpLLt8OTvpnDI",
 				"name": "Nationality",
-				"type": "select",
-				"typeOptions": {
-					"choiceOrder": [
-						"sel6eracCDDL5y5xO",
-						"seli2ZX0y664Q9s58",
-						"selRzNakvYutBWtUO"
-					],
-					"choices": {
-						"sel6eracCDDL5y5xO": {
-							"id": "sel6eracCDDL5y5xO",
-							"color": "blue",
-							"name": "AU-Australia"
-						},
-						"seli2ZX0y664Q9s58": {
-							"id": "seli2ZX0y664Q9s58",
-							"color": "cyan",
-							"name": "SG-Singapore"
-						},
-						"selRzNakvYutBWtUO": {
-							"id": "selRzNakvYutBWtUO",
-							"color": "teal",
-							"name": "PH-Philippines"
-						}
-					},
-					"disableColors": false
-				}
+				"type": "text",
+				"typeOptions": null
 			},
 			{
 				"id": "fld4YCJr4Acv81DiZ",
@@ -4266,14 +4322,6 @@
 				"name": "Relation to Contact Person",
 				"type": "text",
 				"typeOptions": null
-			},
-			{
-				"id": "fldrXNoDYeF7pT6mg",
-				"name": "Job History",
-				"type": "multipleAttachment",
-				"typeOptions": {
-					"unreversed": true
-				}
 			},
 			{
 				"id": "fldPOOCpHARH5Pase",
@@ -4531,6 +4579,12 @@
 					},
 					"resultType": "number"
 				}
+			},
+			{
+				"id": "fldnX2N9WwBN9YalE",
+				"name": "Period ID",
+				"type": "text",
+				"typeOptions": null
 			}
 		]
 	},
@@ -4993,6 +5047,444 @@
 					"precision": 2,
 					"negative": true
 				}
+			}
+		]
+	},
+	{
+		"id": "tblyHYdZLwVkSqgze",
+		"name": "Pay Basis",
+		"columns": [
+			{
+				"id": "fldicfMYptwdGTlmC",
+				"name": "Name",
+				"type": "text"
+			},
+			{
+				"id": "fldeZNOotIcfoKHdN",
+				"name": "PDY ID",
+				"type": "number",
+				"typeOptions": {
+					"format": "integer",
+					"negative": false,
+					"validatorName": "positive"
+				}
+			},
+			{
+				"id": "fldYxlctwYTx475WO",
+				"name": "Employee",
+				"type": "foreignKey",
+				"typeOptions": {
+					"foreignTableId": "tblwceR29WfuANzls",
+					"symmetricColumnId": "fld7iFk08dddQzQcI",
+					"relationship": "many",
+					"unreversed": true
+				}
+			}
+		]
+	},
+	{
+		"id": "tblhDDztQi8OBJCNe",
+		"name": "Payment Method",
+		"columns": [
+			{
+				"id": "flddfVALmA9z5bfNV",
+				"name": "Name",
+				"type": "text"
+			},
+			{
+				"id": "fldAYS1CuFYXrdD04",
+				"name": "Employee",
+				"type": "foreignKey",
+				"typeOptions": {
+					"foreignTableId": "tblwceR29WfuANzls",
+					"symmetricColumnId": "fldTwrJ3b32kBAHvK",
+					"relationship": "many",
+					"unreversed": true
+				}
+			},
+			{
+				"id": "fldECYykh1XKfj3G7",
+				"name": "PDY ID",
+				"type": "number",
+				"typeOptions": {
+					"format": "integer",
+					"negative": false,
+					"validatorName": "positive"
+				}
+			}
+		]
+	},
+	{
+		"id": "tbliT3IBrNO2VGdb0",
+		"name": "Days of Work Per Year",
+		"columns": [
+			{
+				"id": "fldky9SJWapEzVuZY",
+				"name": "Name",
+				"type": "text"
+			},
+			{
+				"id": "fldKzDHrmAexLIk8D",
+				"name": "Employee",
+				"type": "foreignKey",
+				"typeOptions": {
+					"foreignTableId": "tblwceR29WfuANzls",
+					"symmetricColumnId": "fldoXHEdmWVqAfa4l",
+					"relationship": "many",
+					"unreversed": true
+				}
+			},
+			{
+				"id": "fldEIa9g1AKA1ONB6",
+				"name": "PDY ID",
+				"type": "number",
+				"typeOptions": {
+					"format": "integer",
+					"negative": false,
+					"validatorName": "positive"
+				}
+			}
+		]
+	},
+	{
+		"id": "tblQCN5OpZAI7MbCi",
+		"name": "Payroll Groupings",
+		"columns": [
+			{
+				"id": "fldv87bC7E0Ny9Osr",
+				"name": "Name",
+				"type": "text"
+			},
+			{
+				"id": "fldfgpn3tJAk0ez02",
+				"name": "Employee",
+				"type": "foreignKey",
+				"typeOptions": {
+					"foreignTableId": "tblwceR29WfuANzls",
+					"symmetricColumnId": "fldUEKgKkQueG98Pl",
+					"relationship": "many",
+					"unreversed": true
+				}
+			},
+			{
+				"id": "fldsxicyKDFLNXBq7",
+				"name": "PDY ID",
+				"type": "number",
+				"typeOptions": {
+					"format": "integer",
+					"negative": false,
+					"validatorName": "positive"
+				}
+			}
+		]
+	},
+	{
+		"id": "tblw8533b1vRulMKI",
+		"name": "Nationalities",
+		"columns": [
+			{
+				"id": "fldaXKa8kEPk3Fxca",
+				"name": "Name",
+				"type": "text"
+			},
+			{
+				"id": "fld43G9XY2A7yssVd",
+				"name": "PDY ID",
+				"type": "number",
+				"typeOptions": {
+					"format": "integer",
+					"negative": false,
+					"validatorName": "positive"
+				}
+			},
+			{
+				"id": "fldKpRAK2eemWjXFD",
+				"name": "Employee",
+				"type": "foreignKey",
+				"typeOptions": {
+					"foreignTableId": "tblwceR29WfuANzls",
+					"symmetricColumnId": "fldXueYJpTRbDGwC6",
+					"relationship": "many",
+					"unreversed": true
+				}
+			}
+		]
+	},
+	{
+		"id": "tbl5ByffS6m43x4BQ",
+		"name": "Workplaces",
+		"columns": [
+			{
+				"id": "fldT5aCJJN69r6RIS",
+				"name": "Code",
+				"type": "text"
+			},
+			{
+				"id": "fldKMNOyBCzrUeYUv",
+				"name": "Employee",
+				"type": "foreignKey",
+				"typeOptions": {
+					"foreignTableId": "tblwceR29WfuANzls",
+					"symmetricColumnId": "fldnqfBHD6Ycx2QSU",
+					"relationship": "many",
+					"unreversed": true
+				}
+			},
+			{
+				"id": "fldVNaBOy85ajemUK",
+				"name": "Workplace",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fld32YnZ18NLjh7Mf",
+				"name": "PDY ID",
+				"type": "number",
+				"typeOptions": {
+					"format": "integer",
+					"negative": false,
+					"validatorName": "positive"
+				}
+			},
+			{
+				"id": "fld1tqbzcbvQQu6ww",
+				"name": "Company",
+				"type": "foreignKey",
+				"typeOptions": {
+					"relationship": "one",
+					"unreversed": true,
+					"foreignTableId": "tblOsBIEJR6fo0U6h",
+					"symmetricColumnId": "fldm8Qvjep2rfdWay"
+				}
+			}
+		]
+	},
+	{
+		"id": "tblOsBIEJR6fo0U6h",
+		"name": "Companies",
+		"columns": [
+			{
+				"id": "flddvNJxVLbEhbQeJ",
+				"name": "CODE",
+				"type": "text"
+			},
+			{
+				"id": "fldm8Qvjep2rfdWay",
+				"name": "Workplaces",
+				"type": "foreignKey",
+				"typeOptions": {
+					"foreignTableId": "tbl5ByffS6m43x4BQ",
+					"symmetricColumnId": "fld1tqbzcbvQQu6ww",
+					"relationship": "many",
+					"unreversed": true
+				}
+			},
+			{
+				"id": "fldaNSdiQV2F9khzN",
+				"name": "Address",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldGs1EmP79XFTNwD",
+				"name": "Contact Person",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldZLkqrfUFgOb2Bk",
+				"name": "Fax Number",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldOoaX3auyZhHWEB",
+				"name": "PDY ID",
+				"type": "number",
+				"typeOptions": {
+					"format": "integer",
+					"negative": false,
+					"validatorName": "positive"
+				}
+			},
+			{
+				"id": "fld2TCGxQ0m8vXPDe",
+				"name": "Mobile Number",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldsjZLFSooCjXc5m",
+				"name": "PAGIBIG ID",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldqBPKNAkKynag9s",
+				"name": "SSS ID",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldQ1IOmDsYfwjkPM",
+				"name": "PHILHEALTH ID",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldVyPn8eO8POqRr9",
+				"name": "TIN NUMBER",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldJupG5uZCQUhvzh",
+				"name": "Contact Position",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldyHhg9odAYTi9oK",
+				"name": "ZIP Code",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldnXjMTtXgoknsV6",
+				"name": "Telephone Number",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "flde57hnVA2WuWSjd",
+				"name": "Company Name",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldbflMObAGpxlJVC",
+				"name": "Employee",
+				"type": "foreignKey",
+				"typeOptions": {
+					"foreignTableId": "tblwceR29WfuANzls",
+					"symmetricColumnId": "fldLqsElW9zy0C6n2",
+					"relationship": "many",
+					"unreversed": true
+				}
+			}
+		]
+	},
+	{
+		"id": "tblFlvQQdxVF778WO",
+		"name": "Job Statuses",
+		"columns": [
+			{
+				"id": "fld9y3euEoMdfqdce",
+				"name": "Name",
+				"type": "text"
+			},
+			{
+				"id": "fldipBHjOPlQJ5HrG",
+				"name": "Employee",
+				"type": "foreignKey",
+				"typeOptions": {
+					"foreignTableId": "tblwceR29WfuANzls",
+					"symmetricColumnId": "fldfsTH5f02AkKpeR",
+					"relationship": "many",
+					"unreversed": true
+				}
+			},
+			{
+				"id": "fldkG6NNrmIcFKQXk",
+				"name": "PDY ID",
+				"type": "number",
+				"typeOptions": {
+					"format": "integer",
+					"negative": false,
+					"validatorName": "positive"
+				}
+			}
+		]
+	},
+	{
+		"id": "tbl2uxEcOynRt6xci",
+		"name": "Employment Statuses",
+		"columns": [
+			{
+				"id": "fldZS3IWKL5DKviLa",
+				"name": "Name",
+				"type": "text"
+			},
+			{
+				"id": "fldiCVBOArtN5OEjW",
+				"name": "Employee",
+				"type": "foreignKey",
+				"typeOptions": {
+					"foreignTableId": "tblwceR29WfuANzls",
+					"symmetricColumnId": "fldyU6QS2dNOh5hz1",
+					"relationship": "many",
+					"unreversed": true
+				}
+			},
+			{
+				"id": "fldzPFRKS0WYB8I3W",
+				"name": "PDY ID",
+				"type": "number",
+				"typeOptions": {
+					"format": "integer",
+					"negative": false,
+					"validatorName": "positive"
+				}
+			}
+		]
+	},
+	{
+		"id": "tbllVaXsNUWsDzpfh",
+		"name": "Wage Zones",
+		"columns": [
+			{
+				"id": "fldhN6OAqe89Fe7IA",
+				"name": "REGION",
+				"type": "text"
+			},
+			{
+				"id": "fldhgL7wYlccdMy9v",
+				"name": "Employee",
+				"type": "foreignKey",
+				"typeOptions": {
+					"foreignTableId": "tblwceR29WfuANzls",
+					"symmetricColumnId": "fldgPtj5A0oO8KBsH",
+					"relationship": "many",
+					"unreversed": true
+				}
+			},
+			{
+				"id": "fldSDzzhSfD1VeNTh",
+				"name": "Minimum Wage",
+				"type": "number",
+				"typeOptions": {
+					"format": "currency",
+					"precision": 2,
+					"symbol": "",
+					"negative": false,
+					"validatorName": "positive"
+				}
+			},
+			{
+				"id": "fldrxwCaptc324xkh",
+				"name": "PDY ID",
+				"type": "number",
+				"typeOptions": {
+					"format": "integer",
+					"negative": false,
+					"validatorName": "positive"
+				}
+			},
+			{
+				"id": "fldCtBWboRK6kXXmG",
+				"name": "Description",
+				"type": "text",
+				"typeOptions": null
 			}
 		]
 	}

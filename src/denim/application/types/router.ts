@@ -6,7 +6,6 @@ import {
   DenimViewSchema,
 } from '../../core';
 import { DenimIconType } from '../../forms';
-import { DenimScreenProps } from '../screens/DenimScreen';
 
 export interface DenimRouterSchema {
   screens: DenimRouterComponentSchema[];
