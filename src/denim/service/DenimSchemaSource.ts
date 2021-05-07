@@ -36,9 +36,4 @@ export default abstract class DenimSchemaSource<T extends DenimDataContext> {
 
     return tableSchema;
   }
-
-  registerDefaultView(table: string, view: string) {
-    const tableSchema = this.findTableSchema(table);
-    tableSchema.defaultView = view;
-  }
 }

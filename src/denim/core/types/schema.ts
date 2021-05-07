@@ -63,4 +63,3 @@ export interface DenimForeignKeyProperties {
 }
 
 export type YupAst = [string] | [string, any] | [string, any, string] | ['yup.test', Yup.TestOptionsMessage<{}, any>] | YupAst[];
-  

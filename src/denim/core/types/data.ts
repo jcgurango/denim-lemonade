@@ -52,7 +52,7 @@ export interface DenimQueryCondition {
 
 export interface DenimRecord {
   id?: string;
-  [field: string]: DenimRelatedRecord | DenimRelatedRecordCollection | string | number | null | undefined;
+  [field: string]: DenimRelatedRecord | DenimRelatedRecordCollection | string | number | boolean | null | undefined;
 }
 
 export interface DenimRelatedRecordCollection {

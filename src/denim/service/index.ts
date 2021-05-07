@@ -8,3 +8,6 @@ export * from './types/auth';
 export { default as DenimRemoteDataSource } from './DenimRemoteDataSource';
 export { default as DenimAuthenticator } from './DenimAuthenticator';
 export { default as DenimCombinedDataSource } from './DenimCombinedDataSource';
+export { default as DenimDataSourceV2 } from './DenimDataSourceV2';
+export { default as DenimCombinedDataSourceV2 } from './DenimCombinedDataSourceV2';
+export { default as DenimAuthenticatorV2 } from './DenimAuthenticatorV2';

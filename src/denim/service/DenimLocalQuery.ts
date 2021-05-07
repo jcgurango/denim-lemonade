@@ -42,7 +42,12 @@ export default class DenimLocalQuery {
   ): boolean {
     if (conditions.conditionType === 'single') {
       const field = conditions.field;
-      const fieldSchema = schema.columns.find(({ name }) => name === field);
+      const fieldSchema: DenimColumn | undefined = field === 'id' ? {
+        type: DenimColumnType.Text,
+        name: 'id',
+        label: 'id',
+        properties: { },
+      } : schema.columns.find(({ name }) => name === field);
 
       if (!fieldSchema) {
         throw new Error('Unknown field ' + field + '.');

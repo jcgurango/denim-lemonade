@@ -1,21 +1,27 @@
 import express from 'express';
 import Airtable from 'airtable';
-import { AirTableDataSource } from '../denim/connectors/airtable';
-import DenimDataSourceRouter from '../denim/express/DenimDataSourceRouter';
-import AirTableSchemaSource from '../denim/connectors/airtable/AirTableSchemaSource';
+import Base from 'airtable/lib/base';
+import {
+  AirTableDataSourceV2,
+} from '../denim/connectors/airtable';
+import DenimDataSourceV2Router from '../denim/express/DenimDataSourceV2Router';
+import DenimAuthenticatorMiddleware from '../denim/express/DenimAuthenticatorMiddleware';
 import UpdateCoordinator from './sync/UpdateCoordinator';
 import { DenimDataRetriever } from './sync/retrievers/DenimDataRetriever';
 import { EmployeeMapper } from './sync/mappers/EmployeeMapper';
 import LarkUpdater from './sync/updaters/LarkUpdater';
 import { DepartmentMapper } from './sync/mappers/DepartmentMapper';
 import {
-  DenimDataContext,
+  DenimColumnType,
   DenimQueryOperator,
   DenimRecord,
+  YupAst,
 } from '../denim/core';
 import LarkAuthentication from './LarkAuthentication';
-import { DenimCombinedDataSource } from '../denim/service';
-import LemonadeValidations from '../validation';
+import {
+  DenimCombinedDataSourceV2,
+} from '../denim/service';
+import { LemonadeValidations } from '../validation';
 import LemonadeAuthenticator from './LemonadeAuthenticator';
 
 Airtable.configure({
@@ -29,53 +35,28 @@ const app = express();
 const cors = require('cors');
 
 const dataSource = () => {
-  const coreSchema = new AirTableSchemaSource<
-    {
-      userData?: DenimRecord;
-    } & DenimDataContext
-  >(require('../schema/airtable-schema.json'));
-  const coreData = new AirTableDataSource<
-    {
-      userData?: DenimRecord;
-    } & DenimDataContext,
-    AirTableSchemaSource<
-      {
-        userData?: DenimRecord;
-      } & DenimDataContext
-    >
-  >(coreSchema, process.env.CORE_BASE_ID);
+  const coreData = new AirTableDataSourceV2(
+    (Airtable.base(String(process.env.CORE_BASE_ID)) as any) as Base,
+    require('../schema/airtable-schema.json'),
+  );
 
-  const movementSchema = new AirTableSchemaSource<
-    {
-      userData?: DenimRecord;
-    } & DenimDataContext
-  >(require('../schema/airtable-movement-schema.json'));
-  const movementData = new AirTableDataSource<
-    {
-      userData?: DenimRecord;
-    } & DenimDataContext,
-    AirTableSchemaSource<
-      {
-        userData?: DenimRecord;
-      } & DenimDataContext
-    >
-  >(movementSchema, process.env.MOVEMENT_BASE_ID);
+  const movementData = new AirTableDataSourceV2(
+    (Airtable.base(String(process.env.MOVEMENT_BASE_ID)) as any) as Base,
+    require('../schema/airtable-movement-schema.json'),
+  );
 
-  LemonadeValidations(coreSchema);
-  LemonadeValidations(movementSchema);
+  const data = new DenimCombinedDataSourceV2(
+    coreData,
+    movementData,
+  );
 
-  return new DenimCombinedDataSource(coreData, movementData);
+  LemonadeValidations(data);
+
+  return data;
 };
 
 const data = dataSource();
-const securedData = dataSource();
-
-const denimAuth = LemonadeAuthenticator(securedData.schemaSource.findTableSchema('Employee'));
-
-denimAuth.attach(securedData);
-
-const employeeDataProvider = data.createDataProvider('Employee');
-const departmentDataProvider = data.createDataProvider('Department');
+const denimAuth = LemonadeAuthenticator(data.getTable('Employee'), data);
 
 const fs = require('fs');
 const lark = new LarkUpdater(
@@ -84,42 +65,26 @@ const lark = new LarkUpdater(
 );
 
 const larkAuth = new LarkAuthentication(lark, 'test-secret-key');
-const dataRouter = DenimDataSourceRouter(securedData);
+const dataRouter = DenimDataSourceV2Router(data);
 const authMiddleware = larkAuth.middleware(async (id, req, res, next) => {
   // Find the user.
-  const [employee] = await employeeDataProvider.retrieveRecords(
-    {},
-    {
-      conditions: {
-        conditionType: 'single',
-        field: 'Lark ID',
-        operator: DenimQueryOperator.Equals,
-        value: id,
-      },
+  const [employee] = await data.retrieveRecords('Employee', {
+    conditions: {
+      conditionType: 'single',
+      field: 'Lark ID',
+      operator: DenimQueryOperator.Equals,
+      value: id,
     },
-  );
+  });
 
   if (employee) {
-    (req as any).denimContext = {
-      userData: employee,
-    };
+    (req as any).user = employee;
   }
 
   return next();
 });
 
-app.use('/api/auth/me', cors(), authMiddleware, (req, res) => {
-  if ((req as any).denimContext) {
-    return res.json({
-      ...(req as any).denimContext,
-      roles: denimAuth.getRolesFor((req as any).denimContext.userData),
-    });
-  }
-
-  return res.json(null);
-});
-
-app.use('/api/data', cors(), authMiddleware, dataRouter);
+app.use('/api/data', cors(), authMiddleware, DenimAuthenticatorMiddleware(data, denimAuth), dataRouter);
 
 app.use('/api/auth', cors(), larkAuth.loginEndpoint());
 
@@ -149,7 +114,7 @@ if (process.env.ENABLE_SYNC) {
 
   updateCoordinator.registerRetriever(
     'departments',
-    DenimDataRetriever(departmentDataProvider, null, 'Last Modified', {}),
+    DenimDataRetriever(data, 'Department', null, 'Last Modified'),
   );
 
   updateCoordinator.registerUpdater(
@@ -160,7 +125,7 @@ if (process.env.ENABLE_SYNC) {
 
   updateCoordinator.registerRetriever(
     'employees',
-    DenimDataRetriever(employeeDataProvider, null, 'Last Modified', {}),
+    DenimDataRetriever(data, 'Employee', null, 'Last Modified'),
   );
 
   updateCoordinator.registerUpdater(
@@ -169,13 +134,9 @@ if (process.env.ENABLE_SYNC) {
     lark.employee(),
     async (employee: any, originalEmployee: DenimRecord) => {
       if (!originalEmployee['Lark ID'] && employee.open_id) {
-        await employeeDataProvider.updateRecord(
-          {},
-          String(originalEmployee.id),
-          {
-            'Lark ID': employee.open_id,
-          },
-        );
+        await data.updateRecord('Employee', String(originalEmployee.id), {
+          'Lark ID': employee.open_id,
+        });
       }
     },
   );

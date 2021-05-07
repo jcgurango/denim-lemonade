@@ -1,8 +1,11 @@
 import { DenimQueryOperator, DenimTable } from '../denim/core';
-import { DenimAuthenticator } from '../denim/service';
+import { DenimAuthenticatorV2, DenimDataSourceV2 } from '../denim/service';
 
-const LemonadeAuthenticator = (userTable: DenimTable) => {
-  return new DenimAuthenticator(
+const LemonadeAuthenticator = (
+  userTable: DenimTable,
+  dataSource: DenimDataSourceV2,
+) => {
+  return new DenimAuthenticatorV2(
     [
       {
         id: 'hr',
@@ -127,11 +130,18 @@ const LemonadeAuthenticator = (userTable: DenimTable) => {
               operator: DenimQueryOperator.DoesNotEqual,
               value: true,
             },
+            {
+              conditionType: 'single',
+              field: 'id',
+              operator: DenimQueryOperator.NotNull,
+              value: true,
+            },
           ],
         },
       },
     ],
     userTable,
+    dataSource,
   );
 };
 
