@@ -37,6 +37,7 @@ const LookupField: FunctionComponent<TextInputProps & DenimLookupProps> = ({
   onRecordChange,
   record,
   relationship,
+  disabled,
   ...props
 }) => {
   const [searchText, setSearchText] = useState('');
@@ -98,7 +99,7 @@ const LookupField: FunctionComponent<TextInputProps & DenimLookupProps> = ({
           styles.textInput,
           Platform.OS === 'web' ? { height: 24 } : null,
         ]}
-        placeholder="Select a record..."
+        placeholder={disabled ? '-' : 'Select a record...'}
         value={displayText}
         onFocus={() => setShowLookup(true)}
         {...props}
@@ -197,7 +198,10 @@ const DenimLookup: FunctionComponent<
   disabled,
   ...props
 }) => {
-  const nameCache = useNameCache((value && value.id && !value.name && [value.id]) || undefined, relationship);
+  const nameCache = useNameCache(
+    (value && value.id && !value.name && [value.id]) || undefined,
+    relationship,
+  );
   const denimForm = useDenimForm();
   const ControlContainer = denimForm.componentRegistry.controlContainer;
   const helpText = errors?.map(({ message }) => message).join('\n') || '';
@@ -234,7 +238,12 @@ export const DenimMultiLookup: FunctionComponent<
   disabled,
   ...props
 }) => {
-  const nameCache = useNameCache(value && value.records && value.records.map(({ id }: DenimRelatedRecord) => id), relationship);
+  const nameCache = useNameCache(
+    value &&
+      value.records &&
+      value.records.map(({ id }: DenimRelatedRecord) => id),
+    relationship,
+  );
   const denimForm = useDenimForm();
   const ControlContainer = denimForm.componentRegistry.controlContainer;
   const helpText = errors?.map(({ message }) => message).join('\n') || '';
@@ -283,15 +292,17 @@ export const DenimMultiLookup: FunctionComponent<
             );
           })
         : null}
-      <LookupField
-        relationship={relationship || ''}
-        onRecordChange={(record: DenimRelatedRecord | null) =>
-          record && onChange(select(record))
-        }
-        record={null}
-        disabled={disabled}
-        {...props}
-      />
+      {!disabled ? (
+        <LookupField
+          relationship={relationship || ''}
+          onRecordChange={(record: DenimRelatedRecord | null) =>
+            record && onChange(select(record))
+          }
+          record={null}
+          disabled={disabled}
+          {...props}
+        />
+      ) : null}
     </ControlContainer>
   );
 };
