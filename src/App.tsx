@@ -189,16 +189,6 @@ const employeePersonalSection = {
       ],
     },
     {
-      id: 'row6',
-      controls: [
-        {
-          label: 'Address 3',
-          id: 'Address 3',
-          relativeWidth: 5,
-        },
-      ],
-    },
-    {
       id: 'row7',
       controls: [
         {
@@ -1016,15 +1006,6 @@ const App = () => {
                                     flowDirection: 'row',
                                     paths: [],
                                     children: [field('Address 2', 1)],
-                                  },
-                                },
-                                {
-                                  component: {
-                                    id: 'row6',
-                                    type: 'layout',
-                                    flowDirection: 'row',
-                                    paths: [],
-                                    children: [field('Address 3', 1)],
                                   },
                                 },
                                 {
