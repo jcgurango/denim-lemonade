@@ -1,3 +1,64 @@
+import React, { FunctionComponent, useEffect, useState } from 'react';
+import { ActivityIndicator } from 'react-native';
+import {
+  DenimApplicationField,
+  DenimApplicationForm,
+  DenimApplicationV2,
+} from './denim/application';
+import { DenimUserProviderV2, useDenimUserV2 } from './denim/forms';
+import DenimRemoteDataSourceV2 from './denim/service/DenimRemoteDataSourceV2';
+import { LemonadeValidations } from './validation';
+
+const dataSource = new DenimRemoteDataSourceV2(
+  (process.env.REACT_APP_API_BASE || window.location.origin) + '/api/data',
+);
+LemonadeValidations(dataSource);
+
+const App: FunctionComponent<{}> = () => {
+  const user = useDenimUserV2();
+
+  dataSource.headers = {
+    Authorization: user.token ? `Bearer ${user.token}` : '',
+  };
+
+  const [schemaRetrieved, setSchemaRetrieved] = useState(false);
+
+  useEffect(() => {
+    (async () => {
+      await dataSource.retrieveSchema();
+      setSchemaRetrieved(true);
+    })();
+  }, []);
+
+  if (window.location.pathname === '/loading' || !schemaRetrieved) {
+    return <ActivityIndicator />;
+  }
+
+  return (
+    <DenimApplicationV2 dataSource={dataSource}>
+      <DenimApplicationForm table="Employee">
+        <DenimApplicationField schema={{ id: 'Job Title' }} />
+      </DenimApplicationForm>
+    </DenimApplicationV2>
+  );
+};
+
+const AuthenticatedApp = () => (
+  <DenimUserProviderV2
+    authUrl={
+      (process.env.REACT_APP_API_BASE || window.location.origin) + '/api/auth'
+    }
+    rolesUrl={
+      (process.env.REACT_APP_API_BASE || window.location.origin) +
+      '/api/data/roles'
+    }
+  >
+    <App />
+  </DenimUserProviderV2>
+);
+
+export default AuthenticatedApp;
+/*
 import React, { useContext, useEffect, useMemo, useState } from 'react';
 import copyToClipboard from 'copy-to-clipboard';
 import { createConnectedFormProvider } from './denim/forms/providers/DenimConnectedFormProvider';
@@ -1332,3 +1393,4 @@ const Default = () => {
 };
 
 export default Default;
+*/

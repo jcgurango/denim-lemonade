@@ -1,5 +1,6 @@
 import { transformAll } from '@demvsystems/yup-ast';
 import dayjs from 'dayjs';
+import { Schema } from 'yup';
 import {
   DenimQuery,
   DenimRecord,
@@ -54,6 +55,9 @@ export default abstract class DenimDataSourceV2 {
   };
   public hooks: DenimDataSourceHookV2[] = [];
   public extraValidations: AdditionalValidation[] = [];
+  private validationCache: {
+    [table: string]: Schema<any, object>;
+  } = {};
 
   registerHook(hook: DenimDataSourceHookV2) {
     this.hooks.push(hook);
@@ -68,7 +72,9 @@ export default abstract class DenimDataSourceV2 {
   }
 
   public hasTable(table: string): boolean {
-    return !!this.schema.tables.find((tbl) => tbl.name === table || tbl.id === table);
+    return !!this.schema.tables.find(
+      (tbl) => tbl.name === table || tbl.id === table,
+    );
   }
 
   public getTable(table: string): DenimTable {
@@ -85,12 +91,16 @@ export default abstract class DenimDataSourceV2 {
 
   public async validate(
     table: string,
-    type: 'create' | 'update',
     record: DenimRecord,
   ): Promise<DenimRecord> {
-    const tableSchema = this.getTable(table);
-    const validationSchema = await this.createValidator(tableSchema);
-    const validator = transformAll(validationSchema);
+    let validator = this.validationCache[table];
+
+    if (!validator) {
+      const tableSchema = this.getTable(table);
+      const validationSchema = await this.createValidator(tableSchema);
+      validator = transformAll(validationSchema);
+      this.validationCache[table] = validator;
+    }
 
     const validatedRecord = await validator.validate(record, {
       abortEarly: false,
@@ -167,7 +177,9 @@ export default abstract class DenimDataSourceV2 {
 
               if (field?.type === 'record-collection') {
                 return current.concat(
-                  field.records.map(({ id, record }) => record ? '' : id).filter(Boolean),
+                  field.records
+                    .map(({ id, record }) => (record ? '' : id))
+                    .filter(Boolean),
                 );
               }
             }
@@ -219,7 +231,9 @@ export default abstract class DenimDataSourceV2 {
                             return record;
                           }
 
-                          const relatedRecord = relatedRecords.find(({ id }) => record.id === id);
+                          const relatedRecord = relatedRecords.find(
+                            ({ id }) => record.id === id,
+                          );
 
                           if (relatedRecord) {
                             return {
@@ -399,11 +413,7 @@ export default abstract class DenimDataSourceV2 {
       hookedRecord,
     );
 
-    const validRecord = await this.validate(
-      table,
-      'create',
-      hookedRecordPreValidate,
-    );
+    const validRecord = await this.validate(table, hookedRecordPreValidate);
 
     const [hookedRecordPostValidate] = await this.executeHooks(
       'post-create-validate',
@@ -455,7 +465,6 @@ export default abstract class DenimDataSourceV2 {
     // Validate the updated record.
     const validRecord: DenimRecord = await this.validate(
       table,
-      'update',
       hookedRecordPreValidate,
     );
 
@@ -623,7 +632,7 @@ export default abstract class DenimDataSourceV2 {
           [
             'yup.oneOf',
             [null].concat(
-              <any>field.properties.options.map(({ value }) => value),
+              field.properties.options.map(({ value }) => value) as any,
             ),
           ],
         ];
@@ -645,7 +654,7 @@ export default abstract class DenimDataSourceV2 {
             'yup.transform',
             function (this: any, value: any, originalValue: any) {
               if (isNaN(value) && typeof originalValue === 'string') {
-                return +originalValue.replace(/\,/g, '');
+                return +originalValue.replace(/,/g, '');
               }
 
               return value;

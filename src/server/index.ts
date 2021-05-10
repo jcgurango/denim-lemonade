@@ -1,9 +1,7 @@
 import express from 'express';
 import Airtable from 'airtable';
 import Base from 'airtable/lib/base';
-import {
-  AirTableDataSourceV2,
-} from '../denim/connectors/airtable';
+import { AirTableDataSourceV2 } from '../denim/connectors/airtable';
 import DenimDataSourceV2Router from '../denim/express/DenimDataSourceV2Router';
 import DenimAuthenticatorMiddleware from '../denim/express/DenimAuthenticatorMiddleware';
 import UpdateCoordinator from './sync/UpdateCoordinator';
@@ -11,18 +9,12 @@ import { DenimDataRetriever } from './sync/retrievers/DenimDataRetriever';
 import { EmployeeMapper } from './sync/mappers/EmployeeMapper';
 import LarkUpdater from './sync/updaters/LarkUpdater';
 import { DepartmentMapper } from './sync/mappers/DepartmentMapper';
-import {
-  DenimColumnType,
-  DenimQueryOperator,
-  DenimRecord,
-  YupAst,
-} from '../denim/core';
+import { DenimQueryOperator, DenimRecord } from '../denim/core';
 import LarkAuthentication from './LarkAuthentication';
-import {
-  DenimCombinedDataSourceV2,
-} from '../denim/service';
+import { DenimCombinedDataSourceV2 } from '../denim/service';
 import { LemonadeValidations } from '../validation';
 import LemonadeAuthenticator from './LemonadeAuthenticator';
+import PaydayDataSource from './PaydayDataSource';
 
 Airtable.configure({
   endpointUrl: 'https://api.airtable.com',
@@ -48,6 +40,10 @@ const dataSource = () => {
   const data = new DenimCombinedDataSourceV2(
     coreData,
     movementData,
+    new PaydayDataSource('https://pd-lemonade.jcgurango.com/api', {
+      merchant_id: 'l3m0n4d3_mId',
+      merchant_key: 'bGVtb25hZGVfbWs=',
+    }),
   );
 
   LemonadeValidations(data);
@@ -84,9 +80,18 @@ const authMiddleware = larkAuth.middleware(async (id, req, res, next) => {
   return next();
 });
 
-app.use('/api/data', cors(), authMiddleware, DenimAuthenticatorMiddleware(data, denimAuth), dataRouter);
+app.use(
+  '/api/data',
+  cors(),
+  authMiddleware,
+  DenimAuthenticatorMiddleware(data, denimAuth),
+  dataRouter,
+);
 
 app.use('/api/auth', cors(), larkAuth.loginEndpoint());
+app.use('/api/auth/me', cors(), (req, res) => {
+  return res.json((req as any).user || null);
+});
 
 app.listen(9090, () => console.log('Listening...'));
 

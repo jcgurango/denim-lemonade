@@ -26,7 +26,7 @@ interface DenimColumnDefinition<T, TO> {
   name: string;
   label: string;
   type: T;
-  properties: TO; 
+  properties: TO;
 }
 
 export enum DenimColumnType {

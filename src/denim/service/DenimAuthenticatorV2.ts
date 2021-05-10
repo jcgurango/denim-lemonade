@@ -282,6 +282,7 @@ export default class DenimAuthenticatorV2 {
                   userData,
                   columnSchema.properties.foreignTableId,
                   value.record,
+                  actionKey,
                 );
 
                 if (filteredRecord) {
