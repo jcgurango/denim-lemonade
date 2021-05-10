@@ -1082,7 +1082,6 @@ const App = () => {
                                     flowDirection: 'row',
                                     paths: [],
                                     children: [
-                                      field('Base', 1),
                                       field('Department', 1),
                                       field('Department Supervisor', 1),
                                       field('Member Type', 1),
