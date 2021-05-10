@@ -9,9 +9,11 @@ import React, {
 import bent from 'bent';
 import { ActivityIndicator } from 'react-native';
 import qs from 'querystring';
+import { DenimRecord } from '../../core';
 
 export interface DenimUserContextV2Props {
   token?: string;
+  user?: DenimRecord;
   roles: string[];
 }
 
@@ -27,6 +29,7 @@ const DenimUserProvider: FunctionComponent<{
 }> = ({ authUrl, rolesUrl, children }) => {
   const [currentToken, setCurrentToken] = useState('');
   const [roles, setRoles] = useState([]);
+  const [user, setUser] = useState<DenimRecord | undefined>(undefined);
   const { get, getRoles } = useMemo(() => {
     return {
       get: bent(
@@ -100,14 +103,20 @@ const DenimUserProvider: FunctionComponent<{
       let cancelled = false;
 
       (async () => {
+        const user = await get('/me');
         const roles = await getRoles('/');
 
         if (!cancelled) {
+          if (user) {
+            setUser(user);
+          } else {
+            setUser(undefined);
+          }
+
           if (roles) {
             setRoles(roles);
           } else {
-            localStorage.removeItem('denimToken');
-            setCurrentToken('');
+            setRoles([]);
           }
         }
       })();
@@ -116,16 +125,14 @@ const DenimUserProvider: FunctionComponent<{
         cancelled = true;
       };
     }
-  }, [currentToken, getRoles]);
+  }, [currentToken, getRoles, get]);
 
   if (!currentToken) {
     return <ActivityIndicator />;
   }
 
-  console.log(currentToken);
-
   return (
-    <DenimUserContext.Provider value={{ token: currentToken, roles }}>
+    <DenimUserContext.Provider value={{ token: currentToken, user, roles }}>
       {children}
     </DenimUserContext.Provider>
   );

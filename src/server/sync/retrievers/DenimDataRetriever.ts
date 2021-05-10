@@ -12,8 +12,6 @@ export const DenimDataRetriever = (
   updatedAtField: string,
 ) => {
   return async (lastCheck: Date): Promise<DenimRecord[]> => {
-    //console.log('Retrieving new/updated records from ' + tableData.tableSchema.name + ' on ' + updatedAtField + '...');
-
     return dataSource.retrieveRecords(table, {
       ...(query || {}),
       conditions: {

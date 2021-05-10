@@ -89,7 +89,7 @@ app.use(
 );
 
 app.use('/api/auth', cors(), larkAuth.loginEndpoint());
-app.use('/api/auth/me', cors(), (req, res) => {
+app.use('/api/auth/me', cors(), authMiddleware, (req, res) => {
   return res.json((req as any).user || null);
 });
 

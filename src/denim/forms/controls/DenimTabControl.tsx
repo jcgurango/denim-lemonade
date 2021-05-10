@@ -2,11 +2,13 @@ import React, { FunctionComponent, ReactChild } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useDenimForm } from '../providers/DenimFormProvider';
 
+export type DenimTabControlTab = {
+  label: string;
+  content: ReactChild;
+};
+
 export interface DenimTabControlProps {
-  tabs: {
-    label: string;
-    content: ReactChild;
-  }[];
+  tabs: DenimTabControlTab[];
   tab: number;
   onTabChange: (newTab: number) => void;
 }

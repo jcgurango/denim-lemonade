@@ -71,7 +71,7 @@ export default class DenimRemoteDataSourceV2 extends DenimDataSourceV2 {
       'json',
       'PUT',
       this.headers,
-    )(`/${dashify(table)}/${record.id}`, record);
+    )(`/${dashify(table)}`, record);
   }
 
   protected async delete(table: string, id: string): Promise<void> {

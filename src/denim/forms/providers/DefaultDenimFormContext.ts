@@ -7,6 +7,7 @@ import DenimDropDown from '../controls/DenimDropDown';
 import DenimLookup, { DenimMultiLookup } from '../controls/DenimLookup';
 import DenimMultiDropDown from '../controls/DenimMultiDropDown';
 import DenimReadOnly from '../controls/DenimReadOnly';
+import DenimTabControl from '../controls/DenimTabControl';
 import DenimTextInput, {
   DenimMultilineTextInput,
 } from '../controls/DenimTextInput';
@@ -44,6 +45,7 @@ export const DefaultDenimFormContext = {
     viewHeaderCell: DenimViewHeaderCell,
     viewRow: DenimViewRow,
     viewCell: DenimViewCell,
+    tabControl: DenimTabControl,
   },
   setValue: () => () => {},
   getValue: () => null,

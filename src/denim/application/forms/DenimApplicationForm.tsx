@@ -1,15 +1,19 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { FunctionComponent } from 'react';
+import { ActivityIndicator } from 'react-native';
 import * as Yup from 'yup';
 import {
   DenimColumnType,
+  DenimNotificationCodes,
   DenimQuery,
   DenimQueryOperator,
   DenimRecord,
   DenimRelatedRecord,
 } from '../../core';
 import { DenimFormProvider } from '../../forms';
+import { useDenimForm } from '../../forms/providers/DenimFormProvider';
 import DenimLookupDataProvider from '../../forms/providers/DenimLookupDataProvider';
+import { useDenimNotifications } from '../../forms/providers/DenimNotificationProvider';
 import { DenimDataSourceV2 } from '../../service';
 import {
   DenimApplicationContext,
@@ -19,6 +23,7 @@ import {
 export interface DenimApplicationFormProps {
   table: string;
   record?: DenimQuery | string;
+  onSave?: (record: DenimRecord) => void;
 }
 
 export const getLookupProviderFor = (
@@ -109,8 +114,10 @@ const DenimApplicationForm: FunctionComponent<DenimApplicationFormProps> = ({
   table,
   record,
   children,
+  onSave = () => {},
 }) => {
   const application = useDenimApplication();
+  const notifications = useDenimNotifications();
   const lookup = useMemo(() => {
     if (application.dataSource) {
       return getLookupProviderFor(application.dataSource, table);
@@ -127,12 +134,19 @@ const DenimApplicationForm: FunctionComponent<DenimApplicationFormProps> = ({
   const [updateData, setUpdateData] = useState<DenimRecord | undefined>({});
   const [formValid, setFormValid] = useState(false);
   const [errors, setErrors] = useState<Yup.ValidationError[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const {
+    componentRegistry: { button: DenimButton },
+  } = useDenimForm();
 
   useEffect(() => {
     let cancelled = false;
 
     (async () => {
       if (record) {
+        setLoading(true);
+
         if (typeof record === 'string') {
           const foundRecord = await application.dataSource?.retrieveRecord(
             table,
@@ -152,6 +166,8 @@ const DenimApplicationForm: FunctionComponent<DenimApplicationFormProps> = ({
           }
         }
       }
+
+      setLoading(false);
     })();
 
     return () => {
@@ -184,6 +200,65 @@ const DenimApplicationForm: FunctionComponent<DenimApplicationFormProps> = ({
       cancelled = true;
     };
   }, [currentRecord, table, application.dataSource]);
+
+  const save = useCallback(() => {
+    (async () => {
+      setSaving(true);
+      notifications.notify({
+        type: 'info',
+        message: 'Saving record...',
+        code: DenimNotificationCodes.SavingRecord,
+      });
+
+      try {
+        let newRecord = null;
+
+        if (currentRecord?.id) {
+          newRecord = await application.dataSource?.updateRecord(
+            table,
+            currentRecord.id,
+            updateData || {},
+          );
+        } else {
+          newRecord = await application.dataSource?.createRecord(
+            table,
+            updateData || {},
+          );
+        }
+
+        if (newRecord) {
+          notifications.notify({
+            type: 'success',
+            message: 'Record saved.',
+            code: DenimNotificationCodes.SavingSuccessful,
+          });
+
+          onSave(newRecord);
+        }
+      } catch (e) {
+        if (!notifications.handleError(e)) {
+          notifications.notify({
+            type: 'error',
+            message: 'Failed to save the record.',
+            code: DenimNotificationCodes.SavingFailed,
+          });
+        }
+      }
+
+      setSaving(false);
+    })();
+  }, [
+    application.dataSource,
+    currentRecord?.id,
+    notifications,
+    onSave,
+    table,
+    updateData,
+  ]);
+
+  if (loading) {
+    return <ActivityIndicator />;
+  }
 
   return (
     <DenimApplicationContext.Provider
@@ -218,6 +293,13 @@ const DenimApplicationForm: FunctionComponent<DenimApplicationFormProps> = ({
       >
         <DenimLookupDataProvider {...lookup}>
           {children}
+          <div style={{ marginTop: '1em' }}>
+            <DenimButton
+              text={saving ? 'Saving...' : 'Save'}
+              onPress={save}
+              disabled={!formValid || saving}
+            />
+          </div>
         </DenimLookupDataProvider>
       </DenimFormProvider>
     </DenimApplicationContext.Provider>

@@ -9,6 +9,7 @@ import { ValidationError } from 'yup';
 import { DefaultDenimFormContext } from './DefaultDenimFormContext';
 import { DenimButtonProps } from '../controls/DenimButton';
 import { DenimViewHeaderCellProps } from '../DenimView';
+import { DenimTabControlProps } from '../controls/DenimTabControl';
 
 export interface DenimControlProps {
   value: any;
@@ -49,6 +50,7 @@ type DenimComponentRegistry = {
   viewHeaderCell: ComponentType<DenimViewHeaderCellProps>;
   viewRow: ComponentType;
   viewCell: ComponentType;
+  tabControl: ComponentType<DenimTabControlProps>;
 };
 
 type DenimStyleOverrides = {
