@@ -10,6 +10,7 @@ import { DefaultDenimFormContext } from './DefaultDenimFormContext';
 import { DenimButtonProps } from '../controls/DenimButton';
 import { DenimViewHeaderCellProps } from '../DenimView';
 import { DenimTabControlProps } from '../controls/DenimTabControl';
+import { DenimIconProps } from '../controls/DenimIcon';
 
 export interface DenimControlProps {
   value: any;
@@ -51,6 +52,7 @@ type DenimComponentRegistry = {
   viewRow: ComponentType;
   viewCell: ComponentType;
   tabControl: ComponentType<DenimTabControlProps>;
+  icon: ComponentType<DenimIconProps>;
 };
 
 type DenimStyleOverrides = {
@@ -68,7 +70,7 @@ type DenimStyleOverrides = {
     selectedTabHeader?: StyleProp<ViewStyle>;
     selectedTabHeaderText?: StyleProp<TextStyle>;
     contentContainer?: StyleProp<ViewStyle>;
-  },
+  };
 };
 
 interface DenimFormProviderProps extends Partial<DenimFormContextProps> {}

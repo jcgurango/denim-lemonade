@@ -18,13 +18,8 @@
 			{
 				"id": "fldz66zByq4hQJn3L",
 				"name": "Department Head",
-				"type": "foreignKey",
-				"typeOptions": {
-					"foreignTableId": "tblwceR29WfuANzls",
-					"relationship": "one",
-					"unreversed": true,
-					"symmetricColumnId": "fldBNXHP2fBJFMg8H"
-				}
+				"type": "text",
+				"typeOptions": null
 			},
 			{
 				"id": "fldIzkdURlg9WHqgC",
@@ -54,9 +49,12 @@
 						"referencedColumnIdsForValue": [
 							"fldz66zByq4hQJn3L",
 							"fldDaog47aC4vuyuv"
+						],
+						"invalidColumnIds": [
+							"fldz66zByq4hQJn3L"
 						]
 					},
-					"resultType": "text"
+					"formulaError": "brokenDependencies"
 				}
 			},
 			{
@@ -361,42 +359,6 @@
 					"relationship": "one",
 					"foreignTableId": "tblwceR29WfuANzls",
 					"unreversed": true
-				}
-			},
-			{
-				"id": "fldO2hvzqwGVPRoZ5",
-				"name": "Member Type",
-				"type": "select",
-				"typeOptions": {
-					"choiceOrder": [
-						"sel8e6Z6hMB7JN88p",
-						"selkDi9uHzgQXcLFp",
-						"sel5nk6ae9PQHzsDJ",
-						"sellzr0g5KFyDQj0S"
-					],
-					"choices": {
-						"sel8e6Z6hMB7JN88p": {
-							"id": "sel8e6Z6hMB7JN88p",
-							"color": "blue",
-							"name": "Employee"
-						},
-						"selkDi9uHzgQXcLFp": {
-							"id": "selkDi9uHzgQXcLFp",
-							"color": "cyan",
-							"name": "Contractor"
-						},
-						"sel5nk6ae9PQHzsDJ": {
-							"id": "sel5nk6ae9PQHzsDJ",
-							"color": "teal",
-							"name": "Consultant"
-						},
-						"sellzr0g5KFyDQj0S": {
-							"id": "sellzr0g5KFyDQj0S",
-							"color": "green",
-							"name": "Partner"
-						}
-					},
-					"disableColors": false
 				}
 			},
 			{
@@ -790,17 +752,6 @@
 				}
 			},
 			{
-				"id": "fldBNXHP2fBJFMg8H",
-				"name": "Department 2",
-				"type": "foreignKey",
-				"typeOptions": {
-					"foreignTableId": "tblUfitCYsBy6AiNV",
-					"symmetricColumnId": "fldz66zByq4hQJn3L",
-					"relationship": "many",
-					"unreversed": true
-				}
-			},
-			{
 				"id": "fldDaog47aC4vuyuv",
 				"name": "Lark ID",
 				"type": "text",
@@ -868,42 +819,6 @@
 					"symmetricColumnId": "fldHt3s4dC4W89K93",
 					"relationship": "many",
 					"unreversed": true
-				}
-			},
-			{
-				"id": "fldyHhmgPTUoLlP05",
-				"name": "Basic Pay Frequency",
-				"type": "select",
-				"typeOptions": {
-					"choiceOrder": [
-						"sel6wnofY3HLXqlmK",
-						"selCu6rEdZG7zQ0Qi",
-						"selYYjPPMQyidgHpd",
-						"selwsq1JGG5DG288T"
-					],
-					"choices": {
-						"sel6wnofY3HLXqlmK": {
-							"id": "sel6wnofY3HLXqlmK",
-							"color": "blue",
-							"name": "Monthly"
-						},
-						"selCu6rEdZG7zQ0Qi": {
-							"id": "selCu6rEdZG7zQ0Qi",
-							"color": "cyan",
-							"name": "Daily"
-						},
-						"selYYjPPMQyidgHpd": {
-							"id": "selYYjPPMQyidgHpd",
-							"color": "teal",
-							"name": "Weekly"
-						},
-						"selwsq1JGG5DG288T": {
-							"id": "selwsq1JGG5DG288T",
-							"color": "green",
-							"name": "Hourly"
-						}
-					},
-					"disableColors": false
 				}
 			},
 			{
@@ -3977,42 +3892,6 @@
 				"typeOptions": null
 			},
 			{
-				"id": "fld37HUyKnKoU6SOJ",
-				"name": "Member Type",
-				"type": "select",
-				"typeOptions": {
-					"choiceOrder": [
-						"sel8e6Z6hMB7JN88p",
-						"selkDi9uHzgQXcLFp",
-						"sel5nk6ae9PQHzsDJ",
-						"sellzr0g5KFyDQj0S"
-					],
-					"choices": {
-						"sel8e6Z6hMB7JN88p": {
-							"id": "sel8e6Z6hMB7JN88p",
-							"color": "blue",
-							"name": "Employee"
-						},
-						"selkDi9uHzgQXcLFp": {
-							"id": "selkDi9uHzgQXcLFp",
-							"color": "cyan",
-							"name": "Contractor"
-						},
-						"sel5nk6ae9PQHzsDJ": {
-							"id": "sel5nk6ae9PQHzsDJ",
-							"color": "teal",
-							"name": "Consultant"
-						},
-						"sellzr0g5KFyDQj0S": {
-							"id": "sellzr0g5KFyDQj0S",
-							"color": "green",
-							"name": "Partner"
-						}
-					},
-					"disableColors": false
-				}
-			},
-			{
 				"id": "fldoie4RRaj5d5wfb",
 				"name": "Job Positions",
 				"type": "text",
@@ -4337,6 +4216,38 @@
 				"type": "multipleAttachment",
 				"typeOptions": {
 					"unreversed": true
+				}
+			},
+			{
+				"id": "fldHa00ljR9DOSgMK",
+				"name": "Created By",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "flduPgclkSMOkmSUG",
+				"name": "Date Created",
+				"type": "date",
+				"typeOptions": {
+					"isDateTime": true,
+					"timeZone": "client",
+					"dateFormat": "Local"
+				}
+			},
+			{
+				"id": "fldCwvMxHZGNvPrRo",
+				"name": "Last Modified By",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldnMYKLDtH59tTig",
+				"name": "Last Modified",
+				"type": "date",
+				"typeOptions": {
+					"isDateTime": true,
+					"timeZone": "client",
+					"dateFormat": "Local"
 				}
 			},
 			{
@@ -5057,7 +4968,8 @@
 			{
 				"id": "fldicfMYptwdGTlmC",
 				"name": "Name",
-				"type": "text"
+				"type": "text",
+				"typeOptions": null
 			},
 			{
 				"id": "fldeZNOotIcfoKHdN",
@@ -5089,7 +5001,8 @@
 			{
 				"id": "flddfVALmA9z5bfNV",
 				"name": "Name",
-				"type": "text"
+				"type": "text",
+				"typeOptions": null
 			},
 			{
 				"id": "fldAYS1CuFYXrdD04",
@@ -5121,7 +5034,8 @@
 			{
 				"id": "fldky9SJWapEzVuZY",
 				"name": "Name",
-				"type": "text"
+				"type": "text",
+				"typeOptions": null
 			},
 			{
 				"id": "fldKzDHrmAexLIk8D",
@@ -5153,7 +5067,8 @@
 			{
 				"id": "fldv87bC7E0Ny9Osr",
 				"name": "Name",
-				"type": "text"
+				"type": "text",
+				"typeOptions": null
 			},
 			{
 				"id": "fldfgpn3tJAk0ez02",
@@ -5185,7 +5100,8 @@
 			{
 				"id": "fldaXKa8kEPk3Fxca",
 				"name": "Name",
-				"type": "text"
+				"type": "text",
+				"typeOptions": null
 			},
 			{
 				"id": "fld43G9XY2A7yssVd",
@@ -5217,7 +5133,8 @@
 			{
 				"id": "fldT5aCJJN69r6RIS",
 				"name": "Code",
-				"type": "text"
+				"type": "text",
+				"typeOptions": null
 			},
 			{
 				"id": "fldKMNOyBCzrUeYUv",
@@ -5266,7 +5183,8 @@
 			{
 				"id": "flddvNJxVLbEhbQeJ",
 				"name": "CODE",
-				"type": "text"
+				"type": "text",
+				"typeOptions": null
 			},
 			{
 				"id": "fldm8Qvjep2rfdWay",
@@ -5381,7 +5299,8 @@
 			{
 				"id": "fld9y3euEoMdfqdce",
 				"name": "Name",
-				"type": "text"
+				"type": "text",
+				"typeOptions": null
 			},
 			{
 				"id": "fldipBHjOPlQJ5HrG",
@@ -5413,7 +5332,8 @@
 			{
 				"id": "fldZS3IWKL5DKviLa",
 				"name": "Name",
-				"type": "text"
+				"type": "text",
+				"typeOptions": null
 			},
 			{
 				"id": "fldiCVBOArtN5OEjW",
@@ -5445,7 +5365,8 @@
 			{
 				"id": "fldhN6OAqe89Fe7IA",
 				"name": "REGION",
-				"type": "text"
+				"type": "text",
+				"typeOptions": null
 			},
 			{
 				"id": "fldhgL7wYlccdMy9v",

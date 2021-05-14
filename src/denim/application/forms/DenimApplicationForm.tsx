@@ -24,6 +24,8 @@ export interface DenimApplicationFormProps {
   table: string;
   record?: DenimQuery | string;
   onSave?: (record: DenimRecord) => void;
+  showSave?: boolean;
+  prefill?: DenimRecord;
 }
 
 export const getLookupProviderFor = (
@@ -115,6 +117,8 @@ const DenimApplicationForm: FunctionComponent<DenimApplicationFormProps> = ({
   record,
   children,
   onSave = () => {},
+  showSave = true,
+  prefill,
 }) => {
   const application = useDenimApplication();
   const notifications = useDenimNotifications();
@@ -129,9 +133,11 @@ const DenimApplicationForm: FunctionComponent<DenimApplicationFormProps> = ({
     return application.dataSource?.getTable(table);
   }, [application.dataSource, table]);
   const [currentRecord, setCurrentRecord] = useState<DenimRecord | undefined>(
-    undefined,
+    record ? undefined : prefill,
   );
-  const [updateData, setUpdateData] = useState<DenimRecord | undefined>({});
+  const [updateData, setUpdateData] = useState<DenimRecord | undefined>(
+    currentRecord === prefill ? prefill : {},
+  );
   const [formValid, setFormValid] = useState(false);
   const [errors, setErrors] = useState<Yup.ValidationError[]>([]);
   const [loading, setLoading] = useState(true);
@@ -293,13 +299,15 @@ const DenimApplicationForm: FunctionComponent<DenimApplicationFormProps> = ({
       >
         <DenimLookupDataProvider {...lookup}>
           {children}
-          <div style={{ marginTop: '1em' }}>
-            <DenimButton
-              text={saving ? 'Saving...' : 'Save'}
-              onPress={save}
-              disabled={!formValid || saving}
-            />
-          </div>
+          {showSave ? (
+            <div style={{ marginTop: '1em' }}>
+              <DenimButton
+                text={saving ? 'Saving...' : 'Save'}
+                onPress={save}
+                disabled={!formValid || saving}
+              />
+            </div>
+          ) : null}
         </DenimLookupDataProvider>
       </DenimFormProvider>
     </DenimApplicationContext.Provider>

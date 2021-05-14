@@ -4,6 +4,7 @@ import DenimCheckBox from '../controls/DenimCheckBox';
 import DenimControlContainer from '../controls/DenimControlContainer';
 import DenimDatePicker from '../controls/DenimDatePicker';
 import DenimDropDown from '../controls/DenimDropDown';
+import DenimIcon from '../controls/DenimIcon';
 import DenimLookup, { DenimMultiLookup } from '../controls/DenimLookup';
 import DenimMultiDropDown from '../controls/DenimMultiDropDown';
 import DenimReadOnly from '../controls/DenimReadOnly';
@@ -46,6 +47,7 @@ export const DefaultDenimFormContext = {
     viewRow: DenimViewRow,
     viewCell: DenimViewCell,
     tabControl: DenimTabControl,
+    icon: DenimIcon,
   },
   setValue: () => () => {},
   getValue: () => null,

@@ -9,6 +9,7 @@ export interface DenimViewDataContextProps {
   retrieveMore: () => Promise<void>;
   sort?: DenimSortExpression;
   setSort: (sort?: DenimSortExpression) => void;
+  refresh: () => void,
 }
 
 const DenimViewDataContext = createContext<DenimViewDataContextProps>({
@@ -24,6 +25,7 @@ const DenimViewDataContext = createContext<DenimViewDataContextProps>({
   retrieving: false,
   retrieveMore: async () => {},
   setSort: () => {},
+  refresh: () => {},
 });
 
 export const useDenimViewData = () => useContext(DenimViewDataContext);

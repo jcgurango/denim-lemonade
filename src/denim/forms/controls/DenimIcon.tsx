@@ -3,7 +3,7 @@ import React, { FunctionComponent } from 'react';
 export type DenimIconType = 'list' | 'pencil' | 'delete';
 
 export interface DenimIconProps {
-  type: DenimIconType;
+  type?: DenimIconType;
 }
 
 const DenimIcon: FunctionComponent<DenimIconProps> = ({ type }) => {

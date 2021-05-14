@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { FunctionComponent } from 'react';
 import {
   DenimColumn,
@@ -11,6 +11,8 @@ import { useDenimApplication } from '../DenimApplicationV2';
 
 export interface DenimApplicationFieldProps {
   schema: DenimFormControlSchema;
+  value?: any;
+  onChange?: (value: any) => void;
 }
 
 export const getControlFor = (
@@ -127,6 +129,8 @@ export const getControlFor = (
 
 const DenimApplicationField: FunctionComponent<DenimApplicationFieldProps> = ({
   schema,
+  value,
+  onChange,
 }) => {
   const {
     componentRegistry: { control: FormControl },
@@ -143,7 +147,9 @@ const DenimApplicationField: FunctionComponent<DenimApplicationFieldProps> = ({
     return schema;
   }, [application, schema]);
 
-  return <FormControl schema={controlSchema} />;
+  return (
+    <FormControl schema={controlSchema} value={value} onChange={onChange} />
+  );
 };
 
 export default DenimApplicationField;

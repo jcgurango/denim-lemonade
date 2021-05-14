@@ -6,6 +6,7 @@ import {
   DenimApplicationLayout,
   DenimApplicationV2,
   useDenimApplication,
+  DenimScreenV2,
 } from './denim/application';
 import {
   DenimFormProvider,
@@ -25,8 +26,9 @@ import {
 import LemonadeFormControl from './components/LemonadeFormControl';
 import EmployeeForm from './components/EmployeeForm';
 import DenimRouter from './denim/application/DenimRouter';
-import DenimScreenV2 from './denim/application/screens/DenimScreenV2';
 import { useHistory } from 'react-router';
+import EmployeeList from './components/EmployeeList';
+import MovementScreen from './components/MovementScreen';
 
 const dataSource = new DenimRemoteDataSourceV2(
   (process.env.REACT_APP_API_BASE || window.location.origin) + '/api/data',
@@ -115,6 +117,18 @@ const App: FunctionComponent<{}> = () => {
         >
           <HREmployeeForm />
         </DenimScreenV2>
+        <DenimScreenV2
+          id="employee-list"
+          paths={['/']}
+          allowedRoles={['hr', 'hr-user']}
+        >
+          <EmployeeList />
+        </DenimScreenV2>
+        <MovementScreen
+          id="job-position"
+          columns={['Job Position']}
+          table="Job Position Movement"
+        />
       </DenimRouter>
     </DenimApplicationV2>
   );

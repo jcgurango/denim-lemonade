@@ -27,7 +27,7 @@ const DenimTextInput: FunctionComponent<DenimControlProps & DenimTextInputProps 
   const helpText = errors?.map(({ message }) => message).join('\n') || '';
   const formatValue = (value: any, format?: string) => {
     if (format && value) {
-      return sf(format, (numerical && typeof(value) === 'string') ? Number(value.replace(/\,/g, '')) : value);
+      return sf(format, (numerical && typeof(value) === 'string') ? Number(value.replace(/,/g, '')) : value);
     }
 
     return value;

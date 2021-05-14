@@ -1,5 +1,5 @@
 import React, { Fragment, FunctionComponent } from 'react';
-import { Button, StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import {
   DenimColumn,
   DenimFormControlSchema,
