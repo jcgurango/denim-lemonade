@@ -9,7 +9,7 @@ services:
       - 30000:80
   server:
     image: node:12
-    command: bash -c 'yarn install && npx lerna bootstrap && cd /app/packages/denim-lemonade/ (yarn web & yarn server:dev)'
+    command: bash -c 'yarn install && npx lerna bootstrap && cd /app/packages/denim-lemonade/ && (yarn web & yarn server:dev)'
     working_dir: /app
     env_file: app.env
     volumes:
