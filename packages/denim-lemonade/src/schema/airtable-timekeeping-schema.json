@@ -1,0 +1,1424 @@
+[
+	{
+		"id": "tblqx6TOp6EltFoWf",
+		"name": "201 Management",
+		"columns": [
+			{
+				"id": "fldSrdrKotZmEv0bo",
+				"name": "User ID",
+				"type": "multilineText",
+				"typeOptions": null
+			},
+			{
+				"id": "fldhWtc1pf1onIoLW",
+				"name": "Employee ID",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldsqitUDMhz8l6i5",
+				"name": "Account Status",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "flda6oewsA5EwUFe2",
+				"name": "Title",
+				"type": "select",
+				"typeOptions": {
+					"choiceOrder": [
+						"selH4MygMXiunwpuZ",
+						"selWp8CyTRck4cyJq",
+						"selpbwz3M2SAT8PUQ"
+					],
+					"choices": {
+						"selH4MygMXiunwpuZ": {
+							"id": "selH4MygMXiunwpuZ",
+							"color": "blue",
+							"name": "Mr."
+						},
+						"selWp8CyTRck4cyJq": {
+							"id": "selWp8CyTRck4cyJq",
+							"color": "cyan",
+							"name": "Mrs."
+						},
+						"selpbwz3M2SAT8PUQ": {
+							"id": "selpbwz3M2SAT8PUQ",
+							"color": "teal",
+							"name": "Ms."
+						}
+					},
+					"disableColors": false
+				}
+			},
+			{
+				"id": "fldSaJ5f7KRhHebgR",
+				"name": "Last Name",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldh6jNgwo0yhntRs",
+				"name": "First Name",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldMgOb5y1cY9JSi5",
+				"name": "Middle Name",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldbCVjCIZHvep88C",
+				"name": "Full Name",
+				"type": "multilineText",
+				"typeOptions": null
+			},
+			{
+				"id": "fldccpJTpyWRMQnKJ",
+				"name": "Nickname",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldyPoPq2IT5YMExL",
+				"name": "Picture",
+				"type": "multipleAttachment",
+				"typeOptions": {
+					"unreversed": true
+				}
+			},
+			{
+				"id": "fldbpVouMCAjOEmJR",
+				"name": "Date of Birth",
+				"type": "date",
+				"typeOptions": {
+					"isDateTime": false,
+					"dateFormat": "Local"
+				}
+			},
+			{
+				"id": "fld6ObU5Er0YnK2hp",
+				"name": "Gender",
+				"type": "select",
+				"typeOptions": {
+					"choiceOrder": [
+						"selrzRWGi5ymPYlfG",
+						"selm2z0Q2Fpfw087i"
+					],
+					"choices": {
+						"selrzRWGi5ymPYlfG": {
+							"id": "selrzRWGi5ymPYlfG",
+							"color": "blue",
+							"name": "Male"
+						},
+						"selm2z0Q2Fpfw087i": {
+							"id": "selm2z0Q2Fpfw087i",
+							"color": "cyan",
+							"name": "Female"
+						}
+					},
+					"disableColors": false
+				}
+			},
+			{
+				"id": "fldCEgzXnbhDxf9gG",
+				"name": "Marital Status",
+				"type": "select",
+				"typeOptions": {
+					"choiceOrder": [
+						"sel8nxVp5gpF9fZGL",
+						"sel4jEObSBYG7BFvT",
+						"sela9C5VdGVbdGYHm",
+						"sels1PgTREtDOdrrP",
+						"selaCvraEUPV9LVmY",
+						"sel0ogQs0sB8jmBq3"
+					],
+					"choices": {
+						"sel8nxVp5gpF9fZGL": {
+							"id": "sel8nxVp5gpF9fZGL",
+							"color": "blue",
+							"name": "Single"
+						},
+						"sel4jEObSBYG7BFvT": {
+							"id": "sel4jEObSBYG7BFvT",
+							"color": "cyan",
+							"name": "Married"
+						},
+						"sela9C5VdGVbdGYHm": {
+							"id": "sela9C5VdGVbdGYHm",
+							"color": "teal",
+							"name": "Civil Partner"
+						},
+						"sels1PgTREtDOdrrP": {
+							"id": "sels1PgTREtDOdrrP",
+							"color": "green",
+							"name": "Separated"
+						},
+						"selaCvraEUPV9LVmY": {
+							"id": "selaCvraEUPV9LVmY",
+							"color": "yellow",
+							"name": "Divorced"
+						},
+						"sel0ogQs0sB8jmBq3": {
+							"id": "sel0ogQs0sB8jmBq3",
+							"color": "orange",
+							"name": "Widowed"
+						}
+					},
+					"disableColors": false
+				}
+			},
+			{
+				"id": "fldkoDMgLO8cCwcrU",
+				"name": "LinkedIn Account",
+				"type": "text",
+				"typeOptions": {
+					"validatorName": "url"
+				}
+			},
+			{
+				"id": "fldUt62aE3GQXtqiQ",
+				"name": "Email",
+				"type": "text",
+				"typeOptions": {
+					"validatorName": "email"
+				}
+			},
+			{
+				"id": "fldVr31Lt9oy06W4l",
+				"name": "Department",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldLbMijedXgRc4h9",
+				"name": "Direct Manager",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fld9ALa9x20hqmzvP",
+				"name": "Job Positions",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldfpOPLUUZIOZBiW",
+				"name": "Job Roles",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldBk3ZU2DvIrJvSm",
+				"name": "Job Title",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldR6QGukTKtkgbCu",
+				"name": "Department Supervisor",
+				"type": "checkbox",
+				"typeOptions": {
+					"color": "green",
+					"icon": "check"
+				}
+			},
+			{
+				"id": "fldEqumOkrE9qtH20",
+				"name": "Entry Date",
+				"type": "date",
+				"typeOptions": {
+					"isDateTime": false,
+					"dateFormat": "Local"
+				}
+			},
+			{
+				"id": "fldp1WwkiSAML73D5",
+				"name": "Exit Date",
+				"type": "date",
+				"typeOptions": {
+					"isDateTime": false,
+					"dateFormat": "Local"
+				}
+			},
+			{
+				"id": "fldxvb3Ddk20qwI3T",
+				"name": "Payroll ID",
+				"type": "number",
+				"typeOptions": {
+					"format": "integer",
+					"negative": false,
+					"validatorName": "positive"
+				}
+			},
+			{
+				"id": "fld8IG7kGILHJ9oPE",
+				"name": "Employee Wage",
+				"type": "number",
+				"typeOptions": {
+					"format": "currency",
+					"precision": 2,
+					"symbol": "$",
+					"negative": false,
+					"validatorName": "positive"
+				}
+			},
+			{
+				"id": "fld6lQog5453W3ao6",
+				"name": "Employee Allowance",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldsTXN2IJsgpVNgt",
+				"name": "Phone Number Visibility",
+				"type": "checkbox",
+				"typeOptions": {
+					"color": "green",
+					"icon": "check"
+				}
+			},
+			{
+				"id": "fldkIbPJCD1iN5M5F",
+				"name": "Nationality",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldXV0gewgCUFJdHD",
+				"name": "Citizenship",
+				"type": "select",
+				"typeOptions": {
+					"choiceOrder": [
+						"selFqEYqkY6g5k5C8",
+						"selXSzBkMxpGfjpbr",
+						"selmKBuOkWhjxIvvk",
+						"selE1vmw1UhKe6unp"
+					],
+					"choices": {
+						"selFqEYqkY6g5k5C8": {
+							"id": "selFqEYqkY6g5k5C8",
+							"color": "blue",
+							"name": "Filipino"
+						},
+						"selXSzBkMxpGfjpbr": {
+							"id": "selXSzBkMxpGfjpbr",
+							"color": "cyan",
+							"name": "Korean"
+						},
+						"selmKBuOkWhjxIvvk": {
+							"id": "selmKBuOkWhjxIvvk",
+							"color": "teal",
+							"name": "Japanese"
+						},
+						"selE1vmw1UhKe6unp": {
+							"id": "selE1vmw1UhKe6unp",
+							"color": "green",
+							"name": "American"
+						}
+					},
+					"disableColors": false
+				}
+			},
+			{
+				"id": "fldMUfrndtZW7ArDx",
+				"name": "Address 1",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldy9XjudimNyZPyK",
+				"name": "Address 2",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldhl79QVbTPuuW4R",
+				"name": "City",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fld3CbeLWQbK80BKp",
+				"name": "State/Province",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldNvfIBskRkZNgcH",
+				"name": "Zip",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fld1mfYnCjG3FTDxn",
+				"name": "Country",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldvGQOkMowwuusVK",
+				"name": "Home Number",
+				"type": "phone",
+				"typeOptions": null
+			},
+			{
+				"id": "fldj2honSihQBSI0Z",
+				"name": "Mobile Number",
+				"type": "phone",
+				"typeOptions": null
+			},
+			{
+				"id": "fldJ9vpeTIx2KNrFC",
+				"name": "Language",
+				"type": "multiSelect",
+				"typeOptions": {
+					"choiceOrder": [
+						"selTJVX2H1U4x55eU",
+						"selUBOjRag1JIbKHt",
+						"sely63hGI1rSZSBuh",
+						"self0C9FNs6yaf64H",
+						"selJu6vFSCC3qnTev",
+						"selqPubyhrDo1hzjW"
+					],
+					"choices": {
+						"selTJVX2H1U4x55eU": {
+							"id": "selTJVX2H1U4x55eU",
+							"color": "blue",
+							"name": "English"
+						},
+						"selUBOjRag1JIbKHt": {
+							"id": "selUBOjRag1JIbKHt",
+							"color": "cyan",
+							"name": "Filipino"
+						},
+						"sely63hGI1rSZSBuh": {
+							"id": "sely63hGI1rSZSBuh",
+							"color": "teal",
+							"name": "Mandarin"
+						},
+						"self0C9FNs6yaf64H": {
+							"id": "self0C9FNs6yaf64H",
+							"color": "green",
+							"name": "Japanese"
+						},
+						"selJu6vFSCC3qnTev": {
+							"id": "selJu6vFSCC3qnTev",
+							"color": "yellow",
+							"name": "French"
+						},
+						"selqPubyhrDo1hzjW": {
+							"id": "selqPubyhrDo1hzjW",
+							"color": "orange",
+							"name": "German"
+						}
+					},
+					"disableColors": false
+				}
+			},
+			{
+				"id": "fldxoJRCiO4U6vDco",
+				"name": "Curriculum Vitae",
+				"type": "multipleAttachment",
+				"typeOptions": {
+					"unreversed": true
+				}
+			},
+			{
+				"id": "fldSWJzDh3WVBMmaT",
+				"name": "Skills",
+				"type": "multiSelect",
+				"typeOptions": {
+					"choiceOrder": [
+						"selzy2RhO1TQGt8om",
+						"selgUmqA4EYtL0XQt",
+						"selyHYocAAVAaQcAx",
+						"selaIzN0eyju2n21Y",
+						"selSUd2kVpRlmElGx",
+						"selVzFZnQaT27B5OF"
+					],
+					"choices": {
+						"selzy2RhO1TQGt8om": {
+							"id": "selzy2RhO1TQGt8om",
+							"color": "blue",
+							"name": "Programming Skills - .Net"
+						},
+						"selgUmqA4EYtL0XQt": {
+							"id": "selgUmqA4EYtL0XQt",
+							"color": "cyan",
+							"name": "Programming Skills - PHP"
+						},
+						"selyHYocAAVAaQcAx": {
+							"id": "selyHYocAAVAaQcAx",
+							"color": "teal",
+							"name": "Programming Skills - Java"
+						},
+						"selaIzN0eyju2n21Y": {
+							"id": "selaIzN0eyju2n21Y",
+							"color": "green",
+							"name": "Database Management"
+						},
+						"selSUd2kVpRlmElGx": {
+							"id": "selSUd2kVpRlmElGx",
+							"color": "yellow",
+							"name": "Product Management"
+						},
+						"selVzFZnQaT27B5OF": {
+							"id": "selVzFZnQaT27B5OF",
+							"color": "orange",
+							"name": "Pre-Sales"
+						}
+					},
+					"disableColors": false
+				}
+			},
+			{
+				"id": "fldl99JjGYhdUulj4",
+				"name": "Leave Scheme",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fld5UqSYF7Qkp3vY5",
+				"name": "Daily Work Hours",
+				"type": "number",
+				"typeOptions": {
+					"format": "decimal",
+					"precision": 1,
+					"negative": false,
+					"validatorName": "positive"
+				}
+			},
+			{
+				"id": "fldoBR94kFKRyTgAl",
+				"name": "Contact Person",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldm6mZHY5KI7FUY0",
+				"name": "Contact Person Mobile No",
+				"type": "phone",
+				"typeOptions": null
+			},
+			{
+				"id": "fldOb41cJT6TWZFOm",
+				"name": "Relation to Contact Person",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldkubJ4tMxlgrYAN",
+				"name": "Dependents",
+				"type": "multipleAttachment",
+				"typeOptions": {
+					"unreversed": true
+				}
+			},
+			{
+				"id": "fldPrGdztOHEwTVv1",
+				"name": "Attachments",
+				"type": "multipleAttachment",
+				"typeOptions": {
+					"unreversed": true
+				}
+			},
+			{
+				"id": "fldP76vg66tAETxAq",
+				"name": "Created By",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldhS4HH8MDum261B",
+				"name": "Date Created",
+				"type": "date",
+				"typeOptions": {
+					"isDateTime": true,
+					"timeZone": "client",
+					"dateFormat": "Local"
+				}
+			},
+			{
+				"id": "fldFl8bEXLkSJ6PlY",
+				"name": "Last Modified By",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldEktjzKAju3W48V",
+				"name": "Last Modified",
+				"type": "date",
+				"typeOptions": {
+					"isDateTime": true,
+					"timeZone": "client",
+					"dateFormat": "Local"
+				}
+			},
+			{
+				"id": "fldwxeWcZMuItqJyk",
+				"name": "Lark ID",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldhoGayzwyci5k5J",
+				"name": "Is HR",
+				"type": "checkbox",
+				"typeOptions": {
+					"color": "green",
+					"icon": "check"
+				}
+			},
+			{
+				"id": "fldILDGt9qkRbrb23",
+				"name": "Is HR User",
+				"type": "checkbox",
+				"typeOptions": {
+					"color": "green",
+					"icon": "check"
+				}
+			},
+			{
+				"id": "fldiZtgswfMjguUgE",
+				"name": "Calculation",
+				"type": "multilineText",
+				"typeOptions": null
+			},
+			{
+				"id": "fldfdCRndyO05ERZP",
+				"name": "Current Job Position",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldTlzYbereWAywAI",
+				"name": "Current Department",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldFdEFuyUJ31eyBe",
+				"name": "Timekeeping",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fld995VRtN2O1LIyx",
+				"name": "Timekeeping copy",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fld1PCsYnghw3vg4K",
+				"name": "SSS Number",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldFsco2Hm5yJ9Yic",
+				"name": "Philhealth Number",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldahVMFdiAh79UIu",
+				"name": "Pag-ibig Number",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldyez5heLnFxGDqW",
+				"name": "Tax Identification Number",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldzRkaDQggMN501b",
+				"name": "Leave Balance",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldEMB1vMcfHvbduY",
+				"name": "Leave Accrual",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldk7KT3Sgeqcpbyq",
+				"name": "Leave Accrual copy",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldKk8SCMestCCvvM",
+				"name": "Attendance",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldMC0IVhMwenflbx",
+				"name": "Pay Basis",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldX8jUv1xG0u04wf",
+				"name": "Bank Account",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldfPOGWnkGdeLDIO",
+				"name": "E-Cola",
+				"type": "number",
+				"typeOptions": {
+					"format": "currency",
+					"precision": 2,
+					"symbol": "",
+					"negative": false,
+					"validatorName": "positive"
+				}
+			},
+			{
+				"id": "fldSSmfcvqDrDBi9e",
+				"name": "Payment Method",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fld2OdQRECxqZ75UX",
+				"name": "Days of Work Per Year",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldwbLNrqznMd0aEG",
+				"name": "Payroll Grouping",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "flduqzfQQSqTRGG11",
+				"name": "Workplace",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldTUNoMEO9rD2R96",
+				"name": "Employment Status",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldnsV60QzplA2cqD",
+				"name": "Wage Zone",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldFrrhYiW5bwKQA1",
+				"name": "Company",
+				"type": "text",
+				"typeOptions": null
+			}
+		]
+	},
+	{
+		"id": "tblCYVFyI0Six2b4b",
+		"name": "Holiday Calendar",
+		"columns": [
+			{
+				"id": "fldbAtPNU60n7VNBs",
+				"name": "Holiday Name",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldgYvfhSyhDi8eRu",
+				"name": "Date",
+				"type": "date",
+				"typeOptions": {
+					"isDateTime": false,
+					"dateFormat": "Local"
+				}
+			},
+			{
+				"id": "fldXZA8ZaduIwOulH",
+				"name": "Holiday Type",
+				"type": "select",
+				"typeOptions": {
+					"choiceOrder": [
+						"selpt5hiB8KEYfLlz",
+						"selJ9SxM8F1sdKUVJ"
+					],
+					"choices": {
+						"selpt5hiB8KEYfLlz": {
+							"id": "selpt5hiB8KEYfLlz",
+							"color": "blue",
+							"name": "Legal"
+						},
+						"selJ9SxM8F1sdKUVJ": {
+							"id": "selJ9SxM8F1sdKUVJ",
+							"color": "cyan",
+							"name": "Special"
+						}
+					},
+					"disableColors": false
+				}
+			}
+		]
+	},
+	{
+		"id": "tbliQnuDvWqihu4zE",
+		"name": "Shift Holiday Overtime",
+		"columns": [
+			{
+				"id": "fldqIyLWOLWjeRjls",
+				"name": "Name",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldC7OOQIluus1Sw6",
+				"name": "Clock In",
+				"type": "checkbox",
+				"typeOptions": {
+					"color": "green",
+					"icon": "check"
+				}
+			},
+			{
+				"id": "fldF4FwmXrOL4N24f",
+				"name": "Clock Out",
+				"type": "checkbox",
+				"typeOptions": {
+					"color": "green",
+					"icon": "check"
+				}
+			}
+		]
+	},
+	{
+		"id": "tblqhKNQt4LlFJYnb",
+		"name": "AttendanceExport",
+		"columns": [
+			{
+				"id": "fldPl3uU7IUqB3ibx",
+				"name": "employee_id",
+				"type": "multilineText",
+				"typeOptions": null
+			},
+			{
+				"id": "fldcEMMsPIRf9UahR",
+				"name": "payroll_period_id",
+				"type": "number",
+				"typeOptions": {
+					"format": "decimal",
+					"precision": 2,
+					"negative": true
+				}
+			},
+			{
+				"id": "fldzFWK7fpxlDi3jS",
+				"name": "payroll_days",
+				"type": "number",
+				"typeOptions": {
+					"format": "decimal",
+					"precision": 2,
+					"negative": true
+				}
+			},
+			{
+				"id": "fldJDMGlBaWlR0Qfv",
+				"name": "absences",
+				"type": "number",
+				"typeOptions": {
+					"format": "decimal",
+					"precision": 2,
+					"negative": true
+				}
+			},
+			{
+				"id": "fldxeHj2tBAyur1MQ",
+				"name": "leaves",
+				"type": "number",
+				"typeOptions": {
+					"format": "decimal",
+					"precision": 2,
+					"negative": true
+				}
+			},
+			{
+				"id": "fldC1wJlKkpwSuFpo",
+				"name": "holidays",
+				"type": "number",
+				"typeOptions": {
+					"format": "decimal",
+					"precision": 2,
+					"negative": true
+				}
+			},
+			{
+				"id": "fld33zXTUxbe7VQcy",
+				"name": "part_time",
+				"type": "number",
+				"typeOptions": {
+					"format": "decimal",
+					"precision": 2,
+					"negative": true
+				}
+			},
+			{
+				"id": "fldxOuocpqxtEZGSg",
+				"name": "late",
+				"type": "number",
+				"typeOptions": {
+					"format": "decimal",
+					"precision": 2,
+					"negative": true
+				}
+			},
+			{
+				"id": "fldLEKT25SK9pBk98",
+				"name": "undertime",
+				"type": "number",
+				"typeOptions": {
+					"format": "decimal",
+					"precision": 2,
+					"negative": true
+				}
+			},
+			{
+				"id": "fldFskGNydjfWOmvT",
+				"name": "reg_np",
+				"type": "number",
+				"typeOptions": {
+					"format": "decimal",
+					"precision": 2,
+					"negative": true
+				}
+			},
+			{
+				"id": "fldCQShAZO9JDgljj",
+				"name": "reg_ot",
+				"type": "number",
+				"typeOptions": {
+					"format": "decimal",
+					"precision": 2,
+					"negative": true
+				}
+			},
+			{
+				"id": "fldHxJbyWBzB0D5RM",
+				"name": "reg_ot_np",
+				"type": "number",
+				"typeOptions": {
+					"format": "decimal",
+					"precision": 2,
+					"negative": true
+				}
+			},
+			{
+				"id": "fldGJwB962QRMfe91",
+				"name": "reg_ot_ex",
+				"type": "number",
+				"typeOptions": {
+					"format": "decimal",
+					"precision": 2,
+					"negative": true
+				}
+			},
+			{
+				"id": "fldmFJiaO014oMcrs",
+				"name": "reg_ot_ex_np",
+				"type": "number",
+				"typeOptions": {
+					"format": "decimal",
+					"precision": 2,
+					"negative": true
+				}
+			},
+			{
+				"id": "fldLb5FbqytR8SL7D",
+				"name": "leg_ot",
+				"type": "number",
+				"typeOptions": {
+					"format": "decimal",
+					"precision": 2,
+					"negative": true
+				}
+			},
+			{
+				"id": "fldL0pr5WjSCLiLKJ",
+				"name": "leg_ot_np",
+				"type": "number",
+				"typeOptions": {
+					"format": "decimal",
+					"precision": 2,
+					"negative": true
+				}
+			},
+			{
+				"id": "fldLP2rPnN8vfsQc1",
+				"name": "leg_ot_ex",
+				"type": "number",
+				"typeOptions": {
+					"format": "decimal",
+					"precision": 2,
+					"negative": true
+				}
+			},
+			{
+				"id": "fldTaljz7vBfnYdI8",
+				"name": "leg_ot_ex_np",
+				"type": "number",
+				"typeOptions": {
+					"format": "decimal",
+					"precision": 2,
+					"negative": true
+				}
+			},
+			{
+				"id": "fldBOCkl7R0JfxXWe",
+				"name": "sp_ot",
+				"type": "number",
+				"typeOptions": {
+					"format": "decimal",
+					"precision": 2,
+					"negative": true
+				}
+			},
+			{
+				"id": "fldGbEt486OrSmC0K",
+				"name": "sp_ot_np",
+				"type": "number",
+				"typeOptions": {
+					"format": "decimal",
+					"precision": 2,
+					"negative": true
+				}
+			},
+			{
+				"id": "fldDiWLdktHjO78aX",
+				"name": "sp_ot_ex",
+				"type": "number",
+				"typeOptions": {
+					"format": "decimal",
+					"precision": 2,
+					"negative": true
+				}
+			},
+			{
+				"id": "fldJA1eyoHlP595m3",
+				"name": "sp_ot_ex_np",
+				"type": "number",
+				"typeOptions": {
+					"format": "decimal",
+					"precision": 2,
+					"negative": true
+				}
+			},
+			{
+				"id": "fld7P9nYjjOgEFCC2",
+				"name": "rst_ot",
+				"type": "number",
+				"typeOptions": {
+					"format": "decimal",
+					"precision": 2,
+					"negative": true
+				}
+			},
+			{
+				"id": "fldCyHvppXyT4GXzI",
+				"name": "rst_ot_np",
+				"type": "number",
+				"typeOptions": {
+					"format": "decimal",
+					"precision": 2,
+					"negative": true
+				}
+			},
+			{
+				"id": "fldpCCoxUweAbhiHZ",
+				"name": "rst_ot_ex",
+				"type": "number",
+				"typeOptions": {
+					"format": "decimal",
+					"precision": 2,
+					"negative": true
+				}
+			},
+			{
+				"id": "fld4582XLOLmcvz8A",
+				"name": "rst_ot_ex_np",
+				"type": "number",
+				"typeOptions": {
+					"format": "decimal",
+					"precision": 2,
+					"negative": true
+				}
+			},
+			{
+				"id": "fld9oFGBqyBKyKyCc",
+				"name": "leg_rst_ot",
+				"type": "number",
+				"typeOptions": {
+					"format": "decimal",
+					"precision": 2,
+					"negative": true
+				}
+			},
+			{
+				"id": "fldfBK45jmTmtb7sG",
+				"name": "leg_rst_ot_np",
+				"type": "number",
+				"typeOptions": {
+					"format": "decimal",
+					"precision": 2,
+					"negative": true
+				}
+			},
+			{
+				"id": "fldgq5w1axMBieY5G",
+				"name": "leg_rst_ot_ex",
+				"type": "number",
+				"typeOptions": {
+					"format": "decimal",
+					"precision": 2,
+					"negative": true
+				}
+			},
+			{
+				"id": "fldBTbAAZ4fO6hgii",
+				"name": "leg_rst_ot_ex_np",
+				"type": "number",
+				"typeOptions": {
+					"format": "decimal",
+					"precision": 2,
+					"negative": true
+				}
+			},
+			{
+				"id": "fldXtMWCuuhWMCpN5",
+				"name": "sp_rst_ot",
+				"type": "number",
+				"typeOptions": {
+					"format": "decimal",
+					"precision": 2,
+					"negative": true
+				}
+			},
+			{
+				"id": "fldzsF04OTnLepYMR",
+				"name": "sp_rst_ot_np",
+				"type": "number",
+				"typeOptions": {
+					"format": "decimal",
+					"precision": 2,
+					"negative": true
+				}
+			},
+			{
+				"id": "fldv2ncJT0GdBP6wR",
+				"name": "sp_rst_ot_ex",
+				"type": "number",
+				"typeOptions": {
+					"format": "decimal",
+					"precision": 2,
+					"negative": true
+				}
+			},
+			{
+				"id": "fldisHDzKIcXgmaI3",
+				"name": "sp_rst_ot_ex_np",
+				"type": "number",
+				"typeOptions": {
+					"format": "decimal",
+					"precision": 2,
+					"negative": true
+				}
+			},
+			{
+				"id": "fldyMWrd3Emu66X24",
+				"name": "allowance_1",
+				"type": "number",
+				"typeOptions": {
+					"format": "decimal",
+					"precision": 2,
+					"negative": true
+				}
+			},
+			{
+				"id": "fldlV3rlWcZOXYIYh",
+				"name": "allowance_2",
+				"type": "number",
+				"typeOptions": {
+					"format": "decimal",
+					"precision": 2,
+					"negative": true
+				}
+			},
+			{
+				"id": "fldYwI4ZXIMdOwOMF",
+				"name": "allowance_3",
+				"type": "number",
+				"typeOptions": {
+					"format": "decimal",
+					"precision": 2,
+					"negative": true
+				}
+			},
+			{
+				"id": "fldr478PyWijT2QCM",
+				"name": "allowance_4",
+				"type": "number",
+				"typeOptions": {
+					"format": "decimal",
+					"precision": 2,
+					"negative": true
+				}
+			},
+			{
+				"id": "fldJV3U6G4VfWnkr7",
+				"name": "allowance_5",
+				"type": "number",
+				"typeOptions": {
+					"format": "decimal",
+					"precision": 2,
+					"negative": true
+				}
+			},
+			{
+				"id": "fldPUhOaymxu23E3C",
+				"name": "allowance_6",
+				"type": "number",
+				"typeOptions": {
+					"format": "decimal",
+					"precision": 2,
+					"negative": true
+				}
+			},
+			{
+				"id": "fld3eEsFCZil6qfTm",
+				"name": "allowance_7",
+				"type": "number",
+				"typeOptions": {
+					"format": "decimal",
+					"precision": 2,
+					"negative": true
+				}
+			},
+			{
+				"id": "fldT0M3Re0TKcwUuj",
+				"name": "allowance_8",
+				"type": "number",
+				"typeOptions": {
+					"format": "decimal",
+					"precision": 2,
+					"negative": true
+				}
+			},
+			{
+				"id": "fld5zOFDNM024i67Y",
+				"name": "allowance_9",
+				"type": "number",
+				"typeOptions": {
+					"format": "decimal",
+					"precision": 2,
+					"negative": true
+				}
+			},
+			{
+				"id": "fldcPYlvtq6a2oUAa",
+				"name": "allowance_10",
+				"type": "number",
+				"typeOptions": {
+					"format": "decimal",
+					"precision": 2,
+					"negative": true
+				}
+			},
+			{
+				"id": "fldrN0pG98jQP9RP2",
+				"name": "allowance_11",
+				"type": "number",
+				"typeOptions": {
+					"format": "decimal",
+					"precision": 2,
+					"negative": true
+				}
+			},
+			{
+				"id": "fldBRLEke0KVnyEoo",
+				"name": "allowance_12",
+				"type": "number",
+				"typeOptions": {
+					"format": "decimal",
+					"precision": 2,
+					"negative": true
+				}
+			},
+			{
+				"id": "fldFgkHZNXbOMgA03",
+				"name": "Date",
+				"type": "text",
+				"typeOptions": null
+			}
+		]
+	},
+	{
+		"id": "tblfQ3prXZWgzr5fl",
+		"name": "Grid view",
+		"columns": [
+			{
+				"id": "fldiRiyq3iV6R8Cq7",
+				"name": "ID",
+				"type": "multilineText",
+				"typeOptions": null
+			},
+			{
+				"id": "fldhrxn581jEk1X8D",
+				"name": "Employee",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldUUXwikN2KYQJfq",
+				"name": "Employee ID",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldMUCkZBL5hYRtNH",
+				"name": "Employee Name",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fld961wVBY0TnKTBI",
+				"name": "Date",
+				"type": "date",
+				"typeOptions": {
+					"isDateTime": false,
+					"dateFormat": "Local"
+				}
+			},
+			{
+				"id": "fldyeWJqziDwGAja3",
+				"name": "Shift Time In",
+				"type": "number",
+				"typeOptions": {
+					"format": "duration",
+					"durationFormat": "h:mm",
+					"negative": true
+				}
+			},
+			{
+				"id": "fldmuB6W0CDox90hA",
+				"name": "Shift Time Out",
+				"type": "number",
+				"typeOptions": {
+					"format": "duration",
+					"durationFormat": "h:mm",
+					"negative": true
+				}
+			},
+			{
+				"id": "fldOCZWrpp9za0rGW",
+				"name": "First In",
+				"type": "number",
+				"typeOptions": {
+					"format": "duration",
+					"durationFormat": "h:mm",
+					"negative": true
+				}
+			},
+			{
+				"id": "fldk4JpT3GpPK4lMd",
+				"name": "Last Out",
+				"type": "number",
+				"typeOptions": {
+					"format": "duration",
+					"durationFormat": "h:mm",
+					"negative": true
+				}
+			},
+			{
+				"id": "fldX8j7vY2DsGQ9y9",
+				"name": "Not Required",
+				"type": "number",
+				"typeOptions": {
+					"format": "integer",
+					"negative": true
+				}
+			},
+			{
+				"id": "fld6TC2w3Dc0RIQLl",
+				"name": "No Record",
+				"type": "number",
+				"typeOptions": {
+					"format": "integer",
+					"negative": true
+				}
+			},
+			{
+				"id": "fld4HCy7Agwv543BJ",
+				"name": "Required Duration",
+				"type": "number",
+				"typeOptions": {
+					"format": "duration",
+					"durationFormat": "h:mm",
+					"negative": true
+				}
+			},
+			{
+				"id": "fldbeq9ckfngnlvyc",
+				"name": "Actual Duration",
+				"type": "number",
+				"typeOptions": {
+					"format": "duration",
+					"durationFormat": "h:mm",
+					"negative": true
+				}
+			},
+			{
+				"id": "fldV1GfkiIK3qT7vT",
+				"name": "Overtime Hours",
+				"type": "number",
+				"typeOptions": {
+					"format": "decimal",
+					"precision": 1,
+					"negative": false,
+					"validatorName": "positive"
+				}
+			},
+			{
+				"id": "fldDe3B7AANuEZeet",
+				"name": "Leave Type",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldw2Z7cCRilCoqB9",
+				"name": "Leave Time",
+				"type": "number",
+				"typeOptions": {
+					"format": "decimal",
+					"precision": 1,
+					"negative": false,
+					"validatorName": "positive"
+				}
+			},
+			{
+				"id": "fldUbEXga4F84Ui99",
+				"name": "Period ID",
+				"type": "text",
+				"typeOptions": null
+			}
+		]
+	}
+]
