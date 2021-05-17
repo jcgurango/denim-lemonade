@@ -7,7 +7,10 @@ const adminLogin = async (
     tenantId = null,
   } = {},
 ) => {
-  const browser = await puppeteer.launch();
+  const browser = await puppeteer.launch({
+    headless: true,
+    args: ['--no-sandbox'],
+  });
 
   try {
     let qrId = null;
