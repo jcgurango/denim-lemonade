@@ -44,7 +44,7 @@ export const DenimAuthenticatorTableMiddleware = (
         errors: [
           {
             message: e.message,
-          }
+          },
         ],
       });
     }
@@ -55,23 +55,42 @@ export const DenimAuthenticatorTableMiddleware = (
   router.get('/', queryHandler);
   router.post('/', bodyParser.json(), queryHandler);
 
-  const updateHandler = async (req: Request, res: Response, next: NextFunction) => {
-    const existingRecord = req.params.id ? await dataSource.retrieveRecord(table, req.params.id) : { };
+  const updateHandler = async (
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ) => {
+    const existingRecord = req.params.id
+      ? await dataSource.retrieveRecord(table, req.params.id)
+      : {};
 
-    const newUpdate = authenticator.filterRecord(((req as any).user as DenimRecord) || { }, table, {
-      ...existingRecord,
-      ...req.body,
-    }, req.params.id ? 'updateAction' : 'createAction');
+    const filtered = authenticator.filterRecord(
+      ((req as any).user as DenimRecord) || {},
+      table,
+      {
+        ...existingRecord,
+        ...req.body,
+      },
+      req.params.id ? 'updateAction' : 'createAction',
+    );
 
-    if (!newUpdate) {
+    if (!filtered) {
       return res.status(400).json({
         errors: [
           {
             message: 'Unauthorized update.',
-          }
+          },
         ],
       });
     }
+
+    const newUpdate: DenimRecord = {};
+
+    Object.keys(req.body).forEach((key) => {
+      if (key in req.body && key in filtered) {
+        newUpdate[key] = filtered[key];
+      }
+    });
 
     req.body = newUpdate;
 

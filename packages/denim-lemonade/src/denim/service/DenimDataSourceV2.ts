@@ -487,7 +487,7 @@ export default abstract class DenimDataSourceV2 {
       id: hookedRecordPostValidate.id,
     };
 
-    Object.keys(hookedRecordPostValidate).forEach((key) => {
+    Object.keys(record || { }).forEach((key) => {
       let initialValue = existingRecord ? existingRecord[key] : null;
       let newValue = hookedRecordPostValidate[key];
 

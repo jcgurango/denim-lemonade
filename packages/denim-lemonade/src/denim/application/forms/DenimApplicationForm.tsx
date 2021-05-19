@@ -133,6 +133,9 @@ const DenimApplicationForm: FunctionComponent<DenimApplicationFormProps> = ({
         }
 
         if (newRecord) {
+          setCurrentRecord(newRecord);
+          setUpdateData(undefined);
+
           notifications.notify({
             type: 'success',
             message: 'Record saved.',
