@@ -950,6 +950,62 @@
 					"unreversed": true,
 					"symmetricColumnId": "fldbflMObAGpxlJVC"
 				}
+			},
+			{
+				"id": "fldyemW6rAU8ss92O",
+				"name": "Barangay",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fld1SsOrNEySVn6I4",
+				"name": "Village/Compound",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fld8WF2u9glUAEOo7",
+				"name": "House No & Street Name",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldPyOfLFML7Vvjgv",
+				"name": "Job Level",
+				"type": "foreignKey",
+				"typeOptions": {
+					"foreignTableId": "tbl0CuIZQavzqiOIj",
+					"relationship": "many",
+					"unreversed": true,
+					"symmetricColumnId": "fldDTH59FWerW1O4t"
+				}
+			},
+			{
+				"id": "fldB7UPz5IOyp68dj",
+				"name": "Regularization Date",
+				"type": "date",
+				"typeOptions": {
+					"isDateTime": false,
+					"dateFormat": "Local"
+				}
+			},
+			{
+				"id": "fldkopXpxi3uhXtfK",
+				"name": "Passport Number",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldl8C5hew4kyykrm",
+				"name": "HMO Number",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldxGlliUT8aK2xnm",
+				"name": "Bank",
+				"type": "text",
+				"typeOptions": null
 			}
 		]
 	},
@@ -4514,8 +4570,7 @@
 				"name": "payroll_period_id",
 				"type": "number",
 				"typeOptions": {
-					"format": "decimal",
-					"precision": 2,
+					"format": "integer",
 					"negative": true
 				}
 			},
@@ -5294,7 +5349,7 @@
 	},
 	{
 		"id": "tblFlvQQdxVF778WO",
-		"name": "Job Statuses",
+		"name": "Account Statuses",
 		"columns": [
 			{
 				"id": "fld9y3euEoMdfqdce",
@@ -5406,6 +5461,43 @@
 				"name": "Description",
 				"type": "text",
 				"typeOptions": null
+			}
+		]
+	},
+	{
+		"id": "tbl0CuIZQavzqiOIj",
+		"name": "Job Level",
+		"columns": [
+			{
+				"id": "fldxRg6zhARp54Nli",
+				"name": "Job Level",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldAkuNpb4fQNMYd3",
+				"name": "Description",
+				"type": "multilineText",
+				"typeOptions": null
+			},
+			{
+				"id": "fldl4srNA73NTwmdg",
+				"name": "Attachments",
+				"type": "multipleAttachment",
+				"typeOptions": {
+					"unreversed": true
+				}
+			},
+			{
+				"id": "fldDTH59FWerW1O4t",
+				"name": "Employee",
+				"type": "foreignKey",
+				"typeOptions": {
+					"foreignTableId": "tblwceR29WfuANzls",
+					"symmetricColumnId": "fldPyOfLFML7Vvjgv",
+					"relationship": "many",
+					"unreversed": true
+				}
 			}
 		]
 	}
