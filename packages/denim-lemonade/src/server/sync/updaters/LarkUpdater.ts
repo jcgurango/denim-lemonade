@@ -67,7 +67,7 @@ export default class LarkUpdater extends LarkConnection {
             const searchResult = await get('https://open.larksuite.com/open-apis/user/v1/batch_get_id?emails=' + employee.email);
             
             if (!searchResult.code) {
-              const user = searchResult.data.email_users[employee.email];
+              const user = searchResult.data.email_users?.[employee.email];
 
               if (user && user.length) {
                 const { open_id } = user[0];

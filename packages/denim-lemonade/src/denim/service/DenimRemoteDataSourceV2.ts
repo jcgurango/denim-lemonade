@@ -3,7 +3,7 @@ import dashify from 'dashify';
 import qs from 'querystring';
 import { DenimRecord, DenimQuery } from '../core';
 import DenimDataSourceV2 from './DenimDataSourceV2';
-import { DenimResultAction, DenimWorkflowContext } from './types/workflow';
+import { DenimWorkflowContext } from './types/workflow';
 
 export default class DenimRemoteDataSourceV2 extends DenimDataSourceV2 {
   public baseUrl: string;
@@ -113,14 +113,29 @@ export default class DenimRemoteDataSourceV2 extends DenimDataSourceV2 {
     input: DenimRecord,
     context: DenimWorkflowContext,
   ) {
-    const result = await this.wrapRequest(() =>
-      bent<DenimResultAction>(
+    let result = await this.wrapRequest(() =>
+      bent<any>(
+        'json',
         this.baseUrl,
         'POST',
         this.headers,
       )(`/workflow/${dashify(workflowName)}`, input),
     );
 
-    context.resultingAction = result;
+    while (result?.pending) {
+      await new Promise((resolve) => setTimeout(resolve, 2000));
+
+      // eslint-disable-next-line no-loop-func
+      result = await this.wrapRequest(() =>
+        bent<any>(
+          'json',
+          this.baseUrl,
+          'GET',
+          this.headers,
+        )(`/workflow/${dashify(workflowName)}/${result.pending}`),
+      );
+    }
+
+    context.resultingAction = result.action;
   }
 }

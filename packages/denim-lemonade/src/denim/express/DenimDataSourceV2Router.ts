@@ -15,6 +15,40 @@ const getExpansionFromQuery = (query: any) => {
   return null;
 };
 
+const workflowStore = (() => {
+  const store: {
+    [key: string]: {
+      pending: boolean;
+      context: DenimWorkflowContext;
+      error?: Error;
+    };
+  } = {};
+
+  return {
+    push: (context: DenimWorkflowContext) => {
+      const id = Math.random().toString().replace(/\./, '');
+      store[id] = {
+        pending: true,
+        context,
+      };
+
+      return id;
+    },
+    update: (id: string, pending: boolean, context: DenimWorkflowContext) => {
+      store[id].pending = pending;
+      store[id].context = context;
+    },
+    get: (id: string) => store[id],
+    error: (id: string, e: Error) => {
+      store[id].pending = false;
+      store[id].error = e;
+    },
+    remove: (id: string) => {
+      delete store[id];
+    },
+  };
+})();
+
 export const DenimTableRouter = (
   table: string,
   dataSource: DenimDataSourceV2,
@@ -239,27 +273,80 @@ const DenimDataSourceV2Router = (dataSource: DenimDataSourceV2) => {
       '/workflow/' + dashify(workflow),
       bodyParser.json(),
       async (req, res) => {
+        let completed = false;
+        let deferred = null;
+
         try {
           const context: DenimWorkflowContext = {
             executingUser: (req as any).user,
           };
-          await dataSource.executeWorkflow(workflow, req.body, context);
 
-          return res.json(context.resultingAction);
+          setTimeout(async () => {
+            if (!completed) {
+              const id = await workflowStore.push(context);
+              deferred = id;
+
+              res.json({
+                pending: id,
+              });
+            }
+          }, 5000);
+
+          await dataSource.executeWorkflow(workflow, req.body, context);
+          completed = true;
+
+          if (deferred) {
+            await workflowStore.update(deferred, false, context);
+          } else {
+            res.json(context.resultingAction);
+          }
         } catch (e) {
           console.error(e);
 
-          return res.status(500).json({
-            errors: [
-              {
-                message: e.message,
-                path: '',
-              },
-            ],
-          });
+          if (deferred) {
+            workflowStore.error(deferred, e);
+          } else {
+            return res.status(500).json({
+              errors: [
+                {
+                  message: e.message,
+                  path: '',
+                },
+              ],
+            });
+          }
         }
       },
     );
+
+    router.get('/workflow/' + dashify(workflow) + '/:id', async (req, res) => {
+      try {
+        const context = workflowStore.get(req.params.id);
+
+        if (context.pending) {
+          return res.json({
+            pending: req.params.id,
+          });
+        }
+
+        if (context.error) {
+          throw context.error;
+        }
+
+        return res.json({
+          action: context.context.resultingAction,
+        });
+      } catch (e) {
+        return res.status(500).json({
+          errors: [
+            {
+              message: e.message,
+              path: '',
+            },
+          ],
+        });
+      }
+    });
   });
 
   router.use('/schema', (req, res) => {
