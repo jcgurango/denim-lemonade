@@ -6,7 +6,7 @@ import {
   DenimApplicationLayout,
   DenimApplicationTabControl,
   useDenimApplication,
-} from '../denim/application';
+} from 'denim/application';
 import LemonadeLogo from '../assets/images/logo.jpg';
 import { FunctionComponent } from 'react';
 

@@ -70,5 +70,11 @@ export type YupAst =
   | [string]
   | [string, any]
   | [string, any, string]
-  | ['yup.test', Yup.TestOptionsMessage<{}, any>]
+  | [
+      'yup.test',
+      {
+        test: (value: any) => boolean;
+        message: string;
+      }
+    ]
   | YupAst[];

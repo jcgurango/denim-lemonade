@@ -7,16 +7,16 @@ import {
   DenimApplicationField,
   DenimApplicationLayout,
   useDenimApplication,
-} from '../denim/application';
+} from 'denim/application';
 import LemonadeLogo from '../assets/images/logo.jpg';
 import {
   DenimFormControlType,
   DenimNotificationCodes,
   DenimRelatedRecord,
   DenimRelatedRecordCollection,
-} from '../denim/core';
-import { DenimWorkflowContext } from '../denim/service';
-import { useDenimNotifications } from '../denim/forms/providers/DenimNotificationProvider';
+} from 'denim/core';
+import { DenimWorkflowContext } from 'denim/service';
+import { useDenimNotifications } from 'denim/forms/providers/DenimNotificationProvider';
 import { ActivityIndicator } from 'react-native';
 
 const TimekeepingPortal: FunctionComponent<{}> = () => {

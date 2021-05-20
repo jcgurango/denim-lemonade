@@ -1,5 +1,5 @@
-import { DenimQueryOperator, DenimTable } from '../denim/core';
-import { DenimAuthenticatorV2, DenimDataSourceV2 } from '../denim/service';
+import { DenimQueryOperator, DenimTable } from 'denim/core';
+import { DenimAuthenticatorV2, DenimDataSourceV2 } from 'denim/service';
 
 const LemonadeAuthenticator = (
   userTable: DenimTable,

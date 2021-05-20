@@ -1,6 +1,6 @@
 import React, { FunctionComponent } from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
-import { DenimViewHeaderCellProps, useDenimView } from '../denim/forms';
+import { DenimViewHeaderCellProps, useDenimView } from 'denim/forms';
 
 export const LemonadeHeaderRow: FunctionComponent = ({ children }) => {
   return (

@@ -4,8 +4,8 @@ import {
   DenimQuery,
   DenimRecord,
   DenimTable,
-} from '../denim/core';
-import { DenimDataSourceV2, DenimLocalQuery } from '../denim/service';
+} from 'denim/core';
+import { DenimDataSourceV2, DenimLocalQuery } from 'denim/service';
 import bent from 'bent';
 
 type PaydayCredentials = { merchant_id: string; merchant_key: string };

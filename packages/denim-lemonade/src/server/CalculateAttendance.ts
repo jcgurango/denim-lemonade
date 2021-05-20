@@ -1,4 +1,4 @@
-import { DenimRecord } from '../denim/core';
+import { DenimRecord } from 'denim/core';
 
 export const CalculateAttendance = (
   record: DenimRecord,

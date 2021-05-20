@@ -1,8 +1,10 @@
 import React, { FunctionComponent } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import { DenimFormControlProps } from '../denim/forms/DenimFormControl';
-import { useDenimForm } from '../denim/forms/providers/DenimFormProvider';
-import { useTranslation } from '../denim/forms/providers/TranslationProvider';
+import {
+  DenimFormControlProps,
+  useDenimForm,
+  useTranslation,
+} from 'denim/forms';
 
 const Empty = Symbol('Empty');
 

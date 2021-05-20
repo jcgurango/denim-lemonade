@@ -7,10 +7,10 @@ import {
   DenimApplicationLayout,
   useDenimApplication,
   DenimApplicationView,
-} from '../denim/application';
+} from 'denim/application';
 import { Link, useHistory } from 'react-router-dom';
 import LemonadeLogo from '../assets/images/logo.jpg';
-import { DenimFormControlType, DenimQueryOperator } from '../denim/core';
+import { DenimFormControlType, DenimQueryOperator } from 'denim/core';
 
 interface MovementScreenProps {
   id: string;

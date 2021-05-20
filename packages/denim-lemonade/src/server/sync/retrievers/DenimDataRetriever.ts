@@ -2,8 +2,8 @@ import {
   DenimQuery,
   DenimQueryOperator,
   DenimRecord,
-} from '../../../denim/core';
-import { DenimDataSourceV2 } from '../../../denim/service';
+} from 'denim/core';
+import { DenimDataSourceV2 } from 'denim/service';
 
 export const DenimDataRetriever = (
   dataSource: DenimDataSourceV2,

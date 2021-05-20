@@ -1,13 +1,13 @@
 import express from 'express';
 import Airtable from 'airtable';
-import DenimDataSourceV2Router from '../denim/express/DenimDataSourceV2Router';
-import DenimAuthenticatorMiddleware from '../denim/express/DenimAuthenticatorMiddleware';
+import DenimDataSourceV2Router from 'denim/express/DenimDataSourceV2Router';
+import DenimAuthenticatorMiddleware from 'denim/express/DenimAuthenticatorMiddleware';
 import UpdateCoordinator from './sync/UpdateCoordinator';
 import { DenimDataRetriever } from './sync/retrievers/DenimDataRetriever';
 import { EmployeeMapper } from './sync/mappers/EmployeeMapper';
 import LarkUpdater from './sync/updaters/LarkUpdater';
 import { DepartmentMapper } from './sync/mappers/DepartmentMapper';
-import { DenimQueryOperator, DenimRecord } from '../denim/core';
+import { DenimQueryOperator, DenimRecord } from 'denim/core';
 import LarkAuthentication from './LarkAuthentication';
 import LemonadeAuthenticator from './LemonadeAuthenticator';
 import LemonadeDataSource from './LemonadeDataSource';

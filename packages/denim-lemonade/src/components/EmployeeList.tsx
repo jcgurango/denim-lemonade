@@ -6,9 +6,9 @@ import {
   DenimApplicationLayout,
   DenimApplicationView,
   useDenimApplication,
-} from '../denim/application';
+} from 'denim/application';
 import LemonadeLogo from '../assets/images/logo.jpg';
-import { DenimQueryConditionGroup } from '../denim/core';
+import { DenimQueryConditionGroup } from 'denim/core';
 
 const Actions = () => {
   const application = useDenimApplication();

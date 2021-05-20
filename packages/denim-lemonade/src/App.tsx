@@ -7,15 +7,15 @@ import {
   DenimApplicationV2,
   useDenimApplication,
   DenimScreenV2,
-} from './denim/application';
+} from 'denim/application';
 import {
   DenimFormProvider,
   DenimUserProviderV2,
   useDenimUserV2,
-} from './denim/forms';
-import DenimRemoteDataSourceV2 from './denim/service/DenimRemoteDataSourceV2';
+} from 'denim/forms';
+import { DenimRemoteDataSourceV2 } from 'denim/service';
 import { LemonadeValidations } from './validation';
-import { useDenimForm } from './denim/forms/providers/DenimFormProvider';
+import { useDenimForm } from 'denim/forms/providers/DenimFormProvider';
 import LemonadeButton from './components/LemonadeButton';
 import {
   LemonadeCell,
@@ -25,7 +25,7 @@ import {
 } from './components/LemonadeView';
 import LemonadeFormControl from './components/LemonadeFormControl';
 import EmployeeForm from './components/EmployeeForm';
-import DenimRouter from './denim/application/DenimRouter';
+import DenimRouter from 'denim/application/DenimRouter';
 import { useHistory } from 'react-router';
 import EmployeeList from './components/EmployeeList';
 import MovementScreen from './components/MovementScreen';

@@ -1,17 +1,14 @@
 import Airtable from 'airtable';
 import Base from 'airtable/lib/base';
-import { AirTableDataSourceV2 } from '../denim/connectors/airtable';
+import { AirTableDataSourceV2 } from 'denim/connectors/airtable';
 import {
   DenimColumnType,
   DenimQueryOperator,
   DenimRecord,
   DenimRelatedRecord,
   DenimRelatedRecordCollection,
-} from '../denim/core';
-import {
-  DenimCombinedDataSourceV2,
-  DenimWorkflowContext,
-} from '../denim/service';
+} from 'denim/core';
+import { DenimCombinedDataSourceV2, DenimWorkflowContext } from 'denim/service';
 import { LemonadeValidations } from '../validation';
 import { CalculateAttendance } from './CalculateAttendance';
 import PaydayDataSource from './PaydayDataSource';
