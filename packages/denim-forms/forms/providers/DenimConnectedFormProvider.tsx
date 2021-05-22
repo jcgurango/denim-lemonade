@@ -12,7 +12,7 @@ import React, {
 } from 'react';
 import { ActivityIndicator, View as RNView } from 'react-native';
 import * as Yup from 'yup';
-import { BaseSchema } from 'yup';
+import { Schema } from 'yup';
 import {
   DenimColumn,
   DenimColumnType,
@@ -79,7 +79,7 @@ interface AsynchronousProps {
 }
 
 export interface DenimConnectedDataContext<T extends DenimDataContext> {
-  getTableValidator: (table: string) => BaseSchema<any, object>;
+  getTableValidator: (table: string) => Schema<any, object>;
   getTableSchema: (table: string) => DenimTable | undefined;
   getControlFor: (
     table: DenimTable,
