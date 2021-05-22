@@ -96,44 +96,10 @@ const EmployeeForm: FunctionComponent<{}> = () => (
                 content: (
                   <DenimApplicationLayout
                     content={[
+                      <h2>Basic Information</h2>,
                       <DenimApplicationLayout
                         flowDirection="row"
                         content={[
-                          {
-                            relativeWidth: 1,
-                            element: (
-                              <DenimApplicationField
-                                schema={{
-                                  id: 'Employee ID',
-                                }}
-                              />
-                            ),
-                          },
-                          {
-                            relativeWidth: 4,
-                            element: (
-                              <DenimApplicationField
-                                schema={{
-                                  id: 'Full Name',
-                                }}
-                              />
-                            ),
-                          },
-                        ]}
-                      />,
-                      <DenimApplicationLayout
-                        flowDirection="row"
-                        content={[
-                          <DenimApplicationField
-                            schema={{
-                              id: 'Title',
-                            }}
-                          />,
-                          <DenimApplicationField
-                            schema={{
-                              id: 'Last Name',
-                            }}
-                          />,
                           <DenimApplicationField
                             schema={{
                               id: 'First Name',
@@ -146,7 +112,27 @@ const EmployeeForm: FunctionComponent<{}> = () => (
                           />,
                           <DenimApplicationField
                             schema={{
+                              id: 'Last Name',
+                            }}
+                          />,
+                        ]}
+                      />,
+                      <DenimApplicationLayout
+                        flowDirection="row"
+                        content={[
+                          <DenimApplicationField
+                            schema={{
                               id: 'Nickname',
+                            }}
+                          />,
+                          <DenimApplicationField
+                            schema={{
+                              id: 'Date of Birth',
+                            }}
+                          />,
+                          <DenimApplicationField
+                            schema={{
+                              id: 'Marital Status',
                             }}
                           />,
                         ]}
@@ -161,21 +147,31 @@ const EmployeeForm: FunctionComponent<{}> = () => (
                           />,
                           <DenimApplicationField
                             schema={{
-                              id: 'Marital Status',
+                              id: 'Citizenship',
+                            }}
+                          />,
+                          <DenimApplicationField
+                            schema={{
+                              id: 'Nationality',
+                            }}
+                          />,
+                        ]}
+                      />,
+                      <DenimApplicationLayout
+                        flowDirection="row"
+                        content={[
+                          <DenimApplicationField
+                            schema={{
+                              id: 'Language',
                             }}
                           />,
                           {
-                            relativeWidth: 3,
-                            element: (
-                              <DenimApplicationField
-                                schema={{
-                                  id: 'Date of Birth',
-                                }}
-                              />
-                            ),
+                            relativeWidth: 2,
+                            element: <></>,
                           },
                         ]}
                       />,
+                      <h2>Contact Information</h2>,
                       <DenimApplicationLayout
                         flowDirection="row"
                         content={[
@@ -184,27 +180,37 @@ const EmployeeForm: FunctionComponent<{}> = () => (
                               id: 'Email',
                             }}
                           />,
-                          {
-                            relativeWidth: 2,
-                            element: (
-                              <DenimApplicationField
-                                schema={{
-                                  id: 'LinkedIn Account',
-                                }}
-                              />
-                            ),
-                          },
+                          <DenimApplicationField
+                            schema={{
+                              id: 'Mobile Number',
+                            }}
+                          />,
+                          <DenimApplicationField
+                            schema={{
+                              id: 'Home Number',
+                            }}
+                          />,
                         ]}
                       />,
-                      <DenimApplicationField
-                        schema={{
-                          id: 'Address 1',
-                        }}
-                      />,
-                      <DenimApplicationField
-                        schema={{
-                          id: 'Address 2',
-                        }}
+                      <DenimApplicationLayout
+                        flowDirection="row"
+                        content={[
+                          <DenimApplicationField
+                            schema={{
+                              id: 'House No & Street Name',
+                            }}
+                          />,
+                          <DenimApplicationField
+                            schema={{
+                              id: 'Village/Compound',
+                            }}
+                          />,
+                          <DenimApplicationField
+                            schema={{
+                              id: 'Barangay',
+                            }}
+                          />,
+                        ]}
                       />,
                       <DenimApplicationLayout
                         flowDirection="row"
@@ -224,6 +230,26 @@ const EmployeeForm: FunctionComponent<{}> = () => (
                               id: 'Zip',
                             }}
                           />,
+                        ]}
+                      />,
+                      <DenimApplicationField
+                        schema={{
+                          id: 'Address 1',
+                        }}
+                      />,
+                      <DenimApplicationLayout
+                        flowDirection="row"
+                        content={[
+                          {
+                            relativeWidth: 2,
+                            element: (
+                              <DenimApplicationField
+                                schema={{
+                                  id: 'Address 2',
+                                }}
+                              />
+                            ),
+                          },
                           <DenimApplicationField
                             schema={{
                               id: 'Country',
@@ -236,37 +262,17 @@ const EmployeeForm: FunctionComponent<{}> = () => (
                         content={[
                           <DenimApplicationField
                             schema={{
-                              id: 'Home Number',
-                            }}
-                          />,
-                          {
-                            relativeWidth: 2,
-                            element: (
-                              <DenimApplicationField
-                                schema={{
-                                  id: 'Mobile Number',
-                                }}
-                              />
-                            ),
-                          },
-                        ]}
-                      />,
-                      <DenimApplicationLayout
-                        flowDirection="row"
-                        content={[
-                          <DenimApplicationField
-                            schema={{
                               id: 'Contact Person',
                             }}
                           />,
                           <DenimApplicationField
                             schema={{
-                              id: 'Relation to Contact Person',
+                              id: 'Contact Person Mobile No',
                             }}
                           />,
                           <DenimApplicationField
                             schema={{
-                              id: 'Contact Person Mobile No',
+                              id: 'Relation to Contact Person',
                             }}
                           />,
                         ]}
@@ -280,14 +286,82 @@ const EmployeeForm: FunctionComponent<{}> = () => (
                 content: (
                   <DenimApplicationLayout
                     content={[
+                      <h2>Employment Information</h2>,
                       <DenimApplicationLayout
                         flowDirection="row"
                         content={[
                           <DenimApplicationField
                             schema={{
+                              id: 'Employee ID',
+                            }}
+                          />,
+                          <DenimApplicationField
+                            schema={{
                               id: 'Account Status',
                             }}
                           />,
+                          <></>,
+                        ]}
+                      />,
+                      <DenimApplicationLayout
+                        flowDirection="row"
+                        content={[
+                          <DenimApplicationField
+                            schema={{
+                              id: 'Employment Status',
+                            }}
+                          />,
+                          <DenimApplicationField
+                            schema={{
+                              id: 'Job Title',
+                            }}
+                          />,
+                          <></>,
+                        ]}
+                      />,
+                      <DenimApplicationLayout
+                        flowDirection="row"
+                        content={[
+                          <DenimApplicationField
+                            schema={{
+                              id: 'Job Level',
+                            }}
+                          />,
+                          <DenimApplicationField
+                            schema={{
+                              id: 'Department',
+                            }}
+                          />,
+                          <DenimApplicationField
+                            schema={{
+                              id: 'Company',
+                            }}
+                          />,
+                        ]}
+                      />,
+                      <DenimApplicationLayout
+                        flowDirection="row"
+                        content={[
+                          <DenimApplicationField
+                            schema={{
+                              id: 'Is A Manager',
+                            }}
+                          />,
+                          <DenimApplicationField
+                            schema={{
+                              id: 'Direct Manager',
+                            }}
+                          />,
+                          <DenimApplicationField
+                            schema={{
+                              id: 'Workplace',
+                            }}
+                          />,
+                        ]}
+                      />,
+                      <DenimApplicationLayout
+                        flowDirection="row"
+                        content={[
                           <DenimApplicationField
                             schema={{
                               id: 'Entry Date',
@@ -295,7 +369,144 @@ const EmployeeForm: FunctionComponent<{}> = () => (
                           />,
                           <DenimApplicationField
                             schema={{
+                              id: 'Regularization Date',
+                            }}
+                          />,
+                          <DenimApplicationField
+                            schema={{
                               id: 'Exit Date',
+                            }}
+                          />,
+                        ]}
+                      />,
+                      <DenimApplicationField
+                        schema={{
+                          id: 'Skills',
+                        }}
+                      />,
+                    ]}
+                  />
+                ),
+              },
+              {
+                label: 'Compensation & Benefits',
+                content: (
+                  <DenimApplicationLayout
+                    content={[
+                      <h2>Compensation &amp; Benefits</h2>,
+                      <DenimApplicationLayout
+                        flowDirection="row"
+                        content={[
+                          <DenimApplicationField
+                            schema={{
+                              id: 'Basic Pay',
+                            }}
+                          />,
+                          <DenimApplicationField
+                            schema={{
+                              id: 'E-Cola',
+                            }}
+                          />,
+                          <DenimApplicationField
+                            schema={{
+                              id: 'Wage Zone',
+                            }}
+                          />,
+                        ]}
+                      />,
+                      <DenimApplicationLayout
+                        flowDirection="row"
+                        content={[
+                          <DenimApplicationField
+                            schema={{
+                              id: 'Payroll Grouping',
+                            }}
+                          />,
+                          <DenimApplicationField
+                            schema={{
+                              id: 'Payment Method',
+                            }}
+                          />,
+                          <DenimApplicationField
+                            schema={{
+                              id: 'Pay Basis',
+                            }}
+                          />,
+                        ]}
+                      />,
+                      <DenimApplicationLayout
+                        flowDirection="row"
+                        content={[
+                          <DenimApplicationField
+                            schema={{
+                              id: 'Bank',
+                            }}
+                          />,
+                          <DenimApplicationField
+                            schema={{
+                              id: 'Bank Account',
+                            }}
+                          />,
+                          <DenimApplicationField
+                            schema={{
+                              id: 'HMO Number',
+                            }}
+                          />,
+                        ]}
+                      />,
+                      <h2>ID Numbers</h2>,
+                      <DenimApplicationLayout
+                        flowDirection="row"
+                        content={[
+                          <DenimApplicationField
+                            schema={{
+                              id: 'SSS Number',
+                            }}
+                          />,
+                          <DenimApplicationField
+                            schema={{
+                              id: 'Philhealth Number',
+                            }}
+                          />,
+                          <DenimApplicationField
+                            schema={{
+                              id: 'Pag-ibig Number',
+                            }}
+                          />,
+                        ]}
+                      />,
+                      <DenimApplicationLayout
+                        flowDirection="row"
+                        content={[
+                          <DenimApplicationField
+                            schema={{
+                              id: 'Tax Identification Number',
+                            }}
+                          />,
+                          <DenimApplicationField
+                            schema={{
+                              id: 'Passport Number',
+                            }}
+                          />,
+                          <></>,
+                        ]}
+                      />,
+                    ]}
+                  />
+                ),
+              },
+              {
+                label: 'Attendance & Leave',
+                content: (
+                  <DenimApplicationLayout
+                    content={[
+                      <h2>Attendance &amp; Leave Information</h2>,
+                      <DenimApplicationLayout
+                        flowDirection="row"
+                        content={[
+                          <DenimApplicationField
+                            schema={{
+                              id: 'Days of Work Per Year',
                             }}
                           />,
                           <DenimApplicationField
@@ -306,95 +517,13 @@ const EmployeeForm: FunctionComponent<{}> = () => (
                           <DenimApplicationField
                             schema={{
                               id: 'Leave Scheme',
-                              controlProps: {
-                                dropdown: true,
-                              },
                             }}
                           />,
-                        ]}
-                      />,
-                      <DenimApplicationLayout
-                        flowDirection="row"
-                        content={[
-                          <DenimApplicationField
-                            schema={{
-                              id: 'Department',
-                            }}
-                          />,
-                          <DenimApplicationField
-                            schema={{
-                              id: 'Department Supervisor',
-                            }}
-                          />,
-                          <DenimApplicationField
-                            schema={{
-                              id: 'Member Type',
-                            }}
-                          />,
-                          <DenimApplicationField
-                            schema={{
-                              id: 'Direct Manager',
-                            }}
-                          />,
-                        ]}
-                      />,
-                      <DenimApplicationLayout
-                        flowDirection="row"
-                        content={[
-                          <DenimApplicationField
-                            schema={{
-                              id: 'Job Title',
-                            }}
-                          />,
-                          <DenimApplicationField
-                            schema={{
-                              id: 'Job Positions',
-                            }}
-                          />,
-                          {
-                            relativeWidth: 2,
-                            element: (
-                              <DenimApplicationField
-                                schema={{
-                                  id: 'Job Roles',
-                                }}
-                              />
-                            ),
-                          },
-                        ]}
-                      />,
-                      <DenimApplicationLayout
-                        flowDirection="row"
-                        content={[
-                          {
-                            relativeWidth: 1,
-                            element: (
-                              <DenimApplicationField
-                                schema={{
-                                  id: 'Language',
-                                }}
-                              />
-                            ),
-                          },
-                          {
-                            relativeWidth: 3,
-                            element: (
-                              <DenimApplicationField
-                                schema={{
-                                  id: 'Skills',
-                                }}
-                              />
-                            ),
-                          },
                         ]}
                       />,
                     ]}
                   />
                 ),
-              },
-              {
-                label: 'Compensation & Benefits',
-                content: <AllowancesButton />,
               },
             ]}
           />
