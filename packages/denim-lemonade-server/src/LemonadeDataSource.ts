@@ -1,5 +1,4 @@
 import {
-  AirTableDataSourceV2,
   DenimColumnType,
   DenimQueryOperator,
   DenimRecord,
@@ -8,6 +7,7 @@ import {
   DenimCombinedDataSourceV2,
   DenimWorkflowContext,
 } from 'denim';
+import { AirTableDataSourceV2 } from 'denim-airtable';
 import { LemonadeValidations } from '../../denim-lemonade/src/validation';
 import { CalculateAttendance } from './CalculateAttendance';
 import PaydayDataSource from './PaydayDataSource';

@@ -1,5 +1,4 @@
 import { AirTable, AirTableColumn } from './types/schema';
-import DenimDataSourceV2 from '../../service/DenimDataSourceV2';
 import {
   DenimRecord,
   DenimQuery,
@@ -11,7 +10,8 @@ import {
   DenimQueryConditionGroup,
   DenimTable,
   DenimColumn,
-} from '../../core';
+  DenimDataSourceV2,
+} from 'denim';
 import Base from 'airtable/lib/base';
 import Record from 'airtable/lib/record';
 import { QueryParams } from 'airtable/lib/query_params';

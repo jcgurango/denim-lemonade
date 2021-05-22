@@ -12,8 +12,13 @@
   "license": "ISC",
   "dependencies": {
     "bent": "^7.3.12",
+    "cheerio": "^1.0.0-rc.9",
+    "cors": "^2.8.5",
     "denim": "^1.0.0",
+    "denim-airtable": "^1.0.0",
     "denim-express": "^1.0.0",
+    "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
     "lark-admin-simulator": "^1.0.0",
     "lark-airtable-connector": "^1.0.0"
   },

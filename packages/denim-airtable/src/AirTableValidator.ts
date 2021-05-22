@@ -3,8 +3,8 @@ import {
   DenimDataContext,
   DenimTable,
   YupAst,
-} from '../../core';
-import DenimValidator from '../../service/DenimValidator';
+  DenimValidator,
+} from 'denim';
 import { AirTable } from './types/schema';
 
 export default class AirTableValidator<T extends DenimDataContext> extends DenimValidator<T> {

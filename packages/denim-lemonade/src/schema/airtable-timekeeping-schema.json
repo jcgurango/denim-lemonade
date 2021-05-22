@@ -817,8 +817,7 @@
 				"name": "payroll_period_id",
 				"type": "number",
 				"typeOptions": {
-					"format": "decimal",
-					"precision": 2,
+					"format": "integer",
 					"negative": true
 				}
 			},

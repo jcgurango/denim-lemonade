@@ -1,0 +1,22 @@
+{
+  "name": "denim-airtable",
+  "version": "1.0.0",
+  "description": "",
+  "main": "lib/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "airtable": "^0.11.1",
+    "cheerio": "^1.0.0-rc.9",
+    "denim": "^1.0.0",
+    "got": "^11.8.2",
+    "tough-cookie": "^4.0.0"
+  },
+  "devDependencies": {
+    "@types/tough-cookie": "^4.0.0",
+    "typescript": "^4.2.4"
+  }
+}

@@ -9,11 +9,11 @@ import { DenimQueryOperator, DenimRecord } from 'denim/core';
 import LarkAuthentication from './LarkAuthentication';
 import LemonadeAuthenticator from './LemonadeAuthenticator';
 import LemonadeDataSource from './LemonadeDataSource';
-import { AirTableDataSourceV2 } from 'denim/connectors/airtable';
+import { AirTableDataSourceV2 } from 'denim-airtable';
 
 AirTableDataSourceV2.configure({
   endpointUrl: 'https://api.airtable.com',
-  apiKey: 'keyLuy77TiMrMgCUY',
+  apiKey: process.env.AIRTABLE_API_KEY,
   apiVersion: undefined,
   noRetryIfRateLimited: undefined,
 });
