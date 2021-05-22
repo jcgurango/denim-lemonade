@@ -1,4 +1,4 @@
-import { Schema } from 'yup';
+import { BaseSchema } from 'yup';
 import { DenimValidator } from '.';
 import { DenimColumn, DenimDataContext, DenimSchema, DenimTable } from '../core';
 
@@ -8,8 +8,8 @@ interface ValidationHook<T extends DenimDataContext> {
     context: T,
     table: string,
     column: DenimColumn | null,
-    validation: Schema<any, object>,
-  ) => Schema<any, object>;
+    validation: BaseSchema<any, object>,
+  ) => BaseSchema<any, object>;
 }
 
 export default abstract class DenimSchemaSource<T extends DenimDataContext> {

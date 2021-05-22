@@ -1,4 +1,3 @@
-import { NumberSchema, Schema, StringSchema } from 'yup';
 import {
   DenimColumn,
   DenimDataContext,
@@ -36,14 +35,14 @@ export default class AirTableValidator<T extends DenimDataContext> extends Denim
           return [
             ...validation,
             ['yup.email']
-          ];
+          ] as YupAst;
         }
 
         if (atField.typeOptions?.validatorName == 'url') {
           return [
             ...validation,
             ['yup.url']
-          ];
+          ] as YupAst;
         }
       }
 
@@ -51,7 +50,7 @@ export default class AirTableValidator<T extends DenimDataContext> extends Denim
         return [
           ...validation,
           ['yup.matches', /^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9]*$/g]
-        ];
+        ] as YupAst;
       }
 
       if (atField.type === 'number') {
@@ -62,7 +61,7 @@ export default class AirTableValidator<T extends DenimDataContext> extends Denim
           return [
             ...validation,
             ['yup.min', 0]
-          ];
+          ] as YupAst;
         }
       }
     }

@@ -1,6 +1,6 @@
 import React from 'react';
 import copyToClipboard from 'copy-to-clipboard';
-import { useDenimNotifications } from 'denim/forms';
+import { useDenimNotifications } from 'denim-forms';
 
 const CopyLink = () => {
   const url = 'https://airtable.com/shrMs1b9PvJW0F6D0';

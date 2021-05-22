@@ -4,7 +4,7 @@ import {
   DenimFormControlProps,
   useDenimForm,
   useTranslation,
-} from 'denim/forms';
+} from 'denim-forms';
 
 const Empty = Symbol('Empty');
 
@@ -26,7 +26,7 @@ const LemonadeFormControl: FunctionComponent<DenimFormControlProps> = ({
           <Text
             style={[
               styles.formLabel,
-              denimForm.styleOverrides?.formControl?.formLabel,
+              denimForm.styleOverrides?.formControl?.formLabel as any,
             ]}
           >
             {schema.label ||
@@ -73,7 +73,7 @@ const LemonadeFormControl: FunctionComponent<DenimFormControlProps> = ({
         <Text
           style={[
             styles.formLabel,
-            denimForm.styleOverrides?.formControl?.formLabel,
+            denimForm.styleOverrides?.formControl?.formLabel as any,
           ]}
         >
           {schema.label ||

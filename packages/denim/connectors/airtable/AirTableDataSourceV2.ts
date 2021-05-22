@@ -15,6 +15,7 @@ import {
 import Base from 'airtable/lib/base';
 import Record from 'airtable/lib/record';
 import { QueryParams } from 'airtable/lib/query_params';
+import Airtable from 'airtable';
 
 const getSelectProperties = (column: AirTableColumn): DenimSelectProperties => {
   if (column.type === 'select' || column.type === 'multiSelect') {
@@ -33,7 +34,7 @@ const getSelectProperties = (column: AirTableColumn): DenimSelectProperties => {
 const convertColumn = (
   schema: AirTable[],
   table: AirTable,
-  column: AirTableColumn,
+  column: AirTableColumn
 ): DenimColumn => {
   if (column.type === 'text' || column.type === 'phone') {
     return {
@@ -119,17 +120,17 @@ const convertColumn = (
   if (column.type === 'lookup') {
     // Find the lookup column.
     const relationshipColumn = table.columns.find(
-      ({ id }) => id === column.typeOptions?.relationColumnId,
+      ({ id }) => id === column.typeOptions?.relationColumnId
     );
 
     if (relationshipColumn && relationshipColumn.type === 'foreignKey') {
       const foreignTable = schema.find(
-        ({ id }) => id === relationshipColumn.typeOptions?.foreignTableId,
+        ({ id }) => id === relationshipColumn.typeOptions?.foreignTableId
       );
 
       if (foreignTable) {
         const foreignColumn = foreignTable.columns.find(
-          ({ id }) => id === column.typeOptions?.foreignTableRollupColumnId,
+          ({ id }) => id === column.typeOptions?.foreignTableRollupColumnId
         );
 
         if (foreignColumn) {
@@ -175,7 +176,7 @@ const convertSchema = (schema: AirTable[]): DenimSchema => {
         label: airtable.name,
         nameField: airtable.columns[0].name,
         columns: airtable.columns.map(
-          convertColumn.bind(null, schema, airtable),
+          convertColumn.bind(null, schema, airtable)
         ),
       };
     }),
@@ -186,16 +187,30 @@ export default class AirTableDataSourceV2 extends DenimDataSourceV2 {
   public base: Base;
   public airtableSchema: AirTable[];
 
-  constructor(base: Base, schema: AirTable[]) {
+  constructor(base: Base | string, schema: AirTable[]) {
     super();
-    this.base = base;
+    this.base =
+      typeof base === 'string' ? ((Airtable.base(base) as any) as Base) : base;
     this.schema = convertSchema(schema);
     this.airtableSchema = schema;
   }
 
+  public static configure(
+    params: Pick<
+      Airtable.AirtableOptions,
+      | 'apiKey'
+      | 'endpointUrl'
+      | 'apiVersion'
+      | 'noRetryIfRateLimited'
+      | 'requestTimeout'
+    >
+  ) {
+    Airtable.configure(params);
+  }
+
   private mapDenimRecordToAirTableFields(
     table: string,
-    record: DenimRecord,
+    record: DenimRecord
   ): any {
     const tableSchema = this.getTable(table);
 
@@ -204,7 +219,7 @@ export default class AirTableDataSourceV2 extends DenimDataSourceV2 {
 
     Object.keys(record).forEach((column) => {
       const columnSchema = tableSchema.columns.find(
-        ({ name }) => name === column,
+        ({ name }) => name === column
       );
 
       const fieldValue = record[column];
@@ -234,9 +249,12 @@ export default class AirTableDataSourceV2 extends DenimDataSourceV2 {
     return newFields;
   }
 
-  private mapAirtableToDenimRecord(table: string, record: Record): DenimRecord {
+  private mapAirtableToDenimRecord(
+    table: string,
+    record: Record<any>
+  ): DenimRecord {
     const airtableSchema = this.airtableSchema.find(
-      ({ name, id }) => name === table || id === table,
+      ({ name, id }) => name === table || id === table
     );
 
     if (!airtableSchema) {
@@ -255,7 +273,7 @@ export default class AirTableDataSourceV2 extends DenimDataSourceV2 {
       (newFields as any)[column] = fieldValue;
 
       const columnSchema = airtableSchema.columns.find(
-        ({ name }) => name === column,
+        ({ name }) => name === column
       );
 
       if (fieldValue && Array.isArray(fieldValue)) {
@@ -292,7 +310,7 @@ export default class AirTableDataSourceV2 extends DenimDataSourceV2 {
   private operatorToFormula(
     operator: DenimQueryOperator,
     left: string,
-    right: string,
+    right: string
   ): string {
     switch (operator) {
       case DenimQueryOperator.Equals:
@@ -320,7 +338,7 @@ export default class AirTableDataSourceV2 extends DenimDataSourceV2 {
 
   private conditionToFormula(
     tableSchema: DenimTable,
-    condition: DenimQueryConditionOrGroup,
+    condition: DenimQueryConditionOrGroup
   ): string {
     if (condition.conditionType === 'group') {
       return this.conditionGroupToFormula(tableSchema, condition);
@@ -331,7 +349,7 @@ export default class AirTableDataSourceV2 extends DenimDataSourceV2 {
         condition.field === 'id' ? 'RECORD_ID()' : `{${condition.field}}`;
       let right = `'${condition.value}'`;
       const column = tableSchema.columns.find(
-        ({ name }) => name === condition.field,
+        ({ name }) => name === condition.field
       );
 
       if (column && column.type === DenimColumnType.Text) {
@@ -347,7 +365,7 @@ export default class AirTableDataSourceV2 extends DenimDataSourceV2 {
 
   private conditionGroupToFormula(
     tableSchema: DenimTable,
-    condition: DenimQueryConditionGroup,
+    condition: DenimQueryConditionGroup
   ): string {
     return `${condition.type}(${condition.conditions
       .map((c) => this.conditionToFormula(tableSchema, c))
@@ -356,7 +374,7 @@ export default class AirTableDataSourceV2 extends DenimDataSourceV2 {
 
   protected async retrieve(
     table: string,
-    id: string,
+    id: string
   ): Promise<DenimRecord | null> {
     // Retrieve the record.
     const record = await this.base.table(table).find(id);
@@ -370,15 +388,15 @@ export default class AirTableDataSourceV2 extends DenimDataSourceV2 {
 
   protected async query(
     table: string,
-    query?: DenimQuery,
+    query?: DenimQuery
   ): Promise<DenimRecord[]> {
-    const params: QueryParams = {};
+    const params: QueryParams<any> = {};
     const tableSchema = this.getTable(table);
 
     if (query?.conditions) {
       params.filterByFormula = this.conditionToFormula(
         tableSchema,
-        query.conditions,
+        query.conditions
       );
     }
 
@@ -422,9 +440,7 @@ export default class AirTableDataSourceV2 extends DenimDataSourceV2 {
         await atQuery.eachPage((page, nextPage) => {
           if (pageNum === query.page) {
             resolve(
-              page.map((record) =>
-                this.mapAirtableToDenimRecord(table, record),
-              ),
+              page.map((record) => this.mapAirtableToDenimRecord(table, record))
             );
             return;
           }
@@ -439,20 +455,20 @@ export default class AirTableDataSourceV2 extends DenimDataSourceV2 {
 
     if (query?.retrieveAll) {
       return (await atQuery.all()).map((record) =>
-        this.mapAirtableToDenimRecord(table, record),
+        this.mapAirtableToDenimRecord(table, record)
       );
     }
 
     const records = await atQuery.firstPage();
 
     return records.map((record) =>
-      this.mapAirtableToDenimRecord(table, record),
+      this.mapAirtableToDenimRecord(table, record)
     );
   }
 
   protected async save(
     table: string,
-    record: DenimRecord,
+    record: DenimRecord
   ): Promise<DenimRecord> {
     if (record.id) {
       const atRecord = await this.base
@@ -466,7 +482,7 @@ export default class AirTableDataSourceV2 extends DenimDataSourceV2 {
       .table(table)
       .create(this.mapDenimRecordToAirTableFields(table, record));
 
-    return this.mapAirtableToDenimRecord(table, atRecord);
+    return this.mapAirtableToDenimRecord(table, atRecord[0]);
   }
 
   protected async delete(table: string, id: string): Promise<void> {

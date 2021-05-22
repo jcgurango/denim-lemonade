@@ -1,6 +1,6 @@
 import { transformAll } from '@demvsystems/yup-ast';
 import dayjs from 'dayjs';
-import { Schema } from 'yup';
+import { BaseSchema } from 'yup';
 import {
   DenimQuery,
   DenimRecord,
@@ -57,7 +57,7 @@ export default abstract class DenimDataSourceV2 {
   public hooks: DenimDataSourceHookV2[] = [];
   public extraValidations: AdditionalValidation[] = [];
   private validationCache: {
-    [table: string]: Schema<any, object>;
+    [table: string]: BaseSchema<any, object>;
   } = {};
 
   registerHook(hook: DenimDataSourceHookV2) {

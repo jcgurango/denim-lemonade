@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "transpile": "cd packages/denim && npx tsc && cd ../denim-forms && npx tsc && cd ../denim-express && npx tsc",
+    "transpile:watch": "(cd packages/denim && npx tsc --watch) & (cd packages/denim-forms && npx tsc --watch) & (cd packages/denim-express && npx tsc --watch)"
   },
   "repository": {
     "type": "git",
@@ -17,18 +19,19 @@
   },
   "homepage": "https://github.com/jcgurango/denim-lemonade#readme",
   "devDependencies": {
-    "lerna": "^4.0.0",
     "@types/bent": "^7.3.2",
     "@types/dashify": "^1.0.0",
+    "@types/express": "^4.17.9",
+    "@types/jest": "^25.2.3",
+    "@types/jsonwebtoken": "^8.5.0",
     "@types/react": "^17.0.6",
+    "@types/react-dom": "^17.0.0",
     "@types/react-native": "^0.64.5",
     "@types/react-notification-system": "^0.2.40",
     "@types/react-router-dom": "^5.1.7",
-    "@types/yup": "^0.29.11",
-    "@types/jest": "^25.2.3",
-    "@types/jsonwebtoken": "^8.5.0",
-    "@types/react-dom": "^17.0.0",
     "@types/react-test-renderer": "^16.9.2",
-    "@types/express": "^4.17.9"
-  }
+    "@types/yup": "^0.29.11",
+    "lerna": "^4.0.0"
+  },
+  "dependencies": {}
 }

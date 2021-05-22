@@ -1,4 +1,4 @@
-import { Schema } from 'yup';
+import { BaseSchema } from 'yup';
 import {
   DenimDataContext,
   DenimRecord,
@@ -94,8 +94,8 @@ export type DenimDataSourceHook<C extends DenimDataContext> =
         table: string,
         context: C,
         record: DenimRecord,
-        validator: Schema<object, any>,
-      ) => Promise<[C, DenimRecord, Schema<object, any>]>
+        validator: BaseSchema<object, any>,
+      ) => Promise<[C, DenimRecord, BaseSchema<object, any>]>
     >
   | DenimHook<
       'post-create-validate',
@@ -132,8 +132,8 @@ export type DenimDataSourceHook<C extends DenimDataContext> =
         table: string,
         context: C,
         record: DenimRecord,
-        validator: Schema<object, any>,
-      ) => Promise<[C, DenimRecord, Schema<object, any>]>
+        validator: BaseSchema<object, any>,
+      ) => Promise<[C, DenimRecord, BaseSchema<object, any>]>
     >
   | DenimHook<
       'post-update-validate',

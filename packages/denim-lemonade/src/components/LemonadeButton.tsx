@@ -1,6 +1,6 @@
 import React, { FunctionComponent } from 'react';
 import { Button, View } from 'react-native';
-import { DenimButtonProps } from 'denim/forms/controls/DenimButton';
+import { DenimButtonProps } from 'denim-forms';
 
 const Colors = {
   primary: 'rgb(255, 214, 75)',

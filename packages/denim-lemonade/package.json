@@ -10,9 +10,7 @@
     "build": "node scripts/build.js",
     "test": "jest",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
-    "serve": "env PORT=3000 npx serve build",
-    "server": "ts-node --project src/server/tsconfig.json src/server/index.ts",
-    "server:dev": "nodemon"
+    "serve": "env PORT=3000 npx serve build"
   },
   "dependencies": {
     "@babel/core": "7.12.3",
@@ -25,7 +23,6 @@
     "@svgr/webpack": "5.4.0",
     "@typescript-eslint/eslint-plugin": "^4.5.0",
     "@typescript-eslint/parser": "^4.5.0",
-    "airtable": "^0.10.1",
     "babel-eslint": "^10.1.0",
     "babel-jest": "^26.6.0",
     "babel-loader": "8.1.0",
@@ -41,6 +38,8 @@
     "css-loader": "4.3.0",
     "dashify": "^2.0.0",
     "dayjs": "^1.9.6",
+    "denim": "^1.0.0",
+    "denim-forms": "^1.0.0",
     "dotenv": "8.2.0",
     "dotenv-expand": "5.1.0",
     "eslint": "^7.11.0",
@@ -63,9 +62,8 @@
     "jest-resolve": "26.6.0",
     "jest-watch-typeahead": "0.6.1",
     "jsonwebtoken": "^8.5.1",
-    "lark-admin-simulator": "1.0.0",
-    "lark-airtable-connector": "1.0.0",
     "mini-css-extract-plugin": "0.11.3",
+    "moment": "^2.29.1",
     "optimize-css-assets-webpack-plugin": "5.0.4",
     "pnp-webpack-plugin": "1.6.4",
     "postcss-flexbugs-fixes": "4.2.1",
@@ -77,7 +75,7 @@
     "react": "16.13.1",
     "react-app-polyfill": "^2.0.0",
     "react-dev-utils": "^11.0.1",
-    "react-dom": "^17.0.1",
+    "react-dom": "^16.13.1",
     "react-native": "0.63.3",
     "react-native-web": "^0.14.8",
     "react-notification-system": "^0.4.0",
@@ -98,9 +96,7 @@
     "webpack-dev-server": "3.11.0",
     "webpack-manifest-plugin": "2.2.0",
     "workbox-webpack-plugin": "5.1.4",
-    "yup": "^0.29.3",
-    "moment": "^2.29.1",
-    "denim": "^1.0.0"
+    "yup": "^0.29.3"
   },
   "devDependencies": {
     "@babel/runtime": "^7.8.4",
@@ -110,6 +106,7 @@
     "patch-package": "^6.2.2",
     "react-test-renderer": "16.13.1",
     "serve": "^11.3.2",
+    "ts-loader": "^8.2.0",
     "typescript": "^3.8.3"
   },
   "browserslist": {
