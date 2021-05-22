@@ -10,6 +10,7 @@ export { default as DenimDataSourceV2 } from './DenimDataSourceV2';
 export { default as DenimCombinedDataSourceV2 } from './DenimCombinedDataSourceV2';
 export { default as DenimAuthenticatorV2 } from './DenimAuthenticatorV2';
 export { default as DenimRemoteDataSourceV2 } from './DenimRemoteDataSourceV2';
+export { default as DenimJsonDataSource } from './DenimJsonDataSource';
 
 export * from './types/hooks';
 export * from './types/auth';
