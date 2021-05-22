@@ -257,7 +257,7 @@ export default class DenimJsonDataSource extends DenimDataSourceV2 {
     const tablePath = path.join(this.rootPath, tableSchema.id);
     const id = record.id || randomString({ length: 32 });
     const recordPath = path.join(tablePath, `${id}.json`);
-    let currentRecord = {};
+    let currentRecord: DenimRecord = {};
 
     if (fsnp.existsSync(recordPath)) {
       currentRecord = await this.retrieveRecordFromPath(
@@ -267,15 +267,31 @@ export default class DenimJsonDataSource extends DenimDataSourceV2 {
       );
     }
 
-    currentRecord = {
+    let storedRecord: any = {
       id,
       ...currentRecord,
       ...record,
     };
 
-    await fs.writeFile(recordPath, JSON.stringify(currentRecord));
+    Object.keys(storedRecord).forEach((key) => {
+      const value = storedRecord[key];
 
-    return currentRecord;
+      if (typeof(value) === 'object' && value?.type === 'record-collection') {
+        storedRecord[key] = value.records.map(({ id }: any) => id);
+      }
+
+      if (typeof(value) === 'object' && value?.type === 'record') {
+        storedRecord[key] = value.id;
+      }
+    });
+
+    await fs.writeFile(recordPath, JSON.stringify(storedRecord));
+
+    return {
+      id,
+      ...currentRecord,
+      ...record,
+    };
   }
 
   protected async delete(table: string, id: string): Promise<void> {
