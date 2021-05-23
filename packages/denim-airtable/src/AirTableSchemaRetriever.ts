@@ -3,7 +3,7 @@ import { CookieJar } from 'tough-cookie';
 import got from 'got';
 import { AirTable } from './types/schema';
 
-type SchemaResult = {
+export type SchemaResult = {
   apiKey: string;
   bases: {
     [key: string]: {
