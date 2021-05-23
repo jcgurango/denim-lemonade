@@ -8,6 +8,7 @@ type SchemaResult = {
   bases: {
     [key: string]: {
       name: string;
+      category: string;
       tables: AirTable[];
     };
   };
@@ -54,12 +55,18 @@ export default class AirTableSchemaRetriever {
       const baseIdList: string[] = [];
 
       $apiPage('a[href$="/api/docs"]').each(function () {
+        const $link = $apiPage(this);
         const [, baseKey] = /\/(.+)\/api\/docs/g.exec(
-          String($apiPage(this).attr('href'))
+          String($link.attr('href'))
         ) || [null, null];
 
         if (baseKey && (!baseIds.length || baseIds.includes(baseKey))) {
           baseIdList.push(baseKey);
+          result.bases[baseKey] = {
+            name: '',
+            category: $link.parent().find('div.py1.mb1.quieter.strong').text(),
+            tables: [],
+          };
         }
       });
 
@@ -76,7 +83,9 @@ export default class AirTableSchemaRetriever {
         const baseDocsPageSchema = cheerio.load(baseDocsPage);
 
         if (!result.apiKey) {
-          result.apiKey = String(baseDocsPageSchema('div[data-api-key]').attr('data-api-key'));
+          result.apiKey = String(
+            baseDocsPageSchema('div[data-api-key]').attr('data-api-key')
+          );
         }
 
         const window: any = {};
@@ -103,10 +112,8 @@ export default class AirTableSchemaRetriever {
           });
         });
 
-        result.bases[baseId] = {
-          name: window.application.name,
-          tables,
-        };
+        result.bases[baseId].name = window.application.name;
+        result.bases[baseId].tables = tables;
       }
 
       return result;
