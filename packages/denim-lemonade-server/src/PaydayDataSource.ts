@@ -267,7 +267,7 @@ export default class PaydayDataSource extends DenimDataSourceV2 {
       return true;
     });
 
-    if (query?.pageSize && query.page) {
+    if (query && !query.retrieveAll && query.pageSize && query.page) {
       return filteredRecords.slice(
         (query.page - 1) * query.pageSize,
         query.page * query.pageSize

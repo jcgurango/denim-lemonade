@@ -2,11 +2,19 @@ const { AirTableSchemaRetriever } = require('denim-airtable');
 const fs = require('fs');
 
 (async () => {
-  const [
-    coreBaseSchema,
-    movementBaseSchema,
-    timekeepingBaseSchema,
-  ] = await AirTableSchemaRetriever.retrieveSchema(
+  const {
+    bases: {
+      [process.env.CORE_BASE_ID]: {
+        tables: coreBaseSchema,
+      },
+      [process.env.MOVEMENT_BASE_ID]: {
+        tables: movementBaseSchema,
+      },
+      [process.env.TIMEKEEPING_BASE_ID]: {
+        tables: timekeepingBaseSchema,
+      },
+    },
+  } = await AirTableSchemaRetriever.retrieveSchema(
     process.env.AIRTABLE_USERNAME,
     process.env.AIRTABLE_PASSWORD,
     process.env.CORE_BASE_ID,

@@ -3,12 +3,22 @@ import { CookieJar } from 'tough-cookie';
 import got from 'got';
 import { AirTable } from './types/schema';
 
+type SchemaResult = {
+  apiKey: string;
+  bases: {
+    [key: string]: {
+      name: string;
+      tables: AirTable[];
+    };
+  };
+};
+
 export default class AirTableSchemaRetriever {
   static async retrieveSchema(
     email: string,
     password: string,
-    ...baseId: string[]
-  ): Promise<AirTable[][]> {
+    ...baseIds: string[]
+  ): Promise<SchemaResult> {
     const cookieJar = new CookieJar();
 
     const loginPage = await got('https://www.airtable.com/login', {
@@ -29,18 +39,46 @@ export default class AirTableSchemaRetriever {
       followRedirect: false,
     }).text();
 
-    const schemas: AirTable[][] = [];
+    const result: SchemaResult = {
+      apiKey: '',
+      bases: {},
+    };
 
     if (loginAttempt === 'Found. Redirecting to /') {
-      for (let i = 0; i < baseId.length; i++) {
+      // Retrieve all bases.
+      console.log('Retrieving bases...');
+      const apiPage = await got('https://airtable.com/api', {
+        cookieJar,
+      }).text();
+      const $apiPage = cheerio.load(apiPage);
+      const baseIdList: string[] = [];
+
+      $apiPage('a[href$="/api/docs"]').each(function () {
+        const [, baseKey] = /\/(.+)\/api\/docs/g.exec(
+          String($apiPage(this).attr('href'))
+        ) || [null, null];
+
+        if (baseKey && (!baseIds.length || baseIds.includes(baseKey))) {
+          baseIdList.push(baseKey);
+        }
+      });
+
+      for (let i = 0; i < baseIdList.length; i++) {
+        const baseId = baseIdList[i];
+
         // Success.
         const baseDocsPage = await got(
-          `https://airtable.com/${baseId[i]}/api/docs`,
+          `https://airtable.com/${baseId}/api/docs`,
           {
             cookieJar,
           }
         ).text();
         const baseDocsPageSchema = cheerio.load(baseDocsPage);
+
+        if (!result.apiKey) {
+          result.apiKey = String(baseDocsPageSchema('div[data-api-key]').attr('data-api-key'));
+        }
+
         const window: any = {};
         eval(
           baseDocsPageSchema(baseDocsPageSchema('script')[1]).html() ||
@@ -65,10 +103,13 @@ export default class AirTableSchemaRetriever {
           });
         });
 
-        schemas.push(tables);
+        result.bases[baseId] = {
+          name: window.application.name,
+          tables,
+        };
       }
 
-      return schemas;
+      return result;
     } else {
       // Get error.
       const loginPage = await got('https://www.airtable.com/login', {
