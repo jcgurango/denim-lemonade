@@ -10,25 +10,19 @@ export const LemonadeValidations = (dataSource: DenimDataSourceV2) => {
         return [
           tableSchema,
           columnSchema,
-          [
-            ...validation,
-            [
-              'yup.test',
-              {
-                test: (value: any) => {
-                  const date = dayjs(value);
-  
-                  if (date.isValid()) {
-                    return date.isAfter('1/1/1000');
-                  }
-  
-                  return true;
-                },
-                // eslint-disable-next-line no-template-curly-in-string
-                message: '${path} must be a valid date'
-              },
-            ],
-          ] as YupAst,
+          validation.test({
+            test: (value: any) => {
+              const date = dayjs(value);
+
+              if (date.isValid()) {
+                return date.isAfter('1/1/1000');
+              }
+
+              return true;
+            },
+            // eslint-disable-next-line no-template-curly-in-string
+            message: '${path} must be a valid date'
+          }),
         ];
       }
 
