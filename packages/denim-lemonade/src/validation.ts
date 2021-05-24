@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import { DenimColumnType, YupAst, DenimDataSourceV2 } from 'denim';
+import { DenimColumnType, DenimDataSourceV2 } from 'denim';
 
 export const LemonadeValidations = (dataSource: DenimDataSourceV2) => {
   dataSource.registerHook({
