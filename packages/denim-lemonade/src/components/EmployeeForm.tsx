@@ -1,27 +1,12 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import {
-  DenimApplicationButton,
   DenimApplicationField,
   DenimApplicationLayout,
   DenimApplicationTabControl,
-  useDenimApplication,
 } from 'denim-forms';
 import LemonadeLogo from '../assets/images/logo.jpg';
 import { FunctionComponent } from 'react';
-
-const AllowancesButton = () => {
-  const application = useDenimApplication();
-
-  return (
-    <DenimApplicationButton
-      text="View Allowances"
-      action={{
-        link: `/movements/${application.record?.['Employee ID']}/allowances`,
-      }}
-    />
-  );
-};
 
 const EmployeeForm: FunctionComponent<{}> = () => (
   <DenimApplicationLayout
@@ -344,7 +329,7 @@ const EmployeeForm: FunctionComponent<{}> = () => (
                         content={[
                           <DenimApplicationField
                             schema={{
-                              id: 'Is A Manager',
+                              id: 'Department Supervisor',
                             }}
                           />,
                           <DenimApplicationField
