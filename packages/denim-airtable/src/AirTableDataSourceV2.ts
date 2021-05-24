@@ -12,10 +12,10 @@ import {
   DenimColumn,
   DenimDataSourceV2,
 } from 'denim';
-import Base from 'airtable/lib/base';
 import Record from 'airtable/lib/record';
 import { QueryParams } from 'airtable/lib/query_params';
 import Airtable from 'airtable';
+import { AirtableBase } from 'airtable/lib/airtable_base';
 
 const getSelectProperties = (column: AirTableColumn): DenimSelectProperties => {
   if (column.type === 'select' || column.type === 'multiSelect') {
@@ -184,13 +184,13 @@ const convertSchema = (schema: AirTable[]): DenimSchema => {
 };
 
 export default class AirTableDataSourceV2 extends DenimDataSourceV2 {
-  public base: Base;
+  public base: AirtableBase;
   public airtableSchema: AirTable[];
 
-  constructor(base: Base | string, schema: AirTable[]) {
+  constructor(base: AirtableBase | string, schema: AirTable[]) {
     super();
     this.base =
-      typeof base === 'string' ? ((Airtable.base(base) as any) as Base) : base;
+      typeof base === 'string' ? Airtable.base(base) : base;
     this.schema = convertSchema(schema);
     this.airtableSchema = schema;
   }

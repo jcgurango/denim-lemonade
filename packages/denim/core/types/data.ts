@@ -64,5 +64,5 @@ export interface DenimRelatedRecord {
   type: 'record';
   id: string;
   name?: string;
-  record?: DenimRecord;
+  record?: DenimRecord | null;
 }

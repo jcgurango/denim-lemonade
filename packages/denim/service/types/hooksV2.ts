@@ -1,8 +1,8 @@
+import { BaseSchema } from 'yup';
 import {
   DenimRecord,
   Expansion,
   DenimQuery,
-  YupAst,
   DenimColumn,
 } from '../../core';
 
@@ -21,7 +21,7 @@ export type DenimDataSourceHookV2 =
       (
         table: string,
         id: string,
-        expansion?: Expansion,
+        expansion?: Expansion
       ) => Promise<[string, Expansion | undefined]>
     >
   | DenimHookV2<
@@ -30,7 +30,7 @@ export type DenimDataSourceHookV2 =
         table: string,
         id: string,
         expansion: Expansion | undefined,
-        record: DenimRecord | null,
+        record: DenimRecord | null
       ) => Promise<[string, Expansion | undefined, DenimRecord | null]>
     >
   | DenimHookV2<
@@ -39,7 +39,7 @@ export type DenimDataSourceHookV2 =
         table: string,
         id: string,
         expansion: Expansion | undefined,
-        record: DenimRecord | null,
+        record: DenimRecord | null
       ) => Promise<[string, Expansion | undefined, DenimRecord | null]>
     >
   | DenimHookV2<
@@ -51,7 +51,7 @@ export type DenimDataSourceHookV2 =
       (
         table: string,
         records: DenimRecord[],
-        query?: DenimQuery,
+        query?: DenimQuery
       ) => Promise<[DenimRecord[], DenimQuery | undefined]>
     >
   | DenimHookV2<
@@ -59,7 +59,7 @@ export type DenimDataSourceHookV2 =
       (
         table: string,
         query: DenimQuery | undefined,
-        records: DenimRecord[],
+        records: DenimRecord[]
       ) => Promise<[DenimQuery | undefined, DenimRecord[]]>
     >
   | DenimHookV2<
@@ -83,7 +83,7 @@ export type DenimDataSourceHookV2 =
       (
         table: string,
         id: string,
-        record: DenimRecord,
+        record: DenimRecord
       ) => Promise<[string, DenimRecord]>
     >
   | DenimHookV2<
@@ -99,7 +99,7 @@ export type DenimDataSourceHookV2 =
       (
         table: string,
         id: string,
-        record: DenimRecord,
+        record: DenimRecord
       ) => Promise<[string, DenimRecord]>
     >
   | DenimHookV2<'pre-delete', (table: string, id: string) => Promise<[string]>>
@@ -109,7 +109,7 @@ export type DenimDataSourceHookV2 =
       (
         table: string,
         ids: string[],
-        expansion?: Expansion,
+        expansion?: Expansion
       ) => Promise<[string[], Expansion | undefined]>
     >
   | DenimHookV2<
@@ -118,7 +118,7 @@ export type DenimDataSourceHookV2 =
         table: string,
         ids: string[],
         query: DenimQuery,
-        expansion?: Expansion,
+        expansion?: Expansion
       ) => Promise<[string[], DenimQuery, Expansion | undefined]>
     >
   | DenimHookV2<
@@ -128,7 +128,7 @@ export type DenimDataSourceHookV2 =
         ids: string[],
         query: DenimQuery,
         records: DenimRecord[],
-        expansion?: Expansion,
+        expansion?: Expansion
       ) => Promise<[string[], DenimQuery, DenimRecord[], Expansion | undefined]>
     >
   | DenimHookV2<
@@ -136,8 +136,8 @@ export type DenimDataSourceHookV2 =
       (
         table: string,
         columns: DenimColumn[],
-        validation: YupAst,
-      ) => Promise<[DenimColumn[], YupAst]>
+        validation: BaseSchema<any>
+      ) => Promise<[DenimColumn[], BaseSchema<any>]>
     >
   | DenimHookV2<
       'field-validation',
@@ -145,6 +145,6 @@ export type DenimDataSourceHookV2 =
         table: string,
         columns: DenimColumn[],
         columnSchema: DenimColumn,
-        validation: YupAst,
-      ) => Promise<[DenimColumn[], DenimColumn, YupAst]>
+        validation: BaseSchema<any>
+      ) => Promise<[DenimColumn[], DenimColumn, BaseSchema<any>]>
     >;

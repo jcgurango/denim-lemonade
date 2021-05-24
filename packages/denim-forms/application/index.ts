@@ -20,6 +20,7 @@ export { default as DenimApplicationTabControl } from './forms/DenimApplicationT
 export { default as DenimApplicationButton } from './forms/DenimApplicationButton';
 export { default as DenimApplicationView } from './forms/DenimApplicationView';
 export { default as DenimApplicationFilter } from './forms/DenimApplicationFilter';
+export { default as DenimApplicationRepeater } from './forms/DenimApplicationRepeater';
 export { default as DenimScreenV2 } from './screens/DenimScreenV2';
 export { default as DenimRouter } from './DenimRouter';
 

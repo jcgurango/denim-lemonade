@@ -91,31 +91,59 @@ export default class DenimJsonDataSource extends DenimDataSourceV2 {
     }
   }
 
-  private mapRecord(data: any, tableSchema: DenimTable) {
-    Object.keys(data).forEach((key) => {
+  private async mapRecord(data: any, tableSchema: DenimTable) {
+    const keys = Object.keys(data);
+
+    for (let i = 0; i < keys.length; i++) {
+      const key = keys[i];
+
       const columnSchema = tableSchema.columns.find(
         (column) => column.name === key
       );
 
       if (columnSchema?.type === DenimColumnType.ForeignKey) {
+        const tableSchema = this.getTable(
+          columnSchema.properties.foreignTableId
+        );
+        const tablePath = path.join(this.rootPath, tableSchema.id);
+
         if (columnSchema.properties.multiple) {
+          const records: DenimRelatedRecord[] = [];
+
+          for (let i = 0; i < data[key].length; i++) {
+            const id = data[key][i];
+            const recordPath = path.join(tablePath, `${id}.json`);
+
+            if (fsnp.existsSync(recordPath)) {
+              records.push({
+                type: 'record',
+                id,
+                name: '',
+                record: null,
+              });
+            }
+          }
+
           data[key] = {
             type: 'record-collection',
-            records: data[key].map((id: string) => ({
-              type: 'record',
-              id,
-              name: '',
-              record: null,
-            })),
+            records,
           } as DenimRelatedRecordCollection;
         } else {
-          data[key] = {
-            type: 'record',
-            id: data[key],
-          } as DenimRelatedRecord;
+          if (data[key]) {
+            const recordPath = path.join(tablePath, `${data[key]}.json`);
+
+            if (fsnp.existsSync(recordPath)) {
+              data[key] = {
+                type: 'record',
+                id: data[key],
+                name: '',
+                record: null,
+              } as DenimRelatedRecord;
+            }
+          }
         }
       }
-    });
+    }
   }
 
   protected async retrieve(
@@ -143,7 +171,8 @@ export default class DenimJsonDataSource extends DenimDataSourceV2 {
       ...JSON.parse(await fs.readFile(recordPath)),
     };
 
-    this.mapRecord(data, tableSchema);
+    await this.mapRecord(data, tableSchema);
+
     return data;
   }
 
@@ -276,22 +305,18 @@ export default class DenimJsonDataSource extends DenimDataSourceV2 {
     Object.keys(storedRecord).forEach((key) => {
       const value = storedRecord[key];
 
-      if (typeof(value) === 'object' && value?.type === 'record-collection') {
+      if (typeof value === 'object' && value?.type === 'record-collection') {
         storedRecord[key] = value.records.map(({ id }: any) => id);
       }
 
-      if (typeof(value) === 'object' && value?.type === 'record') {
+      if (typeof value === 'object' && value?.type === 'record') {
         storedRecord[key] = value.id;
       }
     });
 
     await fs.writeFile(recordPath, JSON.stringify(storedRecord));
 
-    return {
-      id,
-      ...currentRecord,
-      ...record,
-    };
+    return await this.retrieveRecordFromPath(id, recordPath, tableSchema);
   }
 
   protected async delete(table: string, id: string): Promise<void> {

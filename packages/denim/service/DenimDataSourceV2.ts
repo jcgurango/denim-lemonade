@@ -1,5 +1,5 @@
-import { transformAll } from '@demvsystems/yup-ast';
 import dayjs from 'dayjs';
+import * as Yup from 'yup';
 import { BaseSchema } from 'yup';
 import {
   DenimQuery,
@@ -30,19 +30,15 @@ type AdditionalValidation = {
 };
 
 const RecordSchemaShape = {
-  type: [['yup.string'], ['yup.required'], ['yup.equals', ['record']]],
-  id: [['yup.string', ['yup.required']]],
-  name: [['yup.string'], ['yup.nullable', true]],
-  record: [['yup.mixed'], ['yup.nullable', true]],
+  type: Yup.string().required().equals(['record']),
+  id: Yup.string().required(),
+  name: Yup.string().nullable(true),
+  record: Yup.mixed().nullable(true),
 };
 
 const RecordCollectionSchemaShape = {
-  type: [
-    ['yup.string'],
-    ['yup.required'],
-    ['yup.equals', ['record-collection']],
-  ],
-  record: [['yup.array', [['yup.object'], ['yup.shape', RecordSchemaShape]]]],
+  type: Yup.string().required().equals(['record-collection']),
+  record: Yup.array(Yup.object().shape(RecordSchemaShape)),
 };
 
 export const CommonShapes = {
@@ -78,13 +74,13 @@ export default abstract class DenimDataSourceV2 {
 
   public hasTable(table: string): boolean {
     return !!this.schema.tables.find(
-      (tbl) => tbl.name === table || tbl.id === table,
+      (tbl) => tbl.name === table || tbl.id === table
     );
   }
 
   public getTable(table: string): DenimTable {
     const tableSchema = this.schema.tables.find(
-      ({ id, name }) => id === table || name === table,
+      ({ id, name }) => id === table || name === table
     );
 
     if (!tableSchema) {
@@ -96,17 +92,16 @@ export default abstract class DenimDataSourceV2 {
 
   public async validate(
     table: string,
-    record: DenimRecord,
+    record: DenimRecord
   ): Promise<DenimRecord> {
     let validator = this.validationCache[table];
 
     if (!validator) {
       const tableSchema = this.getTable(table);
-      const validationSchema = await this.createValidator(
+      validator = await this.createValidator(
         tableSchema.name,
-        tableSchema.columns,
+        tableSchema.columns
       );
-      validator = transformAll(validationSchema);
       this.validationCache[table] = validator;
     }
 
@@ -119,22 +114,22 @@ export default abstract class DenimDataSourceV2 {
 
   protected abstract retrieve(
     table: string,
-    id: string,
+    id: string
   ): Promise<DenimRecord | null>;
   protected abstract query(
     table: string,
-    query?: DenimQuery,
+    query?: DenimQuery
   ): Promise<DenimRecord[]>;
   protected abstract save(
     table: string,
-    record: DenimRecord,
+    record: DenimRecord
   ): Promise<DenimRecord>;
   protected abstract delete(table: string, id: string): Promise<void>;
 
   async expandRecords(
     table: string,
     records: DenimRecord[],
-    expansion: Expansion,
+    expansion: Expansion
   ): Promise<void> {
     let relationships: RelationshipMap,
       childExpansions: { [relationship: string]: Expansion },
@@ -150,7 +145,7 @@ export default abstract class DenimDataSourceV2 {
           [root]: [...(current[root] || []), ...(field ? [field] : [])],
         };
       },
-      {},
+      {}
     );
 
     rootExpansions = Object.keys(childExpansions);
@@ -159,7 +154,7 @@ export default abstract class DenimDataSourceV2 {
     await Promise.all(
       rootExpansions.map(async (relationship) => {
         const column = this.getTable(table).columns.find(
-          ({ name }) => name === relationship,
+          ({ name }) => name === relationship
         );
 
         if (
@@ -167,7 +162,7 @@ export default abstract class DenimDataSourceV2 {
           column?.properties?.foreignTableId
         ) {
           const foreignTable = this.getTable(
-            column?.properties?.foreignTableId,
+            column?.properties?.foreignTableId
           );
 
           // Collect related IDs.
@@ -187,7 +182,7 @@ export default abstract class DenimDataSourceV2 {
                 return current.concat(
                   field.records
                     .map(({ id, record }) => (record ? '' : id))
-                    .filter(Boolean),
+                    .filter(Boolean)
                 );
               }
             }
@@ -200,7 +195,7 @@ export default abstract class DenimDataSourceV2 {
             const relatedRecords = await this.findById(
               foreignTable.id,
               childExpansions[relationship],
-              ...relatedRecordIds,
+              ...relatedRecordIds
             );
 
             relationships[relationship] = records.reduce<RelationshipRecordMap>(
@@ -210,7 +205,7 @@ export default abstract class DenimDataSourceV2 {
                 if (typeof field === 'object') {
                   if (field?.type === 'record' && field?.id && !field.record) {
                     const relatedRecord = relatedRecords.find(
-                      ({ id }) => id === field.id,
+                      ({ id }) => id === field.id
                     );
 
                     if (relatedRecord) {
@@ -240,7 +235,7 @@ export default abstract class DenimDataSourceV2 {
                           }
 
                           const relatedRecord = relatedRecords.find(
-                            ({ id }) => record.id === id,
+                            ({ id }) => record.id === id
                           );
 
                           if (relatedRecord) {
@@ -263,13 +258,13 @@ export default abstract class DenimDataSourceV2 {
 
                 return current;
               },
-              {},
+              {}
             );
           }
         } else {
           throw new Error('Unknown expansion ' + relationship);
         }
-      }),
+      })
     );
 
     // Write back to the records.
@@ -293,7 +288,7 @@ export default abstract class DenimDataSourceV2 {
       'pre-find',
       table,
       ids,
-      expansion,
+      expansion
     );
 
     const query: DenimQuery = {
@@ -320,7 +315,7 @@ export default abstract class DenimDataSourceV2 {
       table,
       hookedIds,
       query,
-      hookedExpansion,
+      hookedExpansion
     );
 
     const records = await this.query(table, hookedQuery);
@@ -331,7 +326,7 @@ export default abstract class DenimDataSourceV2 {
       queryHookedIds,
       hookedQuery,
       records,
-      queryHookedExpansion,
+      queryHookedExpansion
     );
 
     if (postHookedExpansion) {
@@ -344,13 +339,13 @@ export default abstract class DenimDataSourceV2 {
   async retrieveRecord(
     table: string,
     id: string,
-    expansion?: Expansion,
+    expansion?: Expansion
   ): Promise<DenimRecord | null> {
     const [hookedId, hookedExpansion] = await this.executeHooks(
       'pre-retrieve-record',
       table,
       id,
-      expansion,
+      expansion
     );
 
     const record = await this.retrieve(table, hookedId);
@@ -360,7 +355,7 @@ export default abstract class DenimDataSourceV2 {
       table,
       hookedId,
       hookedExpansion,
-      record,
+      record
     );
 
     if (hookedRecord && expand) {
@@ -370,7 +365,7 @@ export default abstract class DenimDataSourceV2 {
     const [postHookedRecord] = await this.executeHooks(
       'post-retrieve-record',
       table,
-      hookedRecord,
+      hookedRecord
     );
 
     return postHookedRecord;
@@ -378,12 +373,12 @@ export default abstract class DenimDataSourceV2 {
 
   async retrieveRecords(
     table: string,
-    query?: DenimQuery,
+    query?: DenimQuery
   ): Promise<DenimRecord[]> {
     const [hookedQuery] = await this.executeHooks(
       'pre-retrieve-records',
       table,
-      query,
+      query
     );
     let passedQuery = hookedQuery || {};
 
@@ -394,7 +389,7 @@ export default abstract class DenimDataSourceV2 {
       'pre-retrieve-records-expand',
       table,
       records,
-      hookedQuery,
+      hookedQuery
     );
 
     // Perform expansions (if any).
@@ -406,7 +401,7 @@ export default abstract class DenimDataSourceV2 {
       'post-retrieve-records',
       table,
       preHookedQuery,
-      hookedRecords,
+      hookedRecords
     );
 
     return postHookedRecords;
@@ -418,7 +413,7 @@ export default abstract class DenimDataSourceV2 {
     const [hookedRecordPreValidate] = await this.executeHooks(
       'pre-create-validate',
       table,
-      hookedRecord,
+      hookedRecord
     );
 
     const validRecord = await this.validate(table, hookedRecordPreValidate);
@@ -426,7 +421,7 @@ export default abstract class DenimDataSourceV2 {
     const [hookedRecordPostValidate] = await this.executeHooks(
       'post-create-validate',
       table,
-      validRecord,
+      validRecord
     );
 
     // Create the record.
@@ -438,7 +433,7 @@ export default abstract class DenimDataSourceV2 {
     const [hookedRecordPost] = await this.executeHooks(
       'post-create',
       table,
-      newRecord,
+      newRecord
     );
 
     return hookedRecordPost;
@@ -447,13 +442,13 @@ export default abstract class DenimDataSourceV2 {
   async updateRecord(
     table: string,
     id: string,
-    record: DenimRecord,
+    record: DenimRecord
   ): Promise<DenimRecord> {
     const [hookedId, hookedRecord] = await this.executeHooks(
       'pre-update',
       table,
       id,
-      record,
+      record
     );
 
     // Retrieve the record.
@@ -467,19 +462,19 @@ export default abstract class DenimDataSourceV2 {
     const [hookedRecordPreValidate] = await this.executeHooks(
       'pre-update-validate',
       table,
-      fullRecord,
+      fullRecord
     );
 
     // Validate the updated record.
     const validRecord: DenimRecord = await this.validate(
       table,
-      hookedRecordPreValidate,
+      hookedRecordPreValidate
     );
 
     const [hookedRecordPostValidate] = await this.executeHooks(
       'post-update-validate',
       table,
-      validRecord,
+      validRecord
     );
 
     // Update any values that are different from their initial values.
@@ -487,7 +482,7 @@ export default abstract class DenimDataSourceV2 {
       id: hookedRecordPostValidate.id,
     };
 
-    Object.keys(record || { }).forEach((key) => {
+    Object.keys(record || {}).forEach((key) => {
       let initialValue = existingRecord ? existingRecord[key] : null;
       let newValue = hookedRecordPostValidate[key];
 
@@ -544,7 +539,7 @@ export default abstract class DenimDataSourceV2 {
       'post-update',
       table,
       updatedRecord.id,
-      updatedRecord,
+      updatedRecord
     );
 
     // Return the updated record.
@@ -564,7 +559,7 @@ export default abstract class DenimDataSourceV2 {
   ): Promise<T> {
     const hooks = this.hooks.filter(
       ({ type: t, table: ta }) =>
-        t === type && (typeof ta === 'string' ? table === ta : ta.test(table)),
+        t === type && (typeof ta === 'string' ? table === ta : ta.test(table))
     );
     let currentArguments = args;
 
@@ -577,111 +572,87 @@ export default abstract class DenimDataSourceV2 {
     return currentArguments;
   }
 
-  createForeignKeyValidator(field: DenimColumn): YupAst {
+  createForeignKeyValidator(field: DenimColumn): BaseSchema<any> {
     // Validate the shape.
     if (field.type === DenimColumnType.ForeignKey) {
       if (field.properties.multiple) {
-        return [
-          ['yup.object'],
-          ['yup.shape', CommonShapes.RecordCollection],
-          ['yup.nullable', true],
-          ['yup.default', null],
-        ];
+        return Yup.object()
+          .shape(CommonShapes.RecordCollection)
+          .nullable(true)
+          .default(null);
       } else {
-        return [
-          ['yup.object'],
-          ['yup.shape', CommonShapes.Record],
-          ['yup.nullable', true],
-          ['yup.default', null],
-        ];
+        return Yup.object()
+          .shape(CommonShapes.Record)
+          .nullable(true)
+          .default(null);
       }
     }
 
-    return ['yup.mixed'];
+    return Yup.mixed();
   }
 
-  createFieldValidator(field: DenimColumn): YupAst {
+  createFieldValidator(field: DenimColumn): BaseSchema<any> {
     switch (field.type) {
       case DenimColumnType.ForeignKey:
         return this.createForeignKeyValidator(field);
       case DenimColumnType.Boolean:
-        return [['yup.boolean'], ['yup.nullable', true]];
+        return Yup.boolean().nullable(true);
       case DenimColumnType.DateTime:
         if (!field.properties.includesTime) {
-          return [
-            ['yup.string'],
-            ['yup.nullable', true],
-            [
-              'yup.transform',
-              function (this: any, value: any) {
-                if (!value) {
-                  return null;
-                }
-
-                // First validate that this is a date.
-                const parsed = dayjs(value);
-
-                if (parsed.isValid()) {
-                  return parsed.format('YYYY-MM-DD');
-                }
-
-                return new Date('');
-              },
-            ],
-            ['yup.typeError', field.name + ' must be a valid date.'],
-          ];
-        }
-
-        return [['yup.date'], ['yup.nullable', true]];
-      case DenimColumnType.Select:
-        return [
-          ['yup.string'],
-          ['yup.nullable', true],
-          [
-            'yup.oneOf',
-            [null].concat(
-              field.properties.options.map(({ value }) => value) as any,
-            ),
-          ],
-        ];
-      case DenimColumnType.MultiSelect:
-        return [
-          [
-            'yup.array',
-            [
-              ['yup.string'],
-              ['yup.oneOf', field.properties.options.map(({ value }) => value)],
-            ],
-          ],
-          ['yup.nullable', true],
-        ];
-      case DenimColumnType.Number:
-        return [
-          ['yup.number'],
-          [
-            'yup.transform',
-            function (this: any, value: any, originalValue: any) {
-              if (isNaN(value) && typeof originalValue === 'string') {
-                return +originalValue.replace(/,/g, '');
+          return Yup.string()
+            .nullable(true)
+            .transform(function (this: any, value: any) {
+              if (!value) {
+                return null;
               }
 
-              return value;
-            },
-          ],
-          ['yup.nullable', true],
-        ];
+              // First validate that this is a date.
+              const parsed = dayjs(value);
+
+              if (parsed.isValid()) {
+                return parsed.format('YYYY-MM-DD');
+              }
+
+              return new Date('');
+            })
+            .typeError(field.label + ' must be a valid date.');
+        }
+
+        return Yup.date().nullable(true);
+      case DenimColumnType.Select:
+        return Yup.string()
+          .oneOf(
+            [''].concat(
+              field.properties.options.map(({ value }) => value) as string[]
+            )
+          )
+          .nullable(true);
+      case DenimColumnType.MultiSelect:
+        return Yup.array(
+          Yup.string().oneOf(field.properties.options.map(({ value }) => value))
+        ).nullable(true);
+      case DenimColumnType.Number:
+        return Yup.number()
+          .transform(function (this: any, value: any, originalValue: any) {
+            if (isNaN(value) && typeof originalValue === 'string') {
+              return +originalValue.replace(/,/g, '');
+            }
+
+            return value;
+          })
+          .nullable(true);
       case DenimColumnType.Text:
-        return [['yup.string'], ['yup.nullable', true]];
+        return Yup.string().nullable(true);
       case DenimColumnType.ReadOnly:
-        return [['yup.mixed'], ['yup.nullable', true]];
+        return Yup.mixed().nullable();
     }
   }
 
   async createValidator(
     tableName: string,
-    columns: DenimColumn[],
-  ): Promise<YupAst> {
-    const shape: { [key: string]: YupAst } = {};
+    columns: DenimColumn[]
+  ): Promise<BaseSchema<any>> {
+    const shape: { [key: string]: BaseSchema<any> } = {};
 
     for (let i = 0; i < columns.length; i++) {
       const column = columns[i];
@@ -691,30 +662,30 @@ export default abstract class DenimDataSourceV2 {
         tableName,
         columns,
         column,
-        this.createFieldValidator(column),
+        this.createFieldValidator(column)
       );
 
-      shape[column.name] = validation;
+      shape[column.name] = validation.label(column.label);
     }
 
     const [, newShape] = await this.executeHooks(
       'table-validation',
       tableName,
       columns,
-      shape,
+      shape
     );
 
-    return [['yup.object'], ['yup.shape', newShape]];
+    return Yup.object().shape(newShape);
   }
 
   public async executeWorkflow(
     workflowName: string,
     input: DenimRecord,
-    context: DenimWorkflowContext,
+    context: DenimWorkflowContext
   ) {
     // Find the workflow in the schema.
     const workflow = this.schema.workflows?.find(
-      ({ name }) => name === workflowName,
+      ({ name }) => name === workflowName
     );
 
     if (!workflow) {
@@ -725,13 +696,14 @@ export default abstract class DenimDataSourceV2 {
 
     if (!workflowFunction || typeof workflowFunction !== 'function') {
       throw new Error(
-        'Workflow function ' + workflow.name + ' not implemented.',
+        'Workflow function ' + workflow.name + ' not implemented.'
       );
     }
 
     // Create a validator.
-    const validator = transformAll(
-      await this.createValidator('workflow/' + workflow.name, workflow.inputs),
+    const validator = await this.createValidator(
+      'workflow/' + workflow.name,
+      workflow.inputs
     );
 
     const validatedInput = await validator.validate(input);
