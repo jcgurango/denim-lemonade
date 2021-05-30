@@ -29,6 +29,44 @@ const booleanField = (name: string, label: string = ''): DenimColumn => {
   };
 };
 
+const readToWriteMap: {
+  [key: string]: string;
+} = {
+  EmployeeId: 'employee_id',
+  Lastname: 'last_name',
+  Firstname: 'first_name',
+  Middlename: 'middle_name',
+  Birthdate: 'birthdate',
+  Pagibig: 'pagibig',
+  PhilHealth: 'phil_health',
+  SSS: 'sss',
+  TaxId: 'tax_id',
+  Company: 'company',
+  Location: 'location',
+  Wage: 'wage',
+  EmploymentStatus: 'employment_status',
+  JobsStatus: 'job_status',
+  DaysPerYear: 'days_per_year',
+  Paybasis: 'pay_basis',
+  MonthlyRate: 'monthly_rate',
+  BasicRate: 'basic_rate',
+  Ecola: 'ecola',
+  BasicAdjustment: 'basic_adjustment',
+  Grouping: 'grouping',
+  PaymentMethod: 'payment_method',
+  BankAccount: 'bank_account',
+  DateHired: 'date_hired',
+  StartDate: 'start_date',
+  RegularizationDate: 'regularization_date',
+  ResignationDate: 'resignation_date',
+  MobileNo: 'mobile_no',
+  TelephoneNo: 'telephone_no',
+  Email: 'email',
+  Nationality: 'nationality',
+  Sex: 'sex',
+  CivilStatus: 'civil_status',
+};
+
 export default class PaydayDataSource extends DenimDataSourceV2 {
   public baseUrl: string;
   public credentials: PaydayCredentials;
@@ -41,15 +79,91 @@ export default class PaydayDataSource extends DenimDataSourceV2 {
     this.schema = {
       tables: [
         {
-          id: 'groupings',
-          name: 'groupings',
+          id: 'pdy-locations',
+          name: 'pdy-locations',
+          nameField: 'Name',
+          label: 'Locations',
+          columns: [
+            textField('Code'),
+            textField('CompanyId'),
+            textField('Name'),
+          ],
+        },
+        {
+          id: 'pdy-wages',
+          name: 'pdy-wages',
+          nameField: 'Description',
+          label: 'Wages',
+          columns: [
+            textField('Code'),
+            textField('Description'),
+            {
+              name: 'Amount',
+              label: 'Amount',
+              type: DenimColumnType.Number,
+              properties: undefined,
+            },
+          ],
+        },
+        {
+          id: 'pdy-groupings',
+          name: 'pdy-groupings',
           nameField: 'Description',
           label: 'Groupings',
           columns: [textField('Code'), textField('Description')],
         },
         {
-          id: 'companies',
-          name: 'companies',
+          id: 'pdy-employment/status',
+          name: 'pdy-employment-status',
+          nameField: 'Status',
+          label: 'Employment Status',
+          columns: [textField('Status')],
+        },
+        {
+          id: 'pdy-jobs/status',
+          name: 'pdy-job-status',
+          nameField: 'Status',
+          label: 'Job Status',
+          columns: [textField('Status')],
+        },
+        {
+          id: 'pdy-days/per/year',
+          name: 'pdy-days-per-year',
+          nameField: 'Days',
+          label: 'Days Per Year',
+          columns: [textField('Days')],
+        },
+        {
+          id: 'pdy-pay/basis',
+          name: 'pdy-pay-basis',
+          nameField: 'Basis',
+          label: 'Pay Basis',
+          columns: [textField('Basis')],
+        },
+        {
+          id: 'pdy-payment/methods',
+          name: 'pdy-payment-methods',
+          nameField: 'Method',
+          label: 'Payment Methods',
+          columns: [textField('Method')],
+        },
+        {
+          id: 'pdy-nationalities',
+          name: 'pdy-nationalities',
+          nameField: 'Name',
+          label: 'Nationalities',
+          columns: [textField('Name')],
+        },
+        {
+          id: 'pdy-locations',
+          name: 'pdy-locations',
+          nameField: 'Description',
+          label: 'Groupings',
+          columns: [textField('Code'), textField('Description')],
+        },
+        {
+          id: 'pdy-companies',
+          name: 'pdy-companies',
           nameField: 'Name',
           label: 'Companies',
           columns: [
@@ -69,8 +183,8 @@ export default class PaydayDataSource extends DenimDataSourceV2 {
           ],
         },
         {
-          id: 'payroll/periods',
-          name: 'payroll-periods',
+          id: 'pdy-payroll/periods',
+          name: 'pdy-payroll-periods',
           nameField: 'Desc',
           label: 'Payroll Periods',
           columns: [
@@ -104,7 +218,7 @@ export default class PaydayDataSource extends DenimDataSourceV2 {
               label: 'Company',
               type: DenimColumnType.ForeignKey,
               properties: {
-                foreignTableId: 'companies',
+                foreignTableId: 'pdy-companies',
                 multiple: false,
               },
             },
@@ -113,13 +227,13 @@ export default class PaydayDataSource extends DenimDataSourceV2 {
               label: 'Grouping',
               type: DenimColumnType.ForeignKey,
               properties: {
-                foreignTableId: 'groupings',
+                foreignTableId: 'pdy-groupings',
                 multiple: false,
               },
             },
             {
               name: 'PayrollCount',
-              label: 'PayrollCount',
+              label: 'Payroll Count',
               type: DenimColumnType.Number,
               properties: undefined,
             },
@@ -143,6 +257,172 @@ export default class PaydayDataSource extends DenimDataSourceV2 {
             booleanField('Active'),
             booleanField('LastStatutory', 'Last Statutory'),
             booleanField('PCost', 'P Cost'),
+          ],
+        },
+        {
+          id: 'pdy-employees',
+          name: 'pdy-employees',
+          nameField: 'EmployeeId',
+          label: 'PayDay Employeees',
+          columns: [
+            textField('EmployeeId', 'Employee ID'),
+            textField('Lastname', 'Last Name'),
+            textField('Firstname', 'First Name'),
+            textField('Middlename', 'Middle Name'),
+            {
+              name: 'Birthdate',
+              label: 'Birth Date',
+              type: DenimColumnType.DateTime,
+              properties: {},
+            },
+            textField('Pagibig'),
+            textField('PhilHealth'),
+            textField('SSS', 'SSS'),
+            textField('TaxId', 'Tax ID'),
+            {
+              name: 'Company',
+              label: 'Company',
+              type: DenimColumnType.ForeignKey,
+              properties: {
+                foreignTableId: 'pdy-companies',
+                multiple: false,
+              },
+            },
+            {
+              name: 'Location',
+              label: 'Location',
+              type: DenimColumnType.ForeignKey,
+              properties: {
+                foreignTableId: 'pdy-locations',
+                multiple: false,
+              },
+            },
+            {
+              name: 'Wage',
+              label: 'Wage',
+              type: DenimColumnType.ForeignKey,
+              properties: {
+                foreignTableId: 'pdy-wages',
+                multiple: false,
+              },
+            },
+            {
+              name: 'EmploymentStatus',
+              label: 'Employment Status',
+              type: DenimColumnType.ForeignKey,
+              properties: {
+                foreignTableId: 'pdy-employment/status',
+                multiple: false,
+              },
+            },
+            {
+              name: 'JobsStatus',
+              label: 'Job Status',
+              type: DenimColumnType.ForeignKey,
+              properties: {
+                foreignTableId: 'pdy-jobs/status',
+                multiple: false,
+              },
+            },
+            {
+              name: 'DaysPerYear',
+              label: 'Days Per Year',
+              type: DenimColumnType.ForeignKey,
+              properties: {
+                foreignTableId: 'pdy-days/per/year',
+                multiple: false,
+              },
+            },
+            {
+              name: 'Paybasis',
+              label: 'Pay Basis',
+              type: DenimColumnType.ForeignKey,
+              properties: {
+                foreignTableId: 'pdy-pay/basis',
+                multiple: false,
+              },
+            },
+            {
+              name: 'MonthlyRate',
+              label: 'Monthly Rate',
+              type: DenimColumnType.Number,
+              properties: undefined,
+            },
+            {
+              name: 'BasicRate',
+              label: 'Basic Rate',
+              type: DenimColumnType.Number,
+              properties: undefined,
+            },
+            {
+              name: 'Ecola',
+              label: 'Ecola',
+              type: DenimColumnType.Number,
+              properties: undefined,
+            },
+            {
+              name: 'BasicAdjustment',
+              label: 'Basic Adjustment',
+              type: DenimColumnType.Number,
+              properties: undefined,
+            },
+            {
+              name: 'Grouping',
+              label: 'Grouping',
+              type: DenimColumnType.ForeignKey,
+              properties: {
+                foreignTableId: 'pdy-groupings',
+                multiple: false,
+              },
+            },
+            {
+              name: 'PaymentMethod',
+              label: 'Payment Method',
+              type: DenimColumnType.ForeignKey,
+              properties: {
+                foreignTableId: 'pdy-payment/methods',
+                multiple: false,
+              },
+            },
+            textField('BankAccount', 'Bank Account'),
+            {
+              name: 'DateHired',
+              label: 'Date Hired',
+              type: DenimColumnType.DateTime,
+              properties: {},
+            },
+            {
+              name: 'StartDate',
+              label: 'Start Date',
+              type: DenimColumnType.DateTime,
+              properties: {},
+            },
+            {
+              name: 'RegularizationDate',
+              label: 'Regularization Date',
+              type: DenimColumnType.DateTime,
+              properties: {},
+            },
+            {
+              name: 'ResignationDate',
+              label: 'Resignation Date',
+              type: DenimColumnType.DateTime,
+              properties: {},
+            },
+            textField('MobileNo', 'Mobile Number'),
+            textField('TelephoneNo', 'Telephone Number'),
+            textField('Email'),
+            {
+              name: 'Nationality',
+              label: 'Nationality',
+              type: DenimColumnType.ForeignKey,
+              properties: {
+                foreignTableId: 'pdy-nationalities',
+                multiple: false,
+              },
+            },
+            textField('Sex'),
+            textField('CivilStatus', 'Civil Status'),
           ],
         },
       ],
@@ -194,11 +474,11 @@ export default class PaydayDataSource extends DenimDataSourceV2 {
         } else {
           const transformed = this.transformRecord(otherTableSchema, value);
 
-          rest[key] = {
+          rest[key] = value ? {
             type: 'record',
             name: transformed ? transformed[otherTableSchema.nameField] : '',
             record: transformed,
-          };
+          } : value;
         }
       }
     });
@@ -228,7 +508,7 @@ export default class PaydayDataSource extends DenimDataSourceV2 {
     const tableSchema = this.getTable(table);
     const headers = await this.getHeaders();
     const data = await bent(this.baseUrl, 'json', 'GET')(
-      `/${tableSchema.id}/${id}`,
+      `/${tableSchema.id.substring(4)}/${id}`,
       undefined,
       headers
     );
@@ -243,7 +523,7 @@ export default class PaydayDataSource extends DenimDataSourceV2 {
     const tableSchema = this.getTable(table);
     const headers = await this.getHeaders();
     const data: any[] = await bent(this.baseUrl, 'json', 'GET')(
-      `/${tableSchema.id}`,
+      `/${tableSchema.id.substring(4)}`,
       undefined,
       headers
     );
@@ -277,7 +557,28 @@ export default class PaydayDataSource extends DenimDataSourceV2 {
     return filteredRecords;
   }
 
-  protected save(table: string, record: DenimRecord): Promise<DenimRecord> {
+  public async createEmployee(data: any) {
+    try {
+      const headers = await this.getHeaders();
+      await bent(this.baseUrl, 'PUT')(`/employees`, data, headers);
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  public async updateEmployee(id: string, data: any) {
+    try {
+      const headers = await this.getHeaders();
+      await bent(this.baseUrl, 'PUT')(`/employees/${id}`, data, headers);
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  protected async save(
+    table: string,
+    record: DenimRecord
+  ): Promise<DenimRecord> {
     throw new Error('Method not implemented.');
   }
 

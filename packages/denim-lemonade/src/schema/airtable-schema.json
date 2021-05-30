@@ -934,10 +934,10 @@
 				"name": "Wage Zone",
 				"type": "foreignKey",
 				"typeOptions": {
-					"relationship": "many",
-					"unreversed": true,
+					"relationship": "one",
 					"foreignTableId": "tbllVaXsNUWsDzpfh",
-					"symmetricColumnId": "fldhgL7wYlccdMy9v"
+					"symmetricColumnId": "fldhgL7wYlccdMy9v",
+					"unreversed": true
 				}
 			},
 			{
@@ -1006,6 +1006,17 @@
 				"name": "Bank",
 				"type": "text",
 				"typeOptions": null
+			},
+			{
+				"id": "fldQUVKbOsFeqVrZ8",
+				"name": "Payslip",
+				"type": "foreignKey",
+				"typeOptions": {
+					"foreignTableId": "tblF6cqzbCg0fm4t4",
+					"symmetricColumnId": "fldnzKnAehiIwoMiB",
+					"relationship": "many",
+					"unreversed": true
+				}
 			}
 		]
 	},
@@ -5497,6 +5508,407 @@
 					"symmetricColumnId": "fldPyOfLFML7Vvjgv",
 					"relationship": "many",
 					"unreversed": true
+				}
+			}
+		]
+	},
+	{
+		"id": "tblF6cqzbCg0fm4t4",
+		"name": "Payslip",
+		"columns": [
+			{
+				"id": "fld8AqdwiV0Oe4WKK",
+				"name": "Employee Id",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldMVOBBmTvBKUEp1",
+				"name": "Name",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldETa1B83oLkg8Vr",
+				"name": "Location",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldfxI6YDV770AMKF",
+				"name": "Department",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldd576N5TWYSIObg",
+				"name": "DateHired",
+				"type": "date",
+				"typeOptions": {
+					"isDateTime": false,
+					"dateFormat": "Local"
+				}
+			},
+			{
+				"id": "fldtLoIdSWLQvMU0g",
+				"name": "Monthly Rate",
+				"type": "number",
+				"typeOptions": {
+					"format": "currency",
+					"precision": 2,
+					"symbol": "$",
+					"negative": false,
+					"validatorName": "positive"
+				}
+			},
+			{
+				"id": "fldpzelhxhGE1d7Wn",
+				"name": "Basic Rate",
+				"type": "number",
+				"typeOptions": {
+					"format": "currency",
+					"precision": 2,
+					"symbol": "$",
+					"negative": false,
+					"validatorName": "positive"
+				}
+			},
+			{
+				"id": "fld861UraFRLU5WQF",
+				"name": "Position",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fld7qU9Af55S0GKOi",
+				"name": "YTDTaxInc",
+				"type": "number",
+				"typeOptions": {
+					"format": "currency",
+					"precision": 2,
+					"symbol": "$",
+					"negative": false,
+					"validatorName": "positive"
+				}
+			},
+			{
+				"id": "fldXCuOVK8PUJEmaG",
+				"name": "YTDWTax",
+				"type": "number",
+				"typeOptions": {
+					"format": "currency",
+					"precision": 2,
+					"symbol": "$",
+					"negative": false,
+					"validatorName": "positive"
+				}
+			},
+			{
+				"id": "fldyLa36yIKVYNpJk",
+				"name": "Gross",
+				"type": "number",
+				"typeOptions": {
+					"format": "currency",
+					"precision": 2,
+					"symbol": "$",
+					"negative": false,
+					"validatorName": "positive"
+				}
+			},
+			{
+				"id": "fldcu6v5aIVFsfnFq",
+				"name": "Total Deduction",
+				"type": "number",
+				"typeOptions": {
+					"format": "currency",
+					"precision": 2,
+					"symbol": "$",
+					"negative": false,
+					"validatorName": "positive"
+				}
+			},
+			{
+				"id": "flds5feJDB9A8KGKJ",
+				"name": "Net",
+				"type": "number",
+				"typeOptions": {
+					"format": "currency",
+					"precision": 2,
+					"symbol": "$",
+					"negative": false,
+					"validatorName": "positive"
+				}
+			},
+			{
+				"id": "fldbuYQlS9aIveVd6",
+				"name": "Income Name 1",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldhxYMLTyERYU7Ft",
+				"name": "Income Amount 1",
+				"type": "number",
+				"typeOptions": {
+					"format": "currency",
+					"precision": 2,
+					"symbol": "$",
+					"negative": false,
+					"validatorName": "positive"
+				}
+			},
+			{
+				"id": "fldpWe2aUVK2MYcV3",
+				"name": "Income Name 2",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldQAK3UxuYShUjRb",
+				"name": "Income Amount 2",
+				"type": "number",
+				"typeOptions": {
+					"format": "currency",
+					"precision": 2,
+					"symbol": "$",
+					"negative": false,
+					"validatorName": "positive"
+				}
+			},
+			{
+				"id": "fldslfGrg0fWWxhAt",
+				"name": "Income Name 5",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldN4MwzexRqBEGGt",
+				"name": "Income Name 4",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fld7qfcWCmt6eeibH",
+				"name": "Income Name 3",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fld59vHWSyoGVQiZz",
+				"name": "Income Amount 3",
+				"type": "number",
+				"typeOptions": {
+					"format": "currency",
+					"precision": 2,
+					"symbol": "$",
+					"negative": false,
+					"validatorName": "positive"
+				}
+			},
+			{
+				"id": "fld4iYCY2cyL9OgCs",
+				"name": "Income Amount 4",
+				"type": "number",
+				"typeOptions": {
+					"format": "currency",
+					"precision": 2,
+					"symbol": "$",
+					"negative": false,
+					"validatorName": "positive"
+				}
+			},
+			{
+				"id": "flddL4i7t62xcwtIR",
+				"name": "Income Amount 5",
+				"type": "number",
+				"typeOptions": {
+					"format": "currency",
+					"precision": 2,
+					"symbol": "$",
+					"negative": false,
+					"validatorName": "positive"
+				}
+			},
+			{
+				"id": "fldsJV9aA2pboovZY",
+				"name": "Income Name 6",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldPhVkaEiBaP5jag",
+				"name": "Income Amount 6",
+				"type": "number",
+				"typeOptions": {
+					"format": "currency",
+					"precision": 2,
+					"symbol": "$",
+					"negative": false,
+					"validatorName": "positive"
+				}
+			},
+			{
+				"id": "fldqQjiE95vkezjs1",
+				"name": "Deduction Name 1",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldR3ZRWU2SpuEMFn",
+				"name": "Deduction Name 6",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldwXUMqx9aGi4Zzp",
+				"name": "Deduction Name 5",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldNkGlODi7b3UEHx",
+				"name": "Deduction Name 4",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldrEafYrmSZ0cGyP",
+				"name": "Deduction Name 3",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldrnqmOMhctfXzTb",
+				"name": "Deduction Name 2",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldMEZwX8QCMuPewa",
+				"name": "Deduction Amount 1",
+				"type": "number",
+				"typeOptions": {
+					"format": "currency",
+					"precision": 2,
+					"symbol": "$",
+					"negative": false,
+					"validatorName": "positive"
+				}
+			},
+			{
+				"id": "fldW4OZrOnUoguwlI",
+				"name": "Deduction Amount 2",
+				"type": "number",
+				"typeOptions": {
+					"format": "currency",
+					"precision": 2,
+					"symbol": "$",
+					"negative": false,
+					"validatorName": "positive"
+				}
+			},
+			{
+				"id": "fldgXQaCWMX70suhQ",
+				"name": "Deduction Amount 3",
+				"type": "number",
+				"typeOptions": {
+					"format": "currency",
+					"precision": 2,
+					"symbol": "$",
+					"negative": false,
+					"validatorName": "positive"
+				}
+			},
+			{
+				"id": "fldknOCErAPLvmtvD",
+				"name": "Deduction Amount 4",
+				"type": "number",
+				"typeOptions": {
+					"format": "currency",
+					"precision": 2,
+					"symbol": "$",
+					"negative": false,
+					"validatorName": "positive"
+				}
+			},
+			{
+				"id": "fldF5da35iJfeCNJ1",
+				"name": "Deduction Amount 5",
+				"type": "number",
+				"typeOptions": {
+					"format": "currency",
+					"precision": 2,
+					"symbol": "$",
+					"negative": false,
+					"validatorName": "positive"
+				}
+			},
+			{
+				"id": "fldI2KP1Gq3g7wXxf",
+				"name": "Deduction Amount 6",
+				"type": "number",
+				"typeOptions": {
+					"format": "currency",
+					"precision": 2,
+					"symbol": "$",
+					"negative": false,
+					"validatorName": "positive"
+				}
+			},
+			{
+				"id": "fldpGCJmxjPrCH8wh",
+				"name": "PayrollPeriod",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldMgN5I17ZKFna5G",
+				"name": "Total Income",
+				"type": "formula",
+				"typeOptions": {
+					"format": "currency",
+					"precision": 2,
+					"symbol": "$",
+					"formulaTextParsed": "{column_value_fldhxYMLTyERYU7Ft}+{column_value_fldQAK3UxuYShUjRb}+{column_value_fld59vHWSyoGVQiZz}+{column_value_fld4iYCY2cyL9OgCs}+{column_value_flddL4i7t62xcwtIR}+{column_value_fldPhVkaEiBaP5jag}",
+					"dependencies": {
+						"referencedColumnIdsForValue": [
+							"fldhxYMLTyERYU7Ft",
+							"fldQAK3UxuYShUjRb",
+							"fld59vHWSyoGVQiZz",
+							"fld4iYCY2cyL9OgCs",
+							"flddL4i7t62xcwtIR",
+							"fldPhVkaEiBaP5jag"
+						]
+					},
+					"resultType": "number"
+				}
+			},
+			{
+				"id": "fldnzKnAehiIwoMiB",
+				"name": "Employee",
+				"type": "foreignKey",
+				"typeOptions": {
+					"foreignTableId": "tblwceR29WfuANzls",
+					"relationship": "one",
+					"unreversed": true,
+					"symmetricColumnId": "fldQUVKbOsFeqVrZ8"
+				}
+			},
+			{
+				"id": "fldtOsfIHCYyIrrI9",
+				"name": "Email (from Employee)",
+				"type": "lookup",
+				"typeOptions": {
+					"relationColumnId": "fldnzKnAehiIwoMiB",
+					"foreignTableRollupColumnId": "fldpRMSNGO24MokMF",
+					"canUseSelectResultType": true,
+					"dependencies": {
+						"referencedColumnIdsForValue": [
+							"fldnzKnAehiIwoMiB",
+							"fldpRMSNGO24MokMF"
+						]
+					},
+					"resultType": "text"
 				}
 			}
 		]

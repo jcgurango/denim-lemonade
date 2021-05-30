@@ -53,7 +53,7 @@ const TimekeepingPortal: FunctionComponent<{}> = () => {
             label: 'Payroll Period',
             type: DenimFormControlType.DropDown,
             controlProps: {
-              relationship: 'payroll-periods',
+              relationship: 'pdy-payroll-periods',
             },
           }}
           value={payrollPeriod}
