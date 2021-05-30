@@ -88,19 +88,20 @@ export type DenimDataSourceHookV2 =
     >
   | DenimHookV2<
       'pre-update-validate',
-      (table: string, record: DenimRecord) => Promise<[DenimRecord]>
+      (table: string, record: DenimRecord, oldRecord: DenimRecord) => Promise<[DenimRecord, DenimRecord]>
     >
   | DenimHookV2<
       'post-update-validate',
-      (table: string, record: DenimRecord) => Promise<[DenimRecord]>
+      (table: string, record: DenimRecord, oldRecord: DenimRecord) => Promise<[DenimRecord, DenimRecord]>
     >
   | DenimHookV2<
       'post-update',
       (
         table: string,
         id: string,
-        record: DenimRecord
-      ) => Promise<[string, DenimRecord]>
+        record: DenimRecord,
+        oldRecord: DenimRecord,
+      ) => Promise<[string, DenimRecord, DenimRecord]>
     >
   | DenimHookV2<'pre-delete', (table: string, id: string) => Promise<[string]>>
   | DenimHookV2<'post-delete', (table: string, id: string) => Promise<[string]>>

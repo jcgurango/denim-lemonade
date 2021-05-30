@@ -462,7 +462,8 @@ export default abstract class DenimDataSourceV2 {
     const [hookedRecordPreValidate] = await this.executeHooks(
       'pre-update-validate',
       table,
-      fullRecord
+      fullRecord,
+      existingRecord || { },
     );
 
     // Validate the updated record.
@@ -474,7 +475,8 @@ export default abstract class DenimDataSourceV2 {
     const [hookedRecordPostValidate] = await this.executeHooks(
       'post-update-validate',
       table,
-      validRecord
+      validRecord,
+      existingRecord || { },
     );
 
     // Update any values that are different from their initial values.
@@ -539,7 +541,8 @@ export default abstract class DenimDataSourceV2 {
       'post-update',
       table,
       updatedRecord.id,
-      updatedRecord
+      updatedRecord,
+      existingRecord || { },
     );
 
     // Return the updated record.
