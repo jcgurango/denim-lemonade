@@ -121,7 +121,7 @@ export default class PaydayDataSource extends DenimDataSourceV2 {
         },
         {
           id: 'pdy-jobs/status',
-          name: 'pdy-job-status',
+          name: 'pdy-jobs-status',
           nameField: 'Status',
           label: 'Job Status',
           columns: [textField('Status')],

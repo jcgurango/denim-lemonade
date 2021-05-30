@@ -53,153 +53,6 @@ const LemonadeDataSource = new DenimCombinedDataSourceV2(
 
 LemonadeValidations(LemonadeDataSource);
 
-/*
-{
-  id: 'recRcikjjU1emtvAo',
-  'Last Name': 'Gurango',
-  'First Name': 'JC',
-  'Middle Name': 'M',
-  'Leave Balance': 'c6565159',
-  Title: 'Mr.',
-  Gender: 'Male',
-  'Date of Birth': '2020-04-04',
-  Nationality: {
-    type: 'record',
-    id: 'recqYp2eJbHCeYRAf',
-    name: 'Filipino',
-    record: {
-      id: 'recqYp2eJbHCeYRAf',
-      Name: 'Filipino',
-      'PDY ID': 1,
-      Employee: [Object]
-    }
-  },
-  Citizenship: 'American',
-  'Employee ID': 'FT-1916',
-  City: 'Quezon City',
-  Country: 'US',
-  'Marital Status': 'Married',
-  'Entry Date': '2021-04-13',
-  'Phone Number Visibility': true,
-  'Account Status': {
-    type: 'record',
-    id: 'recaWk5zEvcZFPZjA',
-    name: 'Active',
-    record: {
-      id: 'recaWk5zEvcZFPZjA',
-      Name: 'Active',
-      Employee: [Object],
-      'PDY ID': 1
-    }
-  },
-  Email: 'dummy@jcgurango.com',
-  Nickname: 'JC Gurango',
-  'PDY ID': 10429,
-  'Basic Pay': 200000,
-  'Employee Allowance': {
-    type: 'record-collection',
-    records: [ [Object], [Object], [Object] ]
-  },
-  'Leave Scheme': { type: 'record', id: 'rec7y4loJ5hslLWPd', name: '' },
-  'Daily Work Hours': 8,
-  'Job Title': { type: 'record-collection', records: [ [Object] ] },
-  'Lark ID': 'ou_06d5492523bb9b219103e00d5d22cbc7',
-  Department: { type: 'record', id: 'recaYSYOokpp177KM', name: '' },
-  'Is HR Admin': true,
-  'Is HR User': true,
-  Attendance: { type: 'record-collection', records: [ [Object] ] },
-  'E-Cola': 0,
-  'Payment Method': {
-    type: 'record',
-    id: 'reckfc9zcAqvhAn4W',
-    name: 'Bank',
-    record: {
-      id: 'reckfc9zcAqvhAn4W',
-      Name: 'Bank',
-      Employee: [Object],
-      'PDY ID': 1
-    }
-  },
-  'Days of Work Per Year': {
-    type: 'record',
-    id: 'recn6Fch3ttWepegK',
-    name: '261',
-    record: {
-      id: 'recn6Fch3ttWepegK',
-      Name: '261',
-      Employee: [Object],
-      'PDY ID': 2
-    }
-  },
-  'Payroll Grouping': {
-    type: 'record',
-    id: 'recr7IcMkbzEZYfEz',
-    name: 'Default',
-    record: {
-      id: 'recr7IcMkbzEZYfEz',
-      Name: 'Default',
-      Employee: [Object],
-      'PDY ID': 2
-    }
-  },
-  Workplace: { type: 'record', id: 'rece1Ho3R05DPGart', name: '' },
-  'Employment Status': {
-    type: 'record',
-    id: 'recsdbTIduecYm7GF',
-    name: 'Regular',
-    record: {
-      id: 'recsdbTIduecYm7GF',
-      Name: 'Regular',
-      Employee: [Object],
-      'PDY ID': 2
-    }
-  },
-  'Wage Zone': {
-    type: 'record',
-    id: 'recnjovqVN5FAaThi',
-    name: 'NCR',
-    record: {
-      id: 'recnjovqVN5FAaThi',
-      REGION: 'NCR',
-      Employee: [Object],
-      'Minimum Wage': 537,
-      'PDY ID': 2,
-      Description: 'National Capital Region'
-    }
-  },
-  Company: {
-    type: 'record',
-    id: 'rec5QOhfo69dQMPGx',
-    name: 'STC',
-    record: {
-      id: 'rec5QOhfo69dQMPGx',
-      CODE: 'STC',
-      Workplaces: [Object],
-      'Fax Number': '(02)-1234-1234',
-      'PDY ID': 2,
-      'Mobile Number': '+639123456789',
-      'Company Name': 'Servio Technologies',
-      Employee: [Object]
-    }
-  },
-  'Full Name': 'Gurango, JC M',
-  'User ID': 'FT-1916 - Gurango, JC M',
-  'Created By': {
-    id: 'usrTa9JILlFixnXoM',
-    email: '63.000@joeygurango.com',
-    name: 'Jerome Dominic Junio'
-  },
-  'Date Created': '2020-10-27T22:37:35.000Z',
-  'Last Modified By': {
-    id: 'usrkDpK8KPgVppPlo',
-    email: '5.000@joeygurango.com',
-    name: 'JC Gurango'
-  },
-  'Last Modified': '2021-05-07T07:06:13.000Z',
-  Calculation: 'recRcikjjU1emtvAo'
-}
-*/
-
 const readPaydayId = (value: DenimRelatedRecord): number | null => {
   return (value && value.record && Number(value.record['PDY ID'])) || null;
 };
@@ -474,5 +327,112 @@ LemonadeDataSource.schema.workflows = [
 };
 
 larkAdmin.init();
+
+(async () => {
+  console.log('Syncing master records from PayDay...');
+
+  const sync = async (paydayTable: string, lemonadeTable: string, fieldMap: { [key: string]: string; }) => {
+    console.log(`Syncing ${paydayTable} => ${lemonadeTable}...`);
+
+    const paydayRecords = await LemonadeDataSource.retrieveRecords(paydayTable);
+  
+    for (let i = 0; i < paydayRecords.length; i++) {
+      const record = paydayRecords[i];
+      const updateRecord: DenimRecord = {
+        'PDY ID': record.id,
+      };
+  
+      Object.keys(fieldMap).forEach((key) => {
+        updateRecord[fieldMap[key]] = record[key];
+      });
+  
+      // Look for an existing record.
+      const [existingRecord] = await LemonadeDataSource.retrieveRecords(lemonadeTable, {
+        conditions: {
+          conditionType: 'single',
+          field: 'PDY ID',
+          operator: DenimQueryOperator.Equals,
+          value: record.id,
+        },
+      });
+
+      if (record.CompanyId) {
+        const [companyRecord] = await LemonadeDataSource.retrieveRecords('Companies', {
+          conditions: {
+            conditionType: 'single',
+            field: 'PDY ID',
+            operator: DenimQueryOperator.Equals,
+            value: record.CompanyId,
+          },
+        });
+
+        if (companyRecord) {
+          updateRecord.Company = {
+            type: 'record',
+            id: companyRecord.id || '',
+          };
+        }
+      }
+
+      if (existingRecord) {
+        await LemonadeDataSource.updateRecord(lemonadeTable, existingRecord.id || '', updateRecord);
+      } else {
+        await LemonadeDataSource.createRecord(lemonadeTable, updateRecord);
+      }
+    }
+  }
+
+  await sync('pdy-wages', 'Wage Zones', {
+    Code: 'REGION',
+    Description: 'Description',
+    Amount: 'Minimum Wage',
+  });
+
+  await sync('pdy-jobs-status', 'Account Statuses', {
+    Status: 'Name',
+  });
+
+  await sync('pdy-groupings', 'Payroll Groupings', {
+    Code: 'Name',
+    Description: 'Description',
+  });
+
+  await sync('pdy-companies', 'Companies', {
+    Code: 'CODE',
+    Name: 'Company Name',
+    Address: 'Address',
+    ZipCode: 'ZIP Code',
+    ContactPerson: 'Contact Person',
+    Position: 'Contact Position',
+    FaxNo: 'Fax Number',
+    MobileNo: 'Mobile Number',
+    TelephoneNo: 'Telephone Number',
+    Pagibig: 'PAGIBIG ID',
+    PhilHealth: 'PHILHEALTH ID',
+    SSS: 'SSS ID',
+    TaxId: 'TIN NUMBER',
+  });
+
+  await sync('pdy-nationalities', 'Nationalities', {
+    Name: 'Name',
+  });
+
+  await sync('pdy-days-per-year', 'Days of Work Per Year', {
+    Name: 'Days',
+  });
+
+  await sync('pdy-employment-status', 'Employment Statuses', {
+    Status: 'Name',
+  });
+
+  await sync('pdy-pay-basis', 'Pay Basis', {
+    Basis: 'Name',
+  });
+
+  await sync('pdy-locations', 'Workplaces', {
+    Code: 'Code',
+    Name: 'Workplace',
+  });
+})();
 
 export default LemonadeDataSource;
