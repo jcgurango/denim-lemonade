@@ -14,6 +14,7 @@ export { default as DenimTextInput } from './controls/DenimTextInput';
 export { default as DenimDropDown } from './controls/DenimDropDown';
 export { default as DenimMultiDropDown } from './controls/DenimMultiDropDown';
 export { default as DenimFilterControl } from './controls/DenimFilterControl';
+export { default as DenimTag } from './controls/DenimTag';
 export * from './controls/DenimFilterControl';
 
 export { default as DenimFormProvider } from './providers/DenimFormProvider';

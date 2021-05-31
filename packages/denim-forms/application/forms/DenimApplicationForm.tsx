@@ -33,10 +33,10 @@ const DenimApplicationForm: FunctionComponent<DenimApplicationFormProps> = ({
     return application.dataSource?.getTable(table);
   }, [application.dataSource, table]);
   const [currentRecord, setCurrentRecord] = useState<DenimRecord | undefined>(
-    record ? undefined : prefill,
+    record ? undefined : prefill
   );
   const [updateData, setUpdateData] = useState<DenimRecord | undefined>(
-    currentRecord === prefill ? prefill : {},
+    currentRecord === prefill ? prefill : {}
   );
   const [formValid, setFormValid] = useState(false);
   const [errors, setErrors] = useState<Yup.ValidationError[]>([]);
@@ -56,7 +56,7 @@ const DenimApplicationForm: FunctionComponent<DenimApplicationFormProps> = ({
         if (typeof record === 'string') {
           const foundRecord = await application.dataSource?.retrieveRecord(
             table,
-            record,
+            record
           );
 
           if (!cancelled) {
@@ -123,12 +123,12 @@ const DenimApplicationForm: FunctionComponent<DenimApplicationFormProps> = ({
           newRecord = await application.dataSource?.updateRecord(
             table,
             currentRecord.id,
-            updateData || {},
+            updateData || {}
           );
         } else {
           newRecord = await application.dataSource?.createRecord(
             table,
-            updateData || {},
+            updateData || {}
           );
         }
 
@@ -165,6 +165,25 @@ const DenimApplicationForm: FunctionComponent<DenimApplicationFormProps> = ({
     updateData,
   ]);
 
+  const getValue = useCallback(
+    (field) => currentRecord && currentRecord[field],
+    [currentRecord]
+  );
+
+  const setValue = useCallback(
+    (field) => (newValue: any) => {
+      setCurrentRecord((current: any) => ({
+        ...current,
+        [field]: newValue,
+      }));
+      setUpdateData((current: any) => ({
+        ...current,
+        [field]: newValue,
+      }));
+    },
+    []
+  );
+
   if (loading) {
     return <ActivityIndicator />;
   }
@@ -178,17 +197,8 @@ const DenimApplicationForm: FunctionComponent<DenimApplicationFormProps> = ({
       }}
     >
       <DenimFormProvider
-        getValue={(field) => currentRecord && currentRecord[field]}
-        setValue={(field) => (newValue) => {
-          setCurrentRecord((current: any) => ({
-            ...current,
-            [field]: newValue,
-          }));
-          setUpdateData((current: any) => ({
-            ...current,
-            [field]: newValue,
-          }));
-        }}
+        getValue={getValue}
+        setValue={setValue}
         getErrorsFor={(field) =>
           errors.filter((error) => {
             return (

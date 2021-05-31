@@ -1,6 +1,11 @@
-import React, { createContext, useContext, useMemo } from 'react';
+import React, {
+  ComponentType,
+  createContext,
+  useContext,
+  useMemo,
+} from 'react';
 import { FunctionComponent } from 'react';
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter, useHistory } from 'react-router-dom';
 import {
   DenimQuery,
   DenimQueryOperator,
@@ -9,12 +14,26 @@ import {
   DenimTable,
   DenimDataSourceV2,
 } from 'denim';
+import styled from 'styled-components';
 import { useDenimUserV2 } from '../forms';
 import DenimLookupDataProvider from '../forms/providers/DenimLookupDataProvider';
 import DenimApplicationNotifications from './DenimApplicationNotifications';
 
+const Container = styled.div`
+  padding: 16px;
+  width: 100%;
+  box-sizing: border-box;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+`;
+
 export interface DenimApplicationV2Props {
   dataSource: DenimDataSourceV2;
+  containerStyle?: any;
+  ContainerComponent?: ComponentType<{
+    style: React.CSSProperties;
+  }>;
 }
 
 export interface DenimApplicationContextProps {
@@ -28,13 +47,14 @@ export interface DenimApplicationContextProps {
     [key: string]: any;
   };
   roles: string[];
+  navigate: (url: string) => void;
 }
 
-export const DenimApplicationContext = createContext<DenimApplicationContextProps>(
-  {
+export const DenimApplicationContext =
+  createContext<DenimApplicationContextProps>({
     roles: [],
-  },
-);
+    navigate: () => {},
+  });
 export const useDenimApplication = () => useContext(DenimApplicationContext);
 
 export const getLookupProviderFor = (dataSource: DenimDataSourceV2) => {
@@ -64,7 +84,7 @@ export const getLookupProviderFor = (dataSource: DenimDataSourceV2) => {
 
       const records = await dataSource.retrieveRecords(
         otherTableSchema.name,
-        denimQuery,
+        denimQuery
       );
 
       return records.map(
@@ -74,7 +94,7 @@ export const getLookupProviderFor = (dataSource: DenimDataSourceV2) => {
             id: String(record.id),
             name: String(record[nameField]),
             record,
-          } as DenimRelatedRecord),
+          } as DenimRelatedRecord)
       );
     },
     find: async (relationship: string, id: string) => {
@@ -99,10 +119,34 @@ export const getLookupProviderFor = (dataSource: DenimDataSourceV2) => {
   };
 };
 
+const RoutesWrapper: FunctionComponent<{}> = ({ children }) => {
+  const application = useDenimApplication();
+  const history = useHistory();
+
+  return (
+    <DenimApplicationContext.Provider
+      value={{
+        ...application,
+        navigate: (url: string) => {
+          if (url !== history.location.pathname) {
+            history.push(url);
+          }
+        },
+      }}
+    >
+      {children}
+    </DenimApplicationContext.Provider>
+  );
+};
+
 const DenimApplicationV2: FunctionComponent<DenimApplicationV2Props> = ({
   dataSource,
   children,
+  containerStyle,
+  ContainerComponent,
 }) => {
+  const PageContainer = ContainerComponent || Container;
+
   const user = useDenimUserV2();
   const lookup = useMemo(() => {
     return getLookupProviderFor(dataSource);
@@ -114,22 +158,16 @@ const DenimApplicationV2: FunctionComponent<DenimApplicationV2Props> = ({
         dataSource,
         user: user.user,
         roles: user.roles,
+        navigate: () => {},
       }}
     >
       <DenimApplicationNotifications>
         <DenimLookupDataProvider {...lookup}>
-          <main
-            style={{
-              padding: '16px',
-              width: '100%',
-              boxSizing: 'border-box',
-              maxWidth: '1200px',
-              marginLeft: 'auto',
-              marginRight: 'auto',
-            }}
-          >
-            <BrowserRouter>{children}</BrowserRouter>
-          </main>
+          <PageContainer style={containerStyle}>
+            <BrowserRouter>
+              <RoutesWrapper>{children}</RoutesWrapper>
+            </BrowserRouter>
+          </PageContainer>
         </DenimLookupDataProvider>
       </DenimApplicationNotifications>
     </DenimApplicationContext.Provider>

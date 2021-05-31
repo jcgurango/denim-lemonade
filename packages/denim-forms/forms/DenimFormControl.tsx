@@ -8,6 +8,7 @@ export interface DenimFormControlProps {
   form?: DenimFormSchema;
   value?: any;
   onChange?: (value: any) => void;
+  errors?: { message: string }[];
 }
 
 const Empty = Symbol('Empty');
@@ -17,11 +18,13 @@ const DenimFormControl: FunctionComponent<DenimFormControlProps> = ({
   form,
   value = Empty,
   onChange = Empty,
+  children,
+  errors,
 }) => {
   const translation = useTranslation();
   const denimForm = require('./providers/DenimFormProvider').useDenimForm();
   const Control = schema.type ? denimForm.controlRegistry[schema.type] : null;
-  const controlErrors = denimForm.getErrorsFor(schema.id);
+  const controlErrors = errors || denimForm.getErrorsFor(schema.id);
 
   return (
     <>
@@ -38,6 +41,7 @@ const DenimFormControl: FunctionComponent<DenimFormControlProps> = ({
             )}
         </Text>
       ) : null}
+      {children}
       {Control ? (
         <View>
           <Control

@@ -8,6 +8,7 @@ import {
 } from 'denim';
 import { useDenimForm } from '../../forms/providers/DenimFormProvider';
 import { useDenimApplication } from '../DenimApplicationV2';
+import { DenimFormControlProps } from '../../forms';
 
 export interface DenimApplicationFieldProps {
   schema: DenimFormControlSchema;
@@ -17,7 +18,7 @@ export interface DenimApplicationFieldProps {
 
 export const getControlFor = (
   column: DenimColumn,
-  control: DenimFormControlSchema,
+  control: DenimFormControlSchema
 ) => {
   switch (column.type) {
     case DenimColumnType.Boolean:
@@ -27,8 +28,8 @@ export const getControlFor = (
         id: column.name,
         type: DenimFormControlType.CheckBox,
         controlProps: {
-          ...(column.defaultControlProps || { }),
-          ...(control.controlProps || { }),
+          ...(column.defaultControlProps || {}),
+          ...(control.controlProps || {}),
         },
       };
     case DenimColumnType.Select:
@@ -38,7 +39,7 @@ export const getControlFor = (
         id: column.name,
         type: DenimFormControlType.DropDown,
         controlProps: {
-          ...(column.defaultControlProps || { }),
+          ...(column.defaultControlProps || {}),
           options: column.properties.options,
           ...(control.controlProps || {}),
         },
@@ -50,7 +51,7 @@ export const getControlFor = (
         id: column.name,
         type: DenimFormControlType.MultiDropDown,
         controlProps: {
-          ...(column.defaultControlProps || { }),
+          ...(column.defaultControlProps || {}),
           options: column.properties.options,
           ...(control.controlProps || {}),
         },
@@ -67,7 +68,7 @@ export const getControlFor = (
             ? DenimFormControlType.MultiDropDown
             : DenimFormControlType.DropDown,
           controlProps: {
-            ...(column.defaultControlProps || { }),
+            ...(column.defaultControlProps || {}),
             relationship: column.properties.foreignTableId,
             ...(props || {}),
           },
@@ -82,7 +83,7 @@ export const getControlFor = (
           ? DenimFormControlType.MultiLookup
           : DenimFormControlType.Lookup,
         controlProps: {
-          ...(column.defaultControlProps || { }),
+          ...(column.defaultControlProps || {}),
           relationship: column.properties.foreignTableId,
           ...(control.controlProps || {}),
         },
@@ -95,8 +96,8 @@ export const getControlFor = (
           id: column.name,
           type: DenimFormControlType.MultilineTextInput,
           controlProps: {
-            ...(column.defaultControlProps || { }),
-            ...(control.controlProps || { }),
+            ...(column.defaultControlProps || {}),
+            ...(control.controlProps || {}),
           },
         };
       }
@@ -107,15 +108,15 @@ export const getControlFor = (
         id: column.name,
         type: DenimFormControlType.TextInput,
         controlProps: {
-          ...(column.defaultControlProps || { }),
-          ...(control.controlProps || { }),
+          ...(column.defaultControlProps || {}),
+          ...(control.controlProps || {}),
         },
       };
     case DenimColumnType.Number:
       return {
         ...control,
         controlProps: {
-          ...(column.defaultControlProps || { }),
+          ...(column.defaultControlProps || {}),
           ...control.controlProps,
           format: '{0:#,###,###,###,###,###,###,##0.00}',
           numerical: true,
@@ -131,7 +132,7 @@ export const getControlFor = (
         id: column.name,
         type: DenimFormControlType.DatePicker,
         controlProps: {
-          ...(column.defaultControlProps || { }),
+          ...(column.defaultControlProps || {}),
           withTime: column.properties.includesTime,
           ...(control.controlProps || {}),
         },
@@ -145,11 +146,9 @@ export const getControlFor = (
   };
 };
 
-const DenimApplicationField: FunctionComponent<DenimApplicationFieldProps> = ({
-  schema,
-  value,
-  onChange,
-}) => {
+const DenimApplicationField: FunctionComponent<
+  DenimFormControlProps & DenimApplicationFieldProps
+> = ({ schema, value, onChange, children, ...props }) => {
   const {
     componentRegistry: { control: FormControl },
   } = useDenimForm();
@@ -166,7 +165,14 @@ const DenimApplicationField: FunctionComponent<DenimApplicationFieldProps> = ({
   }, [application, schema]);
 
   return (
-    <FormControl schema={controlSchema} value={value} onChange={onChange} />
+    <FormControl
+      schema={controlSchema}
+      value={value}
+      onChange={onChange}
+      {...props}
+    >
+      {children}
+    </FormControl>
   );
 };
 

@@ -622,7 +622,7 @@ export default abstract class DenimDataSourceV2 {
       case DenimColumnType.Select:
         return Yup.string()
           .oneOf(
-            [''].concat(
+            [null, ''].concat(
               field.properties.options.map(({ value }) => value) as string[]
             )
           )

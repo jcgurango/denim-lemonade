@@ -27,6 +27,7 @@ export interface DenimApplicationButtonProps {
   type?: 'primary' | 'secondary' | 'danger';
   icon?: DenimIconType;
   iconOnly?: boolean;
+  inline?: boolean;
 }
 
 const DeleteModal: FunctionComponent<{
@@ -107,6 +108,7 @@ const DenimApplicationButton: FunctionComponent<DenimApplicationButtonProps> = (
   type,
   icon,
   iconOnly,
+  inline,
   disabled,
 }) => {
   const {
@@ -140,6 +142,7 @@ const DenimApplicationButton: FunctionComponent<DenimApplicationButtonProps> = (
       }
       type={type}
       disabled={disabled}
+      inline={inline}
     />
   );
 
