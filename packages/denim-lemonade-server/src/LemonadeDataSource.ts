@@ -179,7 +179,7 @@ LemonadeDataSource.schema.workflows = [
         label: 'Payroll Period',
         type: DenimColumnType.ForeignKey,
         properties: {
-          foreignTableId: 'payroll-periods',
+          foreignTableId: 'pdy-payroll-periods',
           multiple: false,
         },
       },
@@ -215,7 +215,7 @@ LemonadeDataSource.schema.workflows = [
 
   // Retrieve the period.
   const period = await LemonadeDataSource.retrieveRecord(
-    'payroll-periods',
+    'pdy-payroll-periods',
     periodInput.id
   );
 
@@ -223,6 +223,7 @@ LemonadeDataSource.schema.workflows = [
     throw new Error('Unknown period.');
   }
 
+  /*
   let allEmployees = await LemonadeDataSource.findById(
     'Employee',
     undefined,
@@ -272,6 +273,13 @@ LemonadeDataSource.schema.workflows = [
       ids
     )
   );
+  */
+ const attendanceData = await LemonadeDataSource.retrieveRecords(
+   'Attendance',
+   {
+     retrieveAll: true,
+   }
+ );
 
   const holidays = await LemonadeDataSource.retrieveRecords(
     'Holiday Calendar',
@@ -297,7 +305,7 @@ LemonadeDataSource.schema.workflows = [
       ? CalculateAttendance(
           attendanceData[i],
           periodInput.id,
-          holidayTypesByDate[attendanceData[i].Date]
+          holidayTypesByDate[String(attendanceData[i].Date)]
         )
       : null;
     const existingRow = exportRows[i];
