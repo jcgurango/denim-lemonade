@@ -163,11 +163,11 @@ const DenimApplicationV2: FunctionComponent<DenimApplicationV2Props> = ({
     >
       <DenimApplicationNotifications>
         <DenimLookupDataProvider {...lookup}>
-          <PageContainer style={containerStyle}>
-            <BrowserRouter>
+          <BrowserRouter>
+            <PageContainer style={containerStyle}>
               <RoutesWrapper>{children}</RoutesWrapper>
-            </BrowserRouter>
-          </PageContainer>
+            </PageContainer>
+          </BrowserRouter>
         </DenimLookupDataProvider>
       </DenimApplicationNotifications>
     </DenimApplicationContext.Provider>
