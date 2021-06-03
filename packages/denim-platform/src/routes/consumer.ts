@@ -13,6 +13,7 @@ import appSchemaSource from '../data-sources/app-schema';
 import { registerUserHooks } from './app-schema';
 
 const consumerRouter = Router();
+const tokenSecret = randomString({ length: 32 });
 
 export const refreshConsumerRouter = async () => {
   console.log('Refreshing consumer router...');
@@ -44,7 +45,7 @@ export const refreshConsumerRouter = async () => {
 
     const { router, middleware } = DenimAuthenticationRouter(
       {
-        tokenSecret: randomString({ length: 32 }),
+        tokenSecret,
       },
       usersTableName,
       dataSource,
