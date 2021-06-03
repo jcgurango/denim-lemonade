@@ -93,6 +93,7 @@ export interface AirTableNumberTypeOptions {
   validatorName?: 'positive';
   durationFormat?: string;
   symbol?: string;
+  precision?: number;
 }
 
 export interface AirTableRatingTypeOptions {

@@ -13,20 +13,24 @@ import {
 import { DenimAuthorizationRole } from './types/auth';
 
 export type RolesCallback = (user: DenimRecord) => string[];
+export type CustomSubstitution = (userData: DenimRecord, value: any) => any;
 
 export default class DenimAuthenticatorV2 {
   public roles: DenimAuthorizationRole[];
   public userSchema: DenimTable;
   public dataSource: DenimDataSourceV2;
+  public customSubstitution?: CustomSubstitution;
 
   constructor(
     roles: DenimAuthorizationRole[],
     userSchema: DenimTable,
     dataSource: DenimDataSourceV2,
+    customSubstitution?: CustomSubstitution,
   ) {
     this.roles = roles;
     this.userSchema = userSchema;
     this.dataSource = dataSource;
+    this.customSubstitution = customSubstitution;
   }
 
   protected getAuthorizationActionFromKey(
@@ -213,6 +217,10 @@ export default class DenimAuthenticatorV2 {
   protected substituteQueryValue(userData: DenimRecord, value: any) {
     if (value && value.$user) {
       return userData && userData[value.$user];
+    }
+
+    if (this.customSubstitution) {
+      return this.customSubstitution(userData, value);
     }
 
     return value;

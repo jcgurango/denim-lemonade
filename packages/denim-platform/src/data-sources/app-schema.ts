@@ -1,7 +1,10 @@
 import { DenimJsonDataSource, DenimColumnType } from 'denim';
 import { AirTable, AirTableSchemaRetriever } from 'denim-airtable';
-import { DenimRecord } from 'denim/core';
+import fs from 'fs';
+import path from 'path';
+import { DenimRecord } from 'denim';
 import { refreshConsumerRouter } from '../routes/consumer';
+import { refreshAppSchemaRouter } from '../routes/app-schema';
 
 enum DataConnectionType {
   DataSource = 'data-source',
@@ -59,34 +62,8 @@ const appSchemaSource = new DenimJsonDataSource('app-schema', {
         {
           name: 'update',
           type: DenimColumnType.Boolean,
-          label: 'Update',
+          label: 'Refresh Schema',
           properties: undefined,
-        },
-      ],
-    },
-    {
-      id: 'roles',
-      name: 'roles',
-      label: 'Roles',
-      nameField: 'name',
-      columns: [
-        {
-          name: 'name',
-          type: DenimColumnType.Text,
-          label: 'Role Name',
-          properties: {},
-        },
-        {
-          name: 'query',
-          type: DenimColumnType.Text,
-          label: 'Role Query',
-          properties: {},
-        },
-        {
-          name: 'schema',
-          type: DenimColumnType.Text,
-          label: 'Role Schema',
-          properties: {},
         },
       ],
     },
@@ -100,12 +77,6 @@ const appSchemaSource = new DenimJsonDataSource('app-schema', {
           name: 'name',
           type: DenimColumnType.Text,
           label: 'Screen Name',
-          properties: {},
-        },
-        {
-          name: 'title',
-          type: DenimColumnType.Text,
-          label: 'Screen Title',
           properties: {},
         },
         {
@@ -131,10 +102,88 @@ const appSchemaSource = new DenimJsonDataSource('app-schema', {
         },
       ],
     },
+    {
+      id: 'roles',
+      name: 'roles',
+      label: 'Roles',
+      nameField: 'name',
+      columns: [
+        {
+          name: 'name',
+          type: DenimColumnType.Text,
+          label: 'Role Name',
+          properties: {},
+        },
+        {
+          name: 'query',
+          type: DenimColumnType.Text,
+          label: 'Role Query',
+          properties: {},
+        },
+        {
+          name: 'defaultSchema',
+          type: DenimColumnType.Text,
+          label: 'Default Schema',
+          properties: {},
+        },
+        {
+          name: 'tablesSchema',
+          type: DenimColumnType.Text,
+          label: 'Tables Schema',
+          properties: {},
+        },
+      ],
+    },
+    {
+      id: 'app-setup',
+      name: 'app-setup',
+      label: 'App Setup',
+      nameField: 'name',
+      columns: [
+        {
+          name: 'name',
+          type: DenimColumnType.Text,
+          label: 'Name',
+          properties: {},
+        },
+        {
+          name: 'users-table',
+          type: DenimColumnType.Text,
+          label: 'Users Table',
+          properties: {},
+        },
+        {
+          name: 'username-column',
+          type: DenimColumnType.Text,
+          label: 'Username Column',
+          properties: {},
+        },
+        {
+          name: 'password-column',
+          type: DenimColumnType.Text,
+          label: 'Password Column',
+          properties: {},
+        },
+      ],
+    },
+    {
+      id: 'consumer-schema',
+      name: 'consumer-schema',
+      label: 'Consumer Schema',
+      nameField: 'name',
+      columns: [
+        {
+          name: 'name',
+          type: DenimColumnType.Text,
+          label: 'Name',
+          properties: {},
+        },
+      ],
+    },
   ],
 });
 
-const updateDataConnection = async (record: DenimRecord) => {
+const refreshCache = async (record: DenimRecord) => {
   if (record.type === 'airtable') {
     // Retrieve AirTable schemas.
     const { email, password } = JSON.parse(String(record.credentials));
@@ -144,15 +193,17 @@ const updateDataConnection = async (record: DenimRecord) => {
       password
     );
 
-    record.cache = JSON.stringify(result);
+    return JSON.stringify(result);
   }
+
+  return null;
 };
 
 appSchemaSource.registerHook({
   table: 'data-connections',
   type: 'pre-create',
   callback: async (table, record) => {
-    await updateDataConnection(record);
+    record.cache = await refreshCache(record);
 
     return [record];
   },
@@ -160,10 +211,10 @@ appSchemaSource.registerHook({
 
 appSchemaSource.registerHook({
   table: 'data-connections',
-  type: 'pre-update-validate',
+  type: 'post-update-validate',
   callback: async (table, record) => {
     if (record.update) {
-      await updateDataConnection(record);
+      record.cache = await refreshCache(record);
       record.update = false;
     }
 
@@ -172,7 +223,7 @@ appSchemaSource.registerHook({
 });
 
 appSchemaSource.registerHook({
-  table: 'data-connections',
+  table: /data-connections|roles/g,
   type: 'post-create',
   callback: async (table, record) => {
     await refreshConsumerRouter();
@@ -182,7 +233,7 @@ appSchemaSource.registerHook({
 });
 
 appSchemaSource.registerHook({
-  table: 'data-connections',
+  table: /data-connections|roles/g,
   type: 'post-update',
   callback: async (table, id, record) => {
     await refreshConsumerRouter();
@@ -192,10 +243,88 @@ appSchemaSource.registerHook({
 });
 
 appSchemaSource.registerHook({
-  table: 'data-connections',
+  table: /data-connections|roles/g,
   type: 'post-delete',
   callback: async (table, id) => {
     await refreshConsumerRouter();
+
+    return [id];
+  },
+});
+
+appSchemaSource.registerHook({
+  table: 'app-setup',
+  type: 'post-create',
+  callback: async (table, record) => {
+    await refreshAppSchemaRouter();
+    return [record];
+  },
+});
+
+appSchemaSource.registerHook({
+  table: 'app-setup',
+  type: 'post-update',
+  callback: async (table, id, record) => {
+    await refreshAppSchemaRouter();
+    return [id, record];
+  },
+});
+
+const refreshConsumerFrontend = async () => {
+  // Retrieve screens.
+  const schema: any = {
+    screens: [],
+  };
+  const screens = await appSchemaSource.retrieveRecords('screens');
+
+  screens.forEach((screen: any) => {
+    schema.screens.push({
+      ...screen,
+      paths: JSON.parse(screen.paths || '[]'),
+      schema: JSON.parse(screen.schema || '[]'),
+    });
+  });
+
+  await new Promise<void>((resolve, reject) => {
+    fs.writeFile(
+      path.join(__dirname, '../../../denim-platform-web/src/schema.ts'),
+      'export const applicationSchema: any = ' + JSON.stringify(schema) + ';',
+      (err) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve();
+        }
+      }
+    );
+  });
+};
+
+appSchemaSource.registerHook({
+  table: 'screens',
+  type: 'post-create',
+  callback: async (table, record) => {
+    await refreshConsumerFrontend();
+
+    return [record];
+  },
+});
+
+appSchemaSource.registerHook({
+  table: 'screens',
+  type: 'post-update',
+  callback: async (table, id, record) => {
+    await refreshConsumerFrontend();
+
+    return [id, record];
+  },
+});
+
+appSchemaSource.registerHook({
+  table: 'screens',
+  type: 'post-delete',
+  callback: async (table, id) => {
+    await refreshConsumerFrontend();
 
     return [id];
   },

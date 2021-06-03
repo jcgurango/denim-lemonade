@@ -2,17 +2,17 @@ version: '3.0'
 
 services:
   gateway:
-    build:
-      context: ./.docker/gateway
-    env_file: app.env
+    image: nginx
+    volumes:
+      - ./.docker/gateway:/etc/nginx/conf.d/
     depends_on:
       - server
     ports:
-      - 30000:80
+      - 34000:80
   server:
     build:
       context: ./.docker/server
-    command: bash -c 'yarn install && npx lerna bootstrap && yarn transpile && ((cd /app/packages/denim-lemonade/ && yarn web) & (cd /app/packages/denim-lemonade-server/ && yarn server:dev))'
+    command: bash -c 'yarn install && npx lerna bootstrap && yarn transpile && ((cd /app/packages/denim-platform/ && yarn server:dev) & (cd /app/packages/denim-platform-web/ && yarn start) & (cd /app/packages/denim-platform-admin/ && yarn start))'
     working_dir: /app
     env_file: app.env
     volumes:

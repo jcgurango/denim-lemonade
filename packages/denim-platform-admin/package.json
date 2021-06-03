@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@dnd-kit/core": "^3.0.3",
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
@@ -12,6 +13,9 @@
     "@types/react-dom": "^17.0.0",
     "denim": "^1.0.0",
     "denim-forms": "^1.0.0",
+    "lodash": "^4.17.21",
+    "numeral": "^2.0.6",
+    "random-string": "^0.2.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-native-web": "^0.16.3",
@@ -23,7 +27,7 @@
     "web-vitals": "^1.0.1"
   },
   "scripts": {
-    "start": "env BROWSER=none craco start",
+    "start": "env BROWSER=none PORT=3101 craco start",
     "build": "craco build",
     "test": "craco test"
   },
@@ -47,6 +51,9 @@
   },
   "devDependencies": {
     "@craco/craco": "^6.1.2",
+    "@types/numeral": "^2.0.1",
+    "@types/random-string": "^0.0.28",
     "@types/styled-components": "^5.1.9"
-  }
+  },
+  "proxy": "http://localhost:4000"
 }

@@ -14,12 +14,15 @@ import {
   DenimApplicationContext,
   useDenimApplication,
 } from '../DenimApplicationV2';
+import { DenimRelatedRecordCollection } from 'denim/core';
 
 export interface DenimApplicationViewProviderProps {
   defaultSort?: DenimSortExpression;
   table: string;
   columns: string[];
-  query?: DenimQueryConditionOrGroup;
+  query?:
+    | DenimQueryConditionOrGroup
+    | { records: DenimRelatedRecordCollection };
   pageSize?: number;
 }
 
@@ -60,37 +63,77 @@ const DenimApplicationViewProvider: FunctionComponent<DenimApplicationViewProvid
 
     const retrieveMore = useCallback(
       async (cancelled?: { isCancelled: boolean }, params?: any) => {
-        setRetrieving(true);
+        if (query && 'records' in query) {
+          setRetrieving(true);
 
-        try {
-          const records = await application.dataSource?.retrieveRecords(table, {
-            pageSize,
-            page,
-            expand,
-            sort,
-            conditions: query,
-            ...(params || {}),
-          });
+          if (query && 'records' in query && query.records) {
+            const ids = query.records.records
+              .filter((record) => !record.record)
+              .map(({ id }) => id);
+            let retrievedRecords: DenimRecord[] = [];
 
-          if (records) {
-            if (!cancelled?.isCancelled) {
-              setRecords((r) => r.concat(records));
-              setHasMore(records.length >= pageSize);
-              setPage((page) => page + 1);
+            if (ids.length) {
+              retrievedRecords =
+                (await application.dataSource?.findById(
+                  table,
+                  expand,
+                  ...ids
+                )) || [];
+            }
+
+            setRecords(
+              query.records.records
+                .map(({ id, record }) => {
+                  if (record) {
+                    return record;
+                  }
+
+                  return retrievedRecords.find(
+                    ({ id: recordId }) => recordId === id
+                  );
+                })
+                .filter(Boolean) as DenimRecord[]
+            );
+
+            setHasMore(false);
+            setRetrieving(false);
+          }
+        } else {
+          setRetrieving(true);
+
+          try {
+            const records = await application.dataSource?.retrieveRecords(
+              table,
+              {
+                pageSize,
+                page,
+                expand,
+                sort,
+                conditions: query,
+                ...(params || {}),
+              }
+            );
+
+            if (records) {
+              if (!cancelled?.isCancelled) {
+                setRecords((r) => r.concat(records));
+                setHasMore(records.length >= pageSize);
+                setPage((page) => page + 1);
+              }
+            }
+          } catch (e) {
+            if (!notifications.handleError(e)) {
+              notifications.notify({
+                type: 'error',
+                message: e.message,
+                code: DenimNotificationCodes.RetrievingFailed,
+              });
             }
           }
-        } catch (e) {
-          if (!notifications.handleError(e)) {
-            notifications.notify({
-              type: 'error',
-              message: e.message,
-              code: DenimNotificationCodes.RetrievingFailed,
-            });
-          }
-        }
 
-        if (!cancelled?.isCancelled) {
-          setRetrieving(false);
+          if (!cancelled?.isCancelled) {
+            setRetrieving(false);
+          }
         }
       },
       [

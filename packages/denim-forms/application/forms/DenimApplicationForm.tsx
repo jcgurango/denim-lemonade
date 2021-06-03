@@ -2,7 +2,11 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { FunctionComponent } from 'react';
 import { ActivityIndicator } from 'react-native';
 import * as Yup from 'yup';
-import { DenimNotificationCodes, DenimQuery, DenimRecord } from 'denim';
+import {
+  DenimNotificationCodes,
+  DenimQueryConditionOrGroup,
+  DenimRecord,
+} from 'denim';
 import { DenimFormProvider } from '../../forms';
 import { useDenimForm } from '../../forms/providers/DenimFormProvider';
 import { useDenimNotifications } from '../../forms/providers/DenimNotificationProvider';
@@ -13,7 +17,7 @@ import {
 
 export interface DenimApplicationFormProps {
   table: string;
-  record?: DenimQuery | string;
+  record?: DenimQueryConditionOrGroup | string;
   onSave?: (record: DenimRecord) => void;
   showSave?: boolean;
   prefill?: DenimRecord;
@@ -64,8 +68,11 @@ const DenimApplicationForm: FunctionComponent<DenimApplicationFormProps> = ({
           }
         } else {
           const [foundRecord] =
-            (await application.dataSource?.retrieveRecords(table, record)) ||
-            [];
+            (await application.dataSource?.retrieveRecords(table, {
+              pageSize: 1,
+              page: 1,
+              conditions: record,
+            })) || [];
 
           if (!cancelled) {
             setCurrentRecord(foundRecord || undefined);
@@ -209,6 +216,8 @@ const DenimApplicationForm: FunctionComponent<DenimApplicationFormProps> = ({
             );
           })
         }
+        save={save}
+        canSave={formValid && !saving}
       >
         {children}
         {showSave ? (

@@ -42,10 +42,13 @@ export interface DenimApplicationContextProps {
   record?: DenimRecord;
   screenId?: string;
   route?: string;
+  screenState?: any;
+  setScreenState?: (newValue: any | ((n: any) => any)) => void;
   user?: DenimRecord;
   routeParameters?: {
     [key: string]: any;
   };
+  token?: string;
   roles: string[];
   navigate: (url: string) => void;
 }

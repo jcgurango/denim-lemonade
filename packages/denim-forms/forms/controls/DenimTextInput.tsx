@@ -4,14 +4,15 @@ import {
   DenimControlProps,
   useDenimForm,
 } from '../providers/DenimFormProvider';
-const sf = require('sf');
+import numeral from 'numeral';
 
 export interface DenimTextInputProps {
   format?: string;
-  numerical?: boolean;
 }
 
-const DenimTextInput: FunctionComponent<DenimControlProps & DenimTextInputProps & TextInputProps> = ({
+const DenimTextInput: FunctionComponent<
+  DenimControlProps & DenimTextInputProps & TextInputProps
+> = ({
   onChange,
   value,
   schema,
@@ -19,42 +20,47 @@ const DenimTextInput: FunctionComponent<DenimControlProps & DenimTextInputProps 
   errors,
   numberOfLines,
   format,
-  numerical,
   ...props
 }) => {
   const denimForm = useDenimForm();
   const ControlContainer = denimForm.componentRegistry.controlContainer;
   const helpText = errors?.map(({ message }) => message).join('\n') || '';
-  const formatValue = (value: any, format?: string) => {
-    if (format && value) {
-      return sf(format, (numerical && typeof(value) === 'string') ? Number(value.replace(/,/g, '')) : value);
-    }
-
-    return value;
-  };
-  const [displayedText, setDisplayedText] = useState(() => formatValue(value, format));
-  const firstRun = useRef(true);
-
-  useEffect(() => {
-    if (firstRun.current) {
-      firstRun.current = false;
-    } else {
-      setDisplayedText(value);
-    }
-  }, [value]);
+  const [enteredText, setEnteredText] = useState(
+    () => (format ? numeral(value).format(format) : value) || ''
+  );
 
   return (
-    <ControlContainer
-      error={(errors?.length || 0) > 0}
-      helpText={helpText}
-    >
+    <ControlContainer error={(errors?.length || 0) > 0} helpText={helpText}>
       <TextInput
-        style={[styles.textInput, (Platform.OS === 'web' && (numberOfLines || 0) <= 1) ? { height: 24 } : null]}
-        onChangeText={(text) => onChange(text || null)}
-        value={displayedText || ''}
+        style={[
+          styles.textInput,
+          Platform.OS === 'web' && (numberOfLines || 0) <= 1
+            ? { height: 24 }
+            : null,
+        ]}
+        onChangeText={(text) => {
+          const parsed = numeral(text);
+          const parsedValue = parsed.value();
+          setEnteredText(text);
+
+          if (format && parsedValue !== null && !isNaN(parsedValue)) {
+            onChange(parsedValue);
+          } else {
+            onChange(text);
+          }
+        }}
+        value={enteredText || ''}
         numberOfLines={numberOfLines}
         onBlur={() => {
-          setDisplayedText(formatValue(value, format));
+          if (format) {
+            // First attempt to parse the value.
+            const parsed = numeral(enteredText);
+            const parsedValue = parsed.value();
+
+            if (parsedValue !== null && !isNaN(parsedValue)) {
+              setEnteredText(parsed.format(format));
+            }
+          }
         }}
         {...props}
       />

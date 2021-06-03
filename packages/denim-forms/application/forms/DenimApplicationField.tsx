@@ -23,10 +23,9 @@ export const getControlFor = (
   switch (column.type) {
     case DenimColumnType.Boolean:
       return {
-        ...control,
         label: control.label || column.label,
         id: column.name,
-        type: DenimFormControlType.CheckBox,
+        type: control.type || DenimFormControlType.CheckBox,
         controlProps: {
           ...(column.defaultControlProps || {}),
           ...(control.controlProps || {}),
@@ -37,7 +36,7 @@ export const getControlFor = (
         ...control,
         label: control.label || column.label,
         id: column.name,
-        type: DenimFormControlType.DropDown,
+        type: control.type || DenimFormControlType.DropDown,
         controlProps: {
           ...(column.defaultControlProps || {}),
           options: column.properties.options,
@@ -49,7 +48,7 @@ export const getControlFor = (
         ...control,
         label: control.label || column.label,
         id: column.name,
-        type: DenimFormControlType.MultiDropDown,
+        type: control.type || DenimFormControlType.MultiDropDown,
         controlProps: {
           ...(column.defaultControlProps || {}),
           options: column.properties.options,
@@ -64,9 +63,11 @@ export const getControlFor = (
           ...control,
           label: control.label || column.label,
           id: column.name,
-          type: column.properties.multiple
-            ? DenimFormControlType.MultiDropDown
-            : DenimFormControlType.DropDown,
+          type:
+            control.type ||
+            (column.properties.multiple
+              ? DenimFormControlType.MultiDropDown
+              : DenimFormControlType.DropDown),
           controlProps: {
             ...(column.defaultControlProps || {}),
             relationship: column.properties.foreignTableId,
@@ -79,9 +80,11 @@ export const getControlFor = (
         ...control,
         label: control.label || column.label,
         id: column.name,
-        type: column.properties.multiple
-          ? DenimFormControlType.MultiLookup
-          : DenimFormControlType.Lookup,
+        type:
+          control.type ||
+          (column.properties.multiple
+            ? DenimFormControlType.MultiLookup
+            : DenimFormControlType.Lookup),
         controlProps: {
           ...(column.defaultControlProps || {}),
           relationship: column.properties.foreignTableId,
@@ -94,7 +97,7 @@ export const getControlFor = (
           ...control,
           label: control.label || column.label,
           id: column.name,
-          type: DenimFormControlType.MultilineTextInput,
+          type: control.type || DenimFormControlType.MultilineTextInput,
           controlProps: {
             ...(column.defaultControlProps || {}),
             ...(control.controlProps || {}),
@@ -106,7 +109,7 @@ export const getControlFor = (
         ...control,
         label: control.label || column.label,
         id: column.name,
-        type: DenimFormControlType.TextInput,
+        type: control.type || DenimFormControlType.TextInput,
         controlProps: {
           ...(column.defaultControlProps || {}),
           ...(control.controlProps || {}),
@@ -118,19 +121,18 @@ export const getControlFor = (
         controlProps: {
           ...(column.defaultControlProps || {}),
           ...control.controlProps,
-          format: '{0:#,###,###,###,###,###,###,##0.00}',
           numerical: true,
         },
         label: control.label || column.label,
         id: column.name,
-        type: DenimFormControlType.TextInput,
+        type: control.type || DenimFormControlType.TextInput,
       };
     case DenimColumnType.DateTime:
       return {
         ...control,
         label: control.label || column.label,
         id: column.name,
-        type: DenimFormControlType.DatePicker,
+        type: control.type || DenimFormControlType.DatePicker,
         controlProps: {
           ...(column.defaultControlProps || {}),
           withTime: column.properties.includesTime,
@@ -142,7 +144,7 @@ export const getControlFor = (
   return {
     ...control,
     label: control.label || column.label,
-    type: DenimFormControlType.ReadOnly,
+    type: control.type || DenimFormControlType.ReadOnly,
   };
 };
 

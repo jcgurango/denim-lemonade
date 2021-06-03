@@ -28,6 +28,8 @@ export interface DenimFormContextProps {
   setValue: (field: string) => (newValue: any) => void;
   getValue: (field: string) => any;
   getErrorsFor: (field: string) => ValidationError[];
+  canSave?: boolean;
+  save?: () => void;
 }
 
 const DenimFormContext = createContext<DenimFormContextProps>(

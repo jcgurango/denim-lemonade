@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "transpile": "cd packages/denim && npx tsc && cd ../denim-forms && npx tsc && cd ../denim-express && npx tsc && cd ../denim-airtable && npx tsc",
-    "transpile:watch": "(cd packages/denim && npx tsc --watch) & (cd packages/denim-forms && npx tsc --watch) & (cd packages/denim-express && npx tsc --watch) & (cd packages/denim-airtable && npx tsc --watch)"
+    "transpile:watch": "(cd packages/denim && npx tsc --watch --preserveWatchOutput) & (cd packages/denim-forms && npx tsc --watch --preserveWatchOutput) & (cd packages/denim-express && npx tsc --watch --preserveWatchOutput) & (cd packages/denim-airtable && npx tsc --watch --preserveWatchOutput)"
   },
   "repository": {
     "type": "git",

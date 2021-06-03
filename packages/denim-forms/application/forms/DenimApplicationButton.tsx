@@ -18,7 +18,7 @@ export type DenimApplicationButtonAction =
   | {
       href: string;
     }
-  | 'deleteRecord';
+  | 'deleteRecord' | 'saveRecord';
 
 export interface DenimApplicationButtonProps {
   text: string;
@@ -116,6 +116,7 @@ const DenimApplicationButton: FunctionComponent<DenimApplicationButtonProps> = (
   } = useDenimForm();
   const [deleting, setDeleting] = useState(false);
   const viewData = useDenimViewData();
+  const form = useDenimForm();
   let callback = () => {};
   let extraContent = null;
 
@@ -130,6 +131,13 @@ const DenimApplicationButton: FunctionComponent<DenimApplicationButtonProps> = (
     callback = () => {
       setDeleting(true);
     };
+  }
+
+  if (action === 'saveRecord') {
+    callback = () => {
+      form.save?.();
+    };
+    disabled = disabled || !form.canSave;
   }
 
   let button = (
