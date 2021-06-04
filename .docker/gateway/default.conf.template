@@ -26,6 +26,8 @@ server {
 server {
   listen        80;
   server_name   ${PLATFORM_HOST};
+  auth_basic           "DENIM Platform";
+  auth_basic_user_file /etc/nginx/templates/passwd;
 
   location /sockjs-node {
     proxy_pass http://server:3101/sockjs-node;
