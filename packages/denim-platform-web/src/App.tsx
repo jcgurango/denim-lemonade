@@ -21,7 +21,7 @@ const HeadersUpdater: FunctionComponent<{}> = ({ children }) => {
         Authorization: `Bearer ${application.token}`,
       };
     } else {
-      dataSource.headers = { };
+      dataSource.headers = {};
     }
 
     setReload(true);
@@ -54,30 +54,38 @@ function App() {
     return null;
   }
 
+  const content = (
+    <>
+      {applicationSchema.screens.map((screen: any) => {
+        return (
+          <DenimScreenV2
+            id={screen.id}
+            key={screen.id}
+            paths={screen.paths || []}
+            allowedRoles={screen.roles?.records?.map(({ id }: any) => id) || []}
+          >
+            <ScreenRenderer components={screen.schema} />
+          </DenimScreenV2>
+        );
+      })}
+    </>
+  );
+
   return (
     <DenimApplicationV2 dataSource={dataSource}>
-      <DenimApplicationAuthenticationProvider
-        authUrl={
-          (process.env.REACT_APP_API_BASE_URL ||
-            `${window.location.origin}/consumer`) + '/auth'
-        }
-      >
-        <HeadersUpdater />
-        {applicationSchema.screens.map((screen: any) => {
-          return (
-            <DenimScreenV2
-              id={screen.id}
-              key={screen.id}
-              paths={screen.paths || []}
-              allowedRoles={
-                screen.roles?.records?.map(({ id }: any) => id) || []
-              }
-            >
-              <ScreenRenderer components={screen.schema} />
-            </DenimScreenV2>
-          );
-        })}
-      </DenimApplicationAuthenticationProvider>
+      {applicationSchema.hasAuthentication ? (
+        <DenimApplicationAuthenticationProvider
+          authUrl={
+            (process.env.REACT_APP_API_BASE_URL ||
+              `${window.location.origin}/consumer`) + '/auth'
+          }
+        >
+          <HeadersUpdater />
+          {content}
+        </DenimApplicationAuthenticationProvider>
+      ) : (
+        content
+      )}
     </DenimApplicationV2>
   );
 }

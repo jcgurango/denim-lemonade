@@ -1,7 +1,12 @@
 import bodyParser from 'body-parser';
 import dashify from 'dashify';
 import { NextFunction, Request, Response, Router } from 'express';
-import { DenimRecord, DenimAuthenticatorV2, DenimDataSourceV2, DenimLocalQuery } from 'denim';
+import {
+  DenimRecord,
+  DenimAuthenticatorV2,
+  DenimDataSourceV2,
+  DenimLocalQuery,
+} from 'denim';
 
 export const getRolesFromRequest = (
   authenticator: DenimAuthenticatorV2,
@@ -73,8 +78,15 @@ export const DenimAuthenticatorTableMiddleware = (
       const existingRecord = req.params.id
         ? await dataSource.retrieveRecord(table, req.params.id)
         : {};
-  
-      if (existingRecord && !DenimLocalQuery.matches(dataSource.getTable(table), existingRecord, action)) {
+
+      if (
+        existingRecord &&
+        !DenimLocalQuery.matches(
+          dataSource.getTable(table),
+          existingRecord,
+          authenticator.substituteQueryValues(user, action)
+        )
+      ) {
         return res.status(403).send({
           errors: [
             {

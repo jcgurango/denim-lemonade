@@ -127,7 +127,7 @@ const convertColumn = (
           column.typeOptions?.precision || 0
         )
           .fill('0')
-          .join('')}%`,
+          .join('')}`,
       };
     }
 
@@ -174,13 +174,14 @@ const convertColumn = (
             defaultControlProps: {
               disabled: true,
             },
+            novalidate: true,
           };
         }
       }
     }
   }
 
-  if (column.type === 'formula' && column.typeOptions?.resultType) {
+  if ((column.type === 'formula' || column.type === 'rollup') && column.typeOptions?.resultType) {
     const formulaColumn = {
       ...column,
       type: column.typeOptions.resultType,
@@ -394,8 +395,8 @@ export default class AirTableDataSourceV2 extends DenimDataSourceV2 {
       );
 
       if (column && column.type === DenimColumnType.Text) {
-        left = 'LOWER(' + left + ')';
-        right = 'LOWER(' + right + ')';
+        left = `IF(ISERROR(LOWER(${left})), ${left}, LOWER(${left}))`;
+        right = `IF(ISERROR(LOWER(${left})), ${right}, LOWER(${right}))`;
       }
 
       return `${this.operatorToFormula(condition.operator, left, right)}`;
@@ -523,7 +524,10 @@ export default class AirTableDataSourceV2 extends DenimDataSourceV2 {
       .table(table)
       .create(this.mapDenimRecordToAirTableFields(table, record));
 
-    return this.mapAirtableToDenimRecord(table, Array.isArray(atRecord) ? atRecord[0] : atRecord);
+    return this.mapAirtableToDenimRecord(
+      table,
+      Array.isArray(atRecord) ? atRecord[0] : atRecord
+    );
   }
 
   protected async delete(table: string, id: string): Promise<void> {

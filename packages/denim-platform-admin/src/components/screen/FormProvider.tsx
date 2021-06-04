@@ -1,6 +1,6 @@
 import { DenimApplicationField, DenimApplicationLayout } from 'denim-forms';
 import { DenimFormControlType, DenimColumnType, DenimTable } from 'denim';
-import React, { FunctionComponent } from 'react';
+import React, { FunctionComponent, ReactChild } from 'react';
 import { useConsumerSchema } from '../../providers/ConsumerSchemaProvider';
 import {
   ComponentPropertiesProps,
@@ -11,6 +11,7 @@ import {
 import DynamicValue, {
   DynamicValueProvider,
   DynamicValueSchema,
+  getDataTypesForColumn,
   renderDynamicValue,
   useDynamicValues,
 } from '../DynamicValue';
@@ -19,6 +20,7 @@ import { useMemo } from 'react';
 export interface FormProviderAttributes {
   table?: string;
   children?: any[];
+  prefill: any;
 }
 
 export const FormProviderProperties: FunctionComponent<
@@ -52,6 +54,8 @@ export const FormProviderProperties: FunctionComponent<
                 table: value,
                 record: undefined,
                 showSave: undefined,
+                prefill: undefined,
+                onSave: undefined,
               };
             });
           }}
@@ -95,6 +99,52 @@ export const FormProviderProperties: FunctionComponent<
             types={['callback']}
           />
         </DynamicValueProvider>,
+        <DenimApplicationField
+          schema={{
+            id: 'prefill',
+            label: 'Prefill',
+            type: DenimFormControlType.CheckBox,
+          }}
+          value={schema.prefill}
+          onChange={(prefill) => {
+            onSchemaChange((schema) => ({
+              ...schema,
+              prefill: prefill ? {} : null,
+            }));
+          }}
+        />,
+        ...(schema.prefill && table
+          ? [
+              <h3>Prefill</h3>,
+              ...table.columns.reduce<ReactChild[]>((current, column) => {
+                const types = getDataTypesForColumn(column);
+
+                if (types.length) {
+                  return current.concat(
+                    <DynamicValue
+                      label={column.label}
+                      propKey={column.name}
+                      types={types}
+                      schema={schema.prefill}
+                      onSchemaChange={(schema) => {
+                        onSchemaChange((oldSchema) => {
+                          return {
+                            ...oldSchema,
+                            prefill:
+                              typeof schema === 'function'
+                                ? schema(oldSchema.prefill)
+                                : schema,
+                          };
+                        });
+                      }}
+                    />
+                  );
+                }
+
+                return current;
+              }, []),
+            ]
+          : []),
       ]}
     />
   );
@@ -123,7 +173,21 @@ export const useMemoizedAdditionalFormFields = (
         label: `Record ID from ${tableName}`,
       });
 
+      additionalFields.push({
+        code: `return !!(${generateFieldAccessor('id')});`,
+        arguments: [],
+        type: 'boolean',
+        label: `Record from ${tableName} Exists`,
+      });
+
       table.columns.forEach((column) => {
+        additionalFields.push({
+          code: `return !!(${generateFieldAccessor(column.name)});`,
+          arguments: [],
+          type: 'boolean',
+          label: `${column.label} from ${tableName} has value`,
+        });
+  
         if (column.type === DenimColumnType.Text) {
           additionalFields.push({
             code: `return ${generateFieldAccessor(column.name)};`,
@@ -282,12 +346,14 @@ const FormProvider: FunctionComponent<
         </DynamicValueProvider>
       </div>
       {selected ? (
-        <PropertiesPanel title="Form Provider">
-          <FormProviderProperties
-            schema={schema}
-            onSchemaChange={onSchemaChange}
-          />
-        </PropertiesPanel>
+        <>
+          <PropertiesPanel title="Form Provider">
+            <FormProviderProperties
+              schema={schema}
+              onSchemaChange={onSchemaChange}
+            />
+          </PropertiesPanel>
+        </>
       ) : null}
     </>
   );

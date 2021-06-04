@@ -1,6 +1,7 @@
 node_modules/
-app.env
+.env
 yarn-error.log
 ssh
 docker-compose.override.yml
 lerna-debug.log
+passwd.digest

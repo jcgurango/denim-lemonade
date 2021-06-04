@@ -1,6 +1,6 @@
 server {
   listen        80;
-  server_name   denim-demo.denimtool.com;
+  server_name   ${PUBLIC_HOST};
 
   location /sockjs-node {
     proxy_pass http://server:3101/sockjs-node;
@@ -25,7 +25,7 @@ server {
 
 server {
   listen        80;
-  server_name   denim-demo.platform.denimtool.com;
+  server_name   ${PLATFORM_HOST};
 
   location /sockjs-node {
     proxy_pass http://server:3101/sockjs-node;

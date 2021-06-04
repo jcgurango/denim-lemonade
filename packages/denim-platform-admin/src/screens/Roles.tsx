@@ -84,7 +84,7 @@ export const InnerAppSchema: FunctionComponent<{}> = ({ children }) => {
       []
     ),
     false,
-    `the user`
+    'User Data'
   );
 
   if (usersTable) {

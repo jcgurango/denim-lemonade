@@ -10,6 +10,21 @@ import {
 import { evaluateSchema } from 'denim';
 import { dataSource } from '../Data';
 
+const Actions: FunctionComponent<{ schema: any[] }> = ({ schema }) => {
+  return (
+    <>
+      {schema.map((child: any) => (
+        <ComponentRenderer
+          key={child.id}
+          id={child.id}
+          type={child.type}
+          schema={child.schema}
+        />
+      ))}
+    </>
+  );
+};
+
 const ComponentRenderer: FunctionComponent<{
   id: string;
   type: string;
@@ -36,15 +51,18 @@ const ComponentRenderer: FunctionComponent<{
             evaluatedSchema.onSave();
           }
         }}
+        prefill={evaluatedSchema.prefill}
       >
-        {schema.children.map((child: any) => (
-          <ComponentRenderer
-            key={child.id}
-            id={child.id}
-            type={child.type}
-            schema={child.schema}
-          />
-        ))}
+        <DenimApplicationLayout
+          content={(schema.children || []).map((child: any) => (
+            <ComponentRenderer
+              key={child.id}
+              id={child.id}
+              type={child.type}
+              schema={child.schema}
+            />
+          ))}
+        />
       </DenimApplicationForm>
     );
   }
@@ -63,10 +81,13 @@ const ComponentRenderer: FunctionComponent<{
     const schema = {
       ...evaluatedSchema.schema,
       controlProps: {
-        ...(evaluatedSchema.schema || {}),
-        disabled: evaluatedSchema.readonly,
+        ...(evaluatedSchema.schema.controlProps || {}),
       },
     };
+
+    if (evaluatedSchema.readonly) {
+      schema.controlProps.disabled = true;
+    }
 
     return <DenimApplicationField schema={schema} />;
   }
@@ -96,33 +117,21 @@ const ComponentRenderer: FunctionComponent<{
         icon={evaluatedSchema.icon}
         inline={evaluatedSchema.inline}
         type={evaluatedSchema.type}
+        disabled={evaluatedSchema.disabled}
       />
     );
   }
 
   if (type === 'grid-view') {
-    let actions = undefined;
-
-    if (evaluatedSchema.actions && evaluatedSchema.actions.length) {
-      actions = (
-        <>
-          {(evaluatedSchema.actions || []).map((child: any) => (
-            <ComponentRenderer
-              key={child.id}
-              id={child.id}
-              type={child.type}
-              schema={child.schema}
-            />
-          ))}
-        </>
-      );
-    }
-
     return (
       <DenimApplicationView
         table={evaluatedSchema.table}
         columns={evaluatedSchema.columns}
-        actions={actions}
+        actions={
+          schema.actions && evaluatedSchema.actions.length ? (
+            <Actions schema={schema.actions} />
+          ) : undefined
+        }
         query={evaluatedSchema.query}
       />
     );

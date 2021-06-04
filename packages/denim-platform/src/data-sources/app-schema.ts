@@ -257,6 +257,7 @@ appSchemaSource.registerHook({
   type: 'post-create',
   callback: async (table, record) => {
     await refreshAppSchemaRouter();
+    await refreshConsumerFrontend();
     return [record];
   },
 });
@@ -266,6 +267,7 @@ appSchemaSource.registerHook({
   type: 'post-update',
   callback: async (table, id, record) => {
     await refreshAppSchemaRouter();
+    await refreshConsumerFrontend();
     return [id, record];
   },
 });
@@ -274,8 +276,10 @@ const refreshConsumerFrontend = async () => {
   // Retrieve screens.
   const schema: any = {
     screens: [],
+    hasAuthentication: false,
   };
   const screens = await appSchemaSource.retrieveRecords('screens');
+  const [appSetup] = await appSchemaSource.retrieveRecords('app-setup');
 
   screens.forEach((screen: any) => {
     schema.screens.push({
@@ -284,6 +288,8 @@ const refreshConsumerFrontend = async () => {
       schema: JSON.parse(screen.schema || '[]'),
     });
   });
+  
+  schema.hasAuthentication = !!(appSetup && appSetup['users-table'] && appSetup['username-column'] && appSetup['password-column']);
 
   await new Promise<void>((resolve, reject) => {
     fs.writeFile(

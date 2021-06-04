@@ -6,6 +6,7 @@ import {
   DenimNotificationCodes,
   DenimQueryConditionOrGroup,
   DenimRecord,
+  DenimColumnType,
 } from 'denim';
 import { DenimFormProvider } from '../../forms';
 import { useDenimForm } from '../../forms/providers/DenimFormProvider';
@@ -36,12 +37,46 @@ const DenimApplicationForm: FunctionComponent<DenimApplicationFormProps> = ({
   const tableSchema = useMemo(() => {
     return application.dataSource?.getTable(table);
   }, [application.dataSource, table]);
+
+  const convertedPrefill = useMemo(() => {
+    return (
+      prefill &&
+      Object.keys(prefill).reduce<DenimRecord>((current, key) => {
+        let value = prefill[key];
+        const column = tableSchema?.columns.find(({ name }) => name === key);
+
+        if (
+          column?.type === DenimColumnType.ForeignKey &&
+          typeof value === 'string'
+        ) {
+          value = {
+            type: 'record',
+            id: value,
+          };
+
+          if (column.properties.multiple) {
+            value = {
+              type: 'record-collection',
+              records: [value],
+            };
+          }
+        }
+
+        return {
+          ...current,
+          [key]: value,
+        };
+      }, {})
+    );
+  }, [prefill]);
+
   const [currentRecord, setCurrentRecord] = useState<DenimRecord | undefined>(
-    record ? undefined : prefill
+    record ? undefined : convertedPrefill
   );
   const [updateData, setUpdateData] = useState<DenimRecord | undefined>(
-    currentRecord === prefill ? prefill : {}
+    currentRecord === convertedPrefill ? convertedPrefill : {}
   );
+
   const [formValid, setFormValid] = useState(false);
   const [errors, setErrors] = useState<Yup.ValidationError[]>([]);
   const [loading, setLoading] = useState(true);

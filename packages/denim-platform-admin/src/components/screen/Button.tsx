@@ -15,6 +15,7 @@ export interface LayoutAttributes {
   action: any;
   type?: string;
   inline?: boolean;
+  disabled?: boolean;
 }
 
 export const ButtonProperties: FunctionComponent<
@@ -54,6 +55,13 @@ export const ButtonProperties: FunctionComponent<
         <DynamicValue
           label="Inline"
           propKey="inline"
+          schema={schema}
+          onSchemaChange={onSchemaChange}
+          types={['boolean']}
+        />,
+        <DynamicValue
+          label="Disabled"
+          propKey="disabled"
           schema={schema}
           onSchemaChange={onSchemaChange}
           types={['boolean']}

@@ -54,6 +54,27 @@ const getConditionText = (
     .join(` ${condition.type.toUpperCase()} `)})`;
 };
 
+export const getDataTypesForColumn = (column: DenimColumn) => {
+  let types: string[] = [];
+
+  switch (column.type) {
+    case DenimColumnType.Text:
+      types = ['string'];
+      break;
+    case DenimColumnType.ForeignKey:
+      types = ['string', `record-${column.properties.foreignTableId}`];
+      break;
+    case DenimColumnType.Boolean:
+      types = ['boolean'];
+      break;
+    case DenimColumnType.Number:
+      types = ['number'];
+      break;
+  }
+
+  return types;
+};
+
 export const renderDynamicValue = (
   schema: any,
   keyProp: string,
@@ -111,6 +132,18 @@ const DynamicValueContext = createContext<{
       label: 'False',
     },
     {
+      code: "return !boolValue;",
+      arguments: [
+        {
+          name: 'boolValue',
+          label: 'Boolean',
+          type: 'boolean',
+        }
+      ],
+      type: 'boolean',
+      label: 'Not',
+    },
+    {
       code: "return 'pencil';",
       arguments: [],
       type: 'icon',
@@ -127,36 +160,6 @@ const DynamicValueContext = createContext<{
       arguments: [],
       type: 'icon',
       label: 'Delete',
-    },
-    {
-      code: 'return { link: link };',
-      arguments: [
-        {
-          name: 'link',
-          label: 'Relative URL',
-          type: 'string',
-        },
-      ],
-      type: 'button-action',
-      label: 'Link (In-Application)',
-    },
-    {
-      code: 'return { href: link };',
-      arguments: [
-        {
-          name: 'link',
-          label: 'URL',
-          type: 'string',
-        },
-      ],
-      type: 'button-action',
-      label: 'Link (External)',
-    },
-    {
-      code: "return 'deleteRecord';",
-      arguments: [],
-      type: 'button-action',
-      label: 'Delete Record',
     },
     {
       code: 'return { link: link };',
@@ -358,8 +361,6 @@ const DynamicValue: FunctionComponent<{
             condition,
             onConditionChange
           ) => {
-            let types: string[] = [];
-
             const onSchemaChange = (newSchema: any) => {
               if (typeof newSchema === 'function') {
                 return onConditionChange(newSchema(condition));
@@ -367,19 +368,7 @@ const DynamicValue: FunctionComponent<{
 
               return onConditionChange(newSchema);
             };
-
-            switch (column.type) {
-              case DenimColumnType.Text:
-              case DenimColumnType.ForeignKey:
-                types = ['string'];
-                break;
-              case DenimColumnType.Boolean:
-                types = ['boolean'];
-                break;
-              case DenimColumnType.Number:
-                types = ['number'];
-                break;
-            }
+            const types: string[] = getDataTypesForColumn(column);
 
             if (types.length) {
               return (

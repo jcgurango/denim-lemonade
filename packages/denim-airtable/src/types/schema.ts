@@ -29,6 +29,7 @@ export type AirTableColumn =
   | AirTableColumnDefinition<'number', AirTableNumberTypeOptions>
   | AirTableColumnDefinition<'rating', AirTableRatingTypeOptions>
   | AirTableColumnDefinition<'formula', AirTableFormulaTypeOptions>
+  | AirTableColumnDefinition<'rollup', AirTableFormulaTypeOptions>
   | AirTableColumnDefinition<'foreignKey', AirTableForeignKeyTypeOptions>
   | AirTableColumnDefinition<'lookup', AirTableLookupTypeOptions>;
 

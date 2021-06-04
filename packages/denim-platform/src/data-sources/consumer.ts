@@ -77,7 +77,20 @@ const consumerDataSource = async (schemaSource: DenimDataSourceV2) => {
         return {
           id: String(role.id),
           ...defaultSchema,
-          tables: tablesSchema,
+          tables: tablesSchema.map((schema: any) => {
+            const tableSchema = evaluateSchema(schema, { }, 2);
+
+            Object.keys(tableSchema).forEach((key) => {
+              if (tableSchema[key].query) {
+                tableSchema[key] = {
+                  ...tableSchema[key],
+                  ...tableSchema[key].query,
+                };
+              }
+            });
+
+            return tableSchema;
+          }),
           roleQuery: role.query && JSON.parse(String(role.query)),
         };
       });
