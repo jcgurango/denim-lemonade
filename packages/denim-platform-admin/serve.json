@@ -1,0 +1,10 @@
+{
+  "public": "build",
+  "directoryListing": false,
+  "rewrites": [
+    {
+      "source": "**",
+      "destination": "/index.html"
+    }
+  ]
+}
