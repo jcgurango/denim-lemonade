@@ -29,6 +29,7 @@
   "scripts": {
     "start": "env BROWSER=none PORT=3101 craco start",
     "build": "craco build",
+    "serve": "yarn build && npx serve -l 3101 -n build",
     "test": "craco test"
   },
   "eslintConfig": {
@@ -53,7 +54,8 @@
     "@craco/craco": "^6.1.2",
     "@types/numeral": "^2.0.1",
     "@types/random-string": "^0.0.28",
-    "@types/styled-components": "^5.1.9"
+    "@types/styled-components": "^5.1.9",
+    "serve": "^11.3.2"
   },
   "proxy": "http://localhost:4000"
 }
