@@ -7,9 +7,14 @@ import {
   useDenimApplication,
 } from 'denim-forms';
 import './App.css';
+import numeral from 'numeral';
 import { applicationSchema } from './schema';
 import ScreenRenderer from './components/ScreenRenderer';
 import { dataSource } from './Data';
+
+(window as any).formatNumber = (number: any, format: string) => {
+  return numeral(number).format(format);
+};
 
 const HeadersUpdater: FunctionComponent<{}> = ({ children }) => {
   const application = useDenimApplication();
