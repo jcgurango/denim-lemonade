@@ -29,7 +29,7 @@
   "scripts": {
     "start": "env BROWSER=none PORT=3101 craco start",
     "build": "craco build",
-    "serve": "yarn build && npx serve -l 3101",
+    "serve": "npx serve -l 3101",
     "test": "craco test"
   },
   "eslintConfig": {
