@@ -1,5 +1,5 @@
 import express from 'express';
-import appSchemaSource from './data-sources/app-schema';
+import appSchemaSource, { refreshConsumerFrontend } from './data-sources/app-schema';
 import consumerRouter, { refreshConsumerRouter } from './routes/consumer';
 import appSchemaRouter, { refreshAppSchemaRouter } from './routes/app-schema';
 
@@ -18,6 +18,7 @@ app.use('/consumer', consumerRouter);
   await appSchemaSource.initialize();
   await refreshConsumerRouter();
   await refreshAppSchemaRouter();
+  await refreshConsumerFrontend();
 
   app.listen(port, () => {
     console.log(`DENIM platform running on port ${port}...`);

@@ -272,7 +272,7 @@ appSchemaSource.registerHook({
   },
 });
 
-const refreshConsumerFrontend = async () => {
+export const refreshConsumerFrontend = async () => {
   // Retrieve screens.
   const schema: any = {
     screens: [],
