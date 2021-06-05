@@ -37,6 +37,12 @@ server {
     proxy_set_header Host $host;
   }
 
+  location /consumer {
+    proxy_set_header Host 127.0.0.1;
+    proxy_set_header X-Real-IP $remote_addr;
+    proxy_pass http://server:4000/consumer;
+  }
+
   location /app-schema {
     proxy_set_header Host 127.0.0.1;
     proxy_set_header X-Real-IP $remote_addr;
