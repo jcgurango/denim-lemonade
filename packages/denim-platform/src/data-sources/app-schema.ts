@@ -3,7 +3,7 @@ import { AirTable, AirTableSchemaRetriever } from 'denim-airtable';
 import fs from 'fs';
 import path from 'path';
 import { DenimRecord } from 'denim';
-import { refreshConsumerRouter } from '../routes/consumer';
+import { refreshConsumerRouter, setFrontendSchema } from '../routes/consumer';
 import { refreshAppSchemaRouter } from '../routes/app-schema';
 
 enum DataConnectionType {
@@ -290,7 +290,9 @@ export const refreshConsumerFrontend = async () => {
   });
   
   schema.hasAuthentication = !!(appSetup && appSetup['users-table'] && appSetup['username-column'] && appSetup['password-column']);
+  setFrontendSchema(schema);
 
+  /*
   await new Promise<void>((resolve, reject) => {
     fs.writeFile(
       path.join(__dirname, '../../../denim-platform-web/src/schema.ts'),
@@ -304,6 +306,7 @@ export const refreshConsumerFrontend = async () => {
       }
     );
   });
+  */
 };
 
 appSchemaSource.registerHook({

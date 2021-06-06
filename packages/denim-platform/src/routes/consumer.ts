@@ -14,6 +14,11 @@ import { registerUserHooks } from './app-schema';
 
 const consumerRouter = Router();
 const tokenSecret = randomString({ length: 32 });
+let frontendSchema: any = { screens: [] };
+
+export const setFrontendSchema = (schema: any) => {
+  frontendSchema = schema;
+};
 
 export const refreshConsumerRouter = async () => {
   console.log('Refreshing consumer router...');
@@ -61,6 +66,9 @@ export const refreshConsumerRouter = async () => {
   }
 
   consumerRouter.use(DenimDataSourceV2Router(frontendDataSource));
+  consumerRouter.use('/app', (req, res) => {
+    res.json(frontendSchema);
+  });
 };
 
 export default consumerRouter;

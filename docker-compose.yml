@@ -13,7 +13,7 @@ services:
   server:
     build:
       context: ./.docker/server
-    command: bash -c 'yarn install && npx lerna bootstrap && yarn transpile && yarn build && ((cd /app/packages/denim-platform/ && yarn server) & (cd /app/packages/denim-platform-admin/ && yarn serve) & (cd /app/packages/denim-platform-web/ && yarn start))'
+    command: bash -c 'yarn install && npx lerna bootstrap && yarn transpile && yarn build && ((cd /app/packages/denim-platform/ && yarn server) & (cd /app/packages/denim-platform-admin/ && yarn serve) & (cd /app/packages/denim-platform-web/ && yarn serve))'
     working_dir: /app
     env_file: .env
     volumes:

@@ -6,9 +6,9 @@ import {
   DenimScreenV2,
   useDenimApplication,
 } from 'denim-forms';
-import './App.css';
+import bent from 'bent';
 import numeral from 'numeral';
-import { applicationSchema } from './schema';
+import './App.css';
 import ScreenRenderer from './components/ScreenRenderer';
 import { dataSource } from './Data';
 
@@ -47,15 +47,20 @@ const HeadersUpdater: FunctionComponent<{}> = ({ children }) => {
 
 function App() {
   const [loading, setLoading] = useState(true);
+  const [applicationSchema, setApplicationSchema] = useState<any>();
 
   useEffect(() => {
     (async () => {
       await dataSource.retrieveSchema();
+      const schema = await bent((process.env.REACT_APP_API_BASE_URL ||
+        `${window.location.origin}/consumer`), 'json')('/app');
+
+        setApplicationSchema(schema);
       setLoading(false);
     })();
   }, []);
 
-  if (loading) {
+  if (loading || !applicationSchema) {
     return null;
   }
 
