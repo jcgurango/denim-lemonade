@@ -1,77 +1,99 @@
-const puppeteer = require('puppeteer');
+const tough = require('tough-cookie');
+const { default: got } = require('got');
 
 const adminLogin = async (
+  cookieJar,
   onQrCode = (code) => { },
-  onLoggedIn = (page) => { },
-  {
-    tenantId = null,
-  } = {},
 ) => {
-  const browser = await puppeteer.launch({
-    headless: true,
-    args: ['--no-sandbox'],
+  cookieJar = cookieJar || new tough.CookieJar();
+
+  let adminResponse = await got('https://www.larksuite.com/admin/index', {
+    cookieJar,
   });
 
-  try {
-    let qrId = null;
-    const page = await browser.newPage();
+  if (adminResponse.url.indexOf('https://www.larksuite.com/suite/passport/page/login') === 0) {
+    console.log('Redirected to login. Getting QR...');
 
-    page.on('requestfinished', (req) => {
-      if (req.url().indexOf('qrlogin/init') > -1) {
-        req.response().json().then(({ data: { qr_code } }) => {
-          qrId = qr_code;
-        });
-      }
+    const qrResponse = await got.post('https://www.larksuite.com/suite/passport/v3/qrlogin/init', {
+      cookieJar,
+      json: {
+        app_id: 13,
+        query_scope: 'local',
+        redirect_uri: 'https://www.larksuite.com/admin/index',
+      },
+      headers: {
+        'x-terminal-type': 2,
+      },
+      responseType: 'json',
     });
-
-    await page.goto('https://www.larksuite.com/admin', { waitUntil: 'networkidle2' });
-    await page.waitForSelector('.switch-login-mode-box');
-    await page.evaluate('document.querySelector(".switch-login-mode-box").click();');
-    await page.waitForSelector('.newLogin_scan-QR-code-show canvas');
-
-    await new Promise((resolve, reject) => {
-      const interval = setInterval(() => {
-        if (qrId) {
-          resolve(qrId);
-          clearInterval(interval);
-        }
-      }, 100);
-    });
+    const passportToken = qrResponse.headers['x-passport-token'];
+    
+    if (!qrResponse.body.data || !qrResponse.body.data.qr_code) {
+      throw new Error(qrResponse.body.message);
+    }
 
     onQrCode(JSON.stringify({
       qrlogin: {
-        token: qrId,
+        token: qrResponse.body.data.qr_code,
       }
     }));
 
-    await page.waitForNavigation({ timeout: 5 * 60 * 1000 });
-    let pageContent = await page.content();
+    let user = null;
 
-    if (pageContent.indexOf('Sorry, you don\'t have permission.') > -1) {
-      if (tenantId) {
-        await page.waitForSelector("[data-id='" + tenantId + "']");
-        await page.evaluate(function (tenantId) {
-          document.querySelector("[data-id='" + tenantId + "']").click();
-        }, [tenantId]);
+    while (true) {
+      const qrScanResponse = await got.post('https://www.larksuite.com/suite/passport/v3/qrlogin/polling', {
+        cookieJar,
+        json: {
+          app_id: 13,
+          query_scope: 'local',
+          redirect_uri: 'https://www.larksuite.com/admin/index',
+        },
+        headers: {
+          'x-passport-token': passportToken,
+          'x-terminal-type': 2,
+        },
+        responseType: 'json',
+      });
 
-        await page.waitForNavigation();
-
-        pageContent = await page.content();
-
-        if (pageContent.indexOf('Sorry, you don\'t have permission.') > -1) {
-          throw new Error('Tenant unauthorized.');
-        }
-      } else {
-        throw new Error('Unauthorized.');
+      if (qrScanResponse.body.data.state === 0) {
+        console.log('QR code scanned!');
+        user = qrScanResponse.body.data.user;
+        break;
       }
     }
 
-    await onLoggedIn(page);
-    await browser.close();
-  } catch (e) {
-    await browser.close();
-    throw e;
+    if (!user) {
+      throw new Error('No user.');
+    }
+
+    const appLoginResponse = await got.post('https://www.larksuite.com/suite/passport/v3/app', {
+      cookieJar,
+      json: {
+        user_id: user.user_id,
+        apply_device_login_id: true,
+      },
+      headers: {
+        'x-passport-token': passportToken,
+        'x-terminal-type': 2,
+      },
+      responseType: 'json',
+    });
+
+    const urls = appLoginResponse.body.data.cross_login_uris;
+
+    for (let i = 0; i < urls.length; i++) {
+      await got.get(urls[i], {
+        cookieJar,
+        responseType: 'json',
+      });
+    }
   }
+
+  adminResponse = await got('https://www.larksuite.com/admin/index', {
+    cookieJar,
+  });
+
+  return adminResponse;
 };
 
 module.exports = {

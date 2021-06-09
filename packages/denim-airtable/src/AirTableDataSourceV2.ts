@@ -482,7 +482,7 @@ export default class AirTableDataSourceV2 extends DenimDataSourceV2 {
       .table(table)
       .create(this.mapDenimRecordToAirTableFields(table, record));
 
-    return this.mapAirtableToDenimRecord(table, atRecord[0]);
+    return this.mapAirtableToDenimRecord(table, Array.isArray(atRecord) ? atRecord[0] : atRecord);
   }
 
   protected async delete(table: string, id: string): Promise<void> {

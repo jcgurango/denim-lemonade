@@ -8,15 +8,11 @@ import {
   DenimWorkflowContext,
 } from 'denim';
 import { AirTableDataSourceV2 } from 'denim-airtable';
+import moment from 'moment';
 import { LemonadeValidations } from '../../denim-lemonade/src/validation';
 import { CalculateAttendance } from './CalculateAttendance';
 import PaydayDataSource from './PaydayDataSource';
 
-const larkAdmin = require('lark-airtable-connector/src/services/lark-admin');
-const attendance =
-  require('lark-airtable-connector/src/services/retrievers/attendance-retriever')(
-    larkAdmin
-  );
 const {
   dailyAttendanceToAirTable: { multiple: convertDailyAttendance },
 } = require('lark-airtable-connector/src/services/mappers');
@@ -290,7 +286,17 @@ LemonadeDataSource.schema.workflows = [
   const holidayTypesByDate: { [key: string]: string } = {};
 
   holidays.forEach((holiday) => {
-    holidayTypesByDate[String(holiday.Date)] = String(holiday['Holiday Type']);
+    const dates = [String(holiday.Date)];
+
+    if (holiday['End Date']) {
+      for (let date = moment(String(holiday.Date)).add(1, 'day'); date.isSameOrBefore(String(holiday['End Date'])); date = date.add(1, 'day')) {
+        dates.push(date.format('YYYY-MM-DD'));
+      }
+    }
+
+    dates.forEach((date) => {
+      holidayTypesByDate[date] = String(holiday['Holiday Type']);
+    });
   });
 
   const exportRows = await LemonadeDataSource.retrieveRecords(
@@ -333,114 +339,5 @@ LemonadeDataSource.schema.workflows = [
     }
   }
 };
-
-larkAdmin.init();
-
-(async () => {
-  console.log('Syncing master records from PayDay...');
-
-  const sync = async (paydayTable: string, lemonadeTable: string, fieldMap: { [key: string]: string; }) => {
-    console.log(`Syncing ${paydayTable} => ${lemonadeTable}...`);
-
-    const paydayRecords = await LemonadeDataSource.retrieveRecords(paydayTable);
-  
-    for (let i = 0; i < paydayRecords.length; i++) {
-      const record = paydayRecords[i];
-      const updateRecord: DenimRecord = {
-        'PDY ID': record.id,
-      };
-  
-      Object.keys(fieldMap).forEach((key) => {
-        updateRecord[fieldMap[key]] = record[key];
-      });
-  
-      // Look for an existing record.
-      const [existingRecord] = await LemonadeDataSource.retrieveRecords(lemonadeTable, {
-        conditions: {
-          conditionType: 'single',
-          field: 'PDY ID',
-          operator: DenimQueryOperator.Equals,
-          value: record.id,
-        },
-      });
-
-      if (record.CompanyId) {
-        const [companyRecord] = await LemonadeDataSource.retrieveRecords('Companies', {
-          conditions: {
-            conditionType: 'single',
-            field: 'PDY ID',
-            operator: DenimQueryOperator.Equals,
-            value: record.CompanyId,
-          },
-        });
-
-        if (companyRecord) {
-          updateRecord.Company = {
-            type: 'record',
-            id: companyRecord.id || '',
-          };
-        }
-      }
-
-      if (existingRecord) {
-        await LemonadeDataSource.updateRecord(lemonadeTable, existingRecord.id || '', updateRecord);
-      } else {
-        await LemonadeDataSource.createRecord(lemonadeTable, updateRecord);
-      }
-    }
-  }
-
-  await sync('pdy-wages', 'Wage Zones', {
-    Code: 'REGION',
-    Description: 'Description',
-    Amount: 'Minimum Wage',
-  });
-
-  await sync('pdy-jobs-status', 'Account Statuses', {
-    Status: 'Name',
-  });
-
-  await sync('pdy-groupings', 'Payroll Groupings', {
-    Code: 'Name',
-    Description: 'Description',
-  });
-
-  await sync('pdy-companies', 'Companies', {
-    Code: 'CODE',
-    Name: 'Company Name',
-    Address: 'Address',
-    ZipCode: 'ZIP Code',
-    ContactPerson: 'Contact Person',
-    Position: 'Contact Position',
-    FaxNo: 'Fax Number',
-    MobileNo: 'Mobile Number',
-    TelephoneNo: 'Telephone Number',
-    Pagibig: 'PAGIBIG ID',
-    PhilHealth: 'PHILHEALTH ID',
-    SSS: 'SSS ID',
-    TaxId: 'TIN NUMBER',
-  });
-
-  await sync('pdy-nationalities', 'Nationalities', {
-    Name: 'Name',
-  });
-
-  await sync('pdy-days-per-year', 'Days of Work Per Year', {
-    Name: 'Days',
-  });
-
-  await sync('pdy-employment-status', 'Employment Statuses', {
-    Status: 'Name',
-  });
-
-  await sync('pdy-pay-basis', 'Pay Basis', {
-    Basis: 'Name',
-  });
-
-  await sync('pdy-locations', 'Workplaces', {
-    Code: 'Code',
-    Name: 'Workplace',
-  });
-})();
 
 export default LemonadeDataSource;

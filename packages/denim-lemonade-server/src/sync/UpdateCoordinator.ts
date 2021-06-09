@@ -150,9 +150,7 @@ export default class UpdateCoordinator {
                 }
               }
 
-              this.buckets[bucket] = this.buckets[bucket].filter(
-                (record) => success.indexOf(record) === -1,
-              );
+              this.buckets[bucket] = [];
             }),
           );
 

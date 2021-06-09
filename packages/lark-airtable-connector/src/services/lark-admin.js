@@ -1,11 +1,11 @@
 const { adminLogin } = require('lark-admin-simulator');
-const got = require('got');
+const { default: got } = require('got');
 const tough = require('tough-cookie');
 const qrcodeTerminal = require('qrcode-terminal');
-const CookieFileStore = require('tough-cookie-file-store').FileCookieStore
-const fs = require('fs');
+const CookieFileStore = require('tough-cookie-file-store').FileCookieStore;
 
 let cookies = null;
+let csrfToken = '';
 
 const getCsrfCookie = async (url = 'https://www.larksuite.com/approval/admin/approvalList', tokenCookie = '_csrf_token') => {
   const all = await cookies.getCookies(url);
@@ -13,68 +13,48 @@ const getCsrfCookie = async (url = 'https://www.larksuite.com/approval/admin/app
   return cookie.value;
 };
 
+const crossAppLogin = async (host, appId, callbackUrl, cookieJar) => {
+  const csrf = await getCsrfCookie(`https://${host}/suite/admin/appcenter/app/${appId}/auth_code`, 'csrf_token');
+
+  const authCodeResponse = await got.get(`https://${host}/suite/admin/appcenter/app/${appId}/auth_code`, {
+    cookieJar,
+    headers: {
+      'x-csrf-token': csrf,
+    },
+    responseType: 'json',
+  });
+
+  const { authCode } = authCodeResponse.body;
+
+  await got.get(`${callbackUrl}&code=${authCode}`, {
+    cookieJar,
+  });
+};
+
 module.exports = {
   init: async () => {
-    if (fs.existsSync('.larkadmincookie')) {
-      cookies = new tough.CookieJar(new CookieFileStore('.larkadmincookie'));
-    } else {
-      const cookieJar = new tough.CookieJar(new CookieFileStore('.larkadmincookie'));
+    const cookieJar = new tough.CookieJar(new CookieFileStore('.larkadmincookie'));
 
-      await adminLogin(
-        (code) => {
-          qrcodeTerminal.generate(code, { small: true });
-          console.log('Please scan this QR code to continue.');
-        },
-        async (page) => {
-          const cookies = await page.cookies();
+    const adminResponse = await adminLogin(
+      cookieJar,
+      (code) => {
+        qrcodeTerminal.generate(code, { small: true });
+        console.log('Please scan this QR code to continue.');
+      }
+    );
 
-          for (let i = 0; i < cookies.length; i++) {
-            const cookie = cookies[i];
-            cookieJar.setCookie(new tough.Cookie({
-              key: cookie.name,
-              value: cookie.value,
-              httpOnly: cookie.httpOnly,
-              secure: cookie.secure,
-            }), page.url());
-          }
+    cookies = cookieJar;
+    const url = new URL(adminResponse.url);
 
-          const retrieveOtherCookies = async (appId, wait) => {
-            await page.goto(`https://${process.env.LARK_TENANT_SUBDOMAIN}.larksuite.com/admin_console/appCenter/manage/${appId}`, { waitUntil: 'networkidle2' });
-            await page.waitForSelector('.ant-col.ant-col-12 a');
-            await page.evaluate(() => {
-              document.querySelector('.ant-col.ant-col-12 a').click();
-            });
+    // Log into attendance admin.
+    await crossAppLogin(url.host, 'cli_9dc2bfd708759106', 'https://www.larksuite.com/attendance/manage/callback?next=https%3a%2f%2fwww.larksuite.com%2fattendance%2fmanage%2fgroup%2flist', cookieJar);
 
-            const pageTarget = page.target();
-            const otherPageTarget = await page.browser().waitForTarget((target) => target.opener() === pageTarget);
-            const otherPage = await otherPageTarget.page();
-            await wait(otherPage);
-            const otherPageCookies = await otherPage.cookies();
-
-            for (let i = 0; i < otherPageCookies.length; i++) {
-              const cookie = otherPageCookies[i];
-              await cookieJar.setCookie(new tough.Cookie({
-                key: cookie.name,
-                value: cookie.value,
-                httpOnly: cookie.httpOnly,
-                secure: cookie.secure,
-                path: cookie.path,
-              }), otherPage.url());
-            }
-          };
-
-          await retrieveOtherCookies('cli_9dc2bfd708759106', (otherPage) => (otherPage.waitForSelector('.ant-layout-content')));
-          //await retrieveOtherCookies('cli_9c7cc8a9a9edd105', (otherPage) => (otherPage.waitForSelector('.ant-breadcrumb-link')));
-        },
-      );
-
-      cookies = cookieJar;
-    }
+    // Log into approval admin.
+    await crossAppLogin(url.host, 'cli_9c7cc8a9a9edd105', 'https://www.larksuite.com/approval/admin/callback?next=https%3a%2f%2fwww.larksuite.com%2fapproval%2fadmin', cookieJar);
+    csrfToken = await getCsrfCookie('https://www.larksuite.com/approval/admin', 'lob_csrf_token');
   },
   attendance: {
     getUser: async (QueryString) => {
-      const csrf = await getCsrfCookie('https://www.larksuite.com/attendance/manage', 'lob_csrf_token');
-
       const { body } = await got('https://www.larksuite.com/attendance/manage/SearchOapiUser', {
         method: 'POST',
         json: {
@@ -83,7 +63,7 @@ module.exports = {
         },
         cookieJar: cookies,
         headers: {
-          'x-csrftoken': csrf,
+          'x-csrftoken': csrfToken,
         },
         responseType: 'json',
       });
@@ -91,8 +71,6 @@ module.exports = {
       return body;
     },
     getColumns: async (TaskType = 'daily') => {
-      const csrf = await getCsrfCookie('https://www.larksuite.com/attendance/manage', 'lob_csrf_token');
-
       const { body: { data } } = await got('https://www.larksuite.com/attendance/manage/GetStatisticsColumns', {
         method: 'POST',
         json: {
@@ -101,7 +79,7 @@ module.exports = {
         },
         cookieJar: cookies,
         headers: {
-          'x-csrftoken': csrf,
+          'x-csrftoken': csrfToken,
         },
         responseType: 'json',
       });
@@ -109,14 +87,12 @@ module.exports = {
       return data;
     },
     getStatistics: async (query) => {
-      const csrf = await getCsrfCookie('https://www.larksuite.com/attendance/manage', 'lob_csrf_token');
-
       const { body } = await got('https://www.larksuite.com/attendance/manage/GetStatisticsList', {
         method: 'POST',
         json: query,
         cookieJar: cookies,
         headers: {
-          'x-csrftoken': csrf,
+          'x-csrftoken': csrfToken,
         },
         responseType: 'json',
       });
@@ -125,6 +101,34 @@ module.exports = {
     },
   },
   leaves: {
+    getOvertimeRules: async () => {
+      const { body } = await got('https://www.larksuite.com/approval/admin/api/workManagement/rule/list', {
+        method: 'POST',
+        json: {},
+        cookieJar: cookies,
+        headers: {
+          'x-csrftoken': csrfToken,
+        },
+        responseType: 'json',
+      });
+
+      return body.data;
+    },
+    getOvertimeRule: async (id) => {
+      const { body } = await got('https://www.larksuite.com/approval/admin/api/workManagement/rule/detail', {
+        method: 'POST',
+        json: {
+          id,
+        },
+        cookieJar: cookies,
+        headers: {
+          'x-csrftoken': csrfToken,
+        },
+        responseType: 'json',
+      });
+
+      return body.data;
+    },
     getBalanceLog: async (defId, userId) => {
       const { body } = await got('https://www.larksuite.com/approval/admin/api/GetBalanceLogForUser', {
         method: 'POST',

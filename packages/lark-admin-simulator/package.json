@@ -9,7 +9,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "puppeteer": "^5.4.0"
+    "got": "^11.8.2",
+    "tough-cookie": "^4.0.0"
   },
   "devDependencies": {
     "axios": "^0.21.0",

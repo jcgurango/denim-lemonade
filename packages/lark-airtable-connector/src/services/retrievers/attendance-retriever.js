@@ -40,5 +40,16 @@
         __meta: { ColumnFamilies },
       }));
     },
+    retrieveOvertimeRules: async () => {
+      const { ruleDTO } = await larkAdmin.leaves.getOvertimeRules();
+      const ruleList = [];
+
+      for (let i = 0; i < ruleDTO.length; i++) {
+        const rule = await larkAdmin.leaves.getOvertimeRule(ruleDTO[i].id);
+        ruleList.push(rule);
+      }
+
+      return ruleList;
+    },
   };
 };
