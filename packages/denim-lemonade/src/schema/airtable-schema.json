@@ -1006,17 +1006,6 @@
 				"name": "Bank",
 				"type": "text",
 				"typeOptions": null
-			},
-			{
-				"id": "fldQUVKbOsFeqVrZ8",
-				"name": "Payslip",
-				"type": "foreignKey",
-				"typeOptions": {
-					"foreignTableId": "tblF6cqzbCg0fm4t4",
-					"symmetricColumnId": "fldnzKnAehiIwoMiB",
-					"relationship": "many",
-					"unreversed": true
-				}
 			}
 		]
 	},
@@ -5156,6 +5145,12 @@
 					"negative": false,
 					"validatorName": "positive"
 				}
+			},
+			{
+				"id": "fldpSD2jlt9JE9Mj1",
+				"name": "Description",
+				"type": "text",
+				"typeOptions": null
 			}
 		]
 	},
@@ -5650,9 +5645,7 @@
 				"name": "Income Amount 1",
 				"type": "number",
 				"typeOptions": {
-					"format": "currency",
-					"precision": 2,
-					"symbol": "$",
+					"format": "integer",
 					"negative": false,
 					"validatorName": "positive"
 				}
@@ -5668,9 +5661,8 @@
 				"name": "Income Amount 2",
 				"type": "number",
 				"typeOptions": {
-					"format": "currency",
+					"format": "decimal",
 					"precision": 2,
-					"symbol": "$",
 					"negative": false,
 					"validatorName": "positive"
 				}
@@ -5698,9 +5690,8 @@
 				"name": "Income Amount 3",
 				"type": "number",
 				"typeOptions": {
-					"format": "currency",
+					"format": "decimal",
 					"precision": 2,
-					"symbol": "$",
 					"negative": false,
 					"validatorName": "positive"
 				}
@@ -5710,9 +5701,8 @@
 				"name": "Income Amount 4",
 				"type": "number",
 				"typeOptions": {
-					"format": "currency",
+					"format": "decimal",
 					"precision": 2,
-					"symbol": "$",
 					"negative": false,
 					"validatorName": "positive"
 				}
@@ -5722,9 +5712,8 @@
 				"name": "Income Amount 5",
 				"type": "number",
 				"typeOptions": {
-					"format": "currency",
+					"format": "decimal",
 					"precision": 2,
-					"symbol": "$",
 					"negative": false,
 					"validatorName": "positive"
 				}
@@ -5740,9 +5729,8 @@
 				"name": "Income Amount 6",
 				"type": "number",
 				"typeOptions": {
-					"format": "currency",
+					"format": "decimal",
 					"precision": 2,
-					"symbol": "$",
 					"negative": false,
 					"validatorName": "positive"
 				}
@@ -5788,9 +5776,8 @@
 				"name": "Deduction Amount 1",
 				"type": "number",
 				"typeOptions": {
-					"format": "currency",
+					"format": "decimal",
 					"precision": 2,
-					"symbol": "$",
 					"negative": false,
 					"validatorName": "positive"
 				}
@@ -5800,9 +5787,8 @@
 				"name": "Deduction Amount 2",
 				"type": "number",
 				"typeOptions": {
-					"format": "currency",
+					"format": "decimal",
 					"precision": 2,
-					"symbol": "$",
 					"negative": false,
 					"validatorName": "positive"
 				}
@@ -5812,9 +5798,8 @@
 				"name": "Deduction Amount 3",
 				"type": "number",
 				"typeOptions": {
-					"format": "currency",
+					"format": "decimal",
 					"precision": 2,
-					"symbol": "$",
 					"negative": false,
 					"validatorName": "positive"
 				}
@@ -5824,9 +5809,8 @@
 				"name": "Deduction Amount 4",
 				"type": "number",
 				"typeOptions": {
-					"format": "currency",
+					"format": "decimal",
 					"precision": 2,
-					"symbol": "$",
 					"negative": false,
 					"validatorName": "positive"
 				}
@@ -5836,9 +5820,8 @@
 				"name": "Deduction Amount 5",
 				"type": "number",
 				"typeOptions": {
-					"format": "currency",
+					"format": "decimal",
 					"precision": 2,
-					"symbol": "$",
 					"negative": false,
 					"validatorName": "positive"
 				}
@@ -5848,9 +5831,8 @@
 				"name": "Deduction Amount 6",
 				"type": "number",
 				"typeOptions": {
-					"format": "currency",
+					"format": "decimal",
 					"precision": 2,
-					"symbol": "$",
 					"negative": false,
 					"validatorName": "positive"
 				}
@@ -5884,31 +5866,12 @@
 				}
 			},
 			{
-				"id": "fldnzKnAehiIwoMiB",
-				"name": "Employee",
-				"type": "foreignKey",
+				"id": "fldnH0hgqFj0xOGao",
+				"name": "Date Issued",
+				"type": "date",
 				"typeOptions": {
-					"foreignTableId": "tblwceR29WfuANzls",
-					"relationship": "one",
-					"unreversed": true,
-					"symmetricColumnId": "fldQUVKbOsFeqVrZ8"
-				}
-			},
-			{
-				"id": "fldtOsfIHCYyIrrI9",
-				"name": "Email (from Employee)",
-				"type": "lookup",
-				"typeOptions": {
-					"relationColumnId": "fldnzKnAehiIwoMiB",
-					"foreignTableRollupColumnId": "fldpRMSNGO24MokMF",
-					"canUseSelectResultType": true,
-					"dependencies": {
-						"referencedColumnIdsForValue": [
-							"fldnzKnAehiIwoMiB",
-							"fldpRMSNGO24MokMF"
-						]
-					},
-					"resultType": "text"
+					"isDateTime": false,
+					"dateFormat": "Friendly"
 				}
 			}
 		]

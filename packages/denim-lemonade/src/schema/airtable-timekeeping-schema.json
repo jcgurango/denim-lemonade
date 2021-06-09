@@ -769,6 +769,15 @@
 					},
 					"disableColors": false
 				}
+			},
+			{
+				"id": "fldTPWlyewawVXY3g",
+				"name": "End Date",
+				"type": "date",
+				"typeOptions": {
+					"isDateTime": false,
+					"dateFormat": "Local"
+				}
 			}
 		]
 	},
@@ -1416,6 +1425,489 @@
 				"id": "fldUbEXga4F84Ui99",
 				"name": "Period ID",
 				"type": "text",
+				"typeOptions": null
+			}
+		]
+	},
+	{
+		"id": "tbluYTESVqlKFqdvD",
+		"name": "Payslip",
+		"columns": [
+			{
+				"id": "fldeP5Pn1kFr7Phqg",
+				"name": "Employee Id",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fld2b2PU0IttChk4V",
+				"name": "PayrollPeriod",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldkFf6dAJmhHb7Q0",
+				"name": "Name",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldP4ugJ0IOQRVBpE",
+				"name": "Location",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldzhvtGmMJXrJOwz",
+				"name": "Department",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldJA5SA8aFlBN90r",
+				"name": "DateHired",
+				"type": "date",
+				"typeOptions": {
+					"isDateTime": false,
+					"dateFormat": "Local"
+				}
+			},
+			{
+				"id": "fldkmDXCQfxQ68Hsv",
+				"name": "Monthly Rate",
+				"type": "number",
+				"typeOptions": {
+					"format": "currency",
+					"precision": 2,
+					"symbol": "$",
+					"negative": false,
+					"validatorName": "positive"
+				}
+			},
+			{
+				"id": "fldJfnwPvy7kBT6Rt",
+				"name": "Basic Rate",
+				"type": "number",
+				"typeOptions": {
+					"format": "currency",
+					"precision": 2,
+					"symbol": "$",
+					"negative": false,
+					"validatorName": "positive"
+				}
+			},
+			{
+				"id": "fldiFynsWGu0tLusk",
+				"name": "Position",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldpX9U0oniTk3UkA",
+				"name": "YTDTaxInc",
+				"type": "number",
+				"typeOptions": {
+					"format": "currency",
+					"precision": 2,
+					"symbol": "$",
+					"negative": false,
+					"validatorName": "positive"
+				}
+			},
+			{
+				"id": "fldoc3QH1gLsgveii",
+				"name": "YTDWTax",
+				"type": "number",
+				"typeOptions": {
+					"format": "currency",
+					"precision": 2,
+					"symbol": "$",
+					"negative": false,
+					"validatorName": "positive"
+				}
+			},
+			{
+				"id": "fldbH31EOAvZdN0TA",
+				"name": "Gross",
+				"type": "number",
+				"typeOptions": {
+					"format": "currency",
+					"precision": 2,
+					"symbol": "$",
+					"negative": false,
+					"validatorName": "positive"
+				}
+			},
+			{
+				"id": "fldtiff2TvpoCfuRA",
+				"name": "Total Deduction",
+				"type": "number",
+				"typeOptions": {
+					"format": "currency",
+					"precision": 2,
+					"symbol": "$",
+					"negative": false,
+					"validatorName": "positive"
+				}
+			},
+			{
+				"id": "fldGdurUgVot1bdwa",
+				"name": "Net",
+				"type": "number",
+				"typeOptions": {
+					"format": "currency",
+					"precision": 2,
+					"symbol": "$",
+					"negative": false,
+					"validatorName": "positive"
+				}
+			},
+			{
+				"id": "fldgqFjzRpyFbEDsL",
+				"name": "Income Name 1",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldqrWbiEKzDMG2ga",
+				"name": "Income Name 2",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldTZe7NO1tAOjKCH",
+				"name": "Income Name 3",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fld1Bi48rSAiuM0d3",
+				"name": "Income Name 4",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fld1LASV1nNJpBNRP",
+				"name": "Income Name 5",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldWJXu6CdlVYXVF6",
+				"name": "Income Name 6",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fld3WCXDZXHhsWfKR",
+				"name": "Income Amount 1",
+				"type": "number",
+				"typeOptions": {
+					"format": "currency",
+					"precision": 2,
+					"symbol": "$",
+					"negative": false,
+					"validatorName": "positive"
+				}
+			},
+			{
+				"id": "flduX9Wst9C9VNUVH",
+				"name": "Income Amount 2",
+				"type": "number",
+				"typeOptions": {
+					"format": "currency",
+					"precision": 2,
+					"symbol": "$",
+					"negative": false,
+					"validatorName": "positive"
+				}
+			},
+			{
+				"id": "fldw5NwAYBtB3dXBW",
+				"name": "Income Amount 3",
+				"type": "number",
+				"typeOptions": {
+					"format": "currency",
+					"precision": 2,
+					"symbol": "$",
+					"negative": false,
+					"validatorName": "positive"
+				}
+			},
+			{
+				"id": "fldMDUlaH6Jkxsus0",
+				"name": "Income Amount 4",
+				"type": "number",
+				"typeOptions": {
+					"format": "currency",
+					"precision": 2,
+					"symbol": "$",
+					"negative": false,
+					"validatorName": "positive"
+				}
+			},
+			{
+				"id": "fldwvXyp6jPE1ESMU",
+				"name": "Income Amount 5",
+				"type": "number",
+				"typeOptions": {
+					"format": "currency",
+					"precision": 2,
+					"symbol": "$",
+					"negative": false,
+					"validatorName": "positive"
+				}
+			},
+			{
+				"id": "fldzlMAxFvD9bRcI2",
+				"name": "Income Amount 6",
+				"type": "number",
+				"typeOptions": {
+					"format": "currency",
+					"precision": 2,
+					"symbol": "$",
+					"negative": false,
+					"validatorName": "positive"
+				}
+			},
+			{
+				"id": "fld5Y3LbjQQqlkNoe",
+				"name": "Deduction Name 1",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldyWeHCG4M3tpnKn",
+				"name": "Deduction Name 2",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldasdWiGIeREqW57",
+				"name": "Deduction Name 3",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldtPyZeqfEKApKja",
+				"name": "Deduction Name 4",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldzwoHCTsqOWLDMb",
+				"name": "Deduction Name 5",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fld1OKgXruxIVDMVy",
+				"name": "Deduction Name 6",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldw2azohT9bS9puD",
+				"name": "Deduction Amount 1",
+				"type": "number",
+				"typeOptions": {
+					"format": "currency",
+					"precision": 2,
+					"symbol": "$",
+					"negative": false,
+					"validatorName": "positive"
+				}
+			},
+			{
+				"id": "fld8p1K0NWCUriqwz",
+				"name": "Deduction Amount 2",
+				"type": "number",
+				"typeOptions": {
+					"format": "currency",
+					"precision": 2,
+					"symbol": "$",
+					"negative": false,
+					"validatorName": "positive"
+				}
+			},
+			{
+				"id": "fldv9NVu1aNIkcpUG",
+				"name": "Deduction Amount 3",
+				"type": "number",
+				"typeOptions": {
+					"format": "currency",
+					"precision": 2,
+					"symbol": "$",
+					"negative": false,
+					"validatorName": "positive"
+				}
+			},
+			{
+				"id": "fldBXRY92qsT3vWsE",
+				"name": "Deduction Amount 4",
+				"type": "number",
+				"typeOptions": {
+					"format": "currency",
+					"precision": 2,
+					"symbol": "$",
+					"negative": false,
+					"validatorName": "positive"
+				}
+			},
+			{
+				"id": "fld0VVDtJzeWzOteU",
+				"name": "Deduction Amount 5",
+				"type": "number",
+				"typeOptions": {
+					"format": "currency",
+					"precision": 2,
+					"symbol": "$",
+					"negative": false,
+					"validatorName": "positive"
+				}
+			},
+			{
+				"id": "fldrh4i3pVRQ7AbN9",
+				"name": "Deduction Amount 6",
+				"type": "number",
+				"typeOptions": {
+					"format": "currency",
+					"precision": 2,
+					"symbol": "$",
+					"negative": false,
+					"validatorName": "positive"
+				}
+			},
+			{
+				"id": "fld8tDUe72RGMDs8v",
+				"name": "Loan Name 1",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldgbBBXJLyDlG7Kb",
+				"name": "Loan Name 2",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldoh7edWrHtBiXYp",
+				"name": "Loan Name 3",
+				"type": "multilineText",
+				"typeOptions": null
+			},
+			{
+				"id": "fld8TmWU5slGCNP08",
+				"name": "Loan Name 4",
+				"type": "multilineText",
+				"typeOptions": null
+			},
+			{
+				"id": "fldqDj8W6Cp9Lnr8O",
+				"name": "Loan Name 5",
+				"type": "multilineText",
+				"typeOptions": null
+			},
+			{
+				"id": "fldkVzAeZPrkvCkhF",
+				"name": "Loan Name 6",
+				"type": "multilineText",
+				"typeOptions": null
+			},
+			{
+				"id": "flddUq1nkEgv5AnKB",
+				"name": "Loan Name 7",
+				"type": "multilineText",
+				"typeOptions": null
+			},
+			{
+				"id": "fldZzhs1AhCPV3940",
+				"name": "Loan Name 8",
+				"type": "multilineText",
+				"typeOptions": null
+			},
+			{
+				"id": "fldiDmnAsqv4OqMMn",
+				"name": "Loan Name 9",
+				"type": "multilineText",
+				"typeOptions": null
+			},
+			{
+				"id": "fldXiS99pf6p9vfGA",
+				"name": "Loan Name 10",
+				"type": "multilineText",
+				"typeOptions": null
+			},
+			{
+				"id": "fldIzCpeQHcNO929F",
+				"name": "Loan Amount 1",
+				"type": "multilineText",
+				"typeOptions": null
+			},
+			{
+				"id": "fldVQ7my024rbnstU",
+				"name": "Loan Amount 2",
+				"type": "multilineText",
+				"typeOptions": null
+			},
+			{
+				"id": "fldpxew4TgkxLezMI",
+				"name": "Loan Amount 3",
+				"type": "multilineText",
+				"typeOptions": null
+			},
+			{
+				"id": "fld54JMGzETnJHAKx",
+				"name": "Loan Amount 4",
+				"type": "multilineText",
+				"typeOptions": null
+			},
+			{
+				"id": "fldSuCS37N4bage8y",
+				"name": "Loan Amount 5",
+				"type": "multilineText",
+				"typeOptions": null
+			},
+			{
+				"id": "fldUfSrIKf8Wb9fXC",
+				"name": "Loan Amount 6",
+				"type": "multilineText",
+				"typeOptions": null
+			},
+			{
+				"id": "fldr9prPhyYwRpaGd",
+				"name": "Loan Amount 7",
+				"type": "multilineText",
+				"typeOptions": null
+			},
+			{
+				"id": "fld5PUkv3ZaoOxh6o",
+				"name": "Loan Amount 8",
+				"type": "multilineText",
+				"typeOptions": null
+			},
+			{
+				"id": "fld48wjauyFNn6TeV",
+				"name": "Loan Amount 9",
+				"type": "multilineText",
+				"typeOptions": null
+			},
+			{
+				"id": "fldM6573pVN5lD6ma",
+				"name": "Loan Amount 10",
+				"type": "multilineText",
+				"typeOptions": null
+			},
+			{
+				"id": "fld3kDRh6VPxv8hvu",
+				"name": "Total Income",
+				"type": "multilineText",
+				"typeOptions": null
+			},
+			{
+				"id": "fld3KTnbSXH3jZ2AJ",
+				"name": "Date Issued",
+				"type": "multilineText",
 				"typeOptions": null
 			}
 		]
