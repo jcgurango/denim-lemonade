@@ -67,15 +67,25 @@ const EmployeeList: FunctionComponent<{}> = () => {
                   table="Employee"
                   columns={[
                     'Employee ID',
+                    'Account Status',
+                    'Department',
+                    'Job Title',
                     'Last Name',
                     'First Name',
-                    'Payroll ID',
+                    'Middle Name',
+                    'Full Name',
+                    'Marital Status',
+                    'Gender',
+                    'City',
+                    'Barangay',
+                    'State/Province',
+                    'Company',
                   ]}
                   globalSearchColumns={[
                     'Employee ID',
                     'Account Status',
                     'Department',
-                    'Position Title',
+                    'Job Title',
                     'Last Name',
                     'First Name',
                     'Middle Name',
