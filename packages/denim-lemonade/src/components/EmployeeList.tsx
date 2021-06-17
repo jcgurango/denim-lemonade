@@ -73,9 +73,19 @@ const EmployeeList: FunctionComponent<{}> = () => {
                   ]}
                   globalSearchColumns={[
                     'Employee ID',
+                    'Account Status',
+                    'Department',
+                    'Position Title',
                     'Last Name',
                     'First Name',
-                    'Job Title',
+                    'Middle Name',
+                    'Full Name',
+                    'Marital Status',
+                    'Gender',
+                    'City',
+                    'Barangay',
+                    'State/Province',
+                    'Company',
                   ]}
                   value={query}
                   onChange={setQuery}
