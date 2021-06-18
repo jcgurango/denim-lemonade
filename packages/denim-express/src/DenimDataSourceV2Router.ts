@@ -99,6 +99,7 @@ export const DenimTableRouter = (
       const record = await dataSource.retrieveRecords(table, query);
       return res.json(record);
     } catch (e) {
+      console.error(e);
       return res.status(500).json({
         errors: [
           {
