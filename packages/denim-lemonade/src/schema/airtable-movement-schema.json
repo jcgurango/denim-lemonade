@@ -1,28 +1,616 @@
 [
 	{
-		"id": "tblwFpEMmpdYH23LL",
+		"id": "tblOnngHuxLaXfC4Q",
+		"name": "Job Position",
+		"columns": [
+			{
+				"id": "fldoOwJkIpnMiNW1F",
+				"name": "Job Position",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldTSi4Mcczr3zkah",
+				"name": "Description",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldqrnXna0cbW8QdQ",
+				"name": "Attachments",
+				"type": "multipleAttachment",
+				"typeOptions": {
+					"unreversed": true
+				}
+			},
+			{
+				"id": "fldkY7SjlBFVuQxvd",
+				"name": "Job Position Movement",
+				"type": "foreignKey",
+				"typeOptions": {
+					"foreignTableId": "tbltjPfGAR0FCw5M7",
+					"symmetricColumnId": "fldOCAbu9oizabFsq",
+					"relationship": "many",
+					"unreversed": true
+				}
+			}
+		]
+	},
+	{
+		"id": "tblRQ7vPd1twhxhwE",
+		"name": "Department",
+		"columns": [
+			{
+				"id": "fldv7iZqM7TpplReA",
+				"name": "Department",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldkyvTbHr9IbFEKI",
+				"name": "Description",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fld8g39052qKlj9w0",
+				"name": "Department Head",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldUHreETymE8Gglu",
+				"name": "Last Modified",
+				"type": "formula",
+				"typeOptions": {
+					"isDateTime": true,
+					"dateFormat": "Local",
+					"displayType": "lastModifiedTime",
+					"timeZone": "client",
+					"formulaTextParsed": "LAST_MODIFIED_TIME()",
+					"dependencies": {
+						"referencedColumnIdsForValue": [],
+						"dependsOnAllColumnModifications": true
+					},
+					"resultType": "date"
+				}
+			},
+			{
+				"id": "fld65HFAmwW3yLg7Y",
+				"name": "Parent Department",
+				"type": "foreignKey",
+				"typeOptions": {
+					"foreignTableId": "tblRQ7vPd1twhxhwE",
+					"relationship": "one",
+					"unreversed": true
+				}
+			},
+			{
+				"id": "fldv6SdAv969Ul5nF",
+				"name": "Department Head Lark ID",
+				"type": "lookup",
+				"typeOptions": {
+					"relationColumnId": "fld8g39052qKlj9w0",
+					"foreignTableRollupColumnId": "fldY9zXEtWNEYVshq",
+					"dependencies": {
+						"referencedColumnIdsForValue": [
+							"fld8g39052qKlj9w0",
+							"fldY9zXEtWNEYVshq"
+						],
+						"invalidColumnIds": [
+							"fldY9zXEtWNEYVshq"
+						]
+					},
+					"formulaError": "missingDependencies"
+				}
+			},
+			{
+				"id": "fldnkyjwsvDUXNVtx",
+				"name": "Department Movement",
+				"type": "foreignKey",
+				"typeOptions": {
+					"foreignTableId": "tbl1spgJweuekFus1",
+					"symmetricColumnId": "fldVFEGSnrjkKG3yr",
+					"relationship": "many",
+					"unreversed": true
+				}
+			}
+		]
+	},
+	{
+		"id": "tbltjPfGAR0FCw5M7",
+		"name": "Job Position Movement",
+		"columns": [
+			{
+				"id": "fldqyNRtQx6gykGvu",
+				"name": "Name",
+				"type": "formula",
+				"typeOptions": {
+					"formulaTextParsed": "{column_value_fldRrFSciTixEDqZM}",
+					"dependencies": {
+						"referencedColumnIdsForValue": [
+							"fldRrFSciTixEDqZM"
+						]
+					},
+					"resultType": "text"
+				}
+			},
+			{
+				"id": "fldRrFSciTixEDqZM",
+				"name": "User ID",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldKxvj5dMfU1BKxD",
+				"name": "Full Name",
+				"type": "lookup",
+				"typeOptions": {
+					"relationColumnId": "fldRrFSciTixEDqZM",
+					"foreignTableRollupColumnId": "fldgvxb1GQESl4tBV",
+					"dependencies": {
+						"referencedColumnIdsForValue": [
+							"fldRrFSciTixEDqZM",
+							"fldgvxb1GQESl4tBV"
+						],
+						"invalidColumnIds": [
+							"fldgvxb1GQESl4tBV"
+						]
+					},
+					"formulaError": "missingDependencies"
+				}
+			},
+			{
+				"id": "fldOCAbu9oizabFsq",
+				"name": "Job Position",
+				"type": "foreignKey",
+				"typeOptions": {
+					"foreignTableId": "tblOnngHuxLaXfC4Q",
+					"relationship": "one",
+					"unreversed": true,
+					"viewIdForRecordSelection": "viwWbtZtOPxSQxt1U",
+					"symmetricColumnId": "fldkY7SjlBFVuQxvd"
+				}
+			},
+			{
+				"id": "fldqKS0CvZD6PYFnf",
+				"name": "Effective Date",
+				"type": "date",
+				"typeOptions": {
+					"isDateTime": false,
+					"dateFormat": "Local"
+				}
+			},
+			{
+				"id": "fldKO3zVu315ADcwV",
+				"name": "Employee ID",
+				"type": "lookup",
+				"typeOptions": {
+					"relationColumnId": "fldRrFSciTixEDqZM",
+					"foreignTableRollupColumnId": "fldMovgbmZ0BPO1QT",
+					"dependencies": {
+						"referencedColumnIdsForValue": [
+							"fldRrFSciTixEDqZM",
+							"fldMovgbmZ0BPO1QT"
+						],
+						"invalidColumnIds": [
+							"fldMovgbmZ0BPO1QT"
+						]
+					},
+					"formulaError": "missingDependencies"
+				}
+			}
+		]
+	},
+	{
+		"id": "tbl1spgJweuekFus1",
+		"name": "Department Movement",
+		"columns": [
+			{
+				"id": "fldjZW0Y6oqojJPnJ",
+				"name": "Name",
+				"type": "formula",
+				"typeOptions": {
+					"formulaTextParsed": "{column_value_fldHKHyBjUyf8PuAy}",
+					"dependencies": {
+						"referencedColumnIdsForValue": [
+							"fldHKHyBjUyf8PuAy"
+						]
+					},
+					"resultType": "text"
+				}
+			},
+			{
+				"id": "fldHKHyBjUyf8PuAy",
+				"name": "User ID",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldVFEGSnrjkKG3yr",
+				"name": "Department",
+				"type": "foreignKey",
+				"typeOptions": {
+					"foreignTableId": "tblRQ7vPd1twhxhwE",
+					"relationship": "one",
+					"unreversed": true,
+					"symmetricColumnId": "fldnkyjwsvDUXNVtx"
+				}
+			},
+			{
+				"id": "fldlz3JfhclIEl9Q5",
+				"name": "Full Name",
+				"type": "lookup",
+				"typeOptions": {
+					"relationColumnId": "fldHKHyBjUyf8PuAy",
+					"foreignTableRollupColumnId": "fldgvxb1GQESl4tBV",
+					"dependencies": {
+						"referencedColumnIdsForValue": [
+							"fldHKHyBjUyf8PuAy",
+							"fldgvxb1GQESl4tBV"
+						],
+						"invalidColumnIds": [
+							"fldgvxb1GQESl4tBV"
+						]
+					},
+					"formulaError": "missingDependencies"
+				}
+			},
+			{
+				"id": "fldYoFTB78QNv0aVY",
+				"name": "Effective Date",
+				"type": "date",
+				"typeOptions": {
+					"isDateTime": false,
+					"dateFormat": "Local"
+				}
+			},
+			{
+				"id": "fldEcmnGaq0zX0C90",
+				"name": "Employee ID",
+				"type": "lookup",
+				"typeOptions": {
+					"relationColumnId": "fldHKHyBjUyf8PuAy",
+					"foreignTableRollupColumnId": "fldMovgbmZ0BPO1QT",
+					"dependencies": {
+						"referencedColumnIdsForValue": [
+							"fldHKHyBjUyf8PuAy",
+							"fldMovgbmZ0BPO1QT"
+						],
+						"invalidColumnIds": [
+							"fldMovgbmZ0BPO1QT"
+						]
+					},
+					"formulaError": "missingDependencies"
+				}
+			},
+			{
+				"id": "fldYOsmSJ0dVgZ91N",
+				"name": "Field 7",
+				"type": "text",
+				"typeOptions": null
+			}
+		]
+	},
+	{
+		"id": "tbl97cKHzWGO66fJA",
+		"name": "Basic Pay Movement",
+		"columns": [
+			{
+				"id": "fldyZB7jACcPx2Y8C",
+				"name": "Name",
+				"type": "formula",
+				"typeOptions": {
+					"formulaTextParsed": "{column_value_fld3UV7KqAY3CzTRa}",
+					"dependencies": {
+						"referencedColumnIdsForValue": [
+							"fld3UV7KqAY3CzTRa"
+						]
+					},
+					"resultType": "text"
+				}
+			},
+			{
+				"id": "fld3UV7KqAY3CzTRa",
+				"name": "User ID",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldwqaSUCQYo0ksfE",
+				"name": "Full Name",
+				"type": "lookup",
+				"typeOptions": {
+					"relationColumnId": "fld3UV7KqAY3CzTRa",
+					"foreignTableRollupColumnId": "fldgvxb1GQESl4tBV",
+					"dependencies": {
+						"referencedColumnIdsForValue": [
+							"fld3UV7KqAY3CzTRa",
+							"fldgvxb1GQESl4tBV"
+						],
+						"invalidColumnIds": [
+							"fldgvxb1GQESl4tBV"
+						]
+					},
+					"formulaError": "missingDependencies"
+				}
+			},
+			{
+				"id": "fldvqEaxGQFBsIfCl",
+				"name": "Basic Pay",
+				"type": "number",
+				"typeOptions": {
+					"symbol": "Php",
+					"format": "currency",
+					"precision": 2,
+					"negative": false,
+					"validatorName": "positive"
+				}
+			},
+			{
+				"id": "fldt2TkQ6ZgpBEo2j",
+				"name": "Effective Date",
+				"type": "date",
+				"typeOptions": {
+					"isDateTime": false,
+					"dateFormat": "Local"
+				}
+			},
+			{
+				"id": "fld81nIVvOInwAaAa",
+				"name": "Employee ID",
+				"type": "lookup",
+				"typeOptions": {
+					"relationColumnId": "fld3UV7KqAY3CzTRa",
+					"foreignTableRollupColumnId": "fldMovgbmZ0BPO1QT",
+					"dependencies": {
+						"referencedColumnIdsForValue": [
+							"fld3UV7KqAY3CzTRa",
+							"fldMovgbmZ0BPO1QT"
+						],
+						"invalidColumnIds": [
+							"fldMovgbmZ0BPO1QT"
+						]
+					},
+					"formulaError": "missingDependencies"
+				}
+			}
+		]
+	},
+	{
+		"id": "tbl1RCouOtVV5Yj6T",
+		"name": "Employment Status Movement",
+		"columns": [
+			{
+				"id": "fldT422Y8sHvWxe0W",
+				"name": "Name",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldhux9mtHLRbnH4W",
+				"name": "User ID",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "flduXFH3mnPtnlImy",
+				"name": "Employment Status",
+				"type": "select",
+				"typeOptions": {
+					"choiceOrder": [
+						"selcrJVghoJj2RbZn",
+						"seleoDdUWDbjXtk2c",
+						"selgz1HzvbLZPITfq"
+					],
+					"choices": {
+						"selcrJVghoJj2RbZn": {
+							"id": "selcrJVghoJj2RbZn",
+							"color": "blue",
+							"name": "Intern"
+						},
+						"seleoDdUWDbjXtk2c": {
+							"id": "seleoDdUWDbjXtk2c",
+							"color": "cyan",
+							"name": "Contractual"
+						},
+						"selgz1HzvbLZPITfq": {
+							"id": "selgz1HzvbLZPITfq",
+							"color": "teal",
+							"name": "Full Time"
+						}
+					},
+					"disableColors": false
+				}
+			},
+			{
+				"id": "fldgUFFLhSKjtmiDB",
+				"name": "Effective Date",
+				"type": "date",
+				"typeOptions": {
+					"isDateTime": false,
+					"dateFormat": "Local"
+				}
+			},
+			{
+				"id": "fldBADMiluO4Qg3Y0",
+				"name": "Full Name",
+				"type": "lookup",
+				"typeOptions": {
+					"relationColumnId": "fldhux9mtHLRbnH4W",
+					"foreignTableRollupColumnId": "fldgvxb1GQESl4tBV",
+					"dependencies": {
+						"referencedColumnIdsForValue": [
+							"fldhux9mtHLRbnH4W",
+							"fldgvxb1GQESl4tBV"
+						],
+						"invalidColumnIds": [
+							"fldgvxb1GQESl4tBV"
+						]
+					},
+					"formulaError": "missingDependencies"
+				}
+			},
+			{
+				"id": "fldulS2tGlk8a8uQk",
+				"name": "Employee ID",
+				"type": "lookup",
+				"typeOptions": {
+					"relationColumnId": "fldhux9mtHLRbnH4W",
+					"foreignTableRollupColumnId": "fldMovgbmZ0BPO1QT",
+					"dependencies": {
+						"referencedColumnIdsForValue": [
+							"fldhux9mtHLRbnH4W",
+							"fldMovgbmZ0BPO1QT"
+						],
+						"invalidColumnIds": [
+							"fldMovgbmZ0BPO1QT"
+						]
+					},
+					"formulaError": "missingDependencies"
+				}
+			}
+		]
+	},
+	{
+		"id": "tblkddcCU4yPwtlQh",
+		"name": "Allowance Movement",
+		"columns": [
+			{
+				"id": "fldkoGkxwY6ZHJcxt",
+				"name": "Name",
+				"type": "formula",
+				"typeOptions": {
+					"formulaTextParsed": "{column_value_fldHzFC4fi75C5niF}",
+					"dependencies": {
+						"referencedColumnIdsForValue": [
+							"fldHzFC4fi75C5niF"
+						]
+					},
+					"resultType": "text"
+				}
+			},
+			{
+				"id": "fldHzFC4fi75C5niF",
+				"name": "User ID",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldXQfRlpXhD8N6Pd",
+				"name": "Amount",
+				"type": "number",
+				"typeOptions": {
+					"format": "currency",
+					"precision": 2,
+					"symbol": "Php",
+					"negative": false,
+					"validatorName": "positive"
+				}
+			},
+			{
+				"id": "fldggNqOtijEBVY5z",
+				"name": "Effective Date",
+				"type": "date",
+				"typeOptions": {
+					"isDateTime": false,
+					"dateFormat": "Local"
+				}
+			},
+			{
+				"id": "fldEmcVy3TZx7FGPd",
+				"name": "Full Name",
+				"type": "lookup",
+				"typeOptions": {
+					"relationColumnId": "fldHzFC4fi75C5niF",
+					"foreignTableRollupColumnId": "fldgvxb1GQESl4tBV",
+					"dependencies": {
+						"referencedColumnIdsForValue": [
+							"fldHzFC4fi75C5niF",
+							"fldgvxb1GQESl4tBV"
+						],
+						"invalidColumnIds": [
+							"fldgvxb1GQESl4tBV"
+						]
+					},
+					"formulaError": "missingDependencies"
+				}
+			},
+			{
+				"id": "fld2ruOoe8lPudh6X",
+				"name": "Allowance",
+				"type": "select",
+				"typeOptions": {
+					"choiceOrder": [
+						"selHxc9dt03HuxJHo",
+						"selpEUYdXd3Kcg5GX",
+						"selEVYDbdR9k0OMTE"
+					],
+					"choices": {
+						"selHxc9dt03HuxJHo": {
+							"id": "selHxc9dt03HuxJHo",
+							"color": "blue",
+							"name": "Transportation Allowance"
+						},
+						"selpEUYdXd3Kcg5GX": {
+							"id": "selpEUYdXd3Kcg5GX",
+							"color": "cyan",
+							"name": "Overtime Allowance"
+						},
+						"selEVYDbdR9k0OMTE": {
+							"id": "selEVYDbdR9k0OMTE",
+							"color": "teal",
+							"name": "Meal Allowance"
+						}
+					},
+					"disableColors": false
+				}
+			},
+			{
+				"id": "fldUSz3eIBliikQ13",
+				"name": "Employee ID",
+				"type": "lookup",
+				"typeOptions": {
+					"relationColumnId": "fldHzFC4fi75C5niF",
+					"foreignTableRollupColumnId": "fldMovgbmZ0BPO1QT",
+					"dependencies": {
+						"referencedColumnIdsForValue": [
+							"fldHzFC4fi75C5niF",
+							"fldMovgbmZ0BPO1QT"
+						],
+						"invalidColumnIds": [
+							"fldMovgbmZ0BPO1QT"
+						]
+					},
+					"formulaError": "missingDependencies"
+				}
+			}
+		]
+	},
+	{
+		"id": "tblGs89kT82bFeJHS",
 		"name": "201 Management",
 		"columns": [
 			{
-				"id": "fldoICZFyot1odLnQ",
+				"id": "fldjenSOjLwrPbkAs",
 				"name": "User ID",
 				"type": "multilineText",
 				"typeOptions": null
 			},
 			{
-				"id": "fldTkbKP76gmjsreK",
+				"id": "fldg2pMu9LkscugLg",
 				"name": "Employee ID",
 				"type": "text",
 				"typeOptions": null
 			},
 			{
-				"id": "fldtWDCtahi4g5clK",
+				"id": "fldEaS8okV1WFIl80",
 				"name": "Account Status",
 				"type": "text",
 				"typeOptions": null
 			},
 			{
-				"id": "fldDzQXjpxdV3wwFO",
+				"id": "fld6BM64ZPKvhmdr9",
 				"name": "Title",
 				"type": "select",
 				"typeOptions": {
@@ -52,37 +640,37 @@
 				}
 			},
 			{
-				"id": "fldZy3FSzsxSsGTIu",
+				"id": "fldkIFSSo0Za0LSZD",
 				"name": "Last Name",
 				"type": "text",
 				"typeOptions": null
 			},
 			{
-				"id": "fldcdWo0CaWVHBcWb",
+				"id": "fld6D9Lfag2LjdaVW",
 				"name": "First Name",
 				"type": "text",
 				"typeOptions": null
 			},
 			{
-				"id": "fldaFfs0pzbs8bdQk",
+				"id": "fldnVAgulUbt6C4ci",
 				"name": "Middle Name",
 				"type": "text",
 				"typeOptions": null
 			},
 			{
-				"id": "fldnrdFFrXUDPITZM",
+				"id": "fldZm3OfOHpVpU6pt",
 				"name": "Full Name",
 				"type": "multilineText",
 				"typeOptions": null
 			},
 			{
-				"id": "fldFZbPJhKTonrxw0",
+				"id": "fldQJErKt1rCtY3FH",
 				"name": "Nickname",
 				"type": "text",
 				"typeOptions": null
 			},
 			{
-				"id": "fldClq6Ydkd8tTyMX",
+				"id": "fld2gWxyojrCWwNt2",
 				"name": "Picture",
 				"type": "multipleAttachment",
 				"typeOptions": {
@@ -90,7 +678,7 @@
 				}
 			},
 			{
-				"id": "fldMuy6fs3SiYbJ4V",
+				"id": "fld5wh8vFbtuQGVVH",
 				"name": "Date of Birth",
 				"type": "date",
 				"typeOptions": {
@@ -99,7 +687,7 @@
 				}
 			},
 			{
-				"id": "fldWl9X4xV420lo1w",
+				"id": "fldvsisrNMT1wPfiG",
 				"name": "Gender",
 				"type": "select",
 				"typeOptions": {
@@ -123,7 +711,7 @@
 				}
 			},
 			{
-				"id": "fld4X91VixTnQV9Gb",
+				"id": "fldI7JnKw8EXmjss6",
 				"name": "Marital Status",
 				"type": "select",
 				"typeOptions": {
@@ -171,7 +759,7 @@
 				}
 			},
 			{
-				"id": "fld2FXkfWRruAVt1u",
+				"id": "fldaiTZlwWZ93L6r0",
 				"name": "LinkedIn Account",
 				"type": "text",
 				"typeOptions": {
@@ -179,7 +767,7 @@
 				}
 			},
 			{
-				"id": "fldMZ6QCDa32On3RP",
+				"id": "fldfQBfGHhcLG9VO8",
 				"name": "Email",
 				"type": "text",
 				"typeOptions": {
@@ -187,37 +775,37 @@
 				}
 			},
 			{
-				"id": "fldLBK8trLG7nLMeF",
+				"id": "fldRpDy5HIzmHuKOI",
 				"name": "Department",
 				"type": "text",
 				"typeOptions": null
 			},
 			{
-				"id": "fldDCPBAxthki5HaM",
+				"id": "fldpt6KxY9TcYGozd",
 				"name": "Direct Manager",
 				"type": "text",
 				"typeOptions": null
 			},
 			{
-				"id": "fldIqHAqF1WNVjkdo",
+				"id": "fldlCk4z9ihMPgx0N",
 				"name": "Job Positions",
 				"type": "text",
 				"typeOptions": null
 			},
 			{
-				"id": "fldl0DYwRFub0ECGJ",
+				"id": "fldN7FzgMC1JAxq5M",
 				"name": "Job Roles",
 				"type": "text",
 				"typeOptions": null
 			},
 			{
-				"id": "fldycHxqgD2HHPiEE",
+				"id": "fldobU8XAwztkdy5J",
 				"name": "Job Title",
 				"type": "text",
 				"typeOptions": null
 			},
 			{
-				"id": "fldJqWtiM86HM8sIS",
+				"id": "fldPXmKlxV5Xs3mOc",
 				"name": "Department Supervisor",
 				"type": "checkbox",
 				"typeOptions": {
@@ -226,7 +814,7 @@
 				}
 			},
 			{
-				"id": "fldteuHYQZQVppB81",
+				"id": "fldmNtwOCcKOGigLJ",
 				"name": "Entry Date",
 				"type": "date",
 				"typeOptions": {
@@ -235,7 +823,7 @@
 				}
 			},
 			{
-				"id": "fldg0tBMvSh53mFM2",
+				"id": "fldXX8XOWhzrPemL1",
 				"name": "Exit Date",
 				"type": "date",
 				"typeOptions": {
@@ -244,8 +832,8 @@
 				}
 			},
 			{
-				"id": "fld6GsXS3XWzGe0hi",
-				"name": "Payroll ID",
+				"id": "fldc9DZVYJGf2DN2z",
+				"name": "PDY ID",
 				"type": "number",
 				"typeOptions": {
 					"format": "integer",
@@ -254,8 +842,8 @@
 				}
 			},
 			{
-				"id": "fldWsFayAN983RxeB",
-				"name": "Employee Wage",
+				"id": "fldPxhn16b3mxHTUt",
+				"name": "Basic Pay",
 				"type": "number",
 				"typeOptions": {
 					"format": "currency",
@@ -266,13 +854,37 @@
 				}
 			},
 			{
-				"id": "fldXpsY70Vo1YIe3o",
+				"id": "fldCNwtnaYOiLFuUl",
 				"name": "Employee Allowance",
 				"type": "text",
 				"typeOptions": null
 			},
 			{
-				"id": "fldmXOQjdpWjaXqmu",
+				"id": "fldp6FxXu5RzvLJIo",
+				"name": "SSS Number",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldF1YFnRSiHOUNac",
+				"name": "Philhealth Number",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldYu741vMHNmyhki",
+				"name": "Pag-ibig Number",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldpdP45AGW955hPA",
+				"name": "Tax Identification Number",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "flddFo1grleZZOXUd",
 				"name": "Phone Number Visibility",
 				"type": "checkbox",
 				"typeOptions": {
@@ -281,13 +893,19 @@
 				}
 			},
 			{
-				"id": "fldlZVTZWeANPItgv",
+				"id": "fldOw2tduvrWZU4J5",
+				"name": "Leave Balance",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldWrImkw5pCudm7A",
 				"name": "Nationality",
 				"type": "text",
 				"typeOptions": null
 			},
 			{
-				"id": "fld7oEAhW3I5JcJRP",
+				"id": "fldMYfR7Hz2YSedEt",
 				"name": "Citizenship",
 				"type": "select",
 				"typeOptions": {
@@ -323,55 +941,55 @@
 				}
 			},
 			{
-				"id": "fldtZYIHiGXOjP5dX",
+				"id": "fldVvuE6k3jKiOfiu",
 				"name": "Address 1",
 				"type": "text",
 				"typeOptions": null
 			},
 			{
-				"id": "fldDwMLuR3u2Fzqlj",
+				"id": "fldU151HsaITSbKTM",
 				"name": "Address 2",
 				"type": "text",
 				"typeOptions": null
 			},
 			{
-				"id": "fld5peu1O5rOScSma",
+				"id": "fldgrvMh6nwpOYhcK",
 				"name": "City",
 				"type": "text",
 				"typeOptions": null
 			},
 			{
-				"id": "fldvCWa9ieP1kPxD4",
+				"id": "fld3ud6A6q6wxa93d",
 				"name": "State/Province",
 				"type": "text",
 				"typeOptions": null
 			},
 			{
-				"id": "fldunuA4EA71mMqKT",
+				"id": "fldRiYqtUdJaZwOm0",
 				"name": "Zip",
 				"type": "text",
 				"typeOptions": null
 			},
 			{
-				"id": "fldlTF0trQGuNULyR",
+				"id": "fldUcK4TDt9V1zjKr",
 				"name": "Country",
 				"type": "text",
 				"typeOptions": null
 			},
 			{
-				"id": "flddfhtACfBCtFE4m",
+				"id": "fldpP3gsQSbcLtToj",
 				"name": "Home Number",
 				"type": "phone",
 				"typeOptions": null
 			},
 			{
-				"id": "fldahcAtr4auQNoDW",
+				"id": "fld7NGdAjQES6sjLo",
 				"name": "Mobile Number",
 				"type": "phone",
 				"typeOptions": null
 			},
 			{
-				"id": "fldZwB8ouc6n0qvQC",
+				"id": "fld1GGJHWMWgUZA1G",
 				"name": "Language",
 				"type": "multiSelect",
 				"typeOptions": {
@@ -419,7 +1037,7 @@
 				}
 			},
 			{
-				"id": "fldpIbLsEx3PL0SlC",
+				"id": "fldUCaz7dfXPaufir",
 				"name": "Curriculum Vitae",
 				"type": "multipleAttachment",
 				"typeOptions": {
@@ -427,7 +1045,7 @@
 				}
 			},
 			{
-				"id": "fld8VAdlksXN9v3fu",
+				"id": "fldVYicTTk2MNQUQl",
 				"name": "Skills",
 				"type": "multiSelect",
 				"typeOptions": {
@@ -475,13 +1093,13 @@
 				}
 			},
 			{
-				"id": "fldEGBuL27c571SRs",
+				"id": "fldkObRgV9AeeKYQh",
 				"name": "Leave Scheme",
 				"type": "text",
 				"typeOptions": null
 			},
 			{
-				"id": "fldBfCibqePgvzKrE",
+				"id": "fldotdUqs7u6WNpM9",
 				"name": "Daily Work Hours",
 				"type": "number",
 				"typeOptions": {
@@ -492,25 +1110,31 @@
 				}
 			},
 			{
-				"id": "fldFmE7oTaWzpcV2T",
+				"id": "fldIJA4GRefNPNsXg",
+				"name": "Leave Accrual",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldHNd4oOL96R4LJP",
 				"name": "Contact Person",
 				"type": "text",
 				"typeOptions": null
 			},
 			{
-				"id": "fldiqvIjsUfah8xp8",
+				"id": "fldCWYPWLdn91Un8u",
 				"name": "Contact Person Mobile No",
 				"type": "phone",
 				"typeOptions": null
 			},
 			{
-				"id": "fldnuJ3XYLfNxLnTq",
+				"id": "fldDgc8yCHncX2jxk",
 				"name": "Relation to Contact Person",
 				"type": "text",
 				"typeOptions": null
 			},
 			{
-				"id": "fldV240n2YUgGFnW3",
+				"id": "fldQnEPFn88SDg9iL",
 				"name": "Dependents",
 				"type": "multipleAttachment",
 				"typeOptions": {
@@ -518,7 +1142,7 @@
 				}
 			},
 			{
-				"id": "fldkfzkyKOeGQOwSX",
+				"id": "fldLMbyGzzsVZbSgf",
 				"name": "Attachments",
 				"type": "multipleAttachment",
 				"typeOptions": {
@@ -526,13 +1150,13 @@
 				}
 			},
 			{
-				"id": "fldXy4bklA5GuMz8Q",
+				"id": "fldoquuL8mJtelsC4",
 				"name": "Created By",
 				"type": "text",
 				"typeOptions": null
 			},
 			{
-				"id": "fldvNdmBnaoQhICVS",
+				"id": "fldnsR4od35pFzNkK",
 				"name": "Date Created",
 				"type": "date",
 				"typeOptions": {
@@ -542,13 +1166,13 @@
 				}
 			},
 			{
-				"id": "fldAMbdpRj4gTiDzq",
+				"id": "fldbc2VI2Zu30gLhE",
 				"name": "Last Modified By",
 				"type": "text",
 				"typeOptions": null
 			},
 			{
-				"id": "flddIclCQ0EigecQi",
+				"id": "fldYnG2fbp4kIaHxt",
 				"name": "Last Modified",
 				"type": "date",
 				"typeOptions": {
@@ -558,14 +1182,20 @@
 				}
 			},
 			{
-				"id": "fld55frie33pszSFh",
+				"id": "fldKxqifMQZMxwKCo",
+				"name": "Leave Accrual copy",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldTzJxqhAEc9nk7J",
 				"name": "Lark ID",
 				"type": "text",
 				"typeOptions": null
 			},
 			{
-				"id": "fldxKtRM54VC7plV9",
-				"name": "Is HR",
+				"id": "fld5CnN1Zrr38vDnM",
+				"name": "Is HR Admin",
 				"type": "checkbox",
 				"typeOptions": {
 					"color": "green",
@@ -573,870 +1203,103 @@
 				}
 			},
 			{
-				"id": "fldJwuhorxShR12k5",
+				"id": "fldb548hmYNmzErsn",
+				"name": "Is HR User",
+				"type": "checkbox",
+				"typeOptions": {
+					"color": "green",
+					"icon": "check"
+				}
+			},
+			{
+				"id": "fldQqoctqxvczjcIB",
 				"name": "Calculation",
 				"type": "multilineText",
 				"typeOptions": null
 			},
 			{
-				"id": "fldMZS6B20qAR0cP8",
-				"name": "Job Position Movement",
-				"type": "foreignKey",
-				"typeOptions": {
-					"foreignTableId": "tblAfvJklYgq6avaY",
-					"symmetricColumnId": "fldYnlmQ30yi8hQnD",
-					"relationship": "many",
-					"unreversed": true
-				}
-			},
-			{
-				"id": "fldAeWqvaBvY5aX4K",
-				"name": "Job Position Date",
-				"type": "rollup",
-				"typeOptions": {
-					"dateFormat": "Local",
-					"isDateTime": false,
-					"relationColumnId": "fldMZS6B20qAR0cP8",
-					"foreignTableRollupColumnId": "fldxGyugg6TRjC5L6",
-					"filters": {
-						"conjunction": "and",
-						"filterSet": [
-							{
-								"id": "fltZjdJXvizymrZG2",
-								"columnId": "fldxGyugg6TRjC5L6",
-								"operator": "<=",
-								"value": {
-									"mode": "today",
-									"timeZone": "Asia/Manila",
-									"shouldUseCorrectTimeZoneForFormulaicColumn": true
-								}
-							}
-						]
-					},
-					"formulaTextParsed": "MAX(values)",
-					"dependencies": {
-						"referencedColumnIdsForValue": [
-							"fldMZS6B20qAR0cP8",
-							"fldxGyugg6TRjC5L6"
-						],
-						"dependsOnCurrentTime": true,
-						"referencedColumnIdsForFilters": [
-							"fldxGyugg6TRjC5L6"
-						]
-					},
-					"resultType": "date"
-				}
-			},
-			{
-				"id": "fldqaEJX4dG7RnxsW",
+				"id": "fldMNn9QnAl6aM7nF",
 				"name": "Current Job Position",
 				"type": "text",
 				"typeOptions": null
 			},
 			{
-				"id": "fldAk983RjmljkeuU",
-				"name": "Department 3",
-				"type": "foreignKey",
-				"typeOptions": {
-					"foreignTableId": "tblYMNZtY8JhLbHUv",
-					"symmetricColumnId": "fldfcJDEQ9GvPXzUR",
-					"relationship": "many",
-					"unreversed": true
-				}
-			},
-			{
-				"id": "fldcDbmEArywiUap3",
-				"name": "Department Movement",
-				"type": "foreignKey",
-				"typeOptions": {
-					"foreignTableId": "tbl8o5KnhlKZOjUQS",
-					"symmetricColumnId": "fldOGn2f41O0CtUYp",
-					"relationship": "many",
-					"unreversed": true
-				}
-			},
-			{
-				"id": "fldz0UdleTZlDdnx4",
-				"name": "Department Date",
-				"type": "rollup",
-				"typeOptions": {
-					"relationColumnId": "fldcDbmEArywiUap3",
-					"foreignTableRollupColumnId": "fld5klnfSf6yZEAjP",
-					"isDateTime": false,
-					"dateFormat": "Local",
-					"filters": {
-						"conjunction": "and",
-						"filterSet": [
-							{
-								"id": "fltXoR91CbXuv6s0t",
-								"columnId": "fld5klnfSf6yZEAjP",
-								"operator": "<=",
-								"value": {
-									"mode": "today",
-									"timeZone": "Asia/Manila",
-									"shouldUseCorrectTimeZoneForFormulaicColumn": true
-								}
-							}
-						]
-					},
-					"formulaTextParsed": "MAX(values)",
-					"dependencies": {
-						"referencedColumnIdsForValue": [
-							"fldcDbmEArywiUap3",
-							"fld5klnfSf6yZEAjP"
-						],
-						"dependsOnCurrentTime": true,
-						"referencedColumnIdsForFilters": [
-							"fld5klnfSf6yZEAjP"
-						]
-					},
-					"resultType": "date"
-				}
-			},
-			{
-				"id": "fldql1NLqovBTojDF",
+				"id": "fldQLFIcqQIHkzXSF",
 				"name": "Current Department",
 				"type": "text",
 				"typeOptions": null
 			},
 			{
-				"id": "fldF3X6YtXx6jK9up",
-				"name": "Movement Modified Date",
-				"type": "formula",
+				"id": "fldyl8NRvCf1l1Ki2",
+				"name": "Attendance",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldi6DPPYIsHIE6uJ",
+				"name": "Pay Basis",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldNpeM7XcW6bOXPq",
+				"name": "Bank Account",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldDZVz5UYkrOViEi",
+				"name": "E-Cola",
+				"type": "number",
 				"typeOptions": {
-					"isDateTime": true,
-					"dateFormat": "Local",
-					"displayType": "lastModifiedTime",
-					"timeZone": "client",
-					"formulaTextParsed": "LAST_MODIFIED_TIME({column_modified_time_fldqaEJX4dG7RnxsW}, {column_modified_time_fldql1NLqovBTojDF})",
-					"dependencies": {
-						"referencedColumnIdsForValue": [],
-						"referencedColumnIdsForModification": [
-							"fldqaEJX4dG7RnxsW",
-							"fldql1NLqovBTojDF"
-						]
-					},
-					"resultType": "date"
+					"format": "currency",
+					"precision": 2,
+					"symbol": "",
+					"negative": false,
+					"validatorName": "positive"
 				}
 			},
 			{
-				"id": "fldkeA8ufkopxl0gT",
-				"name": "Basic Pay",
-				"type": "foreignKey",
-				"typeOptions": {
-					"foreignTableId": "tblg3Selk3WzAKF7r",
-					"symmetricColumnId": "fldaQBBobHeO6djf1",
-					"relationship": "many",
-					"unreversed": true
-				}
+				"id": "fld9v2qtpSYJyVGPT",
+				"name": "Payment Method",
+				"type": "text",
+				"typeOptions": null
 			},
 			{
-				"id": "fldPiz9v03GvPFP92",
+				"id": "fldFaicgdyEMulFzX",
+				"name": "Days of Work Per Year",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldwfkxkhUF2W14rg",
+				"name": "Payroll Grouping",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fld2gi5Jr44jzSvDt",
+				"name": "Workplace",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldXszrgH7UXACBn4",
 				"name": "Employment Status",
-				"type": "foreignKey",
-				"typeOptions": {
-					"foreignTableId": "tbl8NiS8zAbGzCJuK",
-					"symmetricColumnId": "fldoqdD0eO1CF17sN",
-					"relationship": "many",
-					"unreversed": true
-				}
-			},
-			{
-				"id": "fldazs1bHKAnqt14v",
-				"name": "Allowance Movement",
-				"type": "foreignKey",
-				"typeOptions": {
-					"foreignTableId": "tblr9TGgFbOA07Le8",
-					"symmetricColumnId": "fldOvl6I0pnQ6JNGw",
-					"relationship": "many",
-					"unreversed": true
-				}
-			},
-			{
-				"id": "fldUjuMC8nccimpsL",
-				"name": "Current Basic Pay",
-				"type": "number",
-				"typeOptions": {
-					"format": "currency",
-					"precision": 2,
-					"symbol": "$",
-					"negative": false,
-					"validatorName": "positive"
-				}
-			},
-			{
-				"id": "fld29i7yVooYwRXWX",
-				"name": "Basic Pay Date",
-				"type": "rollup",
-				"typeOptions": {
-					"dateFormat": "Local",
-					"isDateTime": false,
-					"relationColumnId": "fldkeA8ufkopxl0gT",
-					"foreignTableRollupColumnId": "fldAYzOuR6wa5iOqa",
-					"filters": {
-						"conjunction": "and",
-						"filterSet": [
-							{
-								"id": "fltV5OiS7v0t7rAtB",
-								"columnId": "fldAYzOuR6wa5iOqa",
-								"operator": "<=",
-								"value": {
-									"mode": "today",
-									"timeZone": "Asia/Manila",
-									"shouldUseCorrectTimeZoneForFormulaicColumn": true
-								}
-							}
-						]
-					},
-					"formulaTextParsed": "MAX(values)",
-					"dependencies": {
-						"referencedColumnIdsForValue": [
-							"fldkeA8ufkopxl0gT",
-							"fldAYzOuR6wa5iOqa"
-						],
-						"dependsOnCurrentTime": true,
-						"referencedColumnIdsForFilters": [
-							"fldAYzOuR6wa5iOqa"
-						]
-					},
-					"resultType": "date"
-				}
-			},
-			{
-				"id": "fldmX2v67hXhejwzz",
-				"name": "Employment Status Date",
-				"type": "rollup",
-				"typeOptions": {
-					"dateFormat": "Local",
-					"isDateTime": false,
-					"relationColumnId": "fldPiz9v03GvPFP92",
-					"foreignTableRollupColumnId": "fldnQl9p2Z04X0I1s",
-					"filters": {
-						"conjunction": "and",
-						"filterSet": [
-							{
-								"id": "flt9NNTRgrLNnatLU",
-								"columnId": "fldnQl9p2Z04X0I1s",
-								"operator": "<=",
-								"value": {
-									"mode": "today",
-									"timeZone": "Asia/Manila",
-									"shouldUseCorrectTimeZoneForFormulaicColumn": true
-								}
-							}
-						]
-					},
-					"formulaTextParsed": "MAX(values)",
-					"dependencies": {
-						"referencedColumnIdsForValue": [
-							"fldPiz9v03GvPFP92",
-							"fldnQl9p2Z04X0I1s"
-						],
-						"dependsOnCurrentTime": true,
-						"referencedColumnIdsForFilters": [
-							"fldnQl9p2Z04X0I1s"
-						]
-					},
-					"resultType": "date"
-				}
-			},
-			{
-				"id": "fldmJk8ha1qAjxg5V",
-				"name": "Current Employment Status",
 				"type": "text",
 				"typeOptions": null
 			},
 			{
-				"id": "fldHuOQ8idSrcyzId",
-				"name": "Allowance Movement copy",
-				"type": "text",
-				"typeOptions": null
-			}
-		]
-	},
-	{
-		"id": "tblVj3KlfE1VrT2sH",
-		"name": "Job Position",
-		"columns": [
-			{
-				"id": "fldvKcdYtwDxMrmpw",
-				"name": "Job Position",
+				"id": "fld8SatbqxtFK0kuc",
+				"name": "Wage Zone",
 				"type": "text",
 				"typeOptions": null
 			},
 			{
-				"id": "fld0OYyqXjPcxdKy8",
-				"name": "Description",
+				"id": "fldmyKY7ZNzq0NGLA",
+				"name": "Company",
 				"type": "text",
 				"typeOptions": null
-			},
-			{
-				"id": "fldxn3r1V7sWqMgBH",
-				"name": "Attachments",
-				"type": "multipleAttachment",
-				"typeOptions": {
-					"unreversed": true
-				}
-			},
-			{
-				"id": "fldrUNmX6IVGYuXT4",
-				"name": "Job Position Movement",
-				"type": "foreignKey",
-				"typeOptions": {
-					"foreignTableId": "tblAfvJklYgq6avaY",
-					"symmetricColumnId": "fldVygF8UvykEP5Qh",
-					"relationship": "many",
-					"unreversed": true
-				}
-			}
-		]
-	},
-	{
-		"id": "tblYMNZtY8JhLbHUv",
-		"name": "Department",
-		"columns": [
-			{
-				"id": "fldC3Yt4xe9aTZhCr",
-				"name": "Department",
-				"type": "text",
-				"typeOptions": null
-			},
-			{
-				"id": "fldrubnPsyptFj48z",
-				"name": "Description",
-				"type": "text",
-				"typeOptions": null
-			},
-			{
-				"id": "fldfcJDEQ9GvPXzUR",
-				"name": "Department Head",
-				"type": "foreignKey",
-				"typeOptions": {
-					"foreignTableId": "tblwFpEMmpdYH23LL",
-					"relationship": "one",
-					"unreversed": true,
-					"symmetricColumnId": "fldAk983RjmljkeuU"
-				}
-			},
-			{
-				"id": "fld1D7IiEFCpCkGJl",
-				"name": "Last Modified",
-				"type": "formula",
-				"typeOptions": {
-					"isDateTime": true,
-					"dateFormat": "Local",
-					"displayType": "lastModifiedTime",
-					"timeZone": "client",
-					"formulaTextParsed": "LAST_MODIFIED_TIME()",
-					"dependencies": {
-						"referencedColumnIdsForValue": [],
-						"dependsOnAllColumnModifications": true
-					},
-					"resultType": "date"
-				}
-			},
-			{
-				"id": "fldd1n9e7DcO2pGvP",
-				"name": "Parent Department",
-				"type": "foreignKey",
-				"typeOptions": {
-					"foreignTableId": "tblYMNZtY8JhLbHUv",
-					"relationship": "one",
-					"unreversed": true
-				}
-			},
-			{
-				"id": "fldC2yHeggmUoZvLw",
-				"name": "Department Head Lark ID",
-				"type": "lookup",
-				"typeOptions": {
-					"relationColumnId": "fldfcJDEQ9GvPXzUR",
-					"foreignTableRollupColumnId": "fld55frie33pszSFh",
-					"dependencies": {
-						"referencedColumnIdsForValue": [
-							"fldfcJDEQ9GvPXzUR",
-							"fld55frie33pszSFh"
-						]
-					},
-					"resultType": "text"
-				}
-			},
-			{
-				"id": "fldugeNadCTFrrlRo",
-				"name": "Department Movement",
-				"type": "foreignKey",
-				"typeOptions": {
-					"foreignTableId": "tbl8o5KnhlKZOjUQS",
-					"symmetricColumnId": "fld2Bkaw8yz5ektWi",
-					"relationship": "many",
-					"unreversed": true
-				}
-			}
-		]
-	},
-	{
-		"id": "tblAfvJklYgq6avaY",
-		"name": "Job Position Movement",
-		"columns": [
-			{
-				"id": "fldxutl7BEm12Y6Tl",
-				"name": "Name",
-				"type": "formula",
-				"typeOptions": {
-					"formulaTextParsed": "{column_value_fldYnlmQ30yi8hQnD}",
-					"dependencies": {
-						"referencedColumnIdsForValue": [
-							"fldYnlmQ30yi8hQnD"
-						]
-					},
-					"resultType": "text"
-				}
-			},
-			{
-				"id": "fldYnlmQ30yi8hQnD",
-				"name": "User ID",
-				"type": "foreignKey",
-				"typeOptions": {
-					"foreignTableId": "tblwFpEMmpdYH23LL",
-					"relationship": "one",
-					"unreversed": true,
-					"viewIdForRecordSelection": "viwv1c78fV3i8WfFj",
-					"symmetricColumnId": "fldMZS6B20qAR0cP8"
-				}
-			},
-			{
-				"id": "fldRtbNJYTvFvfaVu",
-				"name": "Full Name",
-				"type": "lookup",
-				"typeOptions": {
-					"relationColumnId": "fldYnlmQ30yi8hQnD",
-					"foreignTableRollupColumnId": "fldnrdFFrXUDPITZM",
-					"dependencies": {
-						"referencedColumnIdsForValue": [
-							"fldYnlmQ30yi8hQnD",
-							"fldnrdFFrXUDPITZM"
-						]
-					},
-					"resultType": "multilineText"
-				}
-			},
-			{
-				"id": "fldVygF8UvykEP5Qh",
-				"name": "Job Position",
-				"type": "foreignKey",
-				"typeOptions": {
-					"foreignTableId": "tblVj3KlfE1VrT2sH",
-					"relationship": "one",
-					"unreversed": true,
-					"viewIdForRecordSelection": "viw379t7zWNDkbTpL",
-					"symmetricColumnId": "fldrUNmX6IVGYuXT4"
-				}
-			},
-			{
-				"id": "fldxGyugg6TRjC5L6",
-				"name": "Effective Date",
-				"type": "date",
-				"typeOptions": {
-					"isDateTime": false,
-					"dateFormat": "Local"
-				}
-			},
-			{
-				"id": "fldRKJ3zfahQ4hCUM",
-				"name": "Employee ID",
-				"type": "lookup",
-				"typeOptions": {
-					"relationColumnId": "fldYnlmQ30yi8hQnD",
-					"foreignTableRollupColumnId": "fldTkbKP76gmjsreK",
-					"dependencies": {
-						"referencedColumnIdsForValue": [
-							"fldYnlmQ30yi8hQnD",
-							"fldTkbKP76gmjsreK"
-						]
-					},
-					"resultType": "text"
-				}
-			}
-		]
-	},
-	{
-		"id": "tbl8o5KnhlKZOjUQS",
-		"name": "Department Movement",
-		"columns": [
-			{
-				"id": "fldqVCuCRvG9NnfLA",
-				"name": "Name",
-				"type": "formula",
-				"typeOptions": {
-					"formulaTextParsed": "{column_value_fldOGn2f41O0CtUYp}",
-					"dependencies": {
-						"referencedColumnIdsForValue": [
-							"fldOGn2f41O0CtUYp"
-						]
-					},
-					"resultType": "text"
-				}
-			},
-			{
-				"id": "fldOGn2f41O0CtUYp",
-				"name": "User ID",
-				"type": "foreignKey",
-				"typeOptions": {
-					"foreignTableId": "tblwFpEMmpdYH23LL",
-					"relationship": "one",
-					"unreversed": true,
-					"symmetricColumnId": "fldcDbmEArywiUap3"
-				}
-			},
-			{
-				"id": "fld2Bkaw8yz5ektWi",
-				"name": "Department",
-				"type": "foreignKey",
-				"typeOptions": {
-					"foreignTableId": "tblYMNZtY8JhLbHUv",
-					"relationship": "one",
-					"unreversed": true,
-					"symmetricColumnId": "fldugeNadCTFrrlRo"
-				}
-			},
-			{
-				"id": "fldsvJdT2jBt8ZzeW",
-				"name": "Full Name",
-				"type": "lookup",
-				"typeOptions": {
-					"relationColumnId": "fldOGn2f41O0CtUYp",
-					"foreignTableRollupColumnId": "fldnrdFFrXUDPITZM",
-					"dependencies": {
-						"referencedColumnIdsForValue": [
-							"fldOGn2f41O0CtUYp",
-							"fldnrdFFrXUDPITZM"
-						]
-					},
-					"resultType": "multilineText"
-				}
-			},
-			{
-				"id": "fld5klnfSf6yZEAjP",
-				"name": "Effective Date",
-				"type": "date",
-				"typeOptions": {
-					"isDateTime": false,
-					"dateFormat": "Local"
-				}
-			},
-			{
-				"id": "fldL82RkVxgkrE2xR",
-				"name": "Employee ID",
-				"type": "lookup",
-				"typeOptions": {
-					"relationColumnId": "fldOGn2f41O0CtUYp",
-					"foreignTableRollupColumnId": "fldTkbKP76gmjsreK",
-					"dependencies": {
-						"referencedColumnIdsForValue": [
-							"fldOGn2f41O0CtUYp",
-							"fldTkbKP76gmjsreK"
-						]
-					},
-					"resultType": "text"
-				}
-			},
-			{
-				"id": "fld5K8Qwu7tGKDzpE",
-				"name": "Field 7",
-				"type": "text",
-				"typeOptions": null
-			}
-		]
-	},
-	{
-		"id": "tblg3Selk3WzAKF7r",
-		"name": "Basic Pay Movement",
-		"columns": [
-			{
-				"id": "fldFVhBXlJsA1Gowt",
-				"name": "Name",
-				"type": "formula",
-				"typeOptions": {
-					"formulaTextParsed": "{column_value_fldaQBBobHeO6djf1}",
-					"dependencies": {
-						"referencedColumnIdsForValue": [
-							"fldaQBBobHeO6djf1"
-						]
-					},
-					"resultType": "text"
-				}
-			},
-			{
-				"id": "fldaQBBobHeO6djf1",
-				"name": "User ID",
-				"type": "foreignKey",
-				"typeOptions": {
-					"foreignTableId": "tblwFpEMmpdYH23LL",
-					"relationship": "one",
-					"unreversed": true,
-					"symmetricColumnId": "fldkeA8ufkopxl0gT"
-				}
-			},
-			{
-				"id": "fldDmQmynXe9uYSDv",
-				"name": "Full Name",
-				"type": "lookup",
-				"typeOptions": {
-					"relationColumnId": "fldaQBBobHeO6djf1",
-					"foreignTableRollupColumnId": "fldnrdFFrXUDPITZM",
-					"dependencies": {
-						"referencedColumnIdsForValue": [
-							"fldaQBBobHeO6djf1",
-							"fldnrdFFrXUDPITZM"
-						]
-					},
-					"resultType": "multilineText"
-				}
-			},
-			{
-				"id": "fldCmkEbrXVmWmF0c",
-				"name": "Basic Pay",
-				"type": "number",
-				"typeOptions": {
-					"symbol": "Php",
-					"format": "currency",
-					"precision": 2,
-					"negative": false,
-					"validatorName": "positive"
-				}
-			},
-			{
-				"id": "fldAYzOuR6wa5iOqa",
-				"name": "Effective Date",
-				"type": "date",
-				"typeOptions": {
-					"isDateTime": false,
-					"dateFormat": "Local"
-				}
-			},
-			{
-				"id": "fldfX3czgVY80eAY1",
-				"name": "Employee ID",
-				"type": "lookup",
-				"typeOptions": {
-					"relationColumnId": "fldaQBBobHeO6djf1",
-					"foreignTableRollupColumnId": "fldTkbKP76gmjsreK",
-					"dependencies": {
-						"referencedColumnIdsForValue": [
-							"fldaQBBobHeO6djf1",
-							"fldTkbKP76gmjsreK"
-						]
-					},
-					"resultType": "text"
-				}
-			}
-		]
-	},
-	{
-		"id": "tbl8NiS8zAbGzCJuK",
-		"name": "Employment Status Movement",
-		"columns": [
-			{
-				"id": "fld00IwCTzXgqbEoN",
-				"name": "Name",
-				"type": "text",
-				"typeOptions": null
-			},
-			{
-				"id": "fldoqdD0eO1CF17sN",
-				"name": "User ID",
-				"type": "foreignKey",
-				"typeOptions": {
-					"foreignTableId": "tblwFpEMmpdYH23LL",
-					"relationship": "one",
-					"unreversed": true,
-					"symmetricColumnId": "fldPiz9v03GvPFP92"
-				}
-			},
-			{
-				"id": "fldBTlbH7u5eRZ8Kp",
-				"name": "Employment Status",
-				"type": "select",
-				"typeOptions": {
-					"choiceOrder": [
-						"selcrJVghoJj2RbZn",
-						"seleoDdUWDbjXtk2c",
-						"selgz1HzvbLZPITfq"
-					],
-					"choices": {
-						"selcrJVghoJj2RbZn": {
-							"id": "selcrJVghoJj2RbZn",
-							"color": "blue",
-							"name": "Intern"
-						},
-						"seleoDdUWDbjXtk2c": {
-							"id": "seleoDdUWDbjXtk2c",
-							"color": "cyan",
-							"name": "Contractual"
-						},
-						"selgz1HzvbLZPITfq": {
-							"id": "selgz1HzvbLZPITfq",
-							"color": "teal",
-							"name": "Full Time"
-						}
-					},
-					"disableColors": false
-				}
-			},
-			{
-				"id": "fldnQl9p2Z04X0I1s",
-				"name": "Effective Date",
-				"type": "date",
-				"typeOptions": {
-					"isDateTime": false,
-					"dateFormat": "Local"
-				}
-			},
-			{
-				"id": "fldIwjgW6B4PkUtmR",
-				"name": "Full Name",
-				"type": "lookup",
-				"typeOptions": {
-					"relationColumnId": "fldoqdD0eO1CF17sN",
-					"foreignTableRollupColumnId": "fldnrdFFrXUDPITZM",
-					"dependencies": {
-						"referencedColumnIdsForValue": [
-							"fldoqdD0eO1CF17sN",
-							"fldnrdFFrXUDPITZM"
-						]
-					},
-					"resultType": "multilineText"
-				}
-			},
-			{
-				"id": "fldBhyw7rsATEMUeb",
-				"name": "Employee ID",
-				"type": "lookup",
-				"typeOptions": {
-					"relationColumnId": "fldoqdD0eO1CF17sN",
-					"foreignTableRollupColumnId": "fldTkbKP76gmjsreK",
-					"dependencies": {
-						"referencedColumnIdsForValue": [
-							"fldoqdD0eO1CF17sN",
-							"fldTkbKP76gmjsreK"
-						]
-					},
-					"resultType": "text"
-				}
-			}
-		]
-	},
-	{
-		"id": "tblr9TGgFbOA07Le8",
-		"name": "Allowance Movement",
-		"columns": [
-			{
-				"id": "fldrkmObh5mKbnCVk",
-				"name": "Name",
-				"type": "formula",
-				"typeOptions": {
-					"formulaTextParsed": "{column_value_fldOvl6I0pnQ6JNGw}",
-					"dependencies": {
-						"referencedColumnIdsForValue": [
-							"fldOvl6I0pnQ6JNGw"
-						]
-					},
-					"resultType": "text"
-				}
-			},
-			{
-				"id": "fldOvl6I0pnQ6JNGw",
-				"name": "User ID",
-				"type": "foreignKey",
-				"typeOptions": {
-					"foreignTableId": "tblwFpEMmpdYH23LL",
-					"relationship": "one",
-					"unreversed": true,
-					"symmetricColumnId": "fldazs1bHKAnqt14v"
-				}
-			},
-			{
-				"id": "fld4MVlZa4xoCrwd4",
-				"name": "Amount",
-				"type": "number",
-				"typeOptions": {
-					"format": "currency",
-					"precision": 2,
-					"symbol": "Php",
-					"negative": false,
-					"validatorName": "positive"
-				}
-			},
-			{
-				"id": "fldnctUsepzp5zotq",
-				"name": "Effective Date",
-				"type": "date",
-				"typeOptions": {
-					"isDateTime": false,
-					"dateFormat": "Local"
-				}
-			},
-			{
-				"id": "fldLiSpcO0fiBj6d4",
-				"name": "Full Name",
-				"type": "lookup",
-				"typeOptions": {
-					"relationColumnId": "fldOvl6I0pnQ6JNGw",
-					"foreignTableRollupColumnId": "fldnrdFFrXUDPITZM",
-					"dependencies": {
-						"referencedColumnIdsForValue": [
-							"fldOvl6I0pnQ6JNGw",
-							"fldnrdFFrXUDPITZM"
-						]
-					},
-					"resultType": "multilineText"
-				}
-			},
-			{
-				"id": "fld9nai2ZfBAYRHuO",
-				"name": "Allowance",
-				"type": "select",
-				"typeOptions": {
-					"choiceOrder": [
-						"selHxc9dt03HuxJHo",
-						"selpEUYdXd3Kcg5GX",
-						"selEVYDbdR9k0OMTE"
-					],
-					"choices": {
-						"selHxc9dt03HuxJHo": {
-							"id": "selHxc9dt03HuxJHo",
-							"color": "blue",
-							"name": "Transportation Allowance"
-						},
-						"selpEUYdXd3Kcg5GX": {
-							"id": "selpEUYdXd3Kcg5GX",
-							"color": "cyan",
-							"name": "Overtime Allowance"
-						},
-						"selEVYDbdR9k0OMTE": {
-							"id": "selEVYDbdR9k0OMTE",
-							"color": "teal",
-							"name": "Meal Allowance"
-						}
-					},
-					"disableColors": false
-				}
-			},
-			{
-				"id": "fld1OfxStIB3MYgpU",
-				"name": "Employee ID",
-				"type": "lookup",
-				"typeOptions": {
-					"relationColumnId": "fldOvl6I0pnQ6JNGw",
-					"foreignTableRollupColumnId": "fldTkbKP76gmjsreK",
-					"dependencies": {
-						"referencedColumnIdsForValue": [
-							"fldOvl6I0pnQ6JNGw",
-							"fldTkbKP76gmjsreK"
-						]
-					},
-					"resultType": "text"
-				}
 			}
 		]
 	}

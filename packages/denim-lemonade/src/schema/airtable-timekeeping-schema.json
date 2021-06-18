@@ -1,28 +1,28 @@
 [
 	{
-		"id": "tblqx6TOp6EltFoWf",
+		"id": "tblvgY3s90A3laWza",
 		"name": "201 Management",
 		"columns": [
 			{
-				"id": "fldSrdrKotZmEv0bo",
+				"id": "fldXa5Bo8nV4w0yOj",
 				"name": "User ID",
 				"type": "multilineText",
 				"typeOptions": null
 			},
 			{
-				"id": "fldhWtc1pf1onIoLW",
+				"id": "fldmFlmF99X6fdWoR",
 				"name": "Employee ID",
 				"type": "text",
 				"typeOptions": null
 			},
 			{
-				"id": "fldsqitUDMhz8l6i5",
+				"id": "fldx9aDynGdh0QEV0",
 				"name": "Account Status",
 				"type": "text",
 				"typeOptions": null
 			},
 			{
-				"id": "flda6oewsA5EwUFe2",
+				"id": "fldfPgoacu1mopdRX",
 				"name": "Title",
 				"type": "select",
 				"typeOptions": {
@@ -52,37 +52,37 @@
 				}
 			},
 			{
-				"id": "fldSaJ5f7KRhHebgR",
+				"id": "fldXTBfTRENZzJJTM",
 				"name": "Last Name",
 				"type": "text",
 				"typeOptions": null
 			},
 			{
-				"id": "fldh6jNgwo0yhntRs",
+				"id": "fldmPbXUgiWg9S1un",
 				"name": "First Name",
 				"type": "text",
 				"typeOptions": null
 			},
 			{
-				"id": "fldMgOb5y1cY9JSi5",
+				"id": "fldRZGlJiV8G1eqV0",
 				"name": "Middle Name",
 				"type": "text",
 				"typeOptions": null
 			},
 			{
-				"id": "fldbCVjCIZHvep88C",
+				"id": "fldglNtgsTDd6UGLx",
 				"name": "Full Name",
 				"type": "multilineText",
 				"typeOptions": null
 			},
 			{
-				"id": "fldccpJTpyWRMQnKJ",
+				"id": "fldhVhTx9sSzElVnE",
 				"name": "Nickname",
 				"type": "text",
 				"typeOptions": null
 			},
 			{
-				"id": "fldyPoPq2IT5YMExL",
+				"id": "fldDygZ4MCPNQhcaG",
 				"name": "Picture",
 				"type": "multipleAttachment",
 				"typeOptions": {
@@ -90,7 +90,7 @@
 				}
 			},
 			{
-				"id": "fldbpVouMCAjOEmJR",
+				"id": "fldg8Ny8www1G9UmM",
 				"name": "Date of Birth",
 				"type": "date",
 				"typeOptions": {
@@ -99,7 +99,7 @@
 				}
 			},
 			{
-				"id": "fld6ObU5Er0YnK2hp",
+				"id": "fldbx34JolWGffAUk",
 				"name": "Gender",
 				"type": "select",
 				"typeOptions": {
@@ -123,7 +123,7 @@
 				}
 			},
 			{
-				"id": "fldCEgzXnbhDxf9gG",
+				"id": "fldHn8JB75dlpKHTB",
 				"name": "Marital Status",
 				"type": "select",
 				"typeOptions": {
@@ -171,7 +171,7 @@
 				}
 			},
 			{
-				"id": "fldkoDMgLO8cCwcrU",
+				"id": "fldp7vWUvI4Uu1K4P",
 				"name": "LinkedIn Account",
 				"type": "text",
 				"typeOptions": {
@@ -179,7 +179,7 @@
 				}
 			},
 			{
-				"id": "fldUt62aE3GQXtqiQ",
+				"id": "fldZcYcOoXCyPYYVL",
 				"name": "Email",
 				"type": "text",
 				"typeOptions": {
@@ -187,37 +187,37 @@
 				}
 			},
 			{
-				"id": "fldVr31Lt9oy06W4l",
+				"id": "fld0aVbpd3kgSBuHg",
 				"name": "Department",
 				"type": "text",
 				"typeOptions": null
 			},
 			{
-				"id": "fldLbMijedXgRc4h9",
+				"id": "fldQUEsXY7TYJHCU4",
 				"name": "Direct Manager",
 				"type": "text",
 				"typeOptions": null
 			},
 			{
-				"id": "fld9ALa9x20hqmzvP",
+				"id": "fldejDkNhWWZiR78K",
 				"name": "Job Positions",
 				"type": "text",
 				"typeOptions": null
 			},
 			{
-				"id": "fldfpOPLUUZIOZBiW",
+				"id": "fldk8GZpEOVqGu9VR",
 				"name": "Job Roles",
 				"type": "text",
 				"typeOptions": null
 			},
 			{
-				"id": "fldBk3ZU2DvIrJvSm",
+				"id": "fldG3V9yMxrqje3vh",
 				"name": "Job Title",
 				"type": "text",
 				"typeOptions": null
 			},
 			{
-				"id": "fldR6QGukTKtkgbCu",
+				"id": "fldWPIQ84NGbcLJfp",
 				"name": "Department Supervisor",
 				"type": "checkbox",
 				"typeOptions": {
@@ -226,7 +226,7 @@
 				}
 			},
 			{
-				"id": "fldEqumOkrE9qtH20",
+				"id": "fldJ9mws4lARiYfFV",
 				"name": "Entry Date",
 				"type": "date",
 				"typeOptions": {
@@ -235,7 +235,7 @@
 				}
 			},
 			{
-				"id": "fldp1WwkiSAML73D5",
+				"id": "flduKOGY2MwuDCBg0",
 				"name": "Exit Date",
 				"type": "date",
 				"typeOptions": {
@@ -244,7 +244,7 @@
 				}
 			},
 			{
-				"id": "fldxvb3Ddk20qwI3T",
+				"id": "fldCe3dhXeYIi1gGO",
 				"name": "Payroll ID",
 				"type": "number",
 				"typeOptions": {
@@ -254,7 +254,7 @@
 				}
 			},
 			{
-				"id": "fld8IG7kGILHJ9oPE",
+				"id": "flddryhYqCHpBEWsz",
 				"name": "Employee Wage",
 				"type": "number",
 				"typeOptions": {
@@ -266,13 +266,13 @@
 				}
 			},
 			{
-				"id": "fld6lQog5453W3ao6",
+				"id": "fldb4IyUPY1LOyI11",
 				"name": "Employee Allowance",
 				"type": "text",
 				"typeOptions": null
 			},
 			{
-				"id": "fldsTXN2IJsgpVNgt",
+				"id": "fldxCPXGsDoYhqlTo",
 				"name": "Phone Number Visibility",
 				"type": "checkbox",
 				"typeOptions": {
@@ -281,13 +281,13 @@
 				}
 			},
 			{
-				"id": "fldkIbPJCD1iN5M5F",
+				"id": "fldpr3ZnmxX0FAkIA",
 				"name": "Nationality",
 				"type": "text",
 				"typeOptions": null
 			},
 			{
-				"id": "fldXV0gewgCUFJdHD",
+				"id": "fld2ESqSgayCxeLky",
 				"name": "Citizenship",
 				"type": "select",
 				"typeOptions": {
@@ -323,55 +323,55 @@
 				}
 			},
 			{
-				"id": "fldMUfrndtZW7ArDx",
+				"id": "fldRD7B1XnVEZ5Zgs",
 				"name": "Address 1",
 				"type": "text",
 				"typeOptions": null
 			},
 			{
-				"id": "fldy9XjudimNyZPyK",
+				"id": "fldDSPt8XcivqunbF",
 				"name": "Address 2",
 				"type": "text",
 				"typeOptions": null
 			},
 			{
-				"id": "fldhl79QVbTPuuW4R",
+				"id": "fldm4ZjuF5PxmZuHM",
 				"name": "City",
 				"type": "text",
 				"typeOptions": null
 			},
 			{
-				"id": "fld3CbeLWQbK80BKp",
+				"id": "fld8l3opGK7s0v9nk",
 				"name": "State/Province",
 				"type": "text",
 				"typeOptions": null
 			},
 			{
-				"id": "fldNvfIBskRkZNgcH",
+				"id": "fldSe7SfceN2RiOPC",
 				"name": "Zip",
 				"type": "text",
 				"typeOptions": null
 			},
 			{
-				"id": "fld1mfYnCjG3FTDxn",
+				"id": "fld65781mdCLxobai",
 				"name": "Country",
 				"type": "text",
 				"typeOptions": null
 			},
 			{
-				"id": "fldvGQOkMowwuusVK",
+				"id": "fldApIYYwisemZ0yF",
 				"name": "Home Number",
 				"type": "phone",
 				"typeOptions": null
 			},
 			{
-				"id": "fldj2honSihQBSI0Z",
+				"id": "fldoL9y1CcdytngDU",
 				"name": "Mobile Number",
 				"type": "phone",
 				"typeOptions": null
 			},
 			{
-				"id": "fldJ9vpeTIx2KNrFC",
+				"id": "fldOSnzSDCtKCiZix",
 				"name": "Language",
 				"type": "multiSelect",
 				"typeOptions": {
@@ -419,7 +419,7 @@
 				}
 			},
 			{
-				"id": "fldxoJRCiO4U6vDco",
+				"id": "fldC7B1g2I0CY0bPj",
 				"name": "Curriculum Vitae",
 				"type": "multipleAttachment",
 				"typeOptions": {
@@ -427,7 +427,7 @@
 				}
 			},
 			{
-				"id": "fldSWJzDh3WVBMmaT",
+				"id": "fldXFBJh1XSDthUNO",
 				"name": "Skills",
 				"type": "multiSelect",
 				"typeOptions": {
@@ -475,13 +475,13 @@
 				}
 			},
 			{
-				"id": "fldl99JjGYhdUulj4",
+				"id": "fldqS1TXqSdVMZTWZ",
 				"name": "Leave Scheme",
 				"type": "text",
 				"typeOptions": null
 			},
 			{
-				"id": "fld5UqSYF7Qkp3vY5",
+				"id": "fldaDi2Cp1M2hy3B0",
 				"name": "Daily Work Hours",
 				"type": "number",
 				"typeOptions": {
@@ -492,25 +492,25 @@
 				}
 			},
 			{
-				"id": "fldoBR94kFKRyTgAl",
+				"id": "fldtkJjI4zGzqoOdg",
 				"name": "Contact Person",
 				"type": "text",
 				"typeOptions": null
 			},
 			{
-				"id": "fldm6mZHY5KI7FUY0",
+				"id": "fldrPe9lIZGqZasBV",
 				"name": "Contact Person Mobile No",
 				"type": "phone",
 				"typeOptions": null
 			},
 			{
-				"id": "fldOb41cJT6TWZFOm",
+				"id": "fldTUWbQtN2BOudrh",
 				"name": "Relation to Contact Person",
 				"type": "text",
 				"typeOptions": null
 			},
 			{
-				"id": "fldkubJ4tMxlgrYAN",
+				"id": "fldpd3TIdGt38WwdI",
 				"name": "Dependents",
 				"type": "multipleAttachment",
 				"typeOptions": {
@@ -518,7 +518,7 @@
 				}
 			},
 			{
-				"id": "fldPrGdztOHEwTVv1",
+				"id": "fldUaynddIDmoot8W",
 				"name": "Attachments",
 				"type": "multipleAttachment",
 				"typeOptions": {
@@ -526,13 +526,13 @@
 				}
 			},
 			{
-				"id": "fldP76vg66tAETxAq",
+				"id": "fldUQYFUQ0piwo5dl",
 				"name": "Created By",
 				"type": "text",
 				"typeOptions": null
 			},
 			{
-				"id": "fldhS4HH8MDum261B",
+				"id": "fldmBWRlSGzcexEEw",
 				"name": "Date Created",
 				"type": "date",
 				"typeOptions": {
@@ -542,13 +542,13 @@
 				}
 			},
 			{
-				"id": "fldFl8bEXLkSJ6PlY",
+				"id": "fldK40liHFgABBnYT",
 				"name": "Last Modified By",
 				"type": "text",
 				"typeOptions": null
 			},
 			{
-				"id": "fldEktjzKAju3W48V",
+				"id": "fldJ3ltduufcVrCLQ",
 				"name": "Last Modified",
 				"type": "date",
 				"typeOptions": {
@@ -558,13 +558,13 @@
 				}
 			},
 			{
-				"id": "fldwxeWcZMuItqJyk",
+				"id": "fldBg66QJGqqlVhbf",
 				"name": "Lark ID",
 				"type": "text",
 				"typeOptions": null
 			},
 			{
-				"id": "fldhoGayzwyci5k5J",
+				"id": "fldm7ykcjquUaASIE",
 				"name": "Is HR",
 				"type": "checkbox",
 				"typeOptions": {
@@ -573,7 +573,7 @@
 				}
 			},
 			{
-				"id": "fldILDGt9qkRbrb23",
+				"id": "fldNuvQ7Tkgz3WJFY",
 				"name": "Is HR User",
 				"type": "checkbox",
 				"typeOptions": {
@@ -582,97 +582,97 @@
 				}
 			},
 			{
-				"id": "fldiZtgswfMjguUgE",
+				"id": "fldnIlq6g9I18ZsTz",
 				"name": "Calculation",
 				"type": "multilineText",
 				"typeOptions": null
 			},
 			{
-				"id": "fldfdCRndyO05ERZP",
+				"id": "fldkWu11XsKIX9pCK",
 				"name": "Current Job Position",
 				"type": "text",
 				"typeOptions": null
 			},
 			{
-				"id": "fldTlzYbereWAywAI",
+				"id": "fldY4r8PYlaEs34dD",
 				"name": "Current Department",
 				"type": "text",
 				"typeOptions": null
 			},
 			{
-				"id": "fldFdEFuyUJ31eyBe",
+				"id": "fldKWwP8iOFLTJ6e9",
 				"name": "Timekeeping",
 				"type": "text",
 				"typeOptions": null
 			},
 			{
-				"id": "fld995VRtN2O1LIyx",
+				"id": "fldeSX5vdHYwTggbs",
 				"name": "Timekeeping copy",
 				"type": "text",
 				"typeOptions": null
 			},
 			{
-				"id": "fld1PCsYnghw3vg4K",
+				"id": "fld6yuCC7adeV0OHF",
 				"name": "SSS Number",
 				"type": "text",
 				"typeOptions": null
 			},
 			{
-				"id": "fldFsco2Hm5yJ9Yic",
+				"id": "fldKb4yGrg1gBEwV7",
 				"name": "Philhealth Number",
 				"type": "text",
 				"typeOptions": null
 			},
 			{
-				"id": "fldahVMFdiAh79UIu",
+				"id": "fldf0NWjXcwZZEslp",
 				"name": "Pag-ibig Number",
 				"type": "text",
 				"typeOptions": null
 			},
 			{
-				"id": "fldyez5heLnFxGDqW",
+				"id": "fldDXrfVYFjnpbb3R",
 				"name": "Tax Identification Number",
 				"type": "text",
 				"typeOptions": null
 			},
 			{
-				"id": "fldzRkaDQggMN501b",
+				"id": "fldEAckhAacuFAyE6",
 				"name": "Leave Balance",
 				"type": "text",
 				"typeOptions": null
 			},
 			{
-				"id": "fldEMB1vMcfHvbduY",
+				"id": "fldJvtb9w6bpnGL7T",
 				"name": "Leave Accrual",
 				"type": "text",
 				"typeOptions": null
 			},
 			{
-				"id": "fldk7KT3Sgeqcpbyq",
+				"id": "fldpQC3HCaa84UJbl",
 				"name": "Leave Accrual copy",
 				"type": "text",
 				"typeOptions": null
 			},
 			{
-				"id": "fldKk8SCMestCCvvM",
+				"id": "fldP302gw8obu738H",
 				"name": "Attendance",
 				"type": "text",
 				"typeOptions": null
 			},
 			{
-				"id": "fldMC0IVhMwenflbx",
+				"id": "fldRlSSz1GsWfKTOs",
 				"name": "Pay Basis",
 				"type": "text",
 				"typeOptions": null
 			},
 			{
-				"id": "fldX8jUv1xG0u04wf",
+				"id": "fld2Rb49LrCImvC9a",
 				"name": "Bank Account",
 				"type": "text",
 				"typeOptions": null
 			},
 			{
-				"id": "fldfPOGWnkGdeLDIO",
+				"id": "fldkyGQA7eCV6gblJ",
 				"name": "E-Cola",
 				"type": "number",
 				"typeOptions": {
@@ -684,43 +684,43 @@
 				}
 			},
 			{
-				"id": "fldSSmfcvqDrDBi9e",
+				"id": "fldXBepQfkz9v6QM9",
 				"name": "Payment Method",
 				"type": "text",
 				"typeOptions": null
 			},
 			{
-				"id": "fld2OdQRECxqZ75UX",
+				"id": "fld7x50vowt8RCDxS",
 				"name": "Days of Work Per Year",
 				"type": "text",
 				"typeOptions": null
 			},
 			{
-				"id": "fldwbLNrqznMd0aEG",
+				"id": "fldBUDX5atju5vIhB",
 				"name": "Payroll Grouping",
 				"type": "text",
 				"typeOptions": null
 			},
 			{
-				"id": "flduqzfQQSqTRGG11",
+				"id": "fldz9rpuAMmBJbeEW",
 				"name": "Workplace",
 				"type": "text",
 				"typeOptions": null
 			},
 			{
-				"id": "fldTUNoMEO9rD2R96",
+				"id": "fldYDFyqoI59vxpM1",
 				"name": "Employment Status",
 				"type": "text",
 				"typeOptions": null
 			},
 			{
-				"id": "fldnsV60QzplA2cqD",
+				"id": "fldsbNgEAtl3sxK3y",
 				"name": "Wage Zone",
 				"type": "text",
 				"typeOptions": null
 			},
 			{
-				"id": "fldFrrhYiW5bwKQA1",
+				"id": "fldKajrC2Q1TofodW",
 				"name": "Company",
 				"type": "text",
 				"typeOptions": null
@@ -728,17 +728,17 @@
 		]
 	},
 	{
-		"id": "tblCYVFyI0Six2b4b",
+		"id": "tblHHNPcsUO0pxJH6",
 		"name": "Holiday Calendar",
 		"columns": [
 			{
-				"id": "fldbAtPNU60n7VNBs",
+				"id": "fldgjlZrE0W5Zqlen",
 				"name": "Holiday Name",
 				"type": "text",
 				"typeOptions": null
 			},
 			{
-				"id": "fldgYvfhSyhDi8eRu",
+				"id": "fldlHnpVCsdlaDMup",
 				"name": "Date",
 				"type": "date",
 				"typeOptions": {
@@ -747,7 +747,7 @@
 				}
 			},
 			{
-				"id": "fldXZA8ZaduIwOulH",
+				"id": "fld2IsiDU7qqoj2YC",
 				"name": "Holiday Type",
 				"type": "select",
 				"typeOptions": {
@@ -771,7 +771,7 @@
 				}
 			},
 			{
-				"id": "fldTPWlyewawVXY3g",
+				"id": "fldYyOvcYq6eNswGb",
 				"name": "End Date",
 				"type": "date",
 				"typeOptions": {
@@ -782,17 +782,17 @@
 		]
 	},
 	{
-		"id": "tbliQnuDvWqihu4zE",
+		"id": "tblnzfEhfQm09ZCcz",
 		"name": "Shift Holiday Overtime",
 		"columns": [
 			{
-				"id": "fldqIyLWOLWjeRjls",
+				"id": "fldvrqVAyFS16mRYn",
 				"name": "Name",
 				"type": "text",
 				"typeOptions": null
 			},
 			{
-				"id": "fldC7OOQIluus1Sw6",
+				"id": "fldHQGYusfqckwq91",
 				"name": "Clock In",
 				"type": "checkbox",
 				"typeOptions": {
@@ -801,7 +801,7 @@
 				}
 			},
 			{
-				"id": "fldF4FwmXrOL4N24f",
+				"id": "fldKNxG0HlKtWiAHa",
 				"name": "Clock Out",
 				"type": "checkbox",
 				"typeOptions": {
@@ -812,17 +812,17 @@
 		]
 	},
 	{
-		"id": "tblqhKNQt4LlFJYnb",
+		"id": "tblv0CXudYH3xew06",
 		"name": "AttendanceExport",
 		"columns": [
 			{
-				"id": "fldPl3uU7IUqB3ibx",
+				"id": "fldU4VEyRCQ8tyQOs",
 				"name": "employee_id",
 				"type": "multilineText",
 				"typeOptions": null
 			},
 			{
-				"id": "fldcEMMsPIRf9UahR",
+				"id": "fldhnEW6zCNX1pIUM",
 				"name": "payroll_period_id",
 				"type": "number",
 				"typeOptions": {
@@ -831,7 +831,7 @@
 				}
 			},
 			{
-				"id": "fldzFWK7fpxlDi3jS",
+				"id": "fldEoOULZjt3vNBWN",
 				"name": "payroll_days",
 				"type": "number",
 				"typeOptions": {
@@ -841,7 +841,7 @@
 				}
 			},
 			{
-				"id": "fldJDMGlBaWlR0Qfv",
+				"id": "fldOmEQZl4S3JvoSq",
 				"name": "absences",
 				"type": "number",
 				"typeOptions": {
@@ -851,7 +851,7 @@
 				}
 			},
 			{
-				"id": "fldxeHj2tBAyur1MQ",
+				"id": "fldCXztGdvwgmWzpL",
 				"name": "leaves",
 				"type": "number",
 				"typeOptions": {
@@ -861,7 +861,7 @@
 				}
 			},
 			{
-				"id": "fldC1wJlKkpwSuFpo",
+				"id": "fldHKoTZueleKZd2j",
 				"name": "holidays",
 				"type": "number",
 				"typeOptions": {
@@ -871,7 +871,7 @@
 				}
 			},
 			{
-				"id": "fld33zXTUxbe7VQcy",
+				"id": "fld8Mr7xEr7WZqoPt",
 				"name": "part_time",
 				"type": "number",
 				"typeOptions": {
@@ -881,7 +881,7 @@
 				}
 			},
 			{
-				"id": "fldxOuocpqxtEZGSg",
+				"id": "fldCxmyQ9ktbwuevb",
 				"name": "late",
 				"type": "number",
 				"typeOptions": {
@@ -891,7 +891,7 @@
 				}
 			},
 			{
-				"id": "fldLEKT25SK9pBk98",
+				"id": "fldQnC3GPMGRh6SM3",
 				"name": "undertime",
 				"type": "number",
 				"typeOptions": {
@@ -901,7 +901,7 @@
 				}
 			},
 			{
-				"id": "fldFskGNydjfWOmvT",
+				"id": "fldKbcQri7fXOjU8O",
 				"name": "reg_np",
 				"type": "number",
 				"typeOptions": {
@@ -911,7 +911,7 @@
 				}
 			},
 			{
-				"id": "fldCQShAZO9JDgljj",
+				"id": "fldHzKreJI5rvLTWe",
 				"name": "reg_ot",
 				"type": "number",
 				"typeOptions": {
@@ -921,7 +921,7 @@
 				}
 			},
 			{
-				"id": "fldHxJbyWBzB0D5RM",
+				"id": "fldMgBlcGvvjS8DuH",
 				"name": "reg_ot_np",
 				"type": "number",
 				"typeOptions": {
@@ -931,7 +931,7 @@
 				}
 			},
 			{
-				"id": "fldGJwB962QRMfe91",
+				"id": "fldLsoLNQWMzEKMMW",
 				"name": "reg_ot_ex",
 				"type": "number",
 				"typeOptions": {
@@ -941,7 +941,7 @@
 				}
 			},
 			{
-				"id": "fldmFJiaO014oMcrs",
+				"id": "fldroBsOyUXMghK4n",
 				"name": "reg_ot_ex_np",
 				"type": "number",
 				"typeOptions": {
@@ -951,7 +951,7 @@
 				}
 			},
 			{
-				"id": "fldLb5FbqytR8SL7D",
+				"id": "fldQUXPPaspz0njKy",
 				"name": "leg_ot",
 				"type": "number",
 				"typeOptions": {
@@ -961,7 +961,7 @@
 				}
 			},
 			{
-				"id": "fldL0pr5WjSCLiLKJ",
+				"id": "fldQJhBJGdOkDNjnE",
 				"name": "leg_ot_np",
 				"type": "number",
 				"typeOptions": {
@@ -971,7 +971,7 @@
 				}
 			},
 			{
-				"id": "fldLP2rPnN8vfsQc1",
+				"id": "fldQyUBt7H4d7XoPW",
 				"name": "leg_ot_ex",
 				"type": "number",
 				"typeOptions": {
@@ -981,7 +981,7 @@
 				}
 			},
 			{
-				"id": "fldTaljz7vBfnYdI8",
+				"id": "fldYTdtdRpxXftLl3",
 				"name": "leg_ot_ex_np",
 				"type": "number",
 				"typeOptions": {
@@ -991,7 +991,7 @@
 				}
 			},
 			{
-				"id": "fldBOCkl7R0JfxXWe",
+				"id": "fldGxuuZRLWr72vz9",
 				"name": "sp_ot",
 				"type": "number",
 				"typeOptions": {
@@ -1001,7 +1001,7 @@
 				}
 			},
 			{
-				"id": "fldGbEt486OrSmC0K",
+				"id": "fldLUwDIS0K9KRaDF",
 				"name": "sp_ot_np",
 				"type": "number",
 				"typeOptions": {
@@ -1011,7 +1011,7 @@
 				}
 			},
 			{
-				"id": "fldDiWLdktHjO78aX",
+				"id": "fldI1OVR4nD1GCGNS",
 				"name": "sp_ot_ex",
 				"type": "number",
 				"typeOptions": {
@@ -1021,7 +1021,7 @@
 				}
 			},
 			{
-				"id": "fldJA1eyoHlP595m3",
+				"id": "fldOjToc8BhxXEDZY",
 				"name": "sp_ot_ex_np",
 				"type": "number",
 				"typeOptions": {
@@ -1031,7 +1031,7 @@
 				}
 			},
 			{
-				"id": "fld7P9nYjjOgEFCC2",
+				"id": "fldcy1xC3dKYwaafX",
 				"name": "rst_ot",
 				"type": "number",
 				"typeOptions": {
@@ -1041,7 +1041,7 @@
 				}
 			},
 			{
-				"id": "fldCyHvppXyT4GXzI",
+				"id": "fldHhzF39RuBWbvcD",
 				"name": "rst_ot_np",
 				"type": "number",
 				"typeOptions": {
@@ -1051,7 +1051,7 @@
 				}
 			},
 			{
-				"id": "fldpCCoxUweAbhiHZ",
+				"id": "flduluybEqai3MQkU",
 				"name": "rst_ot_ex",
 				"type": "number",
 				"typeOptions": {
@@ -1061,7 +1061,7 @@
 				}
 			},
 			{
-				"id": "fld4582XLOLmcvz8A",
+				"id": "fld9O0cBvIH4407Lv",
 				"name": "rst_ot_ex_np",
 				"type": "number",
 				"typeOptions": {
@@ -1071,7 +1071,7 @@
 				}
 			},
 			{
-				"id": "fld9oFGBqyBKyKyCc",
+				"id": "flde7xQfasxsqf6f7",
 				"name": "leg_rst_ot",
 				"type": "number",
 				"typeOptions": {
@@ -1081,7 +1081,7 @@
 				}
 			},
 			{
-				"id": "fldfBK45jmTmtb7sG",
+				"id": "fldkkCeJ3gP4lGF5B",
 				"name": "leg_rst_ot_np",
 				"type": "number",
 				"typeOptions": {
@@ -1091,7 +1091,7 @@
 				}
 			},
 			{
-				"id": "fldgq5w1axMBieY5G",
+				"id": "fldl9XGFUrIjaJwIB",
 				"name": "leg_rst_ot_ex",
 				"type": "number",
 				"typeOptions": {
@@ -1101,7 +1101,7 @@
 				}
 			},
 			{
-				"id": "fldBTbAAZ4fO6hgii",
+				"id": "fldGC3KeJYbwYMOVd",
 				"name": "leg_rst_ot_ex_np",
 				"type": "number",
 				"typeOptions": {
@@ -1111,7 +1111,7 @@
 				}
 			},
 			{
-				"id": "fldXtMWCuuhWMCpN5",
+				"id": "fld2cE6geodEE7Xq0",
 				"name": "sp_rst_ot",
 				"type": "number",
 				"typeOptions": {
@@ -1121,7 +1121,7 @@
 				}
 			},
 			{
-				"id": "fldzsF04OTnLepYMR",
+				"id": "fldEbxaIyNjt6UwpM",
 				"name": "sp_rst_ot_np",
 				"type": "number",
 				"typeOptions": {
@@ -1131,7 +1131,7 @@
 				}
 			},
 			{
-				"id": "fldv2ncJT0GdBP6wR",
+				"id": "fldALfmnDUCVtkE9M",
 				"name": "sp_rst_ot_ex",
 				"type": "number",
 				"typeOptions": {
@@ -1141,7 +1141,7 @@
 				}
 			},
 			{
-				"id": "fldisHDzKIcXgmaI3",
+				"id": "fldnbzNduC8F8RIlY",
 				"name": "sp_rst_ot_ex_np",
 				"type": "number",
 				"typeOptions": {
@@ -1151,7 +1151,7 @@
 				}
 			},
 			{
-				"id": "fldyMWrd3Emu66X24",
+				"id": "fldDvOBRNyicYBvFZ",
 				"name": "allowance_1",
 				"type": "number",
 				"typeOptions": {
@@ -1161,7 +1161,7 @@
 				}
 			},
 			{
-				"id": "fldlV3rlWcZOXYIYh",
+				"id": "fldqEVBZG6VwPtgBc",
 				"name": "allowance_2",
 				"type": "number",
 				"typeOptions": {
@@ -1171,7 +1171,7 @@
 				}
 			},
 			{
-				"id": "fldYwI4ZXIMdOwOMF",
+				"id": "fld3fAeDHCIVG1mpA",
 				"name": "allowance_3",
 				"type": "number",
 				"typeOptions": {
@@ -1181,7 +1181,7 @@
 				}
 			},
 			{
-				"id": "fldr478PyWijT2QCM",
+				"id": "fldwNZitiQe1LxofH",
 				"name": "allowance_4",
 				"type": "number",
 				"typeOptions": {
@@ -1191,7 +1191,7 @@
 				}
 			},
 			{
-				"id": "fldJV3U6G4VfWnkr7",
+				"id": "fldOEV4KqYRXOSS42",
 				"name": "allowance_5",
 				"type": "number",
 				"typeOptions": {
@@ -1201,7 +1201,7 @@
 				}
 			},
 			{
-				"id": "fldPUhOaymxu23E3C",
+				"id": "fldUD9YOigtcUycGx",
 				"name": "allowance_6",
 				"type": "number",
 				"typeOptions": {
@@ -1211,7 +1211,7 @@
 				}
 			},
 			{
-				"id": "fld3eEsFCZil6qfTm",
+				"id": "fld8XwCjmTe3YVNwh",
 				"name": "allowance_7",
 				"type": "number",
 				"typeOptions": {
@@ -1221,7 +1221,7 @@
 				}
 			},
 			{
-				"id": "fldT0M3Re0TKcwUuj",
+				"id": "fldYJEdvYUPs41s7e",
 				"name": "allowance_8",
 				"type": "number",
 				"typeOptions": {
@@ -1231,7 +1231,7 @@
 				}
 			},
 			{
-				"id": "fld5zOFDNM024i67Y",
+				"id": "fldaiGPhxGWKWNEKT",
 				"name": "allowance_9",
 				"type": "number",
 				"typeOptions": {
@@ -1241,7 +1241,7 @@
 				}
 			},
 			{
-				"id": "fldcPYlvtq6a2oUAa",
+				"id": "fldhyQv9dk2SUTsd5",
 				"name": "allowance_10",
 				"type": "number",
 				"typeOptions": {
@@ -1251,7 +1251,7 @@
 				}
 			},
 			{
-				"id": "fldrN0pG98jQP9RP2",
+				"id": "fldwwSzkT2fyHEpsX",
 				"name": "allowance_11",
 				"type": "number",
 				"typeOptions": {
@@ -1261,7 +1261,7 @@
 				}
 			},
 			{
-				"id": "fldBRLEke0KVnyEoo",
+				"id": "fldGADOYYUGDf3c1j",
 				"name": "allowance_12",
 				"type": "number",
 				"typeOptions": {
@@ -1271,7 +1271,7 @@
 				}
 			},
 			{
-				"id": "fldFgkHZNXbOMgA03",
+				"id": "fldKZcRDxR7wEL8DY",
 				"name": "Date",
 				"type": "text",
 				"typeOptions": null
@@ -1279,35 +1279,35 @@
 		]
 	},
 	{
-		"id": "tblfQ3prXZWgzr5fl",
+		"id": "tblkzVz5HTSYrWDSg",
 		"name": "Grid view",
 		"columns": [
 			{
-				"id": "fldiRiyq3iV6R8Cq7",
+				"id": "fldnAaI4NcROJDa32",
 				"name": "ID",
 				"type": "multilineText",
 				"typeOptions": null
 			},
 			{
-				"id": "fldhrxn581jEk1X8D",
+				"id": "fldmapxJSVfmcwvLy",
 				"name": "Employee",
 				"type": "text",
 				"typeOptions": null
 			},
 			{
-				"id": "fldUUXwikN2KYQJfq",
+				"id": "fldZDPGW4HYsQlhSl",
 				"name": "Employee ID",
 				"type": "text",
 				"typeOptions": null
 			},
 			{
-				"id": "fldMUCkZBL5hYRtNH",
+				"id": "fldRDuuDlF1ZQm1qC",
 				"name": "Employee Name",
 				"type": "text",
 				"typeOptions": null
 			},
 			{
-				"id": "fld961wVBY0TnKTBI",
+				"id": "fldePTGzlSWBffreD",
 				"name": "Date",
 				"type": "date",
 				"typeOptions": {
@@ -1316,7 +1316,7 @@
 				}
 			},
 			{
-				"id": "fldyeWJqziDwGAja3",
+				"id": "fldDXOT4jczey5RNY",
 				"name": "Shift Time In",
 				"type": "number",
 				"typeOptions": {
@@ -1326,7 +1326,7 @@
 				}
 			},
 			{
-				"id": "fldmuB6W0CDox90hA",
+				"id": "fldrdtgAKwz6pEyUv",
 				"name": "Shift Time Out",
 				"type": "number",
 				"typeOptions": {
@@ -1336,7 +1336,7 @@
 				}
 			},
 			{
-				"id": "fldOCZWrpp9za0rGW",
+				"id": "fldTlR659j5h2vZjR",
 				"name": "First In",
 				"type": "number",
 				"typeOptions": {
@@ -1346,7 +1346,7 @@
 				}
 			},
 			{
-				"id": "fldk4JpT3GpPK4lMd",
+				"id": "fldpNBzxNAlxCzTp8",
 				"name": "Last Out",
 				"type": "number",
 				"typeOptions": {
@@ -1356,7 +1356,7 @@
 				}
 			},
 			{
-				"id": "fldX8j7vY2DsGQ9y9",
+				"id": "fld2Rbh9IWzaylHb4",
 				"name": "Not Required",
 				"type": "number",
 				"typeOptions": {
@@ -1365,7 +1365,7 @@
 				}
 			},
 			{
-				"id": "fld6TC2w3Dc0RIQLl",
+				"id": "fldbCucaNx8IJdoog",
 				"name": "No Record",
 				"type": "number",
 				"typeOptions": {
@@ -1374,7 +1374,7 @@
 				}
 			},
 			{
-				"id": "fld4HCy7Agwv543BJ",
+				"id": "fld9quILkasdXzBeE",
 				"name": "Required Duration",
 				"type": "number",
 				"typeOptions": {
@@ -1384,7 +1384,7 @@
 				}
 			},
 			{
-				"id": "fldbeq9ckfngnlvyc",
+				"id": "fldgXijQ49jYfQ3b7",
 				"name": "Actual Duration",
 				"type": "number",
 				"typeOptions": {
@@ -1394,7 +1394,7 @@
 				}
 			},
 			{
-				"id": "fldV1GfkiIK3qT7vT",
+				"id": "fld0KypY2CGLioF8O",
 				"name": "Overtime Hours",
 				"type": "number",
 				"typeOptions": {
@@ -1405,13 +1405,13 @@
 				}
 			},
 			{
-				"id": "fldDe3B7AANuEZeet",
+				"id": "fldIXVLLkuJcwuMRo",
 				"name": "Leave Type",
 				"type": "text",
 				"typeOptions": null
 			},
 			{
-				"id": "fldw2Z7cCRilCoqB9",
+				"id": "fldBLRhQmLe3uTYe4",
 				"name": "Leave Time",
 				"type": "number",
 				"typeOptions": {
@@ -1422,7 +1422,7 @@
 				}
 			},
 			{
-				"id": "fldUbEXga4F84Ui99",
+				"id": "fldZUw7UUYBQWpQM4",
 				"name": "Period ID",
 				"type": "text",
 				"typeOptions": null
@@ -1430,41 +1430,41 @@
 		]
 	},
 	{
-		"id": "tbluYTESVqlKFqdvD",
+		"id": "tblzHLOwFkhsxVL8y",
 		"name": "Payslip",
 		"columns": [
 			{
-				"id": "fldeP5Pn1kFr7Phqg",
+				"id": "fldjyXZ1LeB9ZkP3b",
 				"name": "Employee Id",
 				"type": "text",
 				"typeOptions": null
 			},
 			{
-				"id": "fld2b2PU0IttChk4V",
+				"id": "fld7UUZyKCpbuMSHQ",
 				"name": "PayrollPeriod",
 				"type": "text",
 				"typeOptions": null
 			},
 			{
-				"id": "fldkFf6dAJmhHb7Q0",
+				"id": "fldpo7gRkDiZzGFtV",
 				"name": "Name",
 				"type": "text",
 				"typeOptions": null
 			},
 			{
-				"id": "fldP4ugJ0IOQRVBpE",
+				"id": "fldUNmqnKCKyJq92z",
 				"name": "Location",
 				"type": "text",
 				"typeOptions": null
 			},
 			{
-				"id": "fldzhvtGmMJXrJOwz",
+				"id": "fldE0nDk6GFFjem9u",
 				"name": "Department",
 				"type": "text",
 				"typeOptions": null
 			},
 			{
-				"id": "fldJA5SA8aFlBN90r",
+				"id": "fldOjX2eS4B3tiHDm",
 				"name": "DateHired",
 				"type": "date",
 				"typeOptions": {
@@ -1473,7 +1473,7 @@
 				}
 			},
 			{
-				"id": "fldkmDXCQfxQ68Hsv",
+				"id": "fldp5v7gA9tyYDf5q",
 				"name": "Monthly Rate",
 				"type": "number",
 				"typeOptions": {
@@ -1485,7 +1485,7 @@
 				}
 			},
 			{
-				"id": "fldJfnwPvy7kBT6Rt",
+				"id": "fldOYfGtfs32toEuo",
 				"name": "Basic Rate",
 				"type": "number",
 				"typeOptions": {
@@ -1497,13 +1497,13 @@
 				}
 			},
 			{
-				"id": "fldiFynsWGu0tLusk",
+				"id": "fldnoqx6GAqIlg25f",
 				"name": "Position",
 				"type": "text",
 				"typeOptions": null
 			},
 			{
-				"id": "fldpX9U0oniTk3UkA",
+				"id": "flduG14E8heBcysXv",
 				"name": "YTDTaxInc",
 				"type": "number",
 				"typeOptions": {
@@ -1515,7 +1515,7 @@
 				}
 			},
 			{
-				"id": "fldoc3QH1gLsgveii",
+				"id": "fldtVV0lLaHa80MVd",
 				"name": "YTDWTax",
 				"type": "number",
 				"typeOptions": {
@@ -1527,7 +1527,7 @@
 				}
 			},
 			{
-				"id": "fldbH31EOAvZdN0TA",
+				"id": "fldgqVbiyurH5iywv",
 				"name": "Gross",
 				"type": "number",
 				"typeOptions": {
@@ -1539,7 +1539,7 @@
 				}
 			},
 			{
-				"id": "fldtiff2TvpoCfuRA",
+				"id": "fldy17pGDpl6uK2uv",
 				"name": "Total Deduction",
 				"type": "number",
 				"typeOptions": {
@@ -1551,7 +1551,7 @@
 				}
 			},
 			{
-				"id": "fldGdurUgVot1bdwa",
+				"id": "fldLWmBy0PkbTGL95",
 				"name": "Net",
 				"type": "number",
 				"typeOptions": {
@@ -1563,43 +1563,43 @@
 				}
 			},
 			{
-				"id": "fldgqFjzRpyFbEDsL",
+				"id": "fldl9xtdBjun39b5G",
 				"name": "Income Name 1",
 				"type": "text",
 				"typeOptions": null
 			},
 			{
-				"id": "fldqrWbiEKzDMG2ga",
+				"id": "fldvaOlWoEvlEbAT5",
 				"name": "Income Name 2",
 				"type": "text",
 				"typeOptions": null
 			},
 			{
-				"id": "fldTZe7NO1tAOjKCH",
+				"id": "fldYI6hryVpiGOifC",
 				"name": "Income Name 3",
 				"type": "text",
 				"typeOptions": null
 			},
 			{
-				"id": "fld1Bi48rSAiuM0d3",
+				"id": "fld6kaeMbMw0mhyQY",
 				"name": "Income Name 4",
 				"type": "text",
 				"typeOptions": null
 			},
 			{
-				"id": "fld1LASV1nNJpBNRP",
+				"id": "fld6us2zLhJrh6luK",
 				"name": "Income Name 5",
 				"type": "text",
 				"typeOptions": null
 			},
 			{
-				"id": "fldWJXu6CdlVYXVF6",
+				"id": "fld1sPEKm7hDQsti1",
 				"name": "Income Name 6",
 				"type": "text",
 				"typeOptions": null
 			},
 			{
-				"id": "fld3WCXDZXHhsWfKR",
+				"id": "fld8Fu7hJRDZkrNnM",
 				"name": "Income Amount 1",
 				"type": "number",
 				"typeOptions": {
@@ -1611,7 +1611,7 @@
 				}
 			},
 			{
-				"id": "flduX9Wst9C9VNUVH",
+				"id": "fldzG166d3yRNisyC",
 				"name": "Income Amount 2",
 				"type": "number",
 				"typeOptions": {
@@ -1623,7 +1623,7 @@
 				}
 			},
 			{
-				"id": "fldw5NwAYBtB3dXBW",
+				"id": "fldBOFGeIvpjVIveR",
 				"name": "Income Amount 3",
 				"type": "number",
 				"typeOptions": {
@@ -1635,7 +1635,7 @@
 				}
 			},
 			{
-				"id": "fldMDUlaH6Jkxsus0",
+				"id": "fldRmMvOr0F2pX25V",
 				"name": "Income Amount 4",
 				"type": "number",
 				"typeOptions": {
@@ -1647,7 +1647,7 @@
 				}
 			},
 			{
-				"id": "fldwvXyp6jPE1ESMU",
+				"id": "fldBePI3QdLmT9qpP",
 				"name": "Income Amount 5",
 				"type": "number",
 				"typeOptions": {
@@ -1659,7 +1659,7 @@
 				}
 			},
 			{
-				"id": "fldzlMAxFvD9bRcI2",
+				"id": "fldE4EKbppzR3mKlX",
 				"name": "Income Amount 6",
 				"type": "number",
 				"typeOptions": {
@@ -1671,43 +1671,43 @@
 				}
 			},
 			{
-				"id": "fld5Y3LbjQQqlkNoe",
+				"id": "fldaHVVP3KM8dPl19",
 				"name": "Deduction Name 1",
 				"type": "text",
 				"typeOptions": null
 			},
 			{
-				"id": "fldyWeHCG4M3tpnKn",
+				"id": "fldDF6RgqYILlUVni",
 				"name": "Deduction Name 2",
 				"type": "text",
 				"typeOptions": null
 			},
 			{
-				"id": "fldasdWiGIeREqW57",
+				"id": "fldfb56WqCazwVuI2",
 				"name": "Deduction Name 3",
 				"type": "text",
 				"typeOptions": null
 			},
 			{
-				"id": "fldtPyZeqfEKApKja",
+				"id": "fldyyq9Sa9AssUiW5",
 				"name": "Deduction Name 4",
 				"type": "text",
 				"typeOptions": null
 			},
 			{
-				"id": "fldzwoHCTsqOWLDMb",
+				"id": "fldEfgRgDmmwOgbp6",
 				"name": "Deduction Name 5",
 				"type": "text",
 				"typeOptions": null
 			},
 			{
-				"id": "fld1OKgXruxIVDMVy",
+				"id": "fld6xCqBbotqN8kyt",
 				"name": "Deduction Name 6",
 				"type": "text",
 				"typeOptions": null
 			},
 			{
-				"id": "fldw2azohT9bS9puD",
+				"id": "fldBL2J21N5TKEX7y",
 				"name": "Deduction Amount 1",
 				"type": "number",
 				"typeOptions": {
@@ -1719,7 +1719,7 @@
 				}
 			},
 			{
-				"id": "fld8p1K0NWCUriqwz",
+				"id": "fldd8TUExQyCjNY9u",
 				"name": "Deduction Amount 2",
 				"type": "number",
 				"typeOptions": {
@@ -1731,7 +1731,7 @@
 				}
 			},
 			{
-				"id": "fldv9NVu1aNIkcpUG",
+				"id": "fldASF58L4JqcHXxB",
 				"name": "Deduction Amount 3",
 				"type": "number",
 				"typeOptions": {
@@ -1743,7 +1743,7 @@
 				}
 			},
 			{
-				"id": "fldBXRY92qsT3vWsE",
+				"id": "fldGGJ8NMkoBV0u5z",
 				"name": "Deduction Amount 4",
 				"type": "number",
 				"typeOptions": {
@@ -1755,7 +1755,7 @@
 				}
 			},
 			{
-				"id": "fld0VVDtJzeWzOteU",
+				"id": "fld5ENN7ttaErj1RP",
 				"name": "Deduction Amount 5",
 				"type": "number",
 				"typeOptions": {
@@ -1767,7 +1767,7 @@
 				}
 			},
 			{
-				"id": "fldrh4i3pVRQ7AbN9",
+				"id": "fldw0WsH9PNyZ5Jq4",
 				"name": "Deduction Amount 6",
 				"type": "number",
 				"typeOptions": {
@@ -1779,136 +1779,292 @@
 				}
 			},
 			{
-				"id": "fld8tDUe72RGMDs8v",
+				"id": "flddcv4SRWNoE80Lq",
 				"name": "Loan Name 1",
 				"type": "text",
 				"typeOptions": null
 			},
 			{
-				"id": "fldgbBBXJLyDlG7Kb",
+				"id": "fldlUtLBtFuldbFn6",
 				"name": "Loan Name 2",
 				"type": "text",
 				"typeOptions": null
 			},
 			{
-				"id": "fldoh7edWrHtBiXYp",
+				"id": "fldt0ZoRGlDbtNvBk",
 				"name": "Loan Name 3",
-				"type": "multilineText",
+				"type": "text",
 				"typeOptions": null
 			},
 			{
-				"id": "fld8TmWU5slGCNP08",
+				"id": "flddCe6yPmhouinD3",
 				"name": "Loan Name 4",
-				"type": "multilineText",
+				"type": "text",
 				"typeOptions": null
 			},
 			{
-				"id": "fldqDj8W6Cp9Lnr8O",
+				"id": "fldvmbiAQwlRDSZLJ",
 				"name": "Loan Name 5",
-				"type": "multilineText",
+				"type": "text",
 				"typeOptions": null
 			},
 			{
-				"id": "fldkVzAeZPrkvCkhF",
+				"id": "fldpErKSJJn2n7SUA",
 				"name": "Loan Name 6",
-				"type": "multilineText",
+				"type": "text",
 				"typeOptions": null
 			},
 			{
-				"id": "flddUq1nkEgv5AnKB",
-				"name": "Loan Name 7",
-				"type": "multilineText",
-				"typeOptions": null
-			},
-			{
-				"id": "fldZzhs1AhCPV3940",
-				"name": "Loan Name 8",
-				"type": "multilineText",
-				"typeOptions": null
-			},
-			{
-				"id": "fldiDmnAsqv4OqMMn",
-				"name": "Loan Name 9",
-				"type": "multilineText",
-				"typeOptions": null
-			},
-			{
-				"id": "fldXiS99pf6p9vfGA",
-				"name": "Loan Name 10",
-				"type": "multilineText",
-				"typeOptions": null
-			},
-			{
-				"id": "fldIzCpeQHcNO929F",
+				"id": "fldNiuzSAB8vGEAMA",
 				"name": "Loan Amount 1",
-				"type": "multilineText",
-				"typeOptions": null
+				"type": "number",
+				"typeOptions": {
+					"format": "currency",
+					"precision": 2,
+					"symbol": "$",
+					"negative": false,
+					"validatorName": "positive"
+				}
 			},
 			{
-				"id": "fldVQ7my024rbnstU",
+				"id": "fld0zZwcKW093S06P",
 				"name": "Loan Amount 2",
-				"type": "multilineText",
-				"typeOptions": null
+				"type": "number",
+				"typeOptions": {
+					"format": "currency",
+					"precision": 2,
+					"symbol": "$",
+					"negative": false,
+					"validatorName": "positive"
+				}
 			},
 			{
-				"id": "fldpxew4TgkxLezMI",
+				"id": "fldug6GIDagfDJ7pD",
 				"name": "Loan Amount 3",
-				"type": "multilineText",
-				"typeOptions": null
+				"type": "number",
+				"typeOptions": {
+					"format": "currency",
+					"precision": 2,
+					"symbol": "$",
+					"negative": false,
+					"validatorName": "positive"
+				}
 			},
 			{
-				"id": "fld54JMGzETnJHAKx",
+				"id": "fldaNBWkjyP5Bc8ns",
 				"name": "Loan Amount 4",
-				"type": "multilineText",
-				"typeOptions": null
+				"type": "number",
+				"typeOptions": {
+					"format": "currency",
+					"precision": 2,
+					"symbol": "$",
+					"negative": false,
+					"validatorName": "positive"
+				}
 			},
 			{
-				"id": "fldSuCS37N4bage8y",
+				"id": "fldXdu2HRH0T2LMLt",
 				"name": "Loan Amount 5",
-				"type": "multilineText",
-				"typeOptions": null
+				"type": "number",
+				"typeOptions": {
+					"format": "currency",
+					"precision": 2,
+					"symbol": "$",
+					"negative": false,
+					"validatorName": "positive"
+				}
 			},
 			{
-				"id": "fldUfSrIKf8Wb9fXC",
+				"id": "fldZYKBmu94E3ENAx",
 				"name": "Loan Amount 6",
-				"type": "multilineText",
-				"typeOptions": null
+				"type": "number",
+				"typeOptions": {
+					"format": "currency",
+					"precision": 2,
+					"symbol": "$",
+					"negative": false,
+					"validatorName": "positive"
+				}
 			},
 			{
-				"id": "fldr9prPhyYwRpaGd",
-				"name": "Loan Amount 7",
-				"type": "multilineText",
-				"typeOptions": null
-			},
-			{
-				"id": "fld5PUkv3ZaoOxh6o",
-				"name": "Loan Amount 8",
-				"type": "multilineText",
-				"typeOptions": null
-			},
-			{
-				"id": "fld48wjauyFNn6TeV",
-				"name": "Loan Amount 9",
-				"type": "multilineText",
-				"typeOptions": null
-			},
-			{
-				"id": "fldM6573pVN5lD6ma",
-				"name": "Loan Amount 10",
-				"type": "multilineText",
-				"typeOptions": null
-			},
-			{
-				"id": "fld3kDRh6VPxv8hvu",
+				"id": "fld83v1VQPLfnDP8p",
 				"name": "Total Income",
-				"type": "multilineText",
+				"type": "formula",
+				"typeOptions": {
+					"formulaTextParsed": "{column_value_fld8Fu7hJRDZkrNnM}+{column_value_fldzG166d3yRNisyC}+{column_value_fldBOFGeIvpjVIveR}+{column_value_fldRmMvOr0F2pX25V}+{column_value_fldBePI3QdLmT9qpP}+{column_value_fldE4EKbppzR3mKlX}+{column_value_fldNFUgjB9kWQSz5Z}+{column_value_fld8WFbP9zxSonhfl}+{column_value_fldCko14T3NoKF5ab}+{column_value_fldxlLad8C39lJZaV}+{column_value_fld1F2i42LqGw1Lnk}+{column_value_fld3KYSMxG4EyChf3}",
+					"dependencies": {
+						"referencedColumnIdsForValue": [
+							"fld8Fu7hJRDZkrNnM",
+							"fldzG166d3yRNisyC",
+							"fldBOFGeIvpjVIveR",
+							"fldRmMvOr0F2pX25V",
+							"fldBePI3QdLmT9qpP",
+							"fldE4EKbppzR3mKlX",
+							"fldNFUgjB9kWQSz5Z",
+							"fld8WFbP9zxSonhfl",
+							"fldCko14T3NoKF5ab",
+							"fldxlLad8C39lJZaV",
+							"fld1F2i42LqGw1Lnk",
+							"fld3KYSMxG4EyChf3"
+						]
+					},
+					"resultType": "number"
+				}
+			},
+			{
+				"id": "fld8tLxPCRDLbuAdE",
+				"name": "Date Issued",
+				"type": "date",
+				"typeOptions": {
+					"isDateTime": false,
+					"dateFormat": "Local"
+				}
+			},
+			{
+				"id": "fldF3W4Fc18K0ygzR",
+				"name": "Tax Income Name 1",
+				"type": "text",
 				"typeOptions": null
 			},
 			{
-				"id": "fld3KTnbSXH3jZ2AJ",
-				"name": "Date Issued",
-				"type": "multilineText",
+				"id": "fldGXka9Vm7Zmwq6j",
+				"name": "Tax Income Name 2",
+				"type": "text",
 				"typeOptions": null
+			},
+			{
+				"id": "fldcoEUfFcMCXZcOR",
+				"name": "Tax Income Name 3",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldkcZRB1VrfpV3mQ",
+				"name": "Tax Income Name 4",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldXbswKD23E7qFYh",
+				"name": "Tax Income Name 5",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldG5YZk05t3xo78a",
+				"name": "Tax Income Name 6",
+				"type": "text",
+				"typeOptions": null
+			},
+			{
+				"id": "fldNFUgjB9kWQSz5Z",
+				"name": "Tax Income Amount 1",
+				"type": "number",
+				"typeOptions": {
+					"format": "currency",
+					"precision": 2,
+					"symbol": "$",
+					"negative": false,
+					"validatorName": "positive"
+				}
+			},
+			{
+				"id": "fld8WFbP9zxSonhfl",
+				"name": "Tax Income Amount 2",
+				"type": "number",
+				"typeOptions": {
+					"format": "currency",
+					"precision": 2,
+					"symbol": "$",
+					"negative": false,
+					"validatorName": "positive"
+				}
+			},
+			{
+				"id": "fldCko14T3NoKF5ab",
+				"name": "Tax Income Amount 3",
+				"type": "number",
+				"typeOptions": {
+					"format": "currency",
+					"precision": 2,
+					"symbol": "$",
+					"negative": false,
+					"validatorName": "positive"
+				}
+			},
+			{
+				"id": "fldxlLad8C39lJZaV",
+				"name": "Tax Income Amount 4",
+				"type": "number",
+				"typeOptions": {
+					"format": "currency",
+					"precision": 2,
+					"symbol": "$",
+					"negative": false,
+					"validatorName": "positive"
+				}
+			},
+			{
+				"id": "fld1F2i42LqGw1Lnk",
+				"name": "Tax Income Amount 5",
+				"type": "number",
+				"typeOptions": {
+					"format": "currency",
+					"precision": 2,
+					"symbol": "$",
+					"negative": false,
+					"validatorName": "positive"
+				}
+			},
+			{
+				"id": "fld3KYSMxG4EyChf3",
+				"name": "Tax Income Amount 6",
+				"type": "number",
+				"typeOptions": {
+					"format": "currency",
+					"precision": 2,
+					"symbol": "$",
+					"negative": false,
+					"validatorName": "positive"
+				}
+			},
+			{
+				"id": "fldmsbImgqzh0pRxm",
+				"name": "Total NonTaxable",
+				"type": "formula",
+				"typeOptions": {
+					"formulaTextParsed": "{column_value_fld8Fu7hJRDZkrNnM}+{column_value_fldzG166d3yRNisyC}+{column_value_fldBOFGeIvpjVIveR}+{column_value_fldRmMvOr0F2pX25V}+{column_value_fldBePI3QdLmT9qpP}+{column_value_fldE4EKbppzR3mKlX}",
+					"dependencies": {
+						"referencedColumnIdsForValue": [
+							"fld8Fu7hJRDZkrNnM",
+							"fldzG166d3yRNisyC",
+							"fldBOFGeIvpjVIveR",
+							"fldRmMvOr0F2pX25V",
+							"fldBePI3QdLmT9qpP",
+							"fldE4EKbppzR3mKlX"
+						]
+					},
+					"resultType": "number"
+				}
+			},
+			{
+				"id": "flddpJaRiKiUe74EM",
+				"name": "Total OtherDeductions",
+				"type": "formula",
+				"typeOptions": {
+					"formulaTextParsed": "{column_value_fldNiuzSAB8vGEAMA}+{column_value_fld0zZwcKW093S06P}+{column_value_fldug6GIDagfDJ7pD}+{column_value_fldaNBWkjyP5Bc8ns}+{column_value_fldXdu2HRH0T2LMLt}+{column_value_fldZYKBmu94E3ENAx}",
+					"dependencies": {
+						"referencedColumnIdsForValue": [
+							"fldNiuzSAB8vGEAMA",
+							"fld0zZwcKW093S06P",
+							"fldug6GIDagfDJ7pD",
+							"fldaNBWkjyP5Bc8ns",
+							"fldXdu2HRH0T2LMLt",
+							"fldZYKBmu94E3ENAx"
+						]
+					},
+					"resultType": "number"
+				}
 			}
 		]
 	}
