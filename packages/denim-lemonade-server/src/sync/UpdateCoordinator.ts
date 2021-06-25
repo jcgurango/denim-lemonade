@@ -134,10 +134,9 @@ export default class UpdateCoordinator {
 
               for (let i = 0; i < data.length; i++) {
                 const record = data[i];
+                let last = record;
 
                 try {
-                  let last = record;
-
                   for (let c = 0; c < updateCallbacks.length; c++) {
                     last = await updateCallbacks[c](last, record);
                   }
@@ -146,7 +145,7 @@ export default class UpdateCoordinator {
                 } catch (e) {
                   console.log('Error updating for ' + bucket + ':');
                   console.error(e);
-                  console.log('Record: ' + JSON.stringify(record, null, '  '));
+                  console.log('Record: ' + JSON.stringify(last, null, '  '));
                 }
               }
 
