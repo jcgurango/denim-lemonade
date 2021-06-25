@@ -6,12 +6,17 @@ export default class LarkUpdater extends LarkConnection {
   department() {
     return (department: Department) =>
       this.withTenantAccessToken(async ({ get, post }) => {
+        const departmentWithParent: Department = {
+          ...department,
+          parent_department_id: department.parent_department_id || '0',
+        };
+
         // Check if the department already exists.
         let isCreate = true;
         let existingDepartment: any = null;
         existingDepartment = await get(
           'https://open.larksuite.com/open-apis/contact/v1/department/info/get?department_id=' +
-            department.department_id,
+            departmentWithParent.department_id,
         );
 
         isCreate = existingDepartment?.code === 40013;
@@ -21,19 +26,19 @@ export default class LarkUpdater extends LarkConnection {
         }
 
         if (isCreate) {
-          console.log('Creating department ' + department.department_id);
+          console.log('Creating department ' + departmentWithParent.department_id);
 
           return post(
             'https://open.larksuite.com/open-apis/contact/v1/department/add',
-            department,
+            departmentWithParent,
           );
         }
 
-        console.log('Updating department ' + department.department_id);
+        console.log('Updating department ' + departmentWithParent.department_id);
 
         return post(
           'https://open.larksuite.com/open-apis/contact/v1/department/update',
-          department,
+          departmentWithParent,
         );
       });
   }
