@@ -5,7 +5,7 @@ import { Employee } from '../mappers/EmployeeMapper';
 export default class LarkUpdater extends LarkConnection {
   department() {
     return (department: Department) =>
-      this.withTenantAccessToken(async ({ get, post, token }) => {
+      this.withTenantAccessToken(async ({ get, post, put, token }) => {
         const departmentWithParent: Department = {
           ...department,
           parent_department_id: department.parent_department_id || '0',
@@ -31,15 +31,15 @@ export default class LarkUpdater extends LarkConnection {
           console.log('Creating department ' + departmentWithParent.department_id);
 
           return post(
-            'https://open.larksuite.com/open-apis/contact/v1/department/add',
+            'https://open.larksuite.com/open-apis/contact/v3/departments',
             departmentWithParent,
           );
         }
 
         console.log('Updating department ' + departmentWithParent.department_id);
 
-        return post(
-          'https://open.larksuite.com/open-apis/contact/v1/department/update',
+        return put(
+          'https://open.larksuite.com/open-apis/contact/v1/departments/' + departmentWithParent.department_id,
           departmentWithParent,
         );
       });

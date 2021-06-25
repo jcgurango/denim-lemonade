@@ -3,6 +3,7 @@ import bent, { RequestFunction } from 'bent';
 export type RequestFunctions = {
   get: RequestFunction<any>;
   post: RequestFunction<any>;
+  put: RequestFunction<any>;
   token: string;
 };
 export type RequestCallback = (functions: RequestFunctions) => any;
@@ -30,10 +31,12 @@ export default class LarkConnection {
 
     const get = bent('GET', 'json');
     const post = bent('POST', 'json');
+    const put = bent('PUT', 'json');
 
     const result = await callback({
       get,
       post,
+      put,
       token: app_access_token,
     });
 
@@ -67,9 +70,14 @@ export default class LarkConnection {
       Authorization: 'Bearer ' + tenant_access_token,
     });
 
+    const put = bent('PUT', 'json', {
+      Authorization: 'Bearer ' + tenant_access_token,
+    });
+
     const result = await callback({
       get,
       post,
+      put,
       token: tenant_access_token,
     });
 
