@@ -1,7 +1,7 @@
 import Mapper from './Mapper';
 
 export interface Department {
-  id: string;
+  department_id: string;
   name: string;
   parent_id: string;
 }
