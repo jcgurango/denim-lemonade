@@ -13,7 +13,6 @@ import LarkAuthentication from './LarkAuthentication';
 import LemonadeAuthenticator from './LemonadeAuthenticator';
 import LemonadeDataSource from './LemonadeDataSource';
 import { AirTableDataSourceV2 } from 'denim-airtable';
-import configRouter from './ConfigRouter';
 
 AirTableDataSourceV2.configure({
   endpointUrl: 'https://api.airtable.com',
@@ -72,7 +71,6 @@ app.use('/api/auth', cors(), larkAuth.loginEndpoint());
 app.use('/api/auth/me', cors(), authMiddleware, (req, res) => {
   return res.json((req as any).user || null);
 });
-app.use('/api/config', configRouter);
 
 app.listen(9090, () => console.log('Listening...'));
 
