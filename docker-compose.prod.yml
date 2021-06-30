@@ -14,5 +14,6 @@ services:
     command: bash -c 'yarn install && npx lerna bootstrap && yarn transpile && cd /app/packages/denim-lemonade/ && ((cd /app/packages/denim-lemonade/ && PORT=3000 npx serve) & (cd /app/packages/denim-lemonade-server/ && yarn server))'
     working_dir: /app
     env_file: app.env
+    restart: always
     volumes:
       - ./:/app
