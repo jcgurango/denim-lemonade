@@ -12,7 +12,7 @@ function Calculate({createdAttendance, fields}, myHol) {
     let iNoRecord = (fields['No Record']) ? (fields['No Record']) : 0;
 
     //Set Employee ID
-    createdAttendance.employee_id = (fields['Employee ID']) ? fields['Employee ID'][0] : "";
+    createdAttendance.employee_id = (fields['Employee ID']) ? (Array.isArray(fields['Employee ID']) ? fields['Employee ID'][0] : fields['Employee ID']) : "";
     //Set Date
     createdAttendance.Date = (fields['Date']) ? fields['Date'] : new Intl.DateTimeFormat('en-US').format(new Date());;
     //Set Period ID
