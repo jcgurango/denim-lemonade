@@ -3,7 +3,7 @@ import copyToClipboard from 'copy-to-clipboard';
 import { useDenimNotifications } from 'denim-forms';
 
 const CopyLink = () => {
-  const url = 'https://airtable.com/shrMs1b9PvJW0F6D0';
+  const url = process.env.REACT_APP_EMPLOYEE_FORM_URL || 'https://airtable.com/shrMs1b9PvJW0F6D0';
   const notifications = useDenimNotifications();
 
   const copy = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {

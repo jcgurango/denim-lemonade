@@ -10,9 +10,14 @@ import {
 import { AirTableDataSourceV2 } from 'denim-airtable';
 import moment from 'moment';
 import { LemonadeValidations } from '../../denim-lemonade/src/validation';
-import { CalculateAttendance } from './CalculateAttendance';
+import CalculateAttendance from './attendance-calculation/Attendance';
 import PaydayDataSource from './PaydayDataSource';
 
+const larkAdmin = require('lark-airtable-connector/src/services/lark-admin');
+const attendance =
+  require('lark-airtable-connector/src/services/retrievers/attendance-retriever')(
+    larkAdmin
+  );
 const {
   dailyAttendanceToAirTable: { multiple: convertDailyAttendance },
 } = require('lark-airtable-connector/src/services/mappers');
@@ -95,7 +100,11 @@ const mapLemonadeEmployeeToPayDay = (employee: DenimRecord): DenimRecord => {
     basic_adjustment: 0,
   };
 };
-const syncPaydayEmployee = async (record: DenimRecord, table: string, id: string) => {
+const syncPaydayEmployee = async (
+  record: DenimRecord,
+  table: string,
+  id: string
+) => {
   let pdid: string | null = String(record['Employee ID']);
 
   try {
@@ -105,35 +114,26 @@ const syncPaydayEmployee = async (record: DenimRecord, table: string, id: string
   }
 
   // Retrieve the record.
-  const hydratedRecord = await LemonadeDataSource.retrieveRecord(
-    table,
-    id,
-    [
-      'Nationality',
-      'Account Status',
-      'Payment Method',
-      'Days of Work Per Year',
-      'Payroll Grouping',
-      'Employment Status',
-      'Wage Zone',
-      'Company',
-      'Workplace',
-      'Pay Basis',
-    ]
-  );
+  const hydratedRecord = await LemonadeDataSource.retrieveRecord(table, id, [
+    'Nationality',
+    'Account Status',
+    'Payment Method',
+    'Days of Work Per Year',
+    'Payroll Grouping',
+    'Employment Status',
+    'Wage Zone',
+    'Company',
+    'Workplace',
+    'Pay Basis',
+  ]);
 
   if (hydratedRecord) {
     const paydayRecord = mapLemonadeEmployeeToPayDay(hydratedRecord);
 
     if (pdid) {
-      await paydayData.updateEmployee(
-        pdid,
-        paydayRecord
-      );
+      await paydayData.updateEmployee(pdid, paydayRecord);
     } else {
-      await paydayData.createEmployee(
-        paydayRecord
-      );
+      await paydayData.createEmployee(paydayRecord);
     }
   }
 };
@@ -219,7 +219,6 @@ LemonadeDataSource.schema.workflows = [
     throw new Error('Unknown period.');
   }
 
-  /*
   let allEmployees = await LemonadeDataSource.findById(
     'Employee',
     undefined,
@@ -269,13 +268,6 @@ LemonadeDataSource.schema.workflows = [
       ids
     )
   );
-  */
- const attendanceData = await LemonadeDataSource.retrieveRecords(
-   'Attendance',
-   {
-     retrieveAll: true,
-   }
- );
 
   const holidays = await LemonadeDataSource.retrieveRecords(
     'Holiday Calendar',
@@ -289,7 +281,11 @@ LemonadeDataSource.schema.workflows = [
     const dates = [String(holiday.Date)];
 
     if (holiday['End Date']) {
-      for (let date = moment(String(holiday.Date)).add(1, 'day'); date.isSameOrBefore(String(holiday['End Date'])); date = date.add(1, 'day')) {
+      for (
+        let date = moment(String(holiday.Date)).add(1, 'day');
+        date.isSameOrBefore(String(holiday['End Date']));
+        date = date.add(1, 'day')
+      ) {
         dates.push(date.format('YYYY-MM-DD'));
       }
     }
@@ -308,13 +304,70 @@ LemonadeDataSource.schema.workflows = [
 
   for (let i = 0; i < attendanceData.length || i < exportRows.length; i++) {
     const calculated = attendanceData[i]
-      ? CalculateAttendance(
-          attendanceData[i],
-          periodInput.id,
-          holidayTypesByDate[String(attendanceData[i].Date)]
-        )
+      ? {
+          employee_id: '',
+          payroll_period_id: 0,
+          Date: '1999-01-01',
+          payroll_days: 0.0,
+          absences: 0.0,
+          leaves: 0.0,
+          holidays: 0.0,
+          part_time: 0.0,
+          late: 0.0,
+          undertime: 0.0,
+          reg_np: 0.0,
+          reg_ot: 0.0,
+          reg_ot_np: 0.0,
+          reg_ot_ex: 0.0,
+          reg_ot_ex_np: 0.0,
+          leg_ot: 0.0,
+          leg_ot_np: 0.0,
+          leg_ot_ex: 0.0,
+          leg_ot_ex_np: 0.0,
+          sp_ot: 0.0,
+          sp_ot_np: 0.0,
+          sp_ot_ex: 0.0,
+          sp_ot_ex_np: 0.0,
+          rst_ot: 0.0,
+          rst_ot_np: 0.0,
+          rst_ot_ex: 0.0,
+          rst_ot_ex_np: 0.0,
+          leg_rst_ot: 0.0,
+          leg_rst_ot_np: 0.0,
+          leg_rst_ot_ex: 0.0,
+          leg_rst_ot_ex_np: 0.0,
+          sp_rst_ot: 0.0,
+          sp_rst_ot_np: 0.0,
+          sp_rst_ot_ex: 0.0,
+          sp_rst_ot_ex_np: 0.0,
+          allowance_1: 0.0,
+          allowance_2: 0.0,
+          allowance_3: 0.0,
+          allowance_4: 0.0,
+          allowance_5: 0.0,
+          allowance_6: 0.0,
+          allowance_7: 0.0,
+          allowance_8: 0.0,
+          allowance_9: 0.0,
+          allowance_10: 0.0,
+          allowance_11: 0.0,
+          allowance_12: 0.0,
+        }
       : null;
     const existingRow = exportRows[i];
+
+    if (attendanceData[i]) {
+      CalculateAttendance(
+        {
+          createdAttendance: calculated,
+          fields: {
+            ...attendanceData[i],
+            'Period ID': attendanceData[i]['Period ID'] || '',
+          },
+        },
+        holidayTypesByDate[String(attendanceData[i].Date)]
+      );
+    }
 
     // If a row already exists at this position, update it.
     if (calculated && existingRow) {
