@@ -231,6 +231,7 @@ LemonadeDataSource.schema.workflows = [
       'Employee',
       {
         retrieveAll: true,
+        /* Comment for all employees */
         conditions: {
           conditionType: 'group',
           type: 'OR',
@@ -243,6 +244,7 @@ LemonadeDataSource.schema.workflows = [
             };
           }),
         },
+        /* Until here */
       }
     );
 
@@ -268,6 +270,21 @@ LemonadeDataSource.schema.workflows = [
       ids
     )
   );
+
+  /* Uncomment to test import into AirTable:
+  for (let i = 0; i < attendanceData.length; i++) {
+    const { ID, ['Employee ID']: id, ...rest } = attendanceData[i];
+    const record = allEmployees.find(({ ['Employee ID']: eid }) => eid === id);
+
+    await LemonadeDataSource.createRecord('Attendance', {
+      ...rest,
+      Employee: record?.id ? {
+        type: 'record',
+        id: record?.id,
+      } : record?.id,
+    });
+  }
+  */
 
   const holidays = await LemonadeDataSource.retrieveRecords(
     'Holiday Calendar',
