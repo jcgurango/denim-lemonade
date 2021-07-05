@@ -8,7 +8,7 @@ import { DenimDataRetriever } from './sync/retrievers/DenimDataRetriever';
 import { EmployeeMapper } from './sync/mappers/EmployeeMapper';
 import LarkUpdater from './sync/updaters/LarkUpdater';
 import { DepartmentMapper } from './sync/mappers/DepartmentMapper';
-import { DenimQueryOperator, DenimRecord } from 'denim/core';
+import { DenimQueryOperator, DenimRecord } from 'denim';
 import LarkAuthentication from './LarkAuthentication';
 import LemonadeAuthenticator from './LemonadeAuthenticator';
 import LemonadeDataSource from './LemonadeDataSource';

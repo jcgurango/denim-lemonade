@@ -6,6 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "server": "ts-node --project tsconfig.json ./src/index.ts",
+    "server:prod": "ts-node --transpile-only --project tsconfig.json ./src/index.ts",
     "server:dev": "nodemon"
   },
   "author": "",
