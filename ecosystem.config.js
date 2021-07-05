@@ -22,7 +22,10 @@ module.exports = {
       script: 'yarn',
       args: 'server',
       interpreter: 'none',
-      env,
+      env: {
+        ...env,
+        GENERATE_SOURCEMAP: 'false',
+      },
     },
     {
       name: 'frontend',
