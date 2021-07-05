@@ -22,14 +22,14 @@ if (fs.existsSync(path.join(__dirname, '.cache.json'))) {
 }
 
 const parseStatusResponse = (name, statusResponse) => {
-  const [, id, appName, namespace, version, node, pid, uptime, restarts, status, cpu, mem, user, watching] = new RegExp('│ (.+?) +│ ' + name + ' +│ (.+?) +│ (.+?) +│ (.+?) +│ (.+?) +│ (.+?) +│ (.+?) +│ (.+?) +│ (.+?) +│ (.+?) +│ (.+?) +│ (.+?) +│', 'g').exec(statusResponse) || [];
+  const [, id, namespace, version, mode, pid, uptime, restarts, status, cpu, mem, user, watching] = new RegExp('│ (.+?) +│ ' + name + ' +│ (.+?) +│ (.+?) +│ (.+?) +│ (.+?) +│ (.+?) +│ (.+?) +│ (.+?) +│ (.+?) +│ (.+?) +│ (.+?) +│ (.+?) +│', 'g').exec(statusResponse) || [];
 
   return {
     id,
-    appName,
+    name,
     namespace,
     version,
-    node,
+    mode,
     pid,
     uptime,
     restarts,
@@ -51,11 +51,15 @@ const pm2Command = (...command) => new Promise((resolve, reject) => {
     allData += data.toString();
   });
 
+  process.stderr.on('data', (data) => {
+    allData += data.toString();
+  });
+
   process.on('exit', (code) => {
     if (code === 0) {
       resolve(allData);
     } else {
-      reject(code);
+      reject(new Error(allData));
     }
   });
 });
@@ -64,6 +68,7 @@ const getLogs = async (name) => pm2Command('logs', name, '--lines=2500', '--nost
 
 const getStatus = async () => {
   const statusResponse = await pm2Command('status');
+  console.log(statusResponse);
 
   return {
     config: parseStatusResponse('config', statusResponse),
@@ -268,12 +273,18 @@ const render = async (errors = []) => {
             </p>
           `}
           <h1>Status</h1>
+          <button type="button" onclick="window.location.href = window.location.href;">Refresh</button>
           <h2>Backend (${server.status || 'not started'})</h2>
           <h3>Logs</h3>
-          <textarea class="form-control" style="height: 450px;">${serverLogs}</textarea>
+          <textarea class="form-control logs" style="height: 450px;">${serverLogs}</textarea>
           <h2>Frontend (${frontend.status || 'not started'})</h2>
           <h3>Logs</h3>
-          <textarea class="form-control" style="height: 450px;">${frontendLogs}</textarea>
+          <textarea class="form-control logs" style="height: 450px;">${frontendLogs}</textarea>
+          <script>
+            document.querySelectorAll('.logs').forEach(function (item) {
+              item.scrollTop = item.scrollHeight;
+            });
+          </script>
         </form>
     </body>
   </html>
@@ -304,14 +315,7 @@ const reprocess = async (commands) => {
   if (await validateConfig()) {
     const { frontend, server } = await getStatus();
 
-    if (!frontend.status || !server.status) {
-      // Start the processes.
-      await pm2Command('start', '--only=server,frontend', '-a');
-    } else {
-      // Restart the processes.
-      await pm2Command('restart', 'server', '-a');
-      await pm2Command('restart', 'frontend', '-a');
-    }
+    await pm2Command('startOrReload', 'ecosystem.config.js', '--only=frontend,server');
   }
 };
 
