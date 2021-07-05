@@ -44,9 +44,10 @@ const parseStatusResponse = (name, statusResponse) => {
   };
 };
 
-const shell = (name, ...args) => new Promise((resolve, reject) => {
+const shellOptions = (options, name, ...args) => new Promise((resolve, reject) => {
   const process = spawn(name, [...args], {
     cwd: path.join(__dirname, '../../'),
+    ...options,
   });
   let allData = '';
 
@@ -66,6 +67,8 @@ const shell = (name, ...args) => new Promise((resolve, reject) => {
     }
   });
 });
+
+const shell = (name, ...args) => shellOptions({ }, name, ...args);
 
 const gitCommand = (...command) => shell('git', ...command);
 const npxCommand = (...command) => shell('npx', ...command);
@@ -351,7 +354,14 @@ const reprocess = async (commands) => {
       console.log(await pm2Command('stop', 'frontend'));
     }
 
-    console.log(await shellCommand('yarn', 'transpile'));
+    console.log(await shell('yarn', 'transpile'));
+    console.log(await shellOptions({
+      cwd: path.join(__dirname, '../../'),
+      env: {
+        GENERATE_SOURCEMAP: 'false',
+        REACT_APP_EMPLOYEE_FORM_URL: configCache.employeeFormUrl || '',
+      },
+    }, 'yarn', 'build'));
 
     await pm2Command('startOrReload', 'ecosystem.config.js', '--only=frontend,server');
   }
