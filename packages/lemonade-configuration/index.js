@@ -351,6 +351,8 @@ const reprocess = async (commands) => {
       console.log(await pm2Command('stop', 'frontend'));
     }
 
+    console.log(await shellCommand('yarn', 'transpile'));
+
     await pm2Command('startOrReload', 'ecosystem.config.js', '--only=frontend,server');
   }
 };
@@ -364,7 +366,6 @@ app.post('/', express.urlencoded({ extended: true }), async (req, res) => {
     if (req.body.update === 'Y') {
       console.log(await gitCommand('pull'));
       console.log(await npxCommand('lerna', 'bootstrap'));
-      console.log(await shellCommand('yarn', 'transpile'));
       configCache.bases = 'REFRESH';
     } else {
       configCache = {

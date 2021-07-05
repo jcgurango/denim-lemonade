@@ -20,7 +20,7 @@ module.exports = {
       name: 'server',
       cwd: 'packages/denim-lemonade-server/',
       script: 'yarn',
-      args: 'server',
+      args: 'server:prod',
       interpreter: 'none',
       env,
     },
