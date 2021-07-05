@@ -22,10 +22,7 @@ module.exports = {
       script: 'yarn',
       args: 'server',
       interpreter: 'none',
-      env: {
-        ...env,
-        GENERATE_SOURCEMAP: 'false',
-      },
+      env,
     },
     {
       name: 'frontend',
@@ -39,6 +36,6 @@ module.exports = {
       name: 'config',
       cwd: 'packages/lemonade-configuration/',
       script: '.'
-    }
+    },
   ],
 };

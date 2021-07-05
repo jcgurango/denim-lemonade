@@ -341,6 +341,16 @@ const reprocess = async (commands) => {
   }
 
   if (await validateConfig()) {
+    const { frontend, server } = await getStatus();
+
+    if (server.status) {
+      console.log(await pm2Command('stop', 'server'));
+    }
+
+    if (frontend.status) {
+      console.log(await pm2Command('stop', 'frontend'));
+    }
+
     await pm2Command('startOrReload', 'ecosystem.config.js', '--only=frontend,server');
   }
 };
@@ -354,6 +364,7 @@ app.post('/', express.urlencoded({ extended: true }), async (req, res) => {
     if (req.body.update === 'Y') {
       console.log(await gitCommand('pull'));
       console.log(await npxCommand('lerna', 'bootstrap'));
+      console.log(await shellCommand('yarn', 'transpile'));
       configCache.bases = 'REFRESH';
     } else {
       configCache = {
