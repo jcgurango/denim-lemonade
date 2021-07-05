@@ -44,8 +44,8 @@ const parseStatusResponse = (name, statusResponse) => {
   };
 };
 
-const pm2Command = (...command) => new Promise((resolve, reject) => {
-  const process = spawn('npx', ['pm2', ...command], {
+const shell = (name, ...args) => new Promise((resolve, reject) => {
+  const process = spawn(name, [...args], {
     cwd: path.join(__dirname, '../../'),
   });
   let allData = '';
@@ -67,11 +67,14 @@ const pm2Command = (...command) => new Promise((resolve, reject) => {
   });
 });
 
+const gitCommand = (...command) => shell('git', ...command);
+const npxCommand = (...command) => shell('npx', ...command);
+const pm2Command = (...command) => npxCommand('pm2', ...command);
+
 const getLogs = async (name) => pm2Command('logs', name, '--lines=2500', '--nostream');
 
 const getStatus = async () => {
   const statusResponse = await pm2Command('status');
-  console.log(statusResponse);
 
   return {
     config: parseStatusResponse('config', statusResponse),
@@ -151,6 +154,20 @@ const baseSelect = (name) => `
 
 const render = async (errors = []) => {
   const { server, frontend, logs: { server: serverLogs, frontend: frontendLogs } } = await getStatus();
+  let updateName = null;
+
+  try {
+    await gitCommand('fetch', 'origin');
+    const remoteBranch = (await gitCommand('rev-parse', '--abbrev-ref', '--symbolic-full-name', '@{u}')).trim();
+    const currentCommit = (await gitCommand('rev-parse', 'HEAD')).trim();
+    const remoteCommit = (await gitCommand('rev-parse', remoteBranch)).trim();
+
+    if (currentCommit !== remoteCommit) {
+      updateName = `${currentCommit} ... ${remoteCommit}`;
+    }
+  } catch (e) {
+    console.error('Git check error: ' + e.message);
+  }
 
   return `
   <html>
@@ -289,6 +306,14 @@ const render = async (errors = []) => {
             });
           </script>
         </form>
+        ${updateName ? `
+          <form method="POST" action="" class="container">
+            <input type="hidden" name="update" value="Y" />
+            <h1>Update Available!</h1>
+            <p>${updateName}</p>
+            <button type="submit">Update Now</button>
+          </form>
+        ` : ''}
     </body>
   </html>
   `;
@@ -316,8 +341,6 @@ const reprocess = async (commands) => {
   }
 
   if (await validateConfig()) {
-    const { frontend, server } = await getStatus();
-
     await pm2Command('startOrReload', 'ecosystem.config.js', '--only=frontend,server');
   }
 };
@@ -327,24 +350,34 @@ app.get('/', async (req, res) => {
 });
 
 app.post('/', express.urlencoded({ extended: true }), async (req, res) => {
-  configCache = {
-    ...configCache,
-    ...req.body,
-  };
-
-  const { commands } = configCache;
-  delete configCache.commands;
-
-  const errors = [];
-
   try {
-    await reprocess(commands);
+    if (req.body.update === 'Y') {
+      console.log(await gitCommand('pull'));
+      console.log(await npxCommand('lerna', 'bootstrap'));
+      configCache.bases = 'REFRESH';
+    } else {
+      configCache = {
+        ...configCache,
+        ...req.body,
+      };  
+    }
+  
+    const { commands } = configCache;
+    delete configCache.commands;
+  
+    const errors = [];
+  
+    try {
+      await reprocess(commands);
+    } catch (e) {
+      errors.push(e.message);
+    }
+  
+    fs.writeFileSync(path.join(__dirname, '.cache.json'), JSON.stringify(configCache, null, '  '));
+    res.send(await render(errors));
   } catch (e) {
-    errors.push(e.message);
+    res.send(e.message);
   }
-
-  fs.writeFileSync(path.join(__dirname, '.cache.json'), JSON.stringify(configCache, null, '  '));
-  res.send(await render(errors));
 });
 
 let currentLarkAdminPromise = Promise.resolve();
