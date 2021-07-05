@@ -13,6 +13,7 @@ const { spawn } = require('child_process');
 
 const app = express();
 let configCache = {
+  bases: { },
   airtableEmail: '',
   airtablePassword: '',
 };
