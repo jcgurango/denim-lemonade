@@ -295,7 +295,7 @@ const render = async (errors = []) => {
 };
 
 const reprocess = async (commands) => {
-  if (configCache.airtableEmail && configCache.airtablePassword && (!configCache.bases || configCache.bases === 'REFRESH')) {
+  if (configCache.airtableEmail && configCache.airtablePassword && (!configCache.bases.apiKey || configCache.bases === 'REFRESH')) {
     configCache.bases = await AirTableSchemaRetriever.retrieveSchema(configCache.airtableEmail, configCache.airtablePassword);
     configCache.lastUpdate = Date.now();
   }
