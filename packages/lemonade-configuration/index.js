@@ -356,7 +356,7 @@ const reprocess = async (commands) => {
 
     console.log(await shell('yarn', 'transpile'));
     console.log(await shellOptions({
-      cwd: path.join(__dirname, '../../'),
+      cwd: path.join(__dirname, '../../packages/denim-lemonade/'),
       env: {
         GENERATE_SOURCEMAP: 'false',
         REACT_APP_EMPLOYEE_FORM_URL: configCache.employeeFormUrl || '',
