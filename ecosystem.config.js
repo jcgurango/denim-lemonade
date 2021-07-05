@@ -21,7 +21,7 @@ module.exports = {
       cwd: 'packages/denim-lemonade-server/',
       script: 'yarn',
       args: 'server',
-      interpreter: '/bin/bash',
+      interpreter: 'none',
       env,
     },
     {
@@ -29,7 +29,7 @@ module.exports = {
       cwd: 'packages/denim-lemonade/',
       script: 'yarn',
       args: 'serve',
-      interpreter: '/bin/bash',
+      interpreter: 'none',
       env,
     },
     {
