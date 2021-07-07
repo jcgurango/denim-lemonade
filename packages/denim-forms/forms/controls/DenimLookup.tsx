@@ -101,7 +101,10 @@ const LookupField: FunctionComponent<TextInputProps & DenimLookupProps> = ({
         value={displayText}
         onFocus={() => {
           inputRef.current.blur();
-          setShowLookup(true);
+
+          if (!disabled) {
+            setShowLookup(true);
+          }
         }}
         ref={inputRef}
         {...props}

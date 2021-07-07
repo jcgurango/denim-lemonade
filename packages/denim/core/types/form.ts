@@ -50,4 +50,5 @@ export enum DenimNotificationCodes {
   SavingSuccessful = 1002,
   RetrievingFailed = 2000,
   WorkflowExecutionFailed = 3000,
+  AuthError = 4000,
 }

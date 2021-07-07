@@ -306,17 +306,14 @@ export default abstract class DenimDataSourceV2 {
       retrieveAll: true,
     };
 
-    const [
-      queryHookedIds,
-      hookedQuery,
-      queryHookedExpansion,
-    ] = await this.executeHooks(
-      'pre-find-query',
-      table,
-      hookedIds,
-      query,
-      hookedExpansion
-    );
+    const [queryHookedIds, hookedQuery, queryHookedExpansion] =
+      await this.executeHooks(
+        'pre-find-query',
+        table,
+        hookedIds,
+        query,
+        hookedExpansion
+      );
 
     const records = await this.query(table, hookedQuery);
 
@@ -362,9 +359,11 @@ export default abstract class DenimDataSourceV2 {
       await this.expandRecords(table, [hookedRecord], expand);
     }
 
-    const [postHookedRecord] = await this.executeHooks(
+    const [, , postHookedRecord] = await this.executeHooks(
       'post-retrieve-record',
       table,
+      hookedId,
+      hookedExpansion,
       hookedRecord
     );
 
@@ -482,7 +481,7 @@ export default abstract class DenimDataSourceV2 {
       id: hookedRecordPostValidate.id,
     };
 
-    Object.keys(record || {}).forEach((key) => {
+    Object.keys(hookedRecordPostValidate || {}).forEach((key) => {
       let initialValue = existingRecord ? existingRecord[key] : null;
       let newValue = hookedRecordPostValidate[key];
 
@@ -557,9 +556,14 @@ export default abstract class DenimDataSourceV2 {
     table: string,
     ...args: T
   ): Promise<T> {
+    const tableSchema = this.getTable(table);
+
     const hooks = this.hooks.filter(
       ({ type: t, table: ta }) =>
-        t === type && (typeof ta === 'string' ? table === ta : ta.test(table))
+        t === type &&
+        (typeof ta === 'string'
+          ? ta === tableSchema.id || ta === tableSchema.name
+          : ta.test(tableSchema.id) || ta.test(tableSchema.name))
     );
     let currentArguments = args;
 
@@ -592,6 +596,10 @@ export default abstract class DenimDataSourceV2 {
   }
 
   createFieldValidator(field: DenimColumn): BaseSchema<any> {
+    if (field.novalidate) {
+      return Yup.mixed();
+    }
+
     switch (field.type) {
       case DenimColumnType.ForeignKey:
         return this.createForeignKeyValidator(field);
@@ -622,7 +630,7 @@ export default abstract class DenimDataSourceV2 {
       case DenimColumnType.Select:
         return Yup.string()
           .oneOf(
-            [''].concat(
+            [null, ''].concat(
               field.properties.options.map(({ value }) => value) as string[]
             )
           )

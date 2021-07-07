@@ -13,25 +13,29 @@ import {
 import { DenimAuthorizationRole } from './types/auth';
 
 export type RolesCallback = (user: DenimRecord) => string[];
+export type CustomSubstitution = (userData: DenimRecord, value: any) => any;
 
 export default class DenimAuthenticatorV2 {
   public roles: DenimAuthorizationRole[];
   public userSchema: DenimTable;
   public dataSource: DenimDataSourceV2;
+  public customSubstitution?: CustomSubstitution;
 
   constructor(
     roles: DenimAuthorizationRole[],
     userSchema: DenimTable,
     dataSource: DenimDataSourceV2,
+    customSubstitution?: CustomSubstitution
   ) {
     this.roles = roles;
     this.userSchema = userSchema;
     this.dataSource = dataSource;
+    this.customSubstitution = customSubstitution;
   }
 
   protected getAuthorizationActionFromKey(
     obj: any,
-    actionKey: 'readAction' | 'createAction' | 'updateAction' | 'deleteAction',
+    actionKey: 'readAction' | 'createAction' | 'updateAction' | 'deleteAction'
   ): DenimAuthorizationAction {
     return obj[actionKey];
   }
@@ -39,8 +43,9 @@ export default class DenimAuthenticatorV2 {
   public authorizeFromRoles(
     userRoles: DenimAuthorizationRole[],
     actionKey: 'readAction' | 'createAction' | 'updateAction' | 'deleteAction',
-    table: string,
+    table: string
   ): DenimAuthorizationAction {
+    const tableSchema = this.dataSource.getTable(table);
     let query: DenimQueryConditionOrGroup | null = null;
 
     for (let i = 0; i < userRoles.length; i++) {
@@ -48,7 +53,9 @@ export default class DenimAuthenticatorV2 {
 
       // Check if this table is in the role.
       const roleTable = role.tables.find(({ table: ta }) =>
-        typeof ta === 'string' ? ta === table : ta.test(table),
+        typeof ta === 'string'
+          ? ta === tableSchema.id || ta === tableSchema.name
+          : ta.test(tableSchema.id) || ta.test(tableSchema.name)
       );
 
       if (roleTable) {
@@ -76,9 +83,10 @@ export default class DenimAuthenticatorV2 {
   public authorizeFromRoleNames(
     roleNames: string[],
     actionKey: 'readAction' | 'createAction' | 'updateAction' | 'deleteAction',
-    table: string,
+    table: string
   ): DenimAuthorizationAction {
     const userRoles = this.roles.filter(({ id }) => roleNames.includes(id));
+    const tableSchema = this.dataSource.getTable(table);
     let query: DenimQueryConditionOrGroup | null = null;
 
     for (let i = 0; i < userRoles.length; i++) {
@@ -86,7 +94,9 @@ export default class DenimAuthenticatorV2 {
 
       // Check if this table is in the role.
       const roleTable = role.tables.find(({ table: ta }) =>
-        typeof ta === 'string' ? ta === table : ta.test(table),
+        typeof ta === 'string'
+          ? ta === tableSchema.id || ta === tableSchema.name
+          : ta.test(tableSchema.id) || ta.test(tableSchema.name)
       );
 
       if (roleTable) {
@@ -114,10 +124,10 @@ export default class DenimAuthenticatorV2 {
   public authorizeQuery(
     userData: DenimRecord,
     action: DenimAuthorizationAction,
-    query?: DenimQueryConditionOrGroup,
+    query?: DenimQueryConditionOrGroup
   ): DenimQueryConditionOrGroup | undefined {
     if (action === 'allow') {
-      return query;
+      return query ? this.substituteQueryValues(userData, query) : query;
     } else if (action === 'block') {
       throw new Error('Unauthorized query.');
     }
@@ -149,7 +159,7 @@ export default class DenimAuthenticatorV2 {
 
       return this.substituteQueryValues(
         userData,
-        newQuery as DenimQueryConditionOrGroup,
+        newQuery as DenimQueryConditionOrGroup
       );
     }
 
@@ -161,7 +171,7 @@ export default class DenimAuthenticatorV2 {
   public authorize(
     userData: DenimRecord | undefined,
     actionKey: 'readAction' | 'createAction' | 'updateAction' | 'deleteAction',
-    table: string,
+    table: string
   ): DenimAuthorizationAction {
     const userRoles = this.roles.filter(({ roleQuery }) => {
       return (
@@ -178,13 +188,13 @@ export default class DenimAuthenticatorV2 {
     table: string,
     field: string,
     roles: string[],
-    record?: DenimRecord,
+    record?: DenimRecord
   ): boolean {
     // Field-level isn't implemented yet. Table level will have to do for now.
     const authorizationAction = this.authorizeFromRoles(
       this.roles.filter(({ id }) => roles.includes(id)),
       record?.id ? 'createAction' : 'updateAction',
-      table,
+      table
     );
 
     if (typeof authorizationAction === 'object') {
@@ -218,18 +228,22 @@ export default class DenimAuthenticatorV2 {
     return value;
   }
 
-  protected substituteQueryValues(
+  public substituteQueryValues(
     userData: DenimRecord,
-    conditions: DenimQueryConditionOrGroup,
+    conditions: DenimQueryConditionOrGroup
   ): DenimQueryConditionOrGroup {
     if (conditions.conditionType === 'group') {
       return {
         ...conditions,
         conditions: conditions.conditions.map((condition) =>
-          this.substituteQueryValues(userData, condition),
+          this.substituteQueryValues(userData, condition)
         ),
       };
     } else if (conditions.conditionType === 'single') {
+      if (this.customSubstitution) {
+        return this.customSubstitution(userData, conditions);
+      }
+
       return {
         ...conditions,
         value: this.substituteQueryValue(userData, conditions.value),
@@ -247,10 +261,14 @@ export default class DenimAuthenticatorV2 {
       | 'readAction'
       | 'createAction'
       | 'updateAction'
-      | 'deleteAction' = 'readAction',
+      | 'deleteAction' = 'readAction'
   ) {
     const action = this.authorize(userData, actionKey, table);
     const tableSchema = this.dataSource.getTable(table);
+
+    if (action === 'block') {
+      return null;
+    }
 
     if (typeof action === 'object') {
       if (
@@ -258,7 +276,7 @@ export default class DenimAuthenticatorV2 {
         !DenimLocalQuery.matches(
           tableSchema,
           record,
-          this.substituteQueryValues(userData, action),
+          this.substituteQueryValues(userData, action)
         )
       ) {
         return null;
@@ -267,13 +285,15 @@ export default class DenimAuthenticatorV2 {
       return Object.keys(record).reduce<DenimRecord>((current, key) => {
         if (
           !action.allowedFields ||
-          (key === 'id' || action.allowedFields.includes(key))
+          !action.allowedFields.length ||
+          key === 'id' ||
+          action.allowedFields.includes(key)
         ) {
           const value = record[key];
 
           if (value && typeof value === 'object') {
             const columnSchema = tableSchema.columns.find(
-              ({ name }) => name === key,
+              ({ name }) => name === key
             );
 
             if (columnSchema?.type === DenimColumnType.ForeignKey) {
@@ -282,7 +302,7 @@ export default class DenimAuthenticatorV2 {
                   userData,
                   columnSchema.properties.foreignTableId,
                   value.record,
-                  actionKey,
+                  actionKey
                 );
 
                 if (filteredRecord) {
@@ -302,7 +322,7 @@ export default class DenimAuthenticatorV2 {
                       const filteredRecord = this.filterRecord(
                         userData,
                         columnSchema.properties.foreignTableId,
-                        relatedRecord.record,
+                        relatedRecord.record
                       );
 
                       if (!filteredRecord) {
@@ -314,7 +334,7 @@ export default class DenimAuthenticatorV2 {
                   })
                   .filter((record) => Boolean(record))
                   .map<DenimRelatedRecord>(
-                    (record) => record as DenimRelatedRecord,
+                    (record) => record as DenimRelatedRecord
                   );
               }
             }

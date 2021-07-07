@@ -10,6 +10,7 @@ export * from './forms/DenimApplicationButton';
 export * from './forms/DenimApplicationView';
 export * from './forms/DenimApplicationFilter';
 export * from './screens/DenimScreenV2';
+export * from './providers/DenimApplicationAuthenticationProvider';
 
 export { default as DenimApplicationNotifications } from './DenimApplicationNotifications';
 export { default as DenimApplicationV2 } from './DenimApplicationV2';
@@ -23,5 +24,6 @@ export { default as DenimApplicationFilter } from './forms/DenimApplicationFilte
 export { default as DenimApplicationRepeater } from './forms/DenimApplicationRepeater';
 export { default as DenimScreenV2 } from './screens/DenimScreenV2';
 export { default as DenimRouter } from './DenimRouter';
+export { default as DenimApplicationAuthenticationProvider } from './providers/DenimApplicationAuthenticationProvider';
 
 export default DenimApplication;

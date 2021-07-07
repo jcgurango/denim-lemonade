@@ -97,11 +97,46 @@ const convertColumn = (
   }
 
   if (column.type === 'number') {
+    let defaultControlProps = undefined;
+
+    if (column.typeOptions?.format === 'decimal') {
+      defaultControlProps = {
+        format: `0,000.${new Array(column.typeOptions?.precision || 0)
+          .fill('0')
+          .join('')}`,
+      };
+    }
+
+    if (column.typeOptions?.format === 'duration') {
+      defaultControlProps = {
+        format: `0:00:00`,
+      };
+    }
+
+    if (column.typeOptions?.format === 'percentV2') {
+      defaultControlProps = {
+        format: `0,000.${new Array(column.typeOptions?.precision || 0)
+          .fill('0')
+          .join('')}%`,
+      };
+    }
+
+    if (column.typeOptions?.format === 'currency') {
+      defaultControlProps = {
+        format: `${column.typeOptions.symbol || '$'}0,000.${new Array(
+          column.typeOptions?.precision || 0
+        )
+          .fill('0')
+          .join('')}`,
+      };
+    }
+
     return {
       name: column.name,
       label: column.name,
       type: DenimColumnType.Number,
       properties: undefined,
+      defaultControlProps,
     };
   }
 
@@ -139,23 +174,31 @@ const convertColumn = (
             defaultControlProps: {
               disabled: true,
             },
+            novalidate: true,
           };
         }
       }
     }
   }
 
-  if (column.type === 'formula' && column.typeOptions?.resultType) {
+  if ((column.type === 'formula' || column.type === 'rollup') && column.typeOptions?.resultType) {
     const formulaColumn = {
       ...column,
       type: column.typeOptions.resultType,
     } as AirTableColumn;
+    const converted = convertColumn(
+      schema,
+      table,
+      formulaColumn as AirTableColumn
+    );
 
     return {
-      ...convertColumn(schema, table, formulaColumn as AirTableColumn),
+      ...converted,
       defaultControlProps: {
+        ...(converted.defaultControlProps || {}),
         disabled: true,
       },
+      novalidate: true,
     };
   }
 
@@ -189,8 +232,7 @@ export default class AirTableDataSourceV2 extends DenimDataSourceV2 {
 
   constructor(base: AirtableBase | string, schema: AirTable[]) {
     super();
-    this.base =
-      typeof base === 'string' ? Airtable.base(base) : base;
+    this.base = typeof base === 'string' ? Airtable.base(base) : base;
     this.schema = convertSchema(schema);
     this.airtableSchema = schema;
   }
@@ -353,8 +395,8 @@ export default class AirTableDataSourceV2 extends DenimDataSourceV2 {
       );
 
       if (column && column.type === DenimColumnType.Text) {
-        left = 'LOWER(' + left + ')';
-        right = 'LOWER(' + right + ')';
+        left = `IF(ISERROR(LOWER(${left})), ${left}, LOWER(${left}))`;
+        right = `IF(ISERROR(LOWER(${left})), ${right}, LOWER(${right}))`;
       }
 
       return `${this.operatorToFormula(condition.operator, left, right)}`;
@@ -482,7 +524,10 @@ export default class AirTableDataSourceV2 extends DenimDataSourceV2 {
       .table(table)
       .create(this.mapDenimRecordToAirTableFields(table, record));
 
-    return this.mapAirtableToDenimRecord(table, atRecord[0]);
+    return this.mapAirtableToDenimRecord(
+      table,
+      Array.isArray(atRecord) ? atRecord[0] : atRecord
+    );
   }
 
   protected async delete(table: string, id: string): Promise<void> {

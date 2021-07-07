@@ -31,6 +31,7 @@ interface DenimColumnDefinition<T, TO> {
   type: T;
   properties: TO;
   defaultControlProps?: any;
+  novalidate?: boolean;
 }
 
 export enum DenimColumnType {
