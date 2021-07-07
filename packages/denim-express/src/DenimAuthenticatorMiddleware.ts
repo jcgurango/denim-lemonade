@@ -1,7 +1,12 @@
 import bodyParser from 'body-parser';
 import dashify from 'dashify';
 import { NextFunction, Request, Response, Router } from 'express';
-import { DenimRecord, DenimAuthenticatorV2, DenimDataSourceV2 } from 'denim';
+import {
+  DenimRecord,
+  DenimAuthenticatorV2,
+  DenimDataSourceV2,
+  DenimLocalQuery,
+} from 'denim';
 
 export const getRolesFromRequest = (
   authenticator: DenimAuthenticatorV2,
@@ -53,6 +58,47 @@ export const DenimAuthenticatorTableMiddleware = (
 
   router.get('/', queryHandler);
   router.post('/', bodyParser.json(), queryHandler);
+
+  // Existing record.
+  router.get('/:id', async (req, res, next) => {
+    const user = ((req as any).user as DenimRecord) || {};
+    const action = authenticator.authorize(user, 'readAction', table);
+
+    if (action === 'block') {
+      return res.status(403).send({
+        errors: [
+          {
+            message: 'Unauthorized query.',
+          },
+        ],
+      });
+    }
+
+    if (action !== 'allow') {
+      const existingRecord = req.params.id
+        ? await dataSource.retrieveRecord(table, req.params.id)
+        : {};
+
+      if (
+        existingRecord &&
+        !DenimLocalQuery.matches(
+          dataSource.getTable(table),
+          existingRecord,
+          authenticator.substituteQueryValues(user, action)
+        )
+      ) {
+        return res.status(403).send({
+          errors: [
+            {
+              message: 'Unauthorized query.',
+            },
+          ],
+        });
+      }
+    }
+
+    return next();
+  });
 
   const updateHandler = async (
     req: Request,

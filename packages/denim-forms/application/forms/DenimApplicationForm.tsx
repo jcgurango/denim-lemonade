@@ -2,7 +2,12 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { FunctionComponent } from 'react';
 import { ActivityIndicator } from 'react-native';
 import * as Yup from 'yup';
-import { DenimNotificationCodes, DenimQuery, DenimRecord } from 'denim';
+import {
+  DenimNotificationCodes,
+  DenimQueryConditionOrGroup,
+  DenimRecord,
+  DenimColumnType,
+} from 'denim';
 import { DenimFormProvider } from '../../forms';
 import { useDenimForm } from '../../forms/providers/DenimFormProvider';
 import { useDenimNotifications } from '../../forms/providers/DenimNotificationProvider';
@@ -13,7 +18,7 @@ import {
 
 export interface DenimApplicationFormProps {
   table: string;
-  record?: DenimQuery | string;
+  record?: DenimQueryConditionOrGroup | string;
   onSave?: (record: DenimRecord) => void;
   showSave?: boolean;
   prefill?: DenimRecord;
@@ -32,12 +37,46 @@ const DenimApplicationForm: FunctionComponent<DenimApplicationFormProps> = ({
   const tableSchema = useMemo(() => {
     return application.dataSource?.getTable(table);
   }, [application.dataSource, table]);
+
+  const convertedPrefill = useMemo(() => {
+    return (
+      prefill &&
+      Object.keys(prefill).reduce<DenimRecord>((current, key) => {
+        let value = prefill[key];
+        const column = tableSchema?.columns.find(({ name }) => name === key);
+
+        if (
+          column?.type === DenimColumnType.ForeignKey &&
+          typeof value === 'string'
+        ) {
+          value = {
+            type: 'record',
+            id: value,
+          };
+
+          if (column.properties.multiple) {
+            value = {
+              type: 'record-collection',
+              records: [value],
+            };
+          }
+        }
+
+        return {
+          ...current,
+          [key]: value,
+        };
+      }, {})
+    );
+  }, [prefill]);
+
   const [currentRecord, setCurrentRecord] = useState<DenimRecord | undefined>(
-    record ? undefined : prefill,
+    record ? undefined : convertedPrefill
   );
   const [updateData, setUpdateData] = useState<DenimRecord | undefined>(
-    currentRecord === prefill ? prefill : {},
+    currentRecord === convertedPrefill ? convertedPrefill : {}
   );
+
   const [formValid, setFormValid] = useState(false);
   const [errors, setErrors] = useState<Yup.ValidationError[]>([]);
   const [loading, setLoading] = useState(true);
@@ -56,7 +95,7 @@ const DenimApplicationForm: FunctionComponent<DenimApplicationFormProps> = ({
         if (typeof record === 'string') {
           const foundRecord = await application.dataSource?.retrieveRecord(
             table,
-            record,
+            record
           );
 
           if (!cancelled) {
@@ -64,8 +103,11 @@ const DenimApplicationForm: FunctionComponent<DenimApplicationFormProps> = ({
           }
         } else {
           const [foundRecord] =
-            (await application.dataSource?.retrieveRecords(table, record)) ||
-            [];
+            (await application.dataSource?.retrieveRecords(table, {
+              pageSize: 1,
+              page: 1,
+              conditions: record,
+            })) || [];
 
           if (!cancelled) {
             setCurrentRecord(foundRecord || undefined);
@@ -123,12 +165,12 @@ const DenimApplicationForm: FunctionComponent<DenimApplicationFormProps> = ({
           newRecord = await application.dataSource?.updateRecord(
             table,
             currentRecord.id,
-            updateData || {},
+            updateData || {}
           );
         } else {
           newRecord = await application.dataSource?.createRecord(
             table,
-            updateData || {},
+            updateData || {}
           );
         }
 
@@ -165,6 +207,25 @@ const DenimApplicationForm: FunctionComponent<DenimApplicationFormProps> = ({
     updateData,
   ]);
 
+  const getValue = useCallback(
+    (field) => currentRecord && currentRecord[field],
+    [currentRecord]
+  );
+
+  const setValue = useCallback(
+    (field) => (newValue: any) => {
+      setCurrentRecord((current: any) => ({
+        ...current,
+        [field]: newValue,
+      }));
+      setUpdateData((current: any) => ({
+        ...current,
+        [field]: newValue,
+      }));
+    },
+    []
+  );
+
   if (loading) {
     return <ActivityIndicator />;
   }
@@ -178,17 +239,8 @@ const DenimApplicationForm: FunctionComponent<DenimApplicationFormProps> = ({
       }}
     >
       <DenimFormProvider
-        getValue={(field) => currentRecord && currentRecord[field]}
-        setValue={(field) => (newValue) => {
-          setCurrentRecord((current: any) => ({
-            ...current,
-            [field]: newValue,
-          }));
-          setUpdateData((current: any) => ({
-            ...current,
-            [field]: newValue,
-          }));
-        }}
+        getValue={getValue}
+        setValue={setValue}
         getErrorsFor={(field) =>
           errors.filter((error) => {
             return (
@@ -199,6 +251,8 @@ const DenimApplicationForm: FunctionComponent<DenimApplicationFormProps> = ({
             );
           })
         }
+        save={save}
+        canSave={formValid && !saving}
       >
         {children}
         {showSave ? (

@@ -43,25 +43,33 @@ export default class DenimRemoteDataSourceV2 extends DenimDataSourceV2 {
 
   protected async retrieve(
     table: string,
-    id: string,
+    id: string
   ): Promise<DenimRecord | null> {
+    const tableSchema = this.getTable(table);
+
     return this.wrapRequest(() =>
-      bent(this.baseUrl, 'json', this.headers)(`/${dashify(table)}/${id}`),
+      bent(
+        this.baseUrl,
+        'json',
+        this.headers
+      )(`/${dashify(tableSchema.name)}/${id}`)
     );
   }
 
   protected async query(
     table: string,
-    query?: DenimQuery,
+    query?: DenimQuery
   ): Promise<DenimRecord[]> {
+    const tableSchema = this.getTable(table);
+
     return this.wrapRequest(() =>
       bent(
         this.baseUrl,
         'json',
         query?.conditions ? 'POST' : 'GET',
-        this.headers,
+        this.headers
       )(
-        `/${dashify(table)}?${qs.stringify({
+        `/${dashify(tableSchema.name)}?${qs.stringify({
           expand: query?.expand ? query.expand.join(',') : undefined,
           page_size: query?.pageSize ? query.pageSize : undefined,
           page: query?.page ? query.page : undefined,
@@ -72,23 +80,25 @@ export default class DenimRemoteDataSourceV2 extends DenimDataSourceV2 {
               ? 'Y'
               : '',
         })}`,
-        query?.conditions,
-      ),
+        query?.conditions
+      )
     );
   }
 
   protected async save(
     table: string,
-    record: DenimRecord,
+    record: DenimRecord
   ): Promise<DenimRecord> {
+    const tableSchema = this.getTable(table);
+
     if (record.id) {
       return this.wrapRequest(() =>
         bent<DenimRecord>(
           this.baseUrl,
           'json',
           'PUT',
-          this.headers,
-        )(`/${dashify(table)}/${record.id}`, record),
+          this.headers
+        )(`/${dashify(tableSchema.name)}/${record.id}`, record)
       );
     }
 
@@ -97,29 +107,35 @@ export default class DenimRemoteDataSourceV2 extends DenimDataSourceV2 {
         this.baseUrl,
         'json',
         'PUT',
-        this.headers,
-      )(`/${dashify(table)}`, record),
+        this.headers
+      )(`/${dashify(table)}`, record)
     );
   }
 
   protected async delete(table: string, id: string): Promise<void> {
+    const tableSchema = this.getTable(table);
+
     await this.wrapRequest(() =>
-      bent(this.baseUrl, 'DELETE', this.headers)(`/${dashify(table)}/${id}`),
+      bent(
+        this.baseUrl,
+        'DELETE',
+        this.headers
+      )(`/${dashify(tableSchema.name)}/${id}`)
     );
   }
 
   public async executeWorkflow(
     workflowName: string,
     input: DenimRecord,
-    context: DenimWorkflowContext,
+    context: DenimWorkflowContext
   ) {
     let result = await this.wrapRequest(() =>
       bent<any>(
         'json',
         this.baseUrl,
         'POST',
-        this.headers,
-      )(`/workflow/${dashify(workflowName)}`, input),
+        this.headers
+      )(`/workflow/${dashify(workflowName)}`, input)
     );
 
     while (result?.pending) {
@@ -131,8 +147,8 @@ export default class DenimRemoteDataSourceV2 extends DenimDataSourceV2 {
           'json',
           this.baseUrl,
           'GET',
-          this.headers,
-        )(`/workflow/${dashify(workflowName)}/${result.pending}`),
+          this.headers
+        )(`/workflow/${dashify(workflowName)}/${result.pending}`)
       );
     }
 

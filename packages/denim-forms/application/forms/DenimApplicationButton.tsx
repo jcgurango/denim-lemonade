@@ -18,7 +18,7 @@ export type DenimApplicationButtonAction =
   | {
       href: string;
     }
-  | 'deleteRecord';
+  | 'deleteRecord' | 'saveRecord';
 
 export interface DenimApplicationButtonProps {
   text: string;
@@ -27,6 +27,7 @@ export interface DenimApplicationButtonProps {
   type?: 'primary' | 'secondary' | 'danger';
   icon?: DenimIconType;
   iconOnly?: boolean;
+  inline?: boolean;
 }
 
 const DeleteModal: FunctionComponent<{
@@ -107,6 +108,7 @@ const DenimApplicationButton: FunctionComponent<DenimApplicationButtonProps> = (
   type,
   icon,
   iconOnly,
+  inline,
   disabled,
 }) => {
   const {
@@ -114,6 +116,7 @@ const DenimApplicationButton: FunctionComponent<DenimApplicationButtonProps> = (
   } = useDenimForm();
   const [deleting, setDeleting] = useState(false);
   const viewData = useDenimViewData();
+  const form = useDenimForm();
   let callback = () => {};
   let extraContent = null;
 
@@ -130,6 +133,13 @@ const DenimApplicationButton: FunctionComponent<DenimApplicationButtonProps> = (
     };
   }
 
+  if (action === 'saveRecord') {
+    callback = () => {
+      form.save?.();
+    };
+    disabled = disabled || !form.canSave;
+  }
+
   let button = (
     <DenimButton
       text={text}
@@ -140,6 +150,7 @@ const DenimApplicationButton: FunctionComponent<DenimApplicationButtonProps> = (
       }
       type={type}
       disabled={disabled}
+      inline={inline}
     />
   );
 

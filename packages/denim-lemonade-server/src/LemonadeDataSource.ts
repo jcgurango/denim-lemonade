@@ -10,7 +10,7 @@ import {
 import { AirTableDataSourceV2 } from 'denim-airtable';
 import moment from 'moment';
 import { LemonadeValidations } from '../../denim-lemonade/src/validation';
-import CalculateAttendance from './attendance-calculation/Attendance';
+import CalculateAttendance from './attendance-calculation/Calculate';
 import PaydayDataSource from './PaydayDataSource';
 
 const larkAdmin = require('lark-airtable-connector/src/services/lark-admin');
@@ -263,12 +263,49 @@ LemonadeDataSource.schema.workflows = [
     }
   }
 
+  const larkAttendanceData = await attendance.retrieveAttendance(
+    new Date(String(period.Start)),
+    new Date(String(period.End)),
+    ids
+  );
+
+  const airtableAttendanceData = await LemonadeDataSource.retrieveRecords('Attendance', {
+    retrieveAll: true,
+    conditions: {
+      conditionType: 'group',
+      type: 'AND',
+      conditions: [
+        {
+          conditionType: 'single',
+          field: 'Date',
+          operator: DenimQueryOperator.GreaterThanOrEqual,
+          value: period.Start,
+        },
+        {
+          conditionType: 'single',
+          field: 'Date',
+          operator: DenimQueryOperator.LessThanOrEqual,
+          value: period.End,
+        },
+        {
+          conditionType: 'group',
+          type: 'OR',
+          conditions: allEmployees.map(({ ['Employee ID']: value }) => ({
+            conditionType: 'single',
+            field: 'Employee ID',
+            operator: DenimQueryOperator.Equals,
+            value,
+          })),
+        },
+      ],
+    },
+  });
+
   const attendanceData = convertDailyAttendance(
-    await attendance.retrieveAttendance(
-      new Date(String(period.Start)),
-      new Date(String(period.End)),
-      ids
-    )
+    [
+      ...larkAttendanceData,
+      ...airtableAttendanceData,
+    ]
   );
 
   /* Uncomment to test import into AirTable:

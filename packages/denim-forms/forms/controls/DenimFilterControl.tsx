@@ -1,4 +1,4 @@
-import React, { Fragment, FunctionComponent } from 'react';
+import React, { Fragment, FunctionComponent, ReactChild } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import {
   DenimColumn,
@@ -14,14 +14,25 @@ import { useDenimForm } from '../providers/DenimFormProvider';
 import DenimDropDown from './DenimDropDown';
 import NativeDropDown from './NativeDropDown';
 
+export type FieldGeneratorCallback = (
+  column: DenimColumn,
+  key: string,
+  value: any,
+  onChange: (newValue: any) => void,
+  condition: DenimQueryCondition,
+  onConditionChange: (newValue: DenimQueryCondition) => void
+) => ReactChild;
+
 export interface DenimFilterControlProps {
   value?: DenimQueryConditionGroup;
   onChange: (value: DenimQueryConditionGroup) => void;
-  onApply: () => void;
+  onApply?: () => void;
   columns: DenimColumn[];
-  fieldControls: {
-    [key: string]: DenimFormControlSchema;
-  };
+  fieldControls:
+    | {
+        [key: string]: DenimFormControlSchema;
+      }
+    | FieldGeneratorCallback;
 }
 
 const DenimFilterControl: FunctionComponent<DenimFilterControlProps> = ({
@@ -42,7 +53,7 @@ const DenimFilterControl: FunctionComponent<DenimFilterControlProps> = ({
 
   const renderCondition = (
     column: DenimColumn,
-    columnSchema: DenimFormControlSchema,
+    columnSchema: DenimFormControlSchema | FieldGeneratorCallback,
     condition: DenimQueryCondition,
     key: string,
     onChange: (value: DenimQueryCondition) => void,
@@ -50,9 +61,12 @@ const DenimFilterControl: FunctionComponent<DenimFilterControlProps> = ({
   ) => {
     const extraProps: any = {};
 
-    if (columnSchema.type === DenimFormControlType.TextInput) {
+    if (
+      typeof columnSchema === 'object' &&
+      columnSchema.type === DenimFormControlType.TextInput
+    ) {
       extraProps.onSubmitEditing = () => {
-        onApply();
+        onApply?.();
       };
     }
 
@@ -118,24 +132,39 @@ const DenimFilterControl: FunctionComponent<DenimFilterControlProps> = ({
         </View>
         <View style={styles.conditionPartContainer}>
           {!['notnull', 'null'].includes(condition.operator) ? (
-            <DenimFormControl
-              schema={{
-                ...columnSchema,
-                id: key,
-                hideLabel: true,
-                controlProps: {
-                  ...(columnSchema.controlProps || {}),
-                  ...extraProps,
-                },
-              }}
-              value={condition.value}
-              onChange={(newValue) =>
-                onChange({
-                  ...condition,
-                  value: newValue,
-                })
-              }
-            />
+            typeof columnSchema === 'function' ? (
+              columnSchema(
+                column,
+                key,
+                condition.value,
+                (newValue) =>
+                  onChange({
+                    ...condition,
+                    value: newValue,
+                  }),
+                condition,
+                onChange
+              )
+            ) : (
+              <DenimFormControl
+                schema={{
+                  ...columnSchema,
+                  id: key,
+                  hideLabel: true,
+                  controlProps: {
+                    ...(columnSchema.controlProps || {}),
+                    ...extraProps,
+                  },
+                }}
+                value={condition.value}
+                onChange={(newValue) =>
+                  onChange({
+                    ...condition,
+                    value: newValue,
+                  })
+                }
+              />
+            )
           ) : null}
         </View>
         <DenimButton text="Remove" type="danger" onPress={onRemove} />
@@ -181,7 +210,10 @@ const DenimFilterControl: FunctionComponent<DenimFilterControlProps> = ({
               const column = columns.find(
                 ({ name }) => name === condition.field
               );
-              const columnSchema = fieldControls[condition.field];
+              const columnSchema =
+                typeof fieldControls === 'function'
+                  ? fieldControls
+                  : fieldControls[condition.field];
 
               if (column && columnSchema) {
                 return renderCondition(
@@ -290,9 +322,9 @@ const DenimFilterControl: FunctionComponent<DenimFilterControlProps> = ({
                   type="danger"
                   onPress={() => onRemove()}
                 />
-              ) : (
+              ) : onApply ? (
                 <DenimButton text="Apply Filters" onPress={() => onApply()} />
-              )}
+              ) : null}
             </View>
           </View>
         </View>

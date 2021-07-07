@@ -101,7 +101,7 @@ export default class DenimJsonDataSource extends DenimDataSourceV2 {
         (column) => column.name === key
       );
 
-      if (columnSchema?.type === DenimColumnType.ForeignKey) {
+      if (data[key] && columnSchema?.type === DenimColumnType.ForeignKey) {
         const tableSchema = this.getTable(
           columnSchema.properties.foreignTableId
         );

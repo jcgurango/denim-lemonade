@@ -100,12 +100,10 @@ const Screen: FunctionComponent<{ id: string }> = ({ id }) => {
             <DenimApplicationForm
               table="201 Management"
               record={{
-                conditions: {
-                  conditionType: 'single',
-                  field: 'Employee ID',
-                  operator: DenimQueryOperator.Contains,
-                  value: application.routeParameters?.id,
-                },
+                conditionType: 'single',
+                field: 'Employee ID',
+                operator: DenimQueryOperator.Contains,
+                value: application.routeParameters?.id,
               }}
               showSave={false}
             >

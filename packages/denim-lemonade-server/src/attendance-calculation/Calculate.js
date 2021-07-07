@@ -3,6 +3,7 @@ import Overtime from "./Overtime"
 function Calculate({createdAttendance, fields}, myHol) {  
     let fDuration = 8; //fixed duration
     let aDuration = (fields['Actual Duration']) ? (fields['Actual Duration']/3600) : 0;
+    let rDuration = (fields['Required Duration']) ? (fields['Required Duration']/3600) : 0;
     let sTimeIn = (fields['Shift Time In']) ? (fields['Shift Time In']/3600) : 0;
     let sTimeOut = (fields['Shift Time Out']) ? (fields['Shift Time Out']/3600) : 0;
     let fTimeIn = (fields['First In']) ? (fields['First In']/3600) : 0;
@@ -12,7 +13,7 @@ function Calculate({createdAttendance, fields}, myHol) {
     let iNoRecord = (fields['No Record']) ? (fields['No Record']) : 0;
 
     //Set Employee ID
-    createdAttendance.employee_id = (fields['Employee ID']) ? (Array.isArray(fields['Employee ID']) ? fields['Employee ID'][0] : fields['Employee ID']) : "";
+    createdAttendance.employee_id = (fields['Employee ID']) ? fields['Employee ID'][0] : "";
     //Set Date
     createdAttendance.Date = (fields['Date']) ? fields['Date'] : new Intl.DateTimeFormat('en-US').format(new Date());;
     //Set Period ID
@@ -26,7 +27,7 @@ function Calculate({createdAttendance, fields}, myHol) {
         createdAttendance.late = (sTimeIn<fTimeIn) ? (fTimeIn-sTimeIn) : 0;
     }   
     //Set the absent hours
-    createdAttendance.absences = ((iRequired) && (iNoRecord)) ? aDuration : 0;
+    createdAttendance.absences = ((!iRequired) && (iNoRecord)) ? rDuration : 0;
     //Set the leave hours
     createdAttendance.leaves = (fields['Leave Time']) ? (fields['Leave Time']) : 0; 
     //Set the payroll days

@@ -117,6 +117,7 @@ export const DenimTableRouter = (
   // Retrieve existing record.
   router.get('/:id', async (req, res) => {
     const { id } = req.params;
+    const authenticator: DenimAuthenticatorV2 = (req as any).authenticator;
 
     if (!id) {
       return res.status(400).send();
@@ -131,6 +132,17 @@ export const DenimTableRouter = (
 
       if (!record) {
         return res.status(404).json(record);
+      }
+
+      if (authenticator) {
+        return res.json(
+          authenticator.filterRecord(
+            ((req as any).user as DenimRecord) || {},
+            table,
+            record,
+            'readAction'
+          )
+        );
       }
 
       return res.json(record);
