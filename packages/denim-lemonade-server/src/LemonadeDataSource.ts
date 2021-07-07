@@ -301,12 +301,10 @@ LemonadeDataSource.schema.workflows = [
     },
   });
 
-  const attendanceData = convertDailyAttendance(
-    [
-      ...larkAttendanceData,
-      ...airtableAttendanceData,
-    ]
-  );
+  const attendanceData = [
+    ...convertDailyAttendance(larkAttendanceData),
+    airtableAttendanceData,
+  ];
 
   /* Uncomment to test import into AirTable:
   for (let i = 0; i < attendanceData.length; i++) {
