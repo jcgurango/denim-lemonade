@@ -374,7 +374,9 @@ app.get('/', async (req, res) => {
 app.post('/', express.urlencoded({ extended: true }), async (req, res) => {
   try {
     if (req.body.update === 'Y') {
-      console.log(await gitCommand('pull', '-f'));
+      console.log(await gitCommand('add', '.'));
+      console.log(await gitCommand('stash'));
+      console.log(await gitCommand('pull'));
       console.log(await shell('yarn', 'install'));
       console.log(await npxCommand('lerna', 'bootstrap'));
       configCache.bases = 'REFRESH';
