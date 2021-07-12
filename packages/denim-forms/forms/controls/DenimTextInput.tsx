@@ -49,7 +49,7 @@ const DenimTextInput: FunctionComponent<
             onChange(text);
           }
         }}
-        value={enteredText || ''}
+        value={(format ? enteredText : value) || ''}
         numberOfLines={numberOfLines}
         onBlur={() => {
           if (format) {

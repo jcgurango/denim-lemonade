@@ -44,13 +44,18 @@ const DenimScreenV2: FunctionComponent<DenimScreenV2Props> = ({
   return (
     <>
       {paths.map((path) => {
+        if (!application.roles) {
+          return null;
+        }
+
         if (
           allowedRoles &&
           allowedRoles.length &&
-          !allowedRoles.find((role) => application.roles.includes(role))
+          !allowedRoles.find((role) => application.roles?.includes(role))
         ) {
           return (
             <Route key={path} path={path} exact>
+              {id}
               <DenimApplicationLoginForm />
             </Route>
           );

@@ -217,14 +217,14 @@ const EmployeeForm: FunctionComponent<{}> = () => (
                           />,
                         ]}
                       />,
-                      <DenimApplicationField
-                        schema={{
-                          id: 'Address 1',
-                        }}
-                      />,
                       <DenimApplicationLayout
                         flowDirection="row"
                         content={[
+                          <DenimApplicationField
+                            schema={{
+                              id: 'Country',
+                            }}
+                          />,
                           {
                             relativeWidth: 2,
                             element: (
@@ -235,11 +235,6 @@ const EmployeeForm: FunctionComponent<{}> = () => (
                               />
                             ),
                           },
-                          <DenimApplicationField
-                            schema={{
-                              id: 'Country',
-                            }}
-                          />,
                         ]}
                       />,
                       <DenimApplicationLayout

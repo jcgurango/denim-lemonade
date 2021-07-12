@@ -14,11 +14,10 @@ import { DenimRecord } from 'denim';
 export interface DenimUserContextV2Props {
   token?: string;
   user?: DenimRecord;
-  roles: string[];
+  roles?: string[];
 }
 
 const DenimUserContext = createContext<DenimUserContextV2Props>({
-  roles: [],
 });
 
 export const useDenimUserV2 = () => useContext(DenimUserContext);
@@ -28,7 +27,7 @@ const DenimUserProvider: FunctionComponent<{
   rolesUrl: string;
 }> = ({ authUrl, rolesUrl, children }) => {
   const [currentToken, setCurrentToken] = useState('');
-  const [roles, setRoles] = useState([]);
+  const [roles, setRoles] = useState<string[] | undefined>(undefined);
   const [user, setUser] = useState<DenimRecord | undefined>(undefined);
   const { get, getRoles } = useMemo(() => {
     return {

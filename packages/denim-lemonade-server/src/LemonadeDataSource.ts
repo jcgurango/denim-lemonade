@@ -421,6 +421,8 @@ LemonadeDataSource.schema.workflows = [
       );
     }
 
+    console.log(calculated)
+
     // If a row already exists at this position, update it.
     if (calculated && existingRow) {
       await LemonadeDataSource.updateRecord(

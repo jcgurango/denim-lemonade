@@ -49,7 +49,7 @@ export interface DenimApplicationContextProps {
     [key: string]: any;
   };
   token?: string;
-  roles: string[];
+  roles?: string[];
   navigate: (url: string) => void;
 }
 

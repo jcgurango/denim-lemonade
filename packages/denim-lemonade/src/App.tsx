@@ -6,6 +6,7 @@ import {
   DenimApplicationForm,
   DenimApplicationLayout,
   DenimApplicationV2,
+  DenimApplicationGuard,
   useDenimApplication,
   DenimScreenV2,
   DenimFormProvider,
@@ -95,13 +96,24 @@ const App: FunctionComponent<{}> = () => {
   return (
     <DenimApplicationV2 dataSource={dataSource}>
       <DenimRouter>
-        <DenimScreenV2
-          id="employee-self"
-          paths={['/']}
-          allowedRoles={['employee']}
-        >
-          <SelfEmployeeForm />
-        </DenimScreenV2>
+        <DenimApplicationGuard allowedRoles={['employee']}>
+          <DenimScreenV2
+            id="employee-self"
+            paths={['/']}
+            allowedRoles={['employee']}
+          >
+            <SelfEmployeeForm />
+          </DenimScreenV2>
+        </DenimApplicationGuard>
+        <DenimApplicationGuard allowedRoles={['hr', 'hr-user']}>
+          <DenimScreenV2
+            id="employee-list"
+            paths={['/']}
+            allowedRoles={['hr', 'hr-user']}
+          >
+            <EmployeeList />
+          </DenimScreenV2>
+        </DenimApplicationGuard>
         <DenimScreenV2
           id="employee-self"
           paths={['/me']}
@@ -115,13 +127,6 @@ const App: FunctionComponent<{}> = () => {
           allowedRoles={['hr', 'hr-user']}
         >
           <HREmployeeForm />
-        </DenimScreenV2>
-        <DenimScreenV2
-          id="employee-list"
-          paths={['/']}
-          allowedRoles={['hr', 'hr-user']}
-        >
-          <EmployeeList />
         </DenimScreenV2>
         <DenimScreenV2
           id="timekeeping"

@@ -126,7 +126,7 @@ const TimekeepingPortal: FunctionComponent<{}> = () => {
                   context,
                 );
 
-                window.location.href = 'https://airtable.com/shr03lkOUWaJajqxc';
+                window.location.href = process.env.REACT_APP_TIMEKEEPING_EXPORT_URL || 'https://airtable.com/shrkY5E5kAYgrgVZW';
               } catch (e) {
                 if (!notifications.handleError(e)) {
                   notifications.notify({

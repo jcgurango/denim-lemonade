@@ -22,6 +22,7 @@ export { default as DenimApplicationButton } from './forms/DenimApplicationButto
 export { default as DenimApplicationView } from './forms/DenimApplicationView';
 export { default as DenimApplicationFilter } from './forms/DenimApplicationFilter';
 export { default as DenimApplicationRepeater } from './forms/DenimApplicationRepeater';
+export { default as DenimApplicationGuard } from './forms/DenimApplicationGuard';
 export { default as DenimScreenV2 } from './screens/DenimScreenV2';
 export { default as DenimRouter } from './DenimRouter';
 export { default as DenimApplicationAuthenticationProvider } from './providers/DenimApplicationAuthenticationProvider';
