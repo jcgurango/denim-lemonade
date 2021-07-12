@@ -427,6 +427,10 @@ app.get('/lark-code-exists', async (req, res) => {
   }
 });
 
+app.get('/reload', async (req, res) => {
+  await pm2Command('startOrReload', 'ecosystem.config.js', '--only=config');
+});
+
 app.listen(port, () => {
   console.log('Listening on ' + port + '...');
 });

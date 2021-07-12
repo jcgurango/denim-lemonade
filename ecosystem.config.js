@@ -11,6 +11,7 @@ const env = {
   LARK_APP_ID: config.larkAppId,
   LARK_APP_SECRET: config.larkAppSecret,
   REACT_APP_EMPLOYEE_FORM_URL: config.employeeFormUrl,
+  REACT_APP_TIMEKEEPING_EXPORT_URL: config.timekeepingViewUrl,
   ENABLE_SYNC: '1',
 };
 
