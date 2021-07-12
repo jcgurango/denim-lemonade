@@ -239,6 +239,8 @@ const render = async (errors = []) => {
             ${baseSelect('timekeepingBaseId')}
             <label>Employee Form URL</label>
             <input type="text" name="employeeFormUrl" class="form-control" value="${configCache.employeeFormUrl || ''}" />
+            <label>Timekeeping Export View URL</label>
+            <input type="text" name="timekeepingViewUrl" class="form-control" value="${configCache.timekeepingViewUrl || ''}" />
             <label>
               <input type="checkbox" name="bases" value="REFRESH" />
               Re-retrieve schema from AirTable.
