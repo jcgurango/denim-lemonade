@@ -362,6 +362,7 @@ const reprocess = async (commands) => {
       env: {
         GENERATE_SOURCEMAP: 'false',
         REACT_APP_EMPLOYEE_FORM_URL: configCache.employeeFormUrl || '',
+        REACT_APP_TIMEKEEPING_EXPORT_URL: configCache.timekeepingViewUrl || '',
       },
     }, 'yarn', 'build'));
 
