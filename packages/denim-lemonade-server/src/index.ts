@@ -306,7 +306,7 @@ updateCoordinator.registerUpdater(
       'Holiday Name': record.name,
       Date: record.date[0],
       'End Date': record.date[1],
-      'Holiday Type': 'Legal',
+      'Holiday Type': (record.name.indexOf('SWH') === 0 || record.name.indexOf('SNH')) ? 'Special' : 'Legal',
     };
 
     if (existingRecord) {
