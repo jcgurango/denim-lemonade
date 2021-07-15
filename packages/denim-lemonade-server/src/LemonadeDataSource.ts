@@ -358,7 +358,7 @@ LemonadeDataSource.schema.workflows = [
     const calculated = attendanceData[i]
       ? {
           employee_id: '',
-          payroll_period_id: 0,
+          payroll_period_id: periodInput.id,
           Date: '1999-01-01',
           payroll_days: 0.0,
           absences: 0.0,
@@ -414,14 +414,12 @@ LemonadeDataSource.schema.workflows = [
           createdAttendance: calculated,
           fields: {
             ...attendanceData[i],
-            'Period ID': attendanceData[i]['Period ID'] || '',
+            'Period ID': periodInput.id,
           },
         },
         holidayTypesByDate[String(attendanceData[i].Date)]
       );
     }
-
-    console.log(calculated)
 
     // If a row already exists at this position, update it.
     if (calculated && existingRow) {
