@@ -269,41 +269,52 @@ LemonadeDataSource.schema.workflows = [
     ids
   );
 
-  const airtableAttendanceData = await LemonadeDataSource.retrieveRecords('Attendance', {
-    retrieveAll: true,
-    conditions: {
-      conditionType: 'group',
-      type: 'AND',
-      conditions: [
-        {
-          conditionType: 'single',
-          field: 'Date',
-          operator: DenimQueryOperator.GreaterThanOrEqual,
-          value: period.Start,
-        },
-        {
-          conditionType: 'single',
-          field: 'Date',
-          operator: DenimQueryOperator.LessThanOrEqual,
-          value: period.End,
-        },
-        {
-          conditionType: 'group',
-          type: 'OR',
-          conditions: allEmployees.map(({ ['Employee ID']: value }) => ({
+  const airtableAttendanceData = await LemonadeDataSource.retrieveRecords(
+    'Attendance',
+    {
+      retrieveAll: true,
+      conditions: {
+        conditionType: 'group',
+        type: 'AND',
+        conditions: [
+          {
             conditionType: 'single',
-            field: 'Employee ID',
-            operator: DenimQueryOperator.Equals,
-            value,
-          })),
-        },
-      ],
-    },
+            field: 'Date',
+            operator: DenimQueryOperator.GreaterThanOrEqual,
+            value: period.Start,
+          },
+          {
+            conditionType: 'single',
+            field: 'Date',
+            operator: DenimQueryOperator.LessThanOrEqual,
+            value: period.End,
+          },
+          {
+            conditionType: 'group',
+            type: 'OR',
+            conditions: allEmployees.map(({ ['Employee ID']: value }) => ({
+              conditionType: 'single',
+              field: 'Employee ID',
+              operator: DenimQueryOperator.Equals,
+              value,
+            })),
+          },
+        ],
+      },
+    }
+  );
+
+  const convertedLarkAttendance = convertDailyAttendance(larkAttendanceData).filter((attendance: any) => {
+    if (airtableAttendanceData.find(({ ID }) => attendance.ID === ID)) {
+      return false;
+    }
+
+    return true;
   });
 
   const attendanceData = [
-    ...convertDailyAttendance(larkAttendanceData),
-    airtableAttendanceData,
+    ...convertedLarkAttendance,
+    ...airtableAttendanceData,
   ];
 
   /* Uncomment to test import into AirTable:
@@ -414,12 +425,19 @@ LemonadeDataSource.schema.workflows = [
           createdAttendance: calculated,
           fields: {
             ...attendanceData[i],
+            'Employee ID':
+              attendanceData[i]['Employee ID'] &&
+              !Array.isArray(attendanceData[i]['Employee ID'])
+                ? [attendanceData[i]['Employee ID']]
+                : attendanceData[i]['Employee ID'],
             'Period ID': periodInput.id,
           },
         },
         holidayTypesByDate[String(attendanceData[i].Date)]
       );
     }
+
+    console.log(calculated);
 
     // If a row already exists at this position, update it.
     if (calculated && existingRow) {
