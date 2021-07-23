@@ -389,7 +389,7 @@ export default class AirTableDataSourceV2 extends DenimDataSourceV2 {
     if (condition.conditionType === 'single') {
       let left =
         condition.field === 'id' ? 'RECORD_ID()' : `{${condition.field}}`;
-      let right = `'${condition.value}'`;
+      let right = `'${typeof(condition.value) === 'string' ? condition.value.replace(/'/g, '\\\'') : condition.value}'`;
       const column = tableSchema.columns.find(
         ({ name }) => name === condition.field
       );
