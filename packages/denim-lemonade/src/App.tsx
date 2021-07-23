@@ -129,6 +129,13 @@ const App: FunctionComponent<{}> = () => {
           <HREmployeeForm />
         </DenimScreenV2>
         <DenimScreenV2
+          id="payslip"
+          paths={['/payslip-portal']}
+          allowedRoles={['hr']}
+        >
+          <TimekeepingPortal />
+        </DenimScreenV2>
+        <DenimScreenV2
           id="timekeeping"
           paths={['/timekeeping-portal']}
           allowedRoles={['hr']}
