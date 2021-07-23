@@ -440,8 +440,6 @@ export default class AirTableDataSourceV2 extends DenimDataSourceV2 {
         tableSchema,
         query.conditions
       );
-
-      console.log(params.filterByFormula);
     }
 
     if (query?.pageSize) {
