@@ -65,20 +65,35 @@ export default class LarkUpdater extends LarkConnection {
             },
           );
 
-          if (result.code === 40013 && employee.email) {
-            // Email already exists in the system.
-            const searchResult = await get('https://open.larksuite.com/open-apis/user/v1/batch_get_id?emails=' + employee.email);
-            
-            if (!searchResult.code) {
-              const user = searchResult.data.email_users?.[employee.email];
+          if (result.code === 40013) {
+            if (employee.email) {
+              // Email already exists in the system.
+              const searchResult = await get('https://open.larksuite.com/open-apis/user/v1/batch_get_id?emails=' + employee.email);
+              
+              if (!searchResult.code) {
+                const user = searchResult.data.email_users?.[employee.email];
 
-              if (user && user.length) {
-                const { open_id } = user[0];
+                if (user && user.length) {
+                  const { open_id } = user[0];
 
-                return get('https://open.larksuite.com/open-apis/contact/v1/user/get?open_id=' + open_id);
+                  return get('https://open.larksuite.com/open-apis/contact/v1/user/get?open_id=' + open_id);
+                }
               }
-            } else {
-              return result;
+            }
+
+            if (employee.mobile) {
+              // Email already exists in the system.
+              const searchResult = await get('https://open.larksuite.com/open-apis/user/v1/batch_get_id?mobiles=' + employee.mobile);
+              
+              if (!searchResult.code) {
+                const user = searchResult.data.mobile_users?.[employee.mobile];
+
+                if (user && user.length) {
+                  const { open_id } = user[0];
+
+                  return get('https://open.larksuite.com/open-apis/contact/v1/user/get?open_id=' + open_id);
+                }
+              }
             }
           }
 
