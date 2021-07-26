@@ -276,6 +276,13 @@ const render = async (errors = []) => {
                 }
               </script>
             ` : ''}
+            <h2>PayDay Setup</h2>
+            <label>PayDay Base URL</label>
+            <input type="text" name="paydayBaseUrl" class="form-control" value="${configCache.paydayBaseUrl || ''}" />
+            <label>Merchant ID</label>
+            <input type="text" name="paydayMerchantId" class="form-control" value="${configCache.paydayMerchantId || ''}" />
+            <label>Merchant Key</label>
+            <input type="password" name="paydayMerchantKey" class="form-control" value="${configCache.paydayMerchantKey || ''}" />
           `}
           </div>
           <div style="margin-bottom: 0.5em;">

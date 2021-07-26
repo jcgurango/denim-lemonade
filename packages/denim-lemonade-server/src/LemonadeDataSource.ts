@@ -38,10 +38,10 @@ const timekeepingData = new AirTableDataSourceV2(
 );
 
 const paydayData = new PaydayDataSource(
-  'https://pd-lemonade.jcgurango.com/api',
+  `${process.env.PAYDAY_BASE_URL || 'http://localhost:1347'}/api`,
   {
-    merchant_id: 'l3m0n4d3_mId',
-    merchant_key: 'bGVtb25hZGVfbWs=',
+    merchant_id: process.env.PAYDAY_MERCHANT_ID || '',
+    merchant_key: process.env.PAYDAY_MERCHANT_KEY || '',
   }
 );
 

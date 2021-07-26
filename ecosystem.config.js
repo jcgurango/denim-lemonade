@@ -12,6 +12,9 @@ const env = {
   LARK_APP_SECRET: config.larkAppSecret,
   REACT_APP_EMPLOYEE_FORM_URL: config.employeeFormUrl,
   REACT_APP_TIMEKEEPING_EXPORT_URL: config.timekeepingViewUrl,
+  PAYDAY_BASE_URL: config.paydayBaseUrl,
+  PAYDAY_MERCHANT_ID: config.paydayMerchantId,
+  PAYDAY_MERCHANT_KEY: config.paydayMerchantKey,
   ENABLE_SYNC: '1',
 };
 
