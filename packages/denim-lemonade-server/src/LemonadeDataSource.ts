@@ -315,9 +315,7 @@ LemonadeDataSource.schema.workflows = [
     return true;
   });
 
-  const attendanceData = [
-    ...convertedLarkAttendance,
-  ];
+  const attendanceData = [...convertedLarkAttendance];
 
   /* Uncomment to test import into AirTable:
   for (let i = 0; i < attendanceData.length; i++) {
@@ -334,15 +332,54 @@ LemonadeDataSource.schema.workflows = [
   }
   */
 
-  const holidays = await LemonadeDataSource.retrieveRecords(
-    'Holiday Calendar',
-    {
-      retrieveAll: true,
-    }
-  );
-  const holidayTypesByDate: { [key: string]: string } = {};
+  // Retrieve overtime rules from Lark.
+  const overtimeRules = await attendance.retrieveOvertimeRules();
+  const holidays = overtimeRules
+    .reduce((current: any[], rule: any) => {
+      return current.concat(
+        ...rule.subRule.map((subRule: any) => {
+          const { subRule: subRules, ...parentRule } = rule;
 
-  holidays.forEach((holiday) => {
+          return {
+            ...subRule,
+            parentRule,
+          };
+        })
+      );
+    }, [])
+    .reduce((current: any[], subRule: any) => {
+      return current.concat(
+        ...subRule.specialDate.map((specialDate: any) => {
+          const { specialDate: specialDates, parentRule } = subRule;
+
+          return {
+            ...specialDate,
+            parentRule,
+          };
+        })
+      );
+    }, [])
+    .reduce((current: any[], rule: any) => {
+      return current.concat({
+        ...rule,
+        id: rule.name,
+      });
+    }, []);
+
+  const holidayTypesByDate: { [key: string]: string } = {};
+  holidays.forEach((record: any) => {
+    console.log(record.date);
+
+    const holiday = {
+      'Holiday Name': record.name,
+      Date: record.date[0],
+      'End Date': record.date[1],
+      'Holiday Type':
+        record.name.indexOf('SWH') === 0 || record.name.indexOf('SNH') === 0
+          ? 'Special'
+          : 'Legal',
+    };
+
     const dates = [String(holiday.Date)];
 
     if (holiday['End Date']) {
