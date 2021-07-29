@@ -368,8 +368,6 @@ LemonadeDataSource.schema.workflows = [
 
   const holidayTypesByDate: { [key: string]: string } = {};
   holidays.forEach((record: any) => {
-    console.log(record.date);
-
     const holiday = {
       'Holiday Name': record.name,
       Date: record.date[0],
