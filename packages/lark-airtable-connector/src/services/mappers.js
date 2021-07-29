@@ -15,6 +15,28 @@ const parseDuration = (durationText) => {
   return 0;
 };
 
+const parseHoursFromText = (text) => {
+  const match = /([\d\.\,]+)(mins|hrs|days)/g.exec(text);
+
+  if (match) {
+    const [number, unit] = match;
+
+    if (unit === 'mins') {
+      return number / 60;
+    }
+
+    if (unit === 'hrs') {
+      return Number(number);
+    }
+
+    if (unit === 'days') {
+      return number * 8;
+    }
+  }
+
+  return 0;
+};
+
 module.exports = {
   // Maps a leave balance record to Lark.
   leaveBalanceToLark: createMapper(({
@@ -39,6 +61,7 @@ module.exports = {
         '50103': { Value: EmployeeID },
         '51302': { Value: RequiredDuration },
         '51303': { Value: ActualDuration },
+        '51305': { Value: Late },
         '51307': { Value: Overtime },
         '51401': { Value: LeaveTime },
         '51402': { Value: LeaveType },
@@ -97,8 +120,9 @@ module.exports = {
       'Employee ID': EmployeeID,
       'Required Duration': Number(RequiredDuration) * 60,
       'Actual Duration': Number(ActualDuration) * 60,
-      'Overtime Hours': Number(Overtime.replace(/[^\d.,]/g, '')),
-      'Leave Time': Number(LeaveTime.replace(/[^\d.,]/g, '')),
+      'Overtime Hours': parseHoursFromText(Overtime),
+      'Late Time': Number(Late),
+      'Leave Time': parseHoursFromText(LeaveTime),
       'Leave Type': LeaveType === '-' ? null : LeaveType,
       'Shift Time In': shiftStart,
       'Shift Time Out': shiftEnd,

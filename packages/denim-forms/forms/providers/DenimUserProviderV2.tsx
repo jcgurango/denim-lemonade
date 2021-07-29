@@ -80,16 +80,29 @@ const DenimUserProvider: FunctionComponent<{
 
             localStorage.setItem('denimToken', token);
             setCurrentToken(token);
+
+            if (typeof(localStorage) !== 'undefined') {
+              const redirect = localStorage.getItem('authRedirect');
+
+              if (redirect) {
+                window.location.href = redirect;
+                localStorage.removeItem('authRedirect');
+              }
+            }
             return;
           } catch (e) {
             console.error(e);
           }
         }
 
+        if (typeof(localStorage) !== 'undefined') {
+          localStorage.setItem('authRedirect', window.location.href);
+        }
+
         // Retrieve a new token.
         const { url } = await get(
           '/?type=web&redirect_url=' +
-            encodeURIComponent(window.location.href.split('?')[0]),
+            encodeURIComponent(window.location.origin),
         );
 
         window.location.href = url;

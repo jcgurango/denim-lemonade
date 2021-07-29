@@ -29,6 +29,7 @@ import { useHistory } from 'react-router';
 import EmployeeList from './components/EmployeeList';
 import MovementScreen from './components/MovementScreen';
 import TimekeepingPortal from './components/TimekeepingPortal';
+import PayslipPortal from './components/PayslipPortal';
 
 const dataSource = new DenimRemoteDataSourceV2(
   (process.env.REACT_APP_API_BASE || window.location.origin) + '/api/data',
@@ -133,7 +134,7 @@ const App: FunctionComponent<{}> = () => {
           paths={['/payslip-portal']}
           allowedRoles={['hr']}
         >
-          <TimekeepingPortal />
+          <PayslipPortal />
         </DenimScreenV2>
         <DenimScreenV2
           id="timekeeping"

@@ -11,6 +11,7 @@ import { AirTableDataSourceV2 } from 'denim-airtable';
 import moment from 'moment';
 import { LemonadeValidations } from '../../denim-lemonade/src/validation';
 import CalculateAttendance from './attendance-calculation/Calculate';
+import { processDay } from './CalculateAttendance';
 import PaydayDataSource from './PaydayDataSource';
 
 const larkAdmin = require('lark-airtable-connector/src/services/lark-admin');
@@ -304,7 +305,9 @@ LemonadeDataSource.schema.workflows = [
     }
   );
 
-  const convertedLarkAttendance = convertDailyAttendance(larkAttendanceData).filter((attendance: any) => {
+  const convertedLarkAttendance = convertDailyAttendance(
+    larkAttendanceData
+  ).filter((attendance: any) => {
     if (airtableAttendanceData.find(({ ID }) => attendance.ID === ID)) {
       return false;
     }
@@ -314,7 +317,6 @@ LemonadeDataSource.schema.workflows = [
 
   const attendanceData = [
     ...convertedLarkAttendance,
-    ...airtableAttendanceData,
   ];
 
   /* Uncomment to test import into AirTable:
@@ -366,74 +368,14 @@ LemonadeDataSource.schema.workflows = [
   );
 
   for (let i = 0; i < attendanceData.length || i < exportRows.length; i++) {
-    const calculated = attendanceData[i]
-      ? {
-          employee_id: '',
-          payroll_period_id: periodInput.id,
-          Date: '1999-01-01',
-          payroll_days: 0.0,
-          absences: 0.0,
-          leaves: 0.0,
-          holidays: 0.0,
-          part_time: 0.0,
-          late: 0.0,
-          undertime: 0.0,
-          reg_np: 0.0,
-          reg_ot: 0.0,
-          reg_ot_np: 0.0,
-          reg_ot_ex: 0.0,
-          reg_ot_ex_np: 0.0,
-          leg_ot: 0.0,
-          leg_ot_np: 0.0,
-          leg_ot_ex: 0.0,
-          leg_ot_ex_np: 0.0,
-          sp_ot: 0.0,
-          sp_ot_np: 0.0,
-          sp_ot_ex: 0.0,
-          sp_ot_ex_np: 0.0,
-          rst_ot: 0.0,
-          rst_ot_np: 0.0,
-          rst_ot_ex: 0.0,
-          rst_ot_ex_np: 0.0,
-          leg_rst_ot: 0.0,
-          leg_rst_ot_np: 0.0,
-          leg_rst_ot_ex: 0.0,
-          leg_rst_ot_ex_np: 0.0,
-          sp_rst_ot: 0.0,
-          sp_rst_ot_np: 0.0,
-          sp_rst_ot_ex: 0.0,
-          sp_rst_ot_ex_np: 0.0,
-          allowance_1: 0.0,
-          allowance_2: 0.0,
-          allowance_3: 0.0,
-          allowance_4: 0.0,
-          allowance_5: 0.0,
-          allowance_6: 0.0,
-          allowance_7: 0.0,
-          allowance_8: 0.0,
-          allowance_9: 0.0,
-          allowance_10: 0.0,
-          allowance_11: 0.0,
-          allowance_12: 0.0,
-        }
-      : null;
+    let calculated: any = null;
     const existingRow = exportRows[i];
 
     if (attendanceData[i]) {
-      CalculateAttendance(
-        {
-          createdAttendance: calculated,
-          fields: {
-            ...attendanceData[i],
-            'Employee ID':
-              attendanceData[i]['Employee ID'] &&
-              !Array.isArray(attendanceData[i]['Employee ID'])
-                ? [attendanceData[i]['Employee ID']]
-                : attendanceData[i]['Employee ID'],
-            'Period ID': periodInput.id,
-          },
-        },
-        holidayTypesByDate[String(attendanceData[i].Date)]
+      calculated = processDay(
+        attendanceData[i],
+        periodInput.id,
+        holidayTypesByDate[String(attendanceData[i].Date)] as any
       );
     }
 
