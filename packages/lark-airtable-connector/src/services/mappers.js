@@ -16,16 +16,16 @@ const parseDuration = (durationText) => {
 };
 
 const parseHoursFromText = (text) => {
-  const match = /([\d\.\,]+)(mins|hrs|days)/g.exec(text);
+  const match = /([\d\.\,]+)(mins|hrs|hours|days)/g.exec(text);
 
   if (match) {
-    const [number, unit] = match;
+    const [, number, unit] = match;
 
     if (unit === 'mins') {
       return number / 60;
     }
 
-    if (unit === 'hrs') {
+    if (unit === 'hrs' || unit === 'hours') {
       return Number(number);
     }
 
