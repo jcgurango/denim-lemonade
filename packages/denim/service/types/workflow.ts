@@ -8,6 +8,9 @@ export interface DenimWorkflow {
 export type DenimResultAction = {
   $action: 'redirect';
   nextUrl: string;
+} | {
+  $action: 'result';
+  result: any;
 };
 
 export interface DenimWorkflowContext {

@@ -152,6 +152,6 @@ export default class DenimRemoteDataSourceV2 extends DenimDataSourceV2 {
       );
     }
 
-    context.resultingAction = result.action;
+    context.resultingAction = result;
   }
 }

@@ -10,7 +10,6 @@ import {
 import { AirTableDataSourceV2 } from 'denim-airtable';
 import moment from 'moment';
 import { LemonadeValidations } from '../../denim-lemonade/src/validation';
-import CalculateAttendance from './attendance-calculation/Calculate';
 import { processDay } from './CalculateAttendance';
 import PaydayDataSource from './PaydayDataSource';
 
@@ -200,7 +199,46 @@ LemonadeDataSource.schema.workflows = [
       },
     ],
   },
+  {
+    name: 'laborHoursReport',
+    inputs: []
+  },
 ];
+
+(LemonadeDataSource as any).laborHoursReport = async (
+  input: DenimRecord,
+  context: DenimWorkflowContext
+) => {
+  const exportRows = await LemonadeDataSource.retrieveRecords(
+    'AttendanceExport',
+    {
+      retrieveAll: true,
+    }
+  );
+
+  const perEmployeeSummaries: any = { };
+
+  exportRows.forEach((row) => {
+    if (!perEmployeeSummaries[String(row.employee_id)]) {
+      perEmployeeSummaries[String(row.employee_id)] = {
+        ...row,
+      };
+
+      delete perEmployeeSummaries[String(row.employee_id)].Date;
+    } else {
+      Object.keys(row).forEach((key) => {
+        if (typeof(row[key]) === 'number' && key !== 'payroll_period_id') {
+          perEmployeeSummaries[String(row.employee_id)][key] += row[key];
+        }
+      });
+    }
+  });
+  
+  context.resultingAction = {
+    $action: 'result',
+    result: perEmployeeSummaries
+  };
+};
 
 (LemonadeDataSource as any).laborHours = async (
   input: DenimRecord,

@@ -409,6 +409,7 @@ export const processDay = (
   let npMinutes = 0;
   let npOtMinutes = 0;
 
+  /*
   if (record['First In'] && record['Last Out']) {
     npMinutes =
       Math.min(nightDiffEnd, record['Last Out']) -
@@ -426,6 +427,7 @@ export const processDay = (
     npMinutes = Math.max(0, npMinutes) / 60;
     npOtMinutes = Math.max(0, npOtMinutes) / 60;
   }
+  */
 
   let prefix = holidayType ? (holidayType === 'Special' ? 'sp_' : 'leg_') : '';
 
