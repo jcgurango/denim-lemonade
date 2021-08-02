@@ -560,6 +560,7 @@ export default class PaydayDataSource extends DenimDataSourceV2 {
   public async createEmployee(data: any) {
     try {
       const headers = await this.getHeaders();
+      console.log(headers, `PUT /employees`, JSON.stringify(data));
       await bent(this.baseUrl, 'PUT')(`/employees`, data, headers);
     } catch (e) {
       throw e;
@@ -569,6 +570,7 @@ export default class PaydayDataSource extends DenimDataSourceV2 {
   public async updateEmployee(id: string, data: any) {
     try {
       const headers = await this.getHeaders();
+      console.log(headers, `PUT /employees/${id}`, JSON.stringify(data));
       await bent(this.baseUrl, 'PUT')(`/employees/${id}`, data, headers);
     } catch (e) {
       throw e;
