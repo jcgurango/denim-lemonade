@@ -560,8 +560,8 @@ export default class PaydayDataSource extends DenimDataSourceV2 {
   public async createEmployee(data: any) {
     try {
       const headers = await this.getHeaders();
-      console.log(headers, `PUT /employees`, JSON.stringify(data));
-      await bent(this.baseUrl, 'PUT')(`/employees`, data, headers);
+      console.log(headers, `POST /employees`, JSON.stringify(data));
+      await bent(this.baseUrl, 'POST')(`/employees`, data, headers);
     } catch (e) {
       throw e;
     }
