@@ -11,7 +11,7 @@ export default class LarkUpdater extends LarkConnection {
         let existingDepartment: any = null;
         existingDepartment = await get(
           'https://open.larksuite.com/open-apis/contact/v1/department/info/get?department_id=' +
-            department.id,
+            department.department_id,
         );
 
         isCreate = existingDepartment?.code === 40013;
@@ -21,7 +21,7 @@ export default class LarkUpdater extends LarkConnection {
         }
 
         if (isCreate) {
-          console.log('Creating department ' + department.id);
+          console.log('Creating department ' + department.department_id);
 
           return post(
             'https://open.larksuite.com/open-apis/contact/v1/department/add',
@@ -32,7 +32,7 @@ export default class LarkUpdater extends LarkConnection {
           );
         }
 
-        console.log('Updating department ' + department.id);
+        console.log('Updating department ' + department.department_id);
 
         return post(
           'https://open.larksuite.com/open-apis/contact/v1/department/update',

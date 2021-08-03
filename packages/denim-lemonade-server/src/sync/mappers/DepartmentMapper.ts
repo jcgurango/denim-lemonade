@@ -1,7 +1,7 @@
 import Mapper from './Mapper';
 
 export interface Department {
-  id: string;
+  department_id: string;
   name: string;
   parent_id: string;
 }
@@ -12,7 +12,7 @@ export interface SourceDepartment {
 }
 
 export const DepartmentMapper = Mapper<SourceDepartment, Department>({
-  'id': 'id',
+  'id': 'department_id',
   'Department': 'name',
   'Department Head Lark ID': 'leader_open_id',
   'Parent Department': {
