@@ -27,7 +27,7 @@ export default class LarkUpdater extends LarkConnection {
             'https://open.larksuite.com/open-apis/contact/v3/departments?department_id_type=department_id',
             {
               ...department,
-              parent_department_id: department.parent_id || 0,
+              parent_department_id: department.parent_id || '-1',
             },
           );
         }
