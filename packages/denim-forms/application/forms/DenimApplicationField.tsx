@@ -171,6 +171,7 @@ const DenimApplicationField: FunctionComponent<
       schema={controlSchema}
       value={value}
       onChange={onChange}
+      key={controlSchema.id}
       {...props}
     >
       {children}
