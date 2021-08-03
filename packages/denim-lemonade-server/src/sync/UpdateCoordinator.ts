@@ -116,7 +116,7 @@ export default class UpdateCoordinator {
                   this.buckets[bucket] = newBucket;
                 } catch (e) {
                   console.log('Error retrieving for ' + bucket + ':');
-                  console.error(e);
+                  console.log(e);
                 }
               }),
             );
@@ -144,7 +144,7 @@ export default class UpdateCoordinator {
                   success.push(record);
                 } catch (e) {
                   console.log('Error updating for ' + bucket + ':');
-                  console.error(e);
+                  console.log(e);
                   console.log('Record: ' + JSON.stringify(last, null, '  '));
                 }
               }
