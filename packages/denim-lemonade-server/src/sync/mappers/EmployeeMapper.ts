@@ -81,14 +81,10 @@ export const EmployeeMapper = Mapper<SourceEmployee, Employee>({
   },
   Department: {
     destinationColumn: 'department_ids',
-    sourceToDestination: (source) => (source?.id ? [source.id] : []),
-    destinationToSource: (source, item) =>
-      item.departments && item.departments.length
-        ? {
-            type: 'record',
-            id: item.departments[0],
-          }
-        : null,
+    sourceToDestination: (source) => (source?.record?.['Lark ID'] ? [source?.record?.['Lark ID']] : []),
+    destinationToSource: (source, item) => {
+      throw new Error('No reversal allowed.');
+    },
   },
 });
 

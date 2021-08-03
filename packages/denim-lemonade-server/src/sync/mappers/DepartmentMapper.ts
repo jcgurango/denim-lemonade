@@ -1,7 +1,7 @@
 import Mapper from './Mapper';
 
 export interface Department {
-  department_id: string;
+  id: string;
   name: string;
   parent_id: string;
 }
@@ -12,23 +12,8 @@ export interface SourceDepartment {
 }
 
 export const DepartmentMapper = Mapper<SourceDepartment, Department>({
-  'id': 'department_id',
+  'Lark ID': 'id',
   'Department': 'name',
-  'Department Head Lark ID': 'leader_open_id',
-  'Parent Department': {
-    destinationColumn: 'parent_id',
-    sourceToDestination: (source) => {
-      if (source && source.id) {
-        return source.id;
-      }
-
-      return 0;
-    },
-    destinationToSource: (destination) => ({
-      type: 'record',
-      id: destination,
-    }),
-  },
 });
 
 export default DepartmentMapper;

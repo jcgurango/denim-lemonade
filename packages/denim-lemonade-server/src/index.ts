@@ -223,12 +223,29 @@ updateCoordinator.registerRetriever(
 updateCoordinator.registerUpdater(
   'departments',
   DepartmentMapper.forward,
-  lark.department()
+  lark.department(),
+  async (
+    { department_info: department }: any,
+    originalDepartment: DenimRecord
+  ) => {
+    if (!originalDepartment['Lark ID'] && department.id) {
+      await data.updateRecord('Department', String(originalDepartment.id), {
+        'Lark ID': department.id,
+      });
+    }
+  }
 );
 
 updateCoordinator.registerRetriever(
   'employees',
-  DenimDataRetriever(data, 'Employee', null, 'Last Modified')
+  DenimDataRetriever(
+    data,
+    'Employee',
+    {
+      expand: ['Department'],
+    },
+    'Last Modified'
+  )
 );
 
 updateCoordinator.registerUpdater(
