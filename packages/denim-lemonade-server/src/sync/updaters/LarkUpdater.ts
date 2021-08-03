@@ -24,10 +24,10 @@ export default class LarkUpdater extends LarkConnection {
           console.log('Creating department ' + department.department_id);
 
           return post(
-            'https://open.larksuite.com/open-apis/contact/v1/department/add',
+            'https://open.larksuite.com/open-apis/contact/v3/departments?department_id_type=department_id',
             {
               ...department,
-              parent_id: department.parent_id || 0,
+              parent_department_id: department.parent_id || 0,
             },
           );
         }
