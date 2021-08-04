@@ -28,8 +28,32 @@ export default class LarkConnection {
       },
     );
 
-    const get = bent('GET', 'json');
-    const post = bent('POST', 'json');
+    const get: RequestFunction<any> = async (...args: any[]) => {
+      try {
+        return await (bent('GET', 'json') as any)(...args);
+      } catch (e) {
+        if (e.json) {
+          try {
+            const response = await e.json();
+            return response;
+          } catch (e) {
+          }
+        }
+      }
+    };
+    const post: RequestFunction<any> = async (...args: any[]) => {
+      try {
+        return await (bent('POST', 'json') as any)(...args);
+      } catch (e) {
+        if (e.json) {
+          try {
+            const response = await e.json();
+            return response;
+          } catch (e) {
+          }
+        }
+      }
+    };
 
     const result = await callback({
       get,
