@@ -34,31 +34,39 @@ export default class LarkUpdater extends LarkConnection {
     return (employee: Employee) =>
       this.withTenantAccessToken(
         async ({ get, post }) => {
-          if (employee.open_id) {
-            console.log('Updating employee: ' + employee.open_id);
+          const performUpdate = async (id: string) => {
+            console.log('Updating employee: ' + id);
 
-            // Update the employee.
-            return post(
-              'https://open.larksuite.com/open-apis/contact/v1/user/update',
+            const result = await post(
+              'https://open.larksuite.com/open-apis/contact/v3/users/' + id + '?user_id_type=open_id',
               {
                 ...employee,
+                open_id: id,
                 department_ids: employee.department_ids?.length ? employee.department_ids : [0],
               },
             );
+
+            return result.user;
+          };
+
+          if (employee.open_id) {
+            // Update the employee.
+            return performUpdate(employee.open_id);
           }
 
           console.log('Creating new employee user...');
 
           const result = await post(
-            'https://open.larksuite.com/open-apis/contact/v1/user/add',
+            'https://open.larksuite.com/open-apis/contact/v3/users?department_id_type=department_id',
             {
               ...employee,
-              department_ids: employee.department_ids?.length ? employee.department_ids : [0],
+              department_ids: employee.department_ids?.length ? employee.department_ids : ['0'],
+              employee_type: 1,
               need_send_notification: true,
             },
           );
 
-          if (result.code === 40013) {
+          if (result.code === 21002) {
             if (employee.email) {
               // Email already exists in the system.
               const searchResult = await get('https://open.larksuite.com/open-apis/user/v1/batch_get_id?emails=' + encodeURIComponent(employee.email));
@@ -69,7 +77,7 @@ export default class LarkUpdater extends LarkConnection {
                 if (user && user.length) {
                   const { open_id } = user[0];
 
-                  return get('https://open.larksuite.com/open-apis/contact/v1/user/get?open_id=' + open_id);
+                  return performUpdate(open_id);
                 }
               }
             }
@@ -84,13 +92,13 @@ export default class LarkUpdater extends LarkConnection {
                 if (user && user.length) {
                   const { open_id } = user[0];
 
-                  return get('https://open.larksuite.com/open-apis/contact/v1/user/get?open_id=' + open_id);
+                  return performUpdate(open_id);
                 }
               }
             }
           }
 
-          return result;
+          return result.user;
         },
         (data) => {
           if (data.user_info) {

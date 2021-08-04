@@ -74,14 +74,23 @@ export const EmployeeMapper = Mapper<SourceEmployee, Employee>({
   },
   id: {
     destinationColumn: 'custom_attrs',
-    sourceToDestination: (source) => ({
-      airtableId: source,
-    }),
-    destinationToSource: (destination) => destination?.airtableId,
+    sourceToDestination: (source) => [
+      {
+        type: 'TEXT',
+        id: 'airtableId',
+        value: {
+          text: 'source',
+        },
+      },
+    ],
+    destinationToSource: (destination) => {
+      throw new Error('No reversal allowed.');
+    },
   },
   Department: {
     destinationColumn: 'department_ids',
-    sourceToDestination: (source) => (source?.record?.['Lark ID'] ? [source?.record?.['Lark ID']] : []),
+    sourceToDestination: (source) =>
+      source?.record?.['Lark ID'] ? [source?.record?.['Lark ID']] : [],
     destinationToSource: (source, item) => {
       throw new Error('No reversal allowed.');
     },
