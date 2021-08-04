@@ -42,7 +42,7 @@ export default class LarkUpdater extends LarkConnection {
               'https://open.larksuite.com/open-apis/contact/v1/user/update',
               {
                 ...employee,
-                department_ids: employee.department_ids.length ? employee.department_ids : [0],
+                department_ids: employee.department_ids?.length ? employee.department_ids : [0],
               },
             );
           }
@@ -53,7 +53,7 @@ export default class LarkUpdater extends LarkConnection {
             'https://open.larksuite.com/open-apis/contact/v1/user/add',
             {
               ...employee,
-              department_ids: employee.department_ids.length ? employee.department_ids : [0],
+              department_ids: employee.department_ids?.length ? employee.department_ids : [0],
               need_send_notification: true,
             },
           );
