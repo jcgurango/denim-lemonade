@@ -33,12 +33,12 @@ export default class LarkUpdater extends LarkConnection {
   employee() {
     return (employee: Employee) =>
       this.withTenantAccessToken(
-        async ({ get, post }) => {
+        async ({ get, post, patch }) => {
           const performUpdate = async (id: string) => {
             console.log('Updating employee: ' + id);
 
-            const result = await post(
-              'https://open.larksuite.com/open-apis/contact/v3/users/' + id + '?user_id_type=open_id',
+            const result = await patch(
+              'https://open.larksuite.com/open-apis/contact/v3/users/' + id + '?user_id_type=open_id&department_id_type=department_id',
               {
                 ...employee,
                 open_id: id,
@@ -46,7 +46,7 @@ export default class LarkUpdater extends LarkConnection {
               },
             );
 
-            return result.user;
+            return result;
           };
 
           if (employee.open_id) {
@@ -98,11 +98,11 @@ export default class LarkUpdater extends LarkConnection {
             }
           }
 
-          return result.user;
+          return result;
         },
         (data) => {
-          if (data.user_info) {
-            return data.user_info;
+          if (data.user) {
+            return data.user;
           }
 
           return data;
