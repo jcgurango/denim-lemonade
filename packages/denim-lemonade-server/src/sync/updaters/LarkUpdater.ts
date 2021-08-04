@@ -40,7 +40,10 @@ export default class LarkUpdater extends LarkConnection {
             // Update the employee.
             return post(
               'https://open.larksuite.com/open-apis/contact/v1/user/update',
-              employee,
+              {
+                ...employee,
+                department_ids: employee.department_ids.length ? employee.department_ids : [0],
+              },
             );
           }
 
@@ -50,6 +53,7 @@ export default class LarkUpdater extends LarkConnection {
             'https://open.larksuite.com/open-apis/contact/v1/user/add',
             {
               ...employee,
+              department_ids: employee.department_ids.length ? employee.department_ids : [0],
               need_send_notification: true,
             },
           );
@@ -57,7 +61,7 @@ export default class LarkUpdater extends LarkConnection {
           if (result.code === 40013) {
             if (employee.email) {
               // Email already exists in the system.
-              const searchResult = await get('https://open.larksuite.com/open-apis/user/v1/batch_get_id?emails=' + employee.email);
+              const searchResult = await get('https://open.larksuite.com/open-apis/user/v1/batch_get_id?emails=' + encodeURIComponent(employee.email));
               
               if (!searchResult.code) {
                 const user = searchResult.data.email_users?.[employee.email];
