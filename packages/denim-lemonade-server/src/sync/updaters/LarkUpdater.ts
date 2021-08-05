@@ -79,13 +79,15 @@ export default class LarkUpdater extends LarkConnection {
 
                   return performUpdate(open_id);
                 }
+              } else {
+                console.log(searchResult);
               }
             }
 
             if (employee.mobile) {
               // Email already exists in the system.
               const searchResult = await get('https://open.larksuite.com/open-apis/user/v1/batch_get_id?mobiles=' + encodeURIComponent(employee.mobile));
-              
+
               if (!searchResult.code) {
                 const user = searchResult.data.mobile_users?.[employee.mobile];
 
@@ -94,6 +96,8 @@ export default class LarkUpdater extends LarkConnection {
 
                   return performUpdate(open_id);
                 }
+              } else {
+                console.log(searchResult);
               }
             }
           }
