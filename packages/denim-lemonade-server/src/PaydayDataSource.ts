@@ -558,22 +558,36 @@ export default class PaydayDataSource extends DenimDataSourceV2 {
   }
 
   public async createEmployee(data: any) {
+    const headers = await this.getHeaders();
+
     try {
-      const headers = await this.getHeaders();
-      console.log(headers, `POST /employees`, JSON.stringify(data));
       await bent(this.baseUrl, 'POST')(`/employees`, data, headers);
     } catch (e) {
-      throw e;
+      const error = new Error('Error creating employee');
+      (error as any).loggable = true;
+      (error as any).endpoint = 'POST /employees';
+      (error as any).inner = e;
+      (error as any).headers = headers;
+      (error as any).data = data;
+
+      throw error;
     }
   }
 
   public async updateEmployee(id: string, data: any) {
+    const headers = await this.getHeaders();
+
     try {
-      const headers = await this.getHeaders();
-      console.log(headers, `PUT /employees/${id}`, JSON.stringify(data));
       await bent(this.baseUrl, 'PUT')(`/employees/${id}`, data, headers);
     } catch (e) {
-      throw e;
+      const error = new Error('Error updating employee');
+      (error as any).loggable = true;
+      (error as any).endpoint = `PUT /employees/${id}`;
+      (error as any).inner = e;
+      (error as any).headers = headers;
+      (error as any).data = data;
+
+      throw error;
     }
   }
 

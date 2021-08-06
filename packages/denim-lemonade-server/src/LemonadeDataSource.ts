@@ -90,9 +90,9 @@ const mapLemonadeEmployeeToPayDay = (employee: DenimRecord): DenimRecord => {
     date_hired: employee['Entry Date'],
     start_date: employee['Entry Date'],
     regularization_date: employee['Regularization Date'],
-    mobile_no: employee['Mobile Number'],
-    telephone_no: employee['Home Number'],
-    email: employee['Email'],
+    mobile_no: employee['Mobile Number'] || '',
+    telephone_no: employee['Home Number'] || '',
+    email: employee['Email'] || '',
     nationality: readPaydayId(employee['Nationality'] as DenimRelatedRecord),
     sex: employee['Gender'],
     civil_status: employee['Marital Status'],
@@ -145,7 +145,50 @@ LemonadeDataSource.registerHook({
     try {
       await syncPaydayEmployee(record, table, id);
     } catch (e) {
-      console.error(e);
+      if (e.loggable) {
+        let response = await (e.inner?.text?.() || 'n/a');
+        const log = `${e.message}\nENDPOINT: ${e.endpoint}\n\nHEADERS:\n${Object.keys(e.headers).map((header) => `${header}: ${e.headers[header]}`).join('\n')}\n\nDATA: ${JSON.stringify(e.data)}\n\nRESPONSE: ${response}`;
+        console.log(`EMPLOYEE SYNC ERROR: ${id} ${record['Employee ID']}\n${log}`);
+
+        // Look for a record with this key.
+        const [logRecord] = await LemonadeDataSource.retrieveRecords('Sync Logs', {
+          conditions: {
+            conditionType: 'group',
+            type: 'AND',
+            conditions: [
+              {
+                conditionType: 'single',
+                field: 'Key',
+                operator: DenimQueryOperator.Equals,
+                value: 'POST-UPDATE-SYNC',
+              },
+              {
+                conditionType: 'single',
+                field: 'Employee Record ID',
+                operator: DenimQueryOperator.Equals,
+                value: id,
+              }
+            ],
+          },
+        });
+
+        if (logRecord) {
+          await LemonadeDataSource.updateRecord('Sync Logs', logRecord.id || '', {
+            Error: log,
+          });
+        } else {
+          await LemonadeDataSource.createRecord('Sync Logs', {
+            Key: 'POST-UPDATE-SYNC',
+            Employee: {
+              type: 'record',
+              id,
+            },
+            Error: log,
+          });
+        }
+      } else {
+        console.error(e);
+      }
     }
 
     return [id, record, oldRecord];
