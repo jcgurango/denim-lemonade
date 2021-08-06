@@ -160,7 +160,7 @@ LemonadeDataSource.registerHook({
                 conditionType: 'single',
                 field: 'Key',
                 operator: DenimQueryOperator.Equals,
-                value: 'POST-UPDATE-SYNC',
+                value: 'LEMONADE-PAY-SYNC',
               },
               {
                 conditionType: 'single',
@@ -178,7 +178,7 @@ LemonadeDataSource.registerHook({
           });
         } else {
           await LemonadeDataSource.createRecord('Sync Logs', {
-            Key: 'POST-UPDATE-SYNC',
+            Key: 'LEMONADE-PAY-SYNC',
             Employee: {
               type: 'record',
               id,
