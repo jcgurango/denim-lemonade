@@ -4,8 +4,6 @@ export type DailyAttendanceRecord = {
   'Employee ID': string;
   'Required Duration': number;
   'Actual Duration': number;
-  'Overtime Hours': number;
-  'Late Time': number;
   'Leave Time': number;
   'Leave Type': string | null | undefined;
   'Shift Time In': number | null;
@@ -335,6 +333,19 @@ export const processDay = (
     record['Last Out'] += 24 * 60 * 60;
   }
 
+  if (
+    record['Shift Time In'] &&
+    record['Shift Time Out'] &&
+    record['Shift Time Out'] < record['Shift Time In']
+  ) {
+    // Time out should be pushed to next day.
+    record['Shift Time Out'] += 24 * 60 * 60;
+  }
+
+
+  // Calculate break time.
+  let breakTime = (record['Shift Time Out'] && record['Shift Time In']) ? ((record['Shift Time Out'] - record['Shift Time In']) - record['Required Duration']) : 0;
+
   const hoursComputation = {
     employee_id: day['Employee ID'],
     payroll_period_id: payrollPeriod,
@@ -392,24 +403,19 @@ export const processDay = (
     // Subtract 1 hour from the actual duration for break.
     if (record['Actual Duration'] >= 60 * 60 * 9) {
       record['Actual Duration'] -= 60 * 60;
+      breakTime = 60 * 60;
     }
-
-    // Recalculate overtime as excess duration over 8 hours.
-    record['Overtime Hours'] =
-      (record['Actual Duration'] - 60 * 60 * 8) / 60 / 60;
   }
 
+  const overtimeSeconds = Math.max(0, record['Actual Duration'] - 60 * 60 * 8);
+
   const payrollDays =
-    (record['Actual Duration'] - record['Overtime Hours'] * 60 * 60) /
-    60 /
-    60 /
-    8;
+    (record['Actual Duration'] - overtimeSeconds) / 60 / 60 / 8;
 
   // Calculate the amount of minutes they spent in night differential.
   let npMinutes = 0;
   let npOtMinutes = 0;
 
-  /*
   if (record['First In'] && record['Last Out']) {
     npMinutes =
       Math.min(nightDiffEnd, record['Last Out']) -
@@ -418,16 +424,12 @@ export const processDay = (
     // Calculate night differential OT time (last out - OT hours = start of OT)
     npOtMinutes =
       Math.min(nightDiffEnd, record['Last Out']) -
-      Math.max(
-        record['Last Out'] - record['Overtime Hours'] * 60,
-        nightDiffStart
-      );
+      Math.max(record['Last Out'] - overtimeSeconds, nightDiffStart);
 
     // Some negatives may occur, negatives should be normalized to 0.
-    npMinutes = Math.max(0, npMinutes) / 60;
+    npMinutes = Math.max(0, npMinutes) / 60 - (breakTime / 60);
     npOtMinutes = Math.max(0, npOtMinutes) / 60;
   }
-  */
 
   let prefix = holidayType ? (holidayType === 'Special' ? 'sp_' : 'leg_') : '';
 
@@ -437,20 +439,31 @@ export const processDay = (
 
   if (prefix) {
     (hoursComputation as any)[prefix + 'ot'] = payrollDays * 8;
-    (hoursComputation as any)[prefix + 'ot_np'] = Math.round(npMinutes / 60);
-    (hoursComputation as any)[prefix + 'ot_ex'] = Math.round(record['Overtime Hours']);
-    (hoursComputation as any)[prefix + 'ot_ex_np'] = Math.round(npOtMinutes / 60);
+    (hoursComputation as any)[prefix + 'ot_np'] = Math.round(npMinutes / 60) - Math.round(
+      npOtMinutes / 60
+    );
+    (hoursComputation as any)[prefix + 'ot_ex'] = Math.round(
+      overtimeSeconds / 60 / 60
+    ) - Math.round(
+      npOtMinutes / 60
+    );
+    (hoursComputation as any)[prefix + 'ot_ex_np'] = Math.round(
+      npOtMinutes / 60
+    );
   } else {
     hoursComputation.payroll_days = payrollDays;
-    hoursComputation.reg_ot = Math.round(record['Overtime Hours']);
+    hoursComputation.reg_ot = Math.round(overtimeSeconds / 60 / 60) -  Math.round(npOtMinutes / 60);
     hoursComputation.reg_np = Math.round(npMinutes / 60);
     hoursComputation.reg_ot_np = Math.round(npOtMinutes / 60);
   }
 
   hoursComputation.leaves = record['Leave Time'];
-  hoursComputation.late = record['Late Time'] / 60;
 
-  if (record['Actual Duration'] > 0) {
+  if (record['First In'] && record['Shift Time In']) {
+    hoursComputation.late = (Math.max(record['First In'], record['Shift Time In']) - record['Shift Time In']) / 60 / 60;
+  }
+
+  if (record['Actual Duration'] > 0 && record['Required Duration'] > 0) {
     hoursComputation.undertime = Math.max(
       (record['Required Duration'] - record['Actual Duration']) / 60 / 60 -
         hoursComputation.late,
@@ -471,18 +484,31 @@ export const processDay = (
 };
 
 /*
-for (let i = 0; i < testSet.length; i++) {
-  const item = testSet[i];
-  const processed = processDay(item, '1', (holidays as any)[String(item.Date)]);
+const processed = processDay(
+  {
+    ID: 'FTE-1617-20210803',
+    Date: '2021-08-03',
+    'Employee ID': 'FTE-1617',
+    'Required Duration': 0,
+    'Actual Duration': 32400,
+    'Leave Time': 0,
+    'Leave Type': null,
+    'Shift Time In': null,
+    'Shift Time Out': null,
+    'First In': 64800,
+    'Last Out': 10800,
+  },
+  '1',
+  'Legal'
+);
 
-  console.log(
-    Object.keys(processed)
-      .filter((key) => (processed as any)[key])
-      .map((key) => {
-        return `${key}: ${(processed as any)[key]}`;
-      })
-      .join('\n'),
-    '\n'
-  );
-}
+console.log(
+  Object.keys(processed)
+    .filter((key) => (processed as any)[key])
+    .map((key) => {
+      return `${key}: ${(processed as any)[key]}`;
+    })
+    .join('\n'),
+  '\n'
+);
 */
