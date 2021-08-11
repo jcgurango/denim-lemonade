@@ -262,9 +262,14 @@ updateCoordinator.registerUpdater(
 );
 
 (async () => {
-  console.log('Initializing lark admin...');
-  await larkAdmin.init();
-  console.log('Lark admin initialized.');
+  const initLarkAdmin = async () => {
+    console.log('Re-initializing lark admin...');
+    await larkAdmin.init();
+    console.log('Lark admin initialized.');
+  };
+
+  await initLarkAdmin();
+  setInterval(initLarkAdmin, 24 * 60 * 60 * 1000);
 })();
 
 if (process.env.ENABLE_SYNC) {
