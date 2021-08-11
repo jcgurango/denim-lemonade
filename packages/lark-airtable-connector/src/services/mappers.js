@@ -56,14 +56,15 @@ module.exports = {
   dailyAttendanceToAirTable: createMapper((record) => {
     const {
       ColumnMap: {
-        '51201': { Value: RecordDate },
-        '51202': { Value: ShiftText },
-        '50103': { Value: EmployeeID },
-        '51302': { Value: RequiredDuration },
-        '51303': { Value: ActualDuration },
-        '51307': { Value: Overtime },
-        '51401': { Value: LeaveTime },
-        '51402': { Value: LeaveType },
+        '51201': { Value: RecordDate } = { Value: '' },
+        '51202': { Value: ShiftText } = { Value: '' },
+        '50103': { Value: EmployeeID } = { Value: '' },
+        '51302': { Value: RequiredDuration } = { Value: '' },
+        '51303': { Value: ActualDuration } = { Value: '' },
+        '51305': { Value: Late } = { Value: '' },
+        '51307': { Value: Overtime } = { Value: '' },
+        '51401': { Value: LeaveTime } = { Value: '' },
+        '51402': { Value: LeaveType } = { Value: '' },
       },
     } = record;
 
@@ -120,6 +121,7 @@ module.exports = {
       'Required Duration': Number(RequiredDuration) * 60,
       'Actual Duration': Number(ActualDuration) * 60,
       'Overtime Hours': parseHoursFromText(Overtime),
+      'Late Time': Number(Late),
       'Leave Time': parseHoursFromText(LeaveTime),
       'Leave Type': LeaveType === '-' ? null : LeaveType,
       'Shift Time In': shiftStart,
