@@ -86,12 +86,12 @@ const mapLemonadeEmployeeToPayDay = (employee: DenimRecord): DenimRecord => {
     payment_method: readPaydayId(
       employee['Payment Method'] as DenimRelatedRecord
     ),
-    bank_account: employee['Bank Account'],
+    bank_account: employee['Bank Account'] || '',
     date_hired: employee['Entry Date'],
     start_date: employee['Entry Date'],
     regularization_date: employee['Regularization Date'],
-    mobile_no: employee['Mobile Number'] || '',
-    telephone_no: employee['Home Number'] || '',
+    mobile_no: employee['Mobile Number'] || 'n/a',
+    telephone_no: employee['Home Number'] || 'n/a',
     email: employee['Email'] || '',
     nationality: readPaydayId(employee['Nationality'] as DenimRelatedRecord),
     sex: employee['Gender'],
