@@ -416,7 +416,7 @@ export const processDay = (
   let npMinutes = 0;
   let npOtMinutes = 0;
 
-  if (record['First In'] && record['Last Out']) {
+  if (record['First In'] && record['Last Out'] && record['First In'] >= nightDiffStart && record['Last Out'] <= nightDiffEnd) {
     npMinutes =
       Math.min(nightDiffEnd, record['Last Out']) -
       Math.max(record['First In'], nightDiffStart);
@@ -427,7 +427,7 @@ export const processDay = (
       Math.max(record['Last Out'] - overtimeSeconds, nightDiffStart);
 
     // Some negatives may occur, negatives should be normalized to 0.
-    npMinutes = Math.max(0, npMinutes) / 60 - (breakTime / 60);
+    npMinutes = Math.max(0, Math.max(0, npMinutes) / 60 - (breakTime / 60));
     npOtMinutes = Math.max(0, npOtMinutes) / 60;
   }
 
@@ -483,32 +483,59 @@ export const processDay = (
   return hoursComputation;
 };
 
-/*
-const processed = processDay(
+const processed0 = processDay(
+	{
+		"ID": "FTE-1617-20210719",
+		"Date": "2021-07-19",
+		"Employee ID": "FTE-1617",
+		"Required Duration": 0,
+		"Actual Duration": 46800,
+		"Leave Time": 0,
+		"Leave Type": null,
+		"Shift Time In": null,
+		"Shift Time Out": null,
+		"First In": 18000,
+		"Last Out": 64800
+	},
+  '1',
+  'Special'
+);
+
+const processed1 = processDay(
   {
-    ID: 'FTE-1617-20210803',
-    Date: '2021-08-03',
-    'Employee ID': 'FTE-1617',
-    'Required Duration': 0,
-    'Actual Duration': 32400,
-    'Leave Time': 0,
-    'Leave Type': null,
-    'Shift Time In': null,
-    'Shift Time Out': null,
-    'First In': 64800,
-    'Last Out': 10800,
+    "ID": "FTE-1617-20210718",
+    "Date": "2021-07-18",
+    "Employee ID": "FTE-1617",
+    "Required Duration": 0,
+    "Actual Duration": 0,
+    "Leave Time": 0,
+    "Leave Type": null,
+    "Shift Time In": null,
+    "Shift Time Out": null,
+    "First In": 64800,
+    "Last Out": null
   },
   '1',
   'Legal'
 );
 
 console.log(
-  Object.keys(processed)
-    .filter((key) => (processed as any)[key])
+  Object.keys(processed0)
+    .filter((key) => (processed0 as any)[key])
     .map((key) => {
-      return `${key}: ${(processed as any)[key]}`;
+      return `${key}: ${(processed0 as any)[key]}`;
     })
     .join('\n'),
   '\n'
 );
-*/
+
+
+console.log(
+  Object.keys(processed1)
+    .filter((key) => (processed1 as any)[key])
+    .map((key) => {
+      return `${key}: ${(processed1 as any)[key]}`;
+    })
+    .join('\n'),
+  '\n'
+);
