@@ -147,35 +147,50 @@ LemonadeDataSource.registerHook({
     } catch (e) {
       if (e.loggable) {
         let response = await (e.inner?.text?.() || 'n/a');
-        const log = `${e.message}\nENDPOINT: ${e.endpoint}\n\nHEADERS:\n${Object.keys(e.headers).map((header) => `${header}: ${e.headers[header]}`).join('\n')}\n\nDATA: ${JSON.stringify(e.data)}\n\nRESPONSE: ${response}`;
-        console.log(`EMPLOYEE SYNC ERROR: ${id} ${record['Employee ID']}\n${log}`);
+        const log = `${e.message}\nENDPOINT: ${
+          e.endpoint
+        }\n\nHEADERS:\n${Object.keys(e.headers)
+          .map((header) => `${header}: ${e.headers[header]}`)
+          .join('\n')}\n\nDATA: ${JSON.stringify(
+          e.data
+        )}\n\nRESPONSE: ${response}`;
+        console.log(
+          `EMPLOYEE SYNC ERROR: ${id} ${record['Employee ID']}\n${log}`
+        );
 
         // Look for a record with this key.
-        const [logRecord] = await LemonadeDataSource.retrieveRecords('Sync Logs', {
-          conditions: {
-            conditionType: 'group',
-            type: 'AND',
-            conditions: [
-              {
-                conditionType: 'single',
-                field: 'Key',
-                operator: DenimQueryOperator.Equals,
-                value: 'LEMONADE-PAY-SYNC',
-              },
-              {
-                conditionType: 'single',
-                field: 'Employee Record ID',
-                operator: DenimQueryOperator.Equals,
-                value: id,
-              }
-            ],
-          },
-        });
+        const [logRecord] = await LemonadeDataSource.retrieveRecords(
+          'Sync Logs',
+          {
+            conditions: {
+              conditionType: 'group',
+              type: 'AND',
+              conditions: [
+                {
+                  conditionType: 'single',
+                  field: 'Key',
+                  operator: DenimQueryOperator.Equals,
+                  value: 'LEMONADE-PAY-SYNC',
+                },
+                {
+                  conditionType: 'single',
+                  field: 'Employee Record ID',
+                  operator: DenimQueryOperator.Equals,
+                  value: id,
+                },
+              ],
+            },
+          }
+        );
 
         if (logRecord) {
-          await LemonadeDataSource.updateRecord('Sync Logs', logRecord.id || '', {
-            Error: log,
-          });
+          await LemonadeDataSource.updateRecord(
+            'Sync Logs',
+            logRecord.id || '',
+            {
+              Error: log,
+            }
+          );
         } else {
           await LemonadeDataSource.createRecord('Sync Logs', {
             Key: 'LEMONADE-PAY-SYNC',
@@ -244,7 +259,7 @@ LemonadeDataSource.schema.workflows = [
   },
   {
     name: 'laborHoursReport',
-    inputs: []
+    inputs: [],
   },
 ];
 
@@ -259,7 +274,7 @@ LemonadeDataSource.schema.workflows = [
     }
   );
 
-  const perEmployeeSummaries: any = { };
+  const perEmployeeSummaries: any = {};
 
   exportRows.forEach((row) => {
     if (!perEmployeeSummaries[String(row.employee_id)]) {
@@ -270,16 +285,16 @@ LemonadeDataSource.schema.workflows = [
       delete perEmployeeSummaries[String(row.employee_id)].Date;
     } else {
       Object.keys(row).forEach((key) => {
-        if (typeof(row[key]) === 'number' && key !== 'payroll_period_id') {
+        if (typeof row[key] === 'number' && key !== 'payroll_period_id') {
           perEmployeeSummaries[String(row.employee_id)][key] += row[key];
         }
       });
     }
   });
-  
+
   context.resultingAction = {
     $action: 'result',
-    result: perEmployeeSummaries
+    result: perEmployeeSummaries,
   };
 };
 
@@ -313,20 +328,32 @@ LemonadeDataSource.schema.workflows = [
       'Employee',
       {
         retrieveAll: true,
-        /* Comment for all employees */
         conditions: {
           conditionType: 'group',
-          type: 'OR',
-          conditions: departmentsInput.records.map(({ name }) => {
-            return {
+          type: 'AND',
+          conditions: [
+            {
               conditionType: 'single',
-              field: 'Department',
-              operator: DenimQueryOperator.Contains,
-              value: name,
-            };
-          }),
+              field: 'Payroll Group ID',
+              operator: DenimQueryOperator.Equals,
+              value: (periodInput?.record?.Grouping as any)?.id,
+            },
+            /* Comment for all employees */
+            {
+              conditionType: 'group',
+              type: 'OR',
+              conditions: departmentsInput.records.map(({ name }) => {
+                return {
+                  conditionType: 'single',
+                  field: 'Department',
+                  operator: DenimQueryOperator.Contains,
+                  value: name,
+                };
+              }),
+            },
+            /* Until here */
+          ],
         },
-        /* Until here */
       }
     );
 
@@ -351,6 +378,7 @@ LemonadeDataSource.schema.workflows = [
     ids
   );
 
+  /*
   const airtableAttendanceData = await LemonadeDataSource.retrieveRecords(
     'Attendance',
     {
@@ -385,16 +413,9 @@ LemonadeDataSource.schema.workflows = [
       },
     }
   );
+  */
 
-  const convertedLarkAttendance = convertDailyAttendance(
-    larkAttendanceData
-  ).filter((attendance: any) => {
-    if (airtableAttendanceData.find(({ ID }) => attendance.ID === ID)) {
-      return false;
-    }
-
-    return true;
-  });
+  const convertedLarkAttendance = convertDailyAttendance(larkAttendanceData);
 
   const attendanceData = [...convertedLarkAttendance];
 

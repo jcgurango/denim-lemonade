@@ -476,6 +476,7 @@ export default class PaydayDataSource extends DenimDataSourceV2 {
 
           rest[key] = value ? {
             type: 'record',
+            id: transformed?.id,
             name: transformed ? transformed[otherTableSchema.nameField] : '',
             record: transformed,
           } : value;

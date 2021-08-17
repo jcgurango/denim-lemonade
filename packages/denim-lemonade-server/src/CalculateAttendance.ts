@@ -483,6 +483,7 @@ export const processDay = (
   return hoursComputation;
 };
 
+/*
 const processed0 = processDay(
 	{
 		"ID": "FTE-1617-20210719",
@@ -539,3 +540,4 @@ console.log(
     .join('\n'),
   '\n'
 );
+*/

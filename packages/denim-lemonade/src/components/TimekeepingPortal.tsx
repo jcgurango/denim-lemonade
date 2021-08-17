@@ -90,6 +90,7 @@ const TimekeepingPortal: FunctionComponent<{}> = () => {
               type: DenimFormControlType.MultiLookup,
               controlProps: {
                 relationship: 'Department',
+                disabled: !payrollPeriod,
               },
             }}
             value={departments}
@@ -102,6 +103,7 @@ const TimekeepingPortal: FunctionComponent<{}> = () => {
               type: DenimFormControlType.MultiLookup,
               controlProps: {
                 relationship: 'Employee',
+                disabled: !payrollPeriod,
               },
             }}
             value={employees}
