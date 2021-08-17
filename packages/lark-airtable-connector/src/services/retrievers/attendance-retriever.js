@@ -2,7 +2,7 @@
 /**
  * @param {import('../lark-admin')} larkAdmin 
  */
- module.exports = (larkAdmin) => {
+module.exports = (larkAdmin) => {
   return {
     retrieveAttendanceUsers: async (query = '') => {
       const {
@@ -10,7 +10,7 @@
           Users
         },
       } = await larkAdmin.attendance.getUser(query);
-      
+
       return Users;
     },
     retrieveAttendance: async (startDate = new Date(Date.now() - (2 * 24 * 60 * 60 * 1000)), endDate = new Date(), userIds = []) => {
@@ -28,7 +28,14 @@
             "Uids": userIds,
             "NeedHistory": true
           },
-          "ColumnFamilies": cf,
+          "ColumnFamilies": cf.map((cf) => ({
+            ...cf,
+            Columns: cf.Columns.map((column) => ({
+              ...column,
+              Value: '1',
+            })),
+            isAllChoose: true,
+          })),
         },
         "Head": {}
       };
