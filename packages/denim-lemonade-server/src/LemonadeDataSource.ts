@@ -59,6 +59,14 @@ const readPaydayId = (value: DenimRelatedRecord): number | null => {
 };
 
 const mapLemonadeEmployeeToPayDay = (employee: DenimRecord): DenimRecord => {
+  console.log(employee['Basic Pay']
+  ? (employee['Pay Basis'] as DenimRelatedRecord)?.name === 'Daily'
+    ? ((employee['Basic Pay'] as any) *
+        ((employee['Days of Work Per Year'] as DenimRelatedRecord)
+          ?.name as any)) /
+      12
+    : employee['Basic Pay']
+  : 0);
   return {
     employee_id: employee['Employee ID'],
     last_name: employee['Last Name'],
@@ -96,7 +104,14 @@ const mapLemonadeEmployeeToPayDay = (employee: DenimRecord): DenimRecord => {
     nationality: readPaydayId(employee['Nationality'] as DenimRelatedRecord),
     sex: employee['Gender'],
     civil_status: employee['Marital Status'],
-    monthly_rate: 0,
+    monthly_rate: employee['Basic Pay']
+      ? (employee['Pay Basis'] as DenimRelatedRecord)?.name === 'Daily'
+        ? ((employee['Basic Pay'] as any) *
+            ((employee['Days of Work Per Year'] as DenimRelatedRecord)
+              ?.name as any)) /
+          12
+        : employee['Basic Pay']
+      : 0,
     basic_adjustment: 0,
   };
 };
