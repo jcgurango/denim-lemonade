@@ -10,6 +10,9 @@ export type DailyAttendanceRecord = {
   'Shift Time Out': number | null;
   'First In'?: number | null;
   'Last Out'?: number | null;
+  'Shift Name'?: string | null;
+  'Late Time': number;
+  'Overtime Hours': number;
 };
 
 /*
@@ -311,41 +314,10 @@ const holidays = {
 
 export const processDay = (
   day: DailyAttendanceRecord,
-  payrollPeriod: String,
-  holidayType?: 'Special' | 'Legal' | null
+  payrollPeriod: string,
+  holidayType?: 'Special' | 'Legal' | null,
+  employeePayBasis?: string | null
 ) => {
-  // 10 PM in seconds from 12 AM
-  const nightDiffStart = 22 * 60 * 60;
-
-  // 6 AM the next day in seconds from 12 AM
-  const nightDiffEnd = 30 * 60 * 60;
-
-  const record = {
-    ...day,
-  };
-
-  if (
-    record['First In'] &&
-    record['Last Out'] &&
-    record['Last Out'] < record['First In']
-  ) {
-    // Last out should be pushed to next day.
-    record['Last Out'] += 24 * 60 * 60;
-  }
-
-  if (
-    record['Shift Time In'] &&
-    record['Shift Time Out'] &&
-    record['Shift Time Out'] < record['Shift Time In']
-  ) {
-    // Time out should be pushed to next day.
-    record['Shift Time Out'] += 24 * 60 * 60;
-  }
-
-
-  // Calculate break time.
-  let breakTime = (record['Shift Time Out'] && record['Shift Time In']) ? ((record['Shift Time Out'] - record['Shift Time In']) - record['Required Duration']) : 0;
-
   const hoursComputation = {
     employee_id: day['Employee ID'],
     payroll_period_id: payrollPeriod,
@@ -396,8 +368,44 @@ export const processDay = (
     allowance_12: 0.0,
   };
 
+  // 10 PM in seconds from 12 AM
+  const nightDiffStart = 22 * 60 * 60;
+
+  // 6 AM the next day in seconds from 12 AM
+  const nightDiffEnd = 30 * 60 * 60;
+
+  const record = {
+    ...day,
+  };
+
+  if (
+    record['First In'] &&
+    record['Last Out'] &&
+    record['Last Out'] < record['First In']
+  ) {
+    // Last out should be pushed to next day.
+    record['Last Out'] += 24 * 60 * 60;
+  }
+
+  if (
+    record['Shift Time In'] &&
+    record['Shift Time Out'] &&
+    record['Shift Time Out'] < record['Shift Time In']
+  ) {
+    // Time out should be pushed to next day.
+    record['Shift Time Out'] += 24 * 60 * 60;
+  }
+
+  // Calculate break time.
+  let breakTime =
+    record['Shift Time Out'] && record['Shift Time In']
+      ? record['Shift Time Out'] -
+        record['Shift Time In'] -
+        record['Required Duration']
+      : 0;
+
   // Check if it's a rest day.
-  const isRestDay = !day['Required Duration'];
+  const isRestDay = !record['Shift Name'] || record['Shift Name'] === '-';
 
   if (isRestDay) {
     // Subtract 1 hour from the actual duration for break.
@@ -407,16 +415,51 @@ export const processDay = (
     }
   }
 
-  const overtimeSeconds = Math.max(0, record['Actual Duration'] - 60 * 60 * 8);
+  // Calculate Overtime
+  const overtimeSeconds = record['Overtime Hours'] * 60 * 60;
 
-  const payrollDays =
-    (record['Actual Duration'] - overtimeSeconds) / 60 / 60 / 8;
+  // Calculate actual hours worked
+  const hours = (record['Actual Duration'] - overtimeSeconds) / 60 / 60;
+
+  // Retrieve Late Time In
+  hoursComputation.late = record['Late Time'] / 60;
+
+  // Calculate Undertime
+  if (record['Actual Duration'] > 0 && record['Required Duration'] > 0) {
+    hoursComputation.undertime = Math.max(
+      (record['Required Duration'] - record['Actual Duration']) / 60 / 60 -
+        hoursComputation.late,
+      0
+    );
+  }
+
+  // Get leave time
+  hoursComputation.leaves = record['Leave Time'];
+
+  // Anything else would be considered an absence.
+  hoursComputation.absences = Math.max(
+    0,
+    (record['Required Duration'] - record['Actual Duration']) / 60 / 60 -
+      hoursComputation.late -
+      hoursComputation.undertime -
+      hoursComputation.leaves
+  );
+
+  // Monthly employees need an absence to offset leaves
+  if (employeePayBasis === 'Monthly' && hoursComputation.leaves > 0) {
+    hoursComputation.absences += hoursComputation.leaves;
+  }
 
   // Calculate the amount of minutes they spent in night differential.
   let npMinutes = 0;
   let npOtMinutes = 0;
 
-  if (record['First In'] && record['Last Out'] && record['First In'] >= nightDiffStart && record['Last Out'] <= nightDiffEnd) {
+  if (
+    record['First In'] &&
+    record['Last Out'] &&
+    record['First In'] >= nightDiffStart &&
+    record['Last Out'] >= nightDiffEnd
+  ) {
     npMinutes =
       Math.min(nightDiffEnd, record['Last Out']) -
       Math.max(record['First In'], nightDiffStart);
@@ -427,7 +470,7 @@ export const processDay = (
       Math.max(record['Last Out'] - overtimeSeconds, nightDiffStart);
 
     // Some negatives may occur, negatives should be normalized to 0.
-    npMinutes = Math.max(0, Math.max(0, npMinutes) / 60 - (breakTime / 60));
+    npMinutes = Math.max(0, Math.max(0, npMinutes) / 60 - breakTime / 60);
     npOtMinutes = Math.max(0, npOtMinutes) / 60;
   }
 
@@ -437,48 +480,23 @@ export const processDay = (
     prefix += 'rst_';
   }
 
+  const computedOT =
+    Math.round(overtimeSeconds / 60 / 60) - Math.round(npOtMinutes / 60);
+  const computedNightPay = Math.round(npMinutes / 60);
+  const computedNightPayOT = Math.round(npOtMinutes / 60);
+
   if (prefix) {
-    (hoursComputation as any)[prefix + 'ot'] = payrollDays * 8;
-    (hoursComputation as any)[prefix + 'ot_np'] = Math.round(npMinutes / 60) - Math.round(
-      npOtMinutes / 60
-    );
-    (hoursComputation as any)[prefix + 'ot_ex'] = Math.round(
-      overtimeSeconds / 60 / 60
-    ) - Math.round(
-      npOtMinutes / 60
-    );
-    (hoursComputation as any)[prefix + 'ot_ex_np'] = Math.round(
-      npOtMinutes / 60
-    );
+    (hoursComputation as any)[prefix + 'ot'] = hours;
+    (hoursComputation as any)[prefix + 'ot_ex'] = computedOT;
+    (hoursComputation as any)[prefix + 'ot_np'] =
+      computedNightPay - computedNightPayOT;
+    (hoursComputation as any)[prefix + 'ot_ex_np'] = computedNightPayOT;
   } else {
-    hoursComputation.payroll_days = payrollDays;
-    hoursComputation.reg_ot = Math.round(overtimeSeconds / 60 / 60) -  Math.round(npOtMinutes / 60);
-    hoursComputation.reg_np = Math.round(npMinutes / 60);
-    hoursComputation.reg_ot_np = Math.round(npOtMinutes / 60);
+    hoursComputation.payroll_days = hours >= 5 ? 1 : hours >= 4 ? 0.5 : 0;
+    hoursComputation.reg_ot = computedOT;
+    hoursComputation.reg_np = computedNightPay;
+    hoursComputation.reg_ot_np = computedNightPayOT;
   }
-
-  hoursComputation.leaves = record['Leave Time'];
-
-  if (record['First In'] && record['Shift Time In']) {
-    hoursComputation.late = (Math.max(record['First In'], record['Shift Time In']) - record['Shift Time In']) / 60 / 60;
-  }
-
-  if (record['Actual Duration'] > 0 && record['Required Duration'] > 0) {
-    hoursComputation.undertime = Math.max(
-      (record['Required Duration'] - record['Actual Duration']) / 60 / 60 -
-        hoursComputation.late,
-      0
-    );
-  }
-
-  // Anything else would be considered an absence.
-  hoursComputation.absences = Math.max(
-    0,
-    (record['Required Duration'] - record['Actual Duration']) / 60 / 60 -
-      hoursComputation.late -
-      hoursComputation.undertime -
-      hoursComputation.leaves
-  );
 
   return hoursComputation;
 };

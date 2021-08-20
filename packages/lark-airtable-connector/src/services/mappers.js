@@ -126,6 +126,7 @@ module.exports = {
       'Leave Type': LeaveType === '-' ? null : LeaveType,
       'Shift Time In': shiftStart,
       'Shift Time Out': shiftEnd,
+      'Shift Name': ShiftText,
       'First In': firstIn,
       'Last Out': lastOut,
     };
