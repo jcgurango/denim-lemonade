@@ -248,10 +248,58 @@ updateCoordinator.registerRetriever(
   )
 );
 
+const larkEmployeeSync = lark.employee();
+
 updateCoordinator.registerUpdater(
   'employees',
   EmployeeMapper.forward,
-  lark.employee(),
+  async (record, originalRecord) => {
+    try {
+      return await larkEmployeeSync(record);
+    } catch (e) {
+      // Look for a record with this key.
+      const [logRecord] = await LemonadeDataSource.retrieveRecords(
+        'Sync Logs',
+        {
+          conditions: {
+            conditionType: 'group',
+            type: 'AND',
+            conditions: [
+              {
+                conditionType: 'single',
+                field: 'Key',
+                operator: DenimQueryOperator.Equals,
+                value: 'EMPLOYEE-SYNC',
+              },
+              {
+                conditionType: 'single',
+                field: 'Employee Record ID',
+                operator: DenimQueryOperator.Equals,
+                value: originalRecord.id,
+              },
+            ],
+          },
+        }
+      );
+
+      if (logRecord) {
+        await LemonadeDataSource.updateRecord('Sync Logs', logRecord.id || '', {
+          Error: e.message,
+        });
+      } else {
+        await LemonadeDataSource.createRecord('Sync Logs', {
+          Key: 'EMPLOYEE-SYNC',
+          Employee: {
+            type: 'record',
+            id: originalRecord.id,
+          },
+          Error: e.message,
+        });
+      }
+
+      throw e;
+    }
+  },
   async (employee: any, originalEmployee: DenimRecord) => {
     if (!originalEmployee['Lark ID'] && employee.open_id) {
       await data.updateRecord('Employee', String(originalEmployee.id), {
