@@ -375,10 +375,6 @@ LemonadeDataSource.schema.workflows = [
     expand: ['Pay Basis'],
   });
 
-  if (Math.random()> -1) {
-    console.log(allEmployees, (periodInput?.record?.Grouping as any)?.id);throw new Error('test');
-  }
-
   const ids: string[] = [];
 
   for (let i = 0; i < allEmployees.length; i++) {
