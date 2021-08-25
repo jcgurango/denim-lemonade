@@ -113,8 +113,7 @@ const TimekeepingPortal: FunctionComponent<{}> = () => {
             text="Generate Report View"
             disabled={
               loading ||
-              !payrollPeriod ||
-              (!departments?.records.length && !employees?.records.length)
+              !payrollPeriod
             }
             action={{
               callback: async () => {

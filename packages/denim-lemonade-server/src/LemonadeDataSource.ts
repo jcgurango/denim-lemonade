@@ -10,6 +10,7 @@ import {
 import { AirTableDataSourceV2 } from 'denim-airtable';
 import moment from 'moment';
 import { LemonadeValidations } from '../../denim-lemonade/src/validation';
+import { DenimQueryConditionGroup } from '../../denim/core';
 import { processDay } from './CalculateAttendance';
 import PaydayDataSource from './PaydayDataSource';
 
@@ -323,49 +324,59 @@ LemonadeDataSource.schema.workflows = [
     throw new Error('Unknown period.');
   }
 
-  let allEmployees = await LemonadeDataSource.findById(
-    'Employee',
-    ['Pay Basis'],
-    ...(employeesInput?.records?.map(({ id }) => id) || [])
-  );
-
-  // Retrieve all users from the department.
-  if (departmentsInput?.records?.length) {
-    const otherEmployees = await LemonadeDataSource.retrieveRecords(
-      'Employee',
-      {
-        retrieveAll: true,
-        conditions: {
-          conditionType: 'group',
-          type: 'AND',
-          conditions: [
-            {
-              conditionType: 'single',
-              field: 'Payroll Group ID',
-              operator: DenimQueryOperator.Equals,
-              value: (periodInput?.record?.Grouping as any)?.id,
-            },
-            /* Comment for all employees */
-            {
-              conditionType: 'group',
-              type: 'OR',
-              conditions: departmentsInput.records.map(({ name }) => {
-                return {
-                  conditionType: 'single',
-                  field: 'Department',
-                  operator: DenimQueryOperator.Contains,
-                  value: name,
-                };
-              }),
-            },
-            /* Until here */
-          ],
+  const allEmployees = await LemonadeDataSource.retrieveRecords('Employee', {
+    retrieveAll: true,
+    conditions: {
+      conditionType: 'group',
+      type: 'AND',
+      conditions: [
+        {
+          conditionType: 'single',
+          field: 'Payroll Group ID',
+          operator: DenimQueryOperator.Equals,
+          value: (periodInput?.record?.Grouping as any)?.id,
         },
-        expand: ['Pay Basis'],
-      },
-    );
+        /* Comment for all employees */
+        ...(departmentsInput?.records?.length
+          ? [
+              {
+                conditionType: 'group',
+                type: 'OR',
+                conditions: departmentsInput.records.map(({ name }) => {
+                  return {
+                    conditionType: 'single',
+                    field: 'Department',
+                    operator: DenimQueryOperator.Contains,
+                    value: name,
+                  };
+                }),
+              } as DenimQueryConditionGroup,
+            ]
+          : []),
+          ...(employeesInput?.records?.length
+            ? [
+                {
+                  conditionType: 'group',
+                  type: 'OR',
+                  conditions: employeesInput.records.map(({ id }) => {
+                    return {
+                      conditionType: 'single',
+                      field: 'id',
+                      operator: DenimQueryOperator.Equals,
+                      value: id,
+                    };
+                  }),
+                } as DenimQueryConditionGroup,
+              ]
+            : []),
+        /* Until here */
+      ],
+    },
+    expand: ['Pay Basis'],
+  });
 
-    allEmployees = allEmployees.concat(...otherEmployees);
+  if (Math.random()> -1) {
+    console.log(allEmployees, (periodInput?.record?.Grouping as any)?.id);throw new Error('test');
   }
 
   const ids: string[] = [];
@@ -517,13 +528,15 @@ LemonadeDataSource.schema.workflows = [
     const existingRow = exportRows[i];
 
     if (attendanceData[i]) {
-      const employee = allEmployees.find((record) => record['Employee ID'] === attendanceData[i]['Employee ID']);
+      const employee = allEmployees.find(
+        (record) => record['Employee ID'] === attendanceData[i]['Employee ID']
+      );
 
       calculated = processDay(
         attendanceData[i],
         periodInput.id,
         holidayTypesByDate[String(attendanceData[i].Date)] as any,
-        (employee?.['Pay Basis'] as DenimRelatedRecord)?.name,
+        (employee?.['Pay Basis'] as DenimRelatedRecord)?.name
       );
     }
 
