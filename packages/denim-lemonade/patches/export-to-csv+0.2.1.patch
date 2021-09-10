@@ -1,0 +1,18 @@
+diff --git a/node_modules/export-to-csv/build/export-to-csv.js b/node_modules/export-to-csv/build/export-to-csv.js
+index b0347c5..4f1ba70 100644
+--- a/node_modules/export-to-csv/build/export-to-csv.js
++++ b/node_modules/export-to-csv/build/export-to-csv.js
+@@ -95,8 +95,11 @@ var ExportToCsv = (function () {
+             link.setAttribute('visibility', 'hidden');
+             link.download = this._options.filename.replace(/ /g, "_") + fileExtension;
+             document.body.appendChild(link);
+-            link.click();
+-            document.body.removeChild(link);
++
++            setTimeout(() => {
++                link.click();
++                document.body.removeChild(link);
++            }, 500);
+         }
+     };
+     /**
